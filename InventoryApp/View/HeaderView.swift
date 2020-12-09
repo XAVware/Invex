@@ -10,6 +10,8 @@ import SwiftUI
 struct HeaderView: View {
     @ObservedObject var appManager: AppStateManager
     
+    var menuButtonWidth: CGFloat = 100
+    
     var body: some View {
             HStack {
                 Button(action: {
@@ -20,38 +22,38 @@ struct HeaderView: View {
                             .resizable()
                             .scaledToFit()
                             .accentColor(.white)
-                            .font(.system(size: 24, weight: .heavy))
-                            .frame(width: 40, height: 60)
+                            .font(.system(size: 24, weight: .medium))
+                            .frame(width: 30, height: 40)
                         
                         Text("Menu")
-                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .font(.system(size: 18, weight: .light, design: .rounded))
                             .accentColor(.white)
                     }
                 }
-                .frame(width: 150, height: 50)
+                .frame(width: menuButtonWidth)
                 .padding(.horizontal)
                 
-                Text("Inventory Tracker")
-                    .frame(minWidth: 250, maxWidth: .infinity, minHeight: 50, idealHeight: 50, maxHeight: 50, alignment: .center)
-                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                Text("Concession Tracker")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .font(.system(size: 24, weight: .semibold, design: .rounded))
                     .foregroundColor(.white)
                 
                 Spacer()
-                    .frame(width: 150)
+                    .frame(width: menuButtonWidth)
                     .padding(.horizontal)
                 
             }
-            .frame(height: 60)
+            .frame(height: 40)
             .background(
-                LinearGradient(gradient: Gradient(colors: [Color(hex: "000000").opacity(0.9), Color(hex: "434343").opacity(1)]), startPoint: .top, endPoint: .bottom)
+                LinearGradient(gradient: Gradient(colors: [Color(hex: "000000").opacity(0.9), Color(hex: "434343").opacity(0.9)]), startPoint: .top, endPoint: .bottom)
             )
         
     }
 }
 
-//struct HeaderView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HeaderView()
-//            
-//    }
-//}
+struct HeaderView_Previews: PreviewProvider {
+    static var previews: some View {
+        HeaderView(appManager: AppStateManager())
+            
+    }
+}

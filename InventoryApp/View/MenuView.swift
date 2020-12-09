@@ -15,7 +15,7 @@ struct MenuView: View {
             VStack(spacing: 15) {
                 Spacer().frame(height: 10)
                 Button(action: {
-//                    self.appManager.changeDisplayTo(.day)
+                    //                    self.appManager.changeDisplayTo(.day)
                 }) {
                     Text("Make A Sale")
                         .underline()
@@ -25,7 +25,8 @@ struct MenuView: View {
                 }
                 
                 Button(action: {
-//                    self.appManager.changeDisplayTo(.week)
+                        self.appManager.isShowingAddItem.toggle()
+                        self.appManager.isShowingMenu.toggle()
                 }) {
                     Text("Add Inventory")
                         .underline()
@@ -35,7 +36,7 @@ struct MenuView: View {
                 }
                 
                 Button(action: {
-//                    self.appManager.changeDisplayTo(.month)
+                    //                    self.appManager.changeDisplayTo(.month)
                 }) {
                     Text("Sales History")
                         .underline()
@@ -45,8 +46,7 @@ struct MenuView: View {
                 }
                 
                 Button(action: {
-                    self.appManager.isShowingAddItem.toggle()
-                    self.appManager.isShowingMenu.toggle()
+                    
                 }) {
                     Text("Settings")
                         .underline()
@@ -54,7 +54,6 @@ struct MenuView: View {
                         .frame(height: 40)
                         .foregroundColor(.white)
                 }
-//                .fullScreenCover(isPresented: $appManager.isShowingSettings, content: SettingsView.init)
                 
                 Spacer(minLength: 0)
             } //: VStack
