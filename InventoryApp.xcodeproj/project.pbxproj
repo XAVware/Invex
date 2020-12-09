@@ -3,11 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		5FA8ED5567FE7D1AC5F79581 /* Pods_InventoryApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C613C4B7D6A41BA84632996 /* Pods_InventoryApp.framework */; };
+		94003D9025815E130056928E /* AppStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94003D8F25815E130056928E /* AppStateManager.swift */; };
+		94003D9325815FF00056928E /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94003D9225815FF00056928E /* MenuView.swift */; };
+		94003D98258161A70056928E /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94003D97258161A70056928E /* HeaderView.swift */; };
+		94003D9B258164EA0056928E /* AddInventoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94003D9A258164EA0056928E /* AddInventoryView.swift */; };
 		94586EDB2580A1F5001A42C4 /* InventoryAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94586EDA2580A1F5001A42C4 /* InventoryAppApp.swift */; };
 		94586EDD2580A1F5001A42C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94586EDC2580A1F5001A42C4 /* ContentView.swift */; };
 		94586EDF2580A1F5001A42C4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94586EDE2580A1F5001A42C4 /* Assets.xcassets */; };
@@ -17,6 +21,10 @@
 /* Begin PBXFileReference section */
 		34D937F88A67F1F8164756C4 /* Pods-InventoryApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InventoryApp.release.xcconfig"; path = "Target Support Files/Pods-InventoryApp/Pods-InventoryApp.release.xcconfig"; sourceTree = "<group>"; };
 		6C613C4B7D6A41BA84632996 /* Pods_InventoryApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InventoryApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		94003D8F25815E130056928E /* AppStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStateManager.swift; sourceTree = "<group>"; };
+		94003D9225815FF00056928E /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		94003D97258161A70056928E /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		94003D9A258164EA0056928E /* AddInventoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInventoryView.swift; sourceTree = "<group>"; };
 		94586ED72580A1F5001A42C4 /* InventoryApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InventoryApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94586EDA2580A1F5001A42C4 /* InventoryAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryAppApp.swift; sourceTree = "<group>"; };
 		94586EDC2580A1F5001A42C4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -44,7 +52,6 @@
 				9946A64A888619A89A72B516 /* Pods-InventoryApp.debug.xcconfig */,
 				34D937F88A67F1F8164756C4 /* Pods-InventoryApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -54,6 +61,17 @@
 				6C613C4B7D6A41BA84632996 /* Pods_InventoryApp.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		94003D952581619B0056928E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				94586EDC2580A1F5001A42C4 /* ContentView.swift */,
+				94003D9225815FF00056928E /* MenuView.swift */,
+				94003D97258161A70056928E /* HeaderView.swift */,
+				94003D9A258164EA0056928E /* AddInventoryView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		94586ECE2580A1F4001A42C4 = {
@@ -78,10 +96,11 @@
 			isa = PBXGroup;
 			children = (
 				94586EDA2580A1F5001A42C4 /* InventoryAppApp.swift */,
-				94586EDC2580A1F5001A42C4 /* ContentView.swift */,
+				94003D952581619B0056928E /* View */,
 				94586EDE2580A1F5001A42C4 /* Assets.xcassets */,
 				94586EE32580A1F5001A42C4 /* Info.plist */,
 				94586EE02580A1F5001A42C4 /* Preview Content */,
+				94003D8F25815E130056928E /* AppStateManager.swift */,
 			);
 			path = InventoryApp;
 			sourceTree = "<group>";
@@ -207,7 +226,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94003D98258161A70056928E /* HeaderView.swift in Sources */,
 				94586EDD2580A1F5001A42C4 /* ContentView.swift in Sources */,
+				94003D9325815FF00056928E /* MenuView.swift in Sources */,
+				94003D9B258164EA0056928E /* AddInventoryView.swift in Sources */,
+				94003D9025815E130056928E /* AppStateManager.swift in Sources */,
 				94586EDB2580A1F5001A42C4 /* InventoryAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
