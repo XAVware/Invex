@@ -12,7 +12,9 @@ class AppStateManager: ObservableObject {
     var hapticImpact = UIImpactFeedbackGenerator(style: .heavy)
     @Published var isShowingMenu: Bool      = false
     @Published var isShowingAddItem: Bool   = false
+    @Published var isShowingInventoryList: Bool = false
     
+    @Published var itemList: [Item]         = []
     @Published var beverageList: [Item]     = []
     @Published var foodSnackList: [Item]    = []
     @Published var frozenList: [Item]       = []
@@ -45,6 +47,8 @@ class AppStateManager: ObservableObject {
             let realm = try Realm(configuration: config)
             let result = realm.objects(Item.self)
             for item in result {
+                itemList.append(item)
+                
                 switch item.type {
                 case "Beverage":
                     beverageList.append(item)

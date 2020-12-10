@@ -20,6 +20,7 @@
 		94586EDD2580A1F5001A42C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94586EDC2580A1F5001A42C4 /* ContentView.swift */; };
 		94586EDF2580A1F5001A42C4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94586EDE2580A1F5001A42C4 /* Assets.xcassets */; };
 		94586EE22580A1F5001A42C4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94586EE12580A1F5001A42C4 /* Preview Assets.xcassets */; };
+		94EEFDEC2581CDAD0096DB87 /* InventoryListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EEFDEB2581CDAD0096DB87 /* InventoryListRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		94586EDE2580A1F5001A42C4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94586EE12580A1F5001A42C4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		94586EE32580A1F5001A42C4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94EEFDEB2581CDAD0096DB87 /* InventoryListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryListRowView.swift; sourceTree = "<group>"; };
 		9946A64A888619A89A72B516 /* Pods-InventoryApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InventoryApp.debug.xcconfig"; path = "Target Support Files/Pods-InventoryApp/Pods-InventoryApp.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,6 +82,7 @@
 				94003D97258161A70056928E /* HeaderView.swift */,
 				94003D9A258164EA0056928E /* AddInventoryView.swift */,
 				943D60682581ABEE00C6C712 /* InventoryListView.swift */,
+				94EEFDEB2581CDAD0096DB87 /* InventoryListRowView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				943D6066258195BB00C6C712 /* ItemModel.swift in Sources */,
 				94003D9325815FF00056928E /* MenuView.swift in Sources */,
 				943D606D2581B85700C6C712 /* ItemButton.swift in Sources */,
+				94EEFDEC2581CDAD0096DB87 /* InventoryListRowView.swift in Sources */,
 				94003D9B258164EA0056928E /* AddInventoryView.swift in Sources */,
 				94003D9025815E130056928E /* AppStateManager.swift in Sources */,
 				94586EDB2580A1F5001A42C4 /* InventoryAppApp.swift in Sources */,
