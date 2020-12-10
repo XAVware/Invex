@@ -42,18 +42,7 @@ struct ContentView: View {
                                         
                                         ScrollView(.vertical, showsIndicators: false) {
                                             ForEach(self.appManager.foodSnackList, id: \.self) { item in
-                                                Button(action: {
-                                                    
-                                                }) {
-                                                    Text(item.name)
-                                                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.black)
-                                                }
-                                                .frame(width: 100, height: 50)
-                                                .cornerRadius(10)
-                                                .background(
-                                                    Color(hex: "dc2430")
-                                                )
+                                                ItemButton(item: item, colorHexString: "b5ac49")
                                             }
                                         }//: ScrollView
                                     } //: VStack
@@ -75,22 +64,14 @@ struct ContentView: View {
                                             .background(Color.black)
                                             .padding(.horizontal)
                                         
+                                        Spacer().frame(height: 10)
+                                        
                                         ScrollView(.vertical, showsIndicators: false) {
                                             ForEach(self.appManager.beverageList, id: \.self) { item in
-                                                Button(action: {
-                                                    
-                                                }) {
-                                                    Text(item.name)
-                                                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                                                        .foregroundColor(.black)
-                                                }
-                                                .frame(width: 100, height: 50)
-                                                .cornerRadius(10)
-                                                .background(
-                                                    Color.blue
-                                                )
-                                            } //: ScrollView
-                                        }
+                                                ItemButton(item: item, colorHexString: "1488cc")
+                                            }
+                                            
+                                        } //: ScrollView
                                     } //: VStack
                                 } //: ZStack - Beverage Section
                                 
@@ -133,8 +114,55 @@ struct ContentView: View {
                             
                         }
                         
-                        LinearGradient(gradient: Gradient(colors: [Color(hex: "141E30").opacity(0.8), Color(hex: "243B55").opacity(0.7)]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                            .frame(width: 350)
+                        //MARK: - Cart Section
+                        ZStack {
+                            LinearGradient(gradient: Gradient(colors: [Color(hex: "141E30").opacity(0.8), Color(hex: "243B55").opacity(0.7)]), startPoint: .topLeading, endPoint: .bottomTrailing)
+                                
+                            
+                            VStack(spacing: 0) {
+                                Text("Cart")
+                                    .padding(.vertical, 7)
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                
+                                Divider()
+                                    .background(Color.white)
+                                    .padding(.horizontal)
+                                
+                                Spacer()
+                                
+                                Divider()
+                                    .background(Color.white)
+                                    .padding(.horizontal)
+                                
+                                HStack {
+                                    Text("Total: ")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 24, weight: .semibold, design: .rounded))
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    Text("$ 0.00")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 24, weight: .semibold, design: .rounded))
+                                        .frame(width: 150, alignment: .trailing)
+                                }
+                                .padding()
+                                
+                                Button(action: {
+                                    
+                                }) {
+                                    Text("Checkout")
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 24, weight: .semibold, design: .rounded))
+                                }
+                                .frame(maxWidth: .infinity, minHeight: 60)
+                                .background(
+                                    Color.green
+                                )
+                            }
+                        } //: ZStack - Cart Section
+                        .frame(width: 350)
+                        
                     } //: VStack
                     
                     if self.appManager.isShowingAddItem {
