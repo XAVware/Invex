@@ -25,13 +25,21 @@ class AppStateManager: ObservableObject {
         let config = Realm.Configuration(schemaVersion: 1)
         do {
             let realm = try Realm(configuration: config)
-//            let newData = datatype()
-//            newData.name = self.name
-//            newData.age = self.age
             try realm.write({
-//                realm.add(newData)
+                realm.add(newItem)
                 print("Success")
             })
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func getAllItems() {
+        let config = Realm.Configuration(schemaVersion: 1)
+        do {
+            let realm = try Realm(configuration: config)
+            let result = realm.objects(Item.self)
+            print(result)
         } catch {
             print(error.localizedDescription)
         }

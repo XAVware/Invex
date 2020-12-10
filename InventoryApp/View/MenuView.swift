@@ -23,6 +23,7 @@ struct MenuView: View {
                     .frame(width: menuWidth, height: 50, alignment: .leading)
                 Button(action: {
                     self.appManager.goToMakeASale()
+                    self.appManager.getAllItems()
                 }) {
                     Text("Make A Sale")
                         .underline()
