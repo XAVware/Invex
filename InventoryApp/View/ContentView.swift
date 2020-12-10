@@ -56,9 +56,7 @@ struct ContentView: View {
             
             MenuView(appManager: self.appManager) //Menu should always be at top of ZStack
         } //: ZStack
-        //        .fullScreenCover(isPresented: self.$appManager.isShowingAddItem, content: {
-        //            AddInventoryView(appManager: self.appManager)
-        //        })
+
         
         
         

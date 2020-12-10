@@ -11,8 +11,8 @@ struct AddInventoryView: View {
     @ObservedObject var appManager: AppStateManager
     
     @State var itemName: String = ""
-    @State var type: Int = 0
-    @State var quantityPurchased: Int = 0
+    @State var typeID: Int = 0
+    @State var quantityPurchased: Int = 24
     @State var isCustomQuantity: Bool = false
     @State var customValue: String = "10"
     @State var cost: String = "10.00"
@@ -62,7 +62,7 @@ struct AddInventoryView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     
-                    Picker(selection: $type, label: Text("")) {
+                    Picker(selection: $typeID, label: Text("")) {
                         ForEach(0..<types.count) { index in
                             Text(self.types[index]).tag(index)
                         }
@@ -256,11 +256,20 @@ struct AddInventoryView: View {
             Spacer().frame(height: 40)
             
             Button(action: {
-                print("Item Name: \(itemName)")
-                print("Type: \(type)")
-                print("Quantity Purchased: \(quantityPurchased)")
-                print("Cost of Package: \(cost)")
-                print("Retail Price: \(retailPrice)")
+                let tempAvgCost = Double(cost)! / Double(quantityPurchased)
+                let formattedAvgCost = Double(String(format: "%.2f", tempAvgCost))!
+
+                
+                //This should return a success/failure result in case they try and add a new item that already exists
+                let newItem = Item()
+                newItem.name = self.itemName
+                newItem.type = self.types[self.typeID]
+                newItem.onHandQty += Int(self.quantityPurchased)
+                newItem.avgCostPer = formattedAvgCost
+                newItem.retailPrice = self.retailPrice
+                
+                self.appManager.createNewItem(newItem: newItem)
+                
             }) {
                 Text("Save")
                     .font(.system(size: 24, weight: .bold, design: .rounded))
@@ -279,6 +288,8 @@ struct AddInventoryView: View {
         .padding()
         .background(Color.white)
     }
+    
+    
 }
 
 struct AddInventoryView_Previews: PreviewProvider {

@@ -10,12 +10,19 @@ import SwiftUI
 struct MenuView: View {
     @ObservedObject var appManager: AppStateManager
     
+    var menuWidth: CGFloat = 350
+    
     var body: some View {
         HStack {
             VStack(spacing: 15) {
                 Spacer().frame(height: 10)
+                Text("Menu")
+                    .padding(.horizontal)
+                    .font(.system(size: 36, weight: .semibold, design: .rounded))
+                    .foregroundColor(.white)
+                    .frame(width: menuWidth, height: 50, alignment: .leading)
                 Button(action: {
-                    //                    self.appManager.changeDisplayTo(.day)
+                    self.appManager.goToMakeASale()
                 }) {
                     Text("Make A Sale")
                         .underline()
@@ -25,8 +32,7 @@ struct MenuView: View {
                 }
                 
                 Button(action: {
-                        self.appManager.isShowingAddItem.toggle()
-                        self.appManager.isShowingMenu.toggle()
+                    self.appManager.goToAddInventory()
                 }) {
                     Text("Add Inventory")
                         .underline()
@@ -45,21 +51,17 @@ struct MenuView: View {
                         .foregroundColor(.white)
                 }
                 
-                Button(action: {
-                    
-                }) {
-                    Text("Settings")
-                        .underline()
-                        .font(.system(size: 18, weight: .semibold, design: .rounded))
-                        .frame(height: 40)
-                        .foregroundColor(.white)
-                }
                 
                 Spacer(minLength: 0)
             } //: VStack
-            .frame(width: 350)
+            .frame(width: menuWidth)
             .background(
-                LinearGradient(gradient: Gradient(colors: [Color(hex: "f0f2f0"), Color(hex: "000c40")]), startPoint: .bottom, endPoint: .top)
+//                LinearGradient(gradient: Gradient(colors: [Color(hex: "f0f2f0"), Color(hex: "000c40")]), startPoint: .bottom, endPoint: .top)
+                ZStack {
+                    Color(hex: "0f2027")
+                    
+                    RadialGradient(gradient: Gradient(colors: [Color(hex: "0f2027"), Color(hex: "203a43"), Color(hex: "2c5354")]), center: .topLeading, startRadius: 40, endRadius: UIScreen.main.bounds.width)
+                }
             )
             .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom)
             .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
@@ -73,8 +75,9 @@ struct MenuView: View {
     }
 }
 
-//struct MenuView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MenuView()
-//    }
-//}
+struct MenuView_Previews: PreviewProvider {
+    static var previews: some View {
+        MenuView(appManager: AppStateManager())
+            .previewLayout(.sizeThatFits)
+    }
+}
