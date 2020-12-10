@@ -10,6 +10,7 @@ import RealmSwift
 
 struct ContentView: View {
     @StateObject var appManager = AppStateManager()
+    @StateObject var cart = Cart()
     
     var body: some View {
         
@@ -42,7 +43,7 @@ struct ContentView: View {
                                         
                                         ScrollView(.vertical, showsIndicators: false) {
                                             ForEach(self.appManager.foodSnackList, id: \.self) { item in
-                                                ItemButton(item: item, colorHexString: "b5ac49")
+                                                ItemButton(cart: self.cart, item: item, colorHexString: "b5ac49")
                                             }
                                         }//: ScrollView
                                     } //: VStack
@@ -68,11 +69,13 @@ struct ContentView: View {
                                         
                                         ScrollView(.vertical, showsIndicators: false) {
                                             ForEach(self.appManager.beverageList, id: \.self) { item in
-                                                ItemButton(item: item, colorHexString: "1488cc")
+                                                ItemButton(cart: self.cart, item: item, colorHexString: "1488cc")
                                             }
                                             
                                         } //: ScrollView
+                                        
                                     } //: VStack
+                                    
                                 } //: ZStack - Beverage Section
                                 
                                 
@@ -125,11 +128,39 @@ struct ContentView: View {
                                     .foregroundColor(.white)
                                     .font(.system(size: 18, weight: .semibold, design: .rounded))
                                 
+                                HStack(spacing: 0) {
+                                    Text("Item:")
+                                        .padding(.horizontal)
+                                        .foregroundColor(Color.white.opacity(0.8))
+                                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                        .frame(width: 120, alignment: .leading)
+                                    
+                                    Text("Qty:")
+                                        .foregroundColor(Color.white.opacity(0.8))
+                                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                        .frame(width: 120)
+                                    
+                                    Text("Price:")
+                                        .padding(.horizontal)
+                                        .foregroundColor(Color.white.opacity(0.8))
+                                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                        .frame(width: 120, alignment: .trailing)
+                                }
+                                
                                 Divider()
                                     .background(Color.white)
                                     .padding(.horizontal)
                                 
-                                Spacer()
+                                Spacer().frame(height: 10)
+                                
+                                ScrollView(.vertical, showsIndicators: false) {
+                                    ForEach(self.cart.cartItems, id: \.self) { cartItem in
+                                        CartItemView()
+                                    }
+                                    .onDelete(perform: { indexSet in
+                                        print("Delete IndexSet: \(indexSet)")
+                                    })
+                                }
                                 
                                 Divider()
                                     .background(Color.white)
@@ -141,7 +172,7 @@ struct ContentView: View {
                                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                     
-                                    Text("$ 0.00")
+                                    Text(self.cart.cartTotalString)
                                         .foregroundColor(.white)
                                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                                         .frame(width: 150, alignment: .trailing)
@@ -149,7 +180,7 @@ struct ContentView: View {
                                 .padding()
                                 
                                 Button(action: {
-                                    
+                                    print(self.cart.cartItems)
                                 }) {
                                     Text("Checkout")
                                         .foregroundColor(.black)
@@ -161,12 +192,14 @@ struct ContentView: View {
                                 )
                             }
                         } //: ZStack - Cart Section
-                        .frame(width: 350)
+                        .frame(width: 360)
                         
                     } //: VStack
                     
                     if self.appManager.isShowingAddItem {
                         AddInventoryView(appManager: self.appManager)
+                    } else if self.appManager.isShowingInventoryList {
+                        InventoryListView(appManager: self.appManager)
                     }
                     
                     
@@ -186,6 +219,9 @@ struct ContentView: View {
    
     }
     
+    init() {
+        UITableView.appearance().backgroundColor = UIColor.clear
+    }
     
 }
 

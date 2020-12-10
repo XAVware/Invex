@@ -78,4 +78,10 @@ class AppStateManager: ObservableObject {
         self.isShowingAddItem.toggle()
         self.toggleMenu()
     }
+    
+    func goToInventoryList() {
+        self.hapticImpact.impactOccurred()
+        self.isShowingInventoryList.toggle()
+        self.toggleMenu()
+    }
 }

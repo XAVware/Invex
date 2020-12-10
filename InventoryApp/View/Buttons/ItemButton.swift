@@ -8,20 +8,22 @@
 import SwiftUI
 
 struct ItemButton: View {
+    @ObservedObject var cart: Cart
     var item: Item
     
     @State var colorHexString: String
     
     var body: some View {
         Button(action: {
-            
+            self.cart.addItemToCart(item: self.item)
+            print(cart.cartItems)
         }) {
             VStack(spacing: 0) {
-                Text(item.name)
+                Text(self.item.name)
                     .font(.system(size: 18, weight: .bold, design:.rounded))
                     .foregroundColor(.black)
                     
-                Text("$ \(item.retailPrice)")
+                Text("$ \(self.item.retailPrice)")
                     .font(.system(size: 14, weight: .semibold, design:.rounded))
                     .foregroundColor(.black)
                     

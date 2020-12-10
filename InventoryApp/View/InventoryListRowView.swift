@@ -8,30 +8,45 @@
 import SwiftUI
 
 struct InventoryListRowView: View {
+    @State var item: Item
+    
     var body: some View {
-        HStack {
-            Text("Pepsi")
+        HStack(alignment: .center, spacing: 0) {
+            Text(item.name)
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
-                .padding(.horizontal)
+                .foregroundColor(.black)
+                .frame(width: 160)
             
-            Text("")
+            Text(item.type)
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
-                .padding(.horizontal)
+                .foregroundColor(.black)
+                .frame(width: 160)
             
-            Text("Pepsi")
+            Text("\(item.onHandQty)")
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
-                .padding(.horizontal)
+                .foregroundColor(.black)
+                .frame(width: 160)
+            
+            Text("$ \(item.retailPrice)")
+                .font(.system(size: 18, weight: .semibold, design: .rounded))
+                .foregroundColor(.black)
+                .frame(width: 160)
+            
+            Text("$ \(String(format: "%.2f", item.avgCostPer))")
+                .font(.system(size: 18, weight: .semibold, design: .rounded))
+                .foregroundColor(.black)
+                .frame(width: 160)
         }
         .background(
             Color.white
         )
-        .frame(height: 40)
+        .frame(maxWidth: 800, maxHeight: 40)
     }
 }
 
 struct InventoryListRowView_Previews: PreviewProvider {
     static var previews: some View {
-        InventoryListRowView()
+        InventoryListRowView(item: Item())
             .previewLayout(.sizeThatFits)
     }
 }

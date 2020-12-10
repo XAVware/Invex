@@ -23,7 +23,6 @@ struct MenuView: View {
                     .frame(width: menuWidth, height: 50, alignment: .leading)
                 Button(action: {
                     self.appManager.goToMakeASale()
-                    self.appManager.getAllItems()
                 }) {
                     Text("Make A Sale")
                         .underline()
@@ -43,9 +42,9 @@ struct MenuView: View {
                 }
                 
                 Button(action: {
-                    //                    self.appManager.changeDisplayTo(.month)
+                    self.appManager.goToInventoryList()
                 }) {
-                    Text("Sales History")
+                    Text("Inventory List")
                         .underline()
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                         .frame(height: 60)

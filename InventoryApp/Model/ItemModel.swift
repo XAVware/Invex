@@ -15,3 +15,11 @@ class Item: Object {
     @objc dynamic var avgCostPer: Double = 0.00
     @objc dynamic var onHandQty: Int = 0
 }
+
+
+struct CartItem: Hashable {
+    var name: String
+    var type: String
+    var qtyToPurchase: Int
+    var retailPrice: String
+}

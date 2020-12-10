@@ -30,9 +30,13 @@ struct AddInventoryView: View {
                     .scaledToFit()
                     .font(.system(size: 36, weight: .semibold))
                     .frame(width: 40, height: 40)
+                    .foregroundColor(.black)
+                
+                
                 
                 Text("Add Inventory")
                     .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .foregroundColor(.black)
                 
                 Spacer()
             } //: HStack - Title
@@ -46,6 +50,8 @@ struct AddInventoryView: View {
                     Text("Item Name:")
                         .padding(.horizontal, 3)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundColor(.black)
+                    
                     
                     TextField("Ex. Mt. Dew", text: $itemName)
                         .padding()
@@ -54,21 +60,26 @@ struct AddInventoryView: View {
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                 } //: VStack - Title Field
                 
+                
                 //MARK: - Type Field
                 HStack {
                     Text("Type:")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(.black)
                     
                     
                     Picker(selection: $typeID, label: Text("")) {
                         ForEach(0..<types.count) { index in
-                            Text(self.types[index]).tag(index)
+                            Text(self.types[index]).foregroundColor(.black).tag(index)
+                                
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .frame(width: 400)
+                    .foregroundColor(.black)
+                    .accentColor(.black)
                     
                     
                 } //: HStack - Type
@@ -80,6 +91,7 @@ struct AddInventoryView: View {
                 HStack {
                     Text("Quantity Purchased:")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundColor(.black)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
@@ -164,6 +176,7 @@ struct AddInventoryView: View {
                                 
                                 TextField("", text: $customValue)
                                     .padding()
+                                    .foregroundColor(.black)
                                     .background(
                                         Color(UIColor.tertiarySystemFill)
                                             .cornerRadius(9)
@@ -191,7 +204,7 @@ struct AddInventoryView: View {
                     .frame(width: 410, height: 30)
                     
                     
-                } //: HStack - Type
+                } //: HStack - Quantity Purchased
                 .frame(height: 50)
                 
                 Divider()
@@ -200,11 +213,13 @@ struct AddInventoryView: View {
                 HStack {
                     Text("Cost of Package:")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundColor(.black)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Text("$")
                         .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .foregroundColor(.black)
                     
                     TextField("19.99", text: $cost)
                         .padding()
@@ -217,10 +232,11 @@ struct AddInventoryView: View {
                         .cornerRadius(9)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .frame(width: 100, height: 40)
+                        .foregroundColor(.black)
                     
                     
                     
-                } //: HStack - Type
+                } //: HStack - Package Cost
                 .frame(height: 50)
                 
                 Divider()
@@ -231,9 +247,11 @@ struct AddInventoryView: View {
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .foregroundColor(.black)
                     
                     Text("$")
                         .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .foregroundColor(.black)
                     
                     TextField("1.00", text: $retailPrice)
                         .padding()
@@ -245,6 +263,7 @@ struct AddInventoryView: View {
                         )
                         .cornerRadius(9)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundColor(.black)
                         .frame(width: 100, height: 40)
                 } //: HStack - Type
                 .frame(height: 50)
@@ -287,9 +306,20 @@ struct AddInventoryView: View {
         }
         .padding()
         .background(Color.white)
+        .accentColor(.black)
     }
     
     
+    
+    init(appManager: AppStateManager) {
+        self.appManager = appManager
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(named: "ColorWatermelonDark")
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        
+        UITextField.appearance().attributedText = NSAttributedString(string: "Ex. Mt. Dew", attributes: [NSAttributedString.Key.foregroundColor: Color.black])
+        
+    }
 }
 
 struct AddInventoryView_Previews: PreviewProvider {
