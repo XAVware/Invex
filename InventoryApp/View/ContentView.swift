@@ -11,9 +11,6 @@ import RealmSwift
 struct ContentView: View {
     @StateObject var appManager = AppStateManager()
     
-    @State var name = ""
-    @State var age = ""
-    
     var body: some View {
         
         ZStack {
@@ -29,20 +26,116 @@ struct ContentView: View {
                         VStack(spacing: 0) {
                             
                             HStack(spacing: 0) {
-                                LinearGradient(gradient: Gradient(colors: [Color(hex: "7b4397").opacity(0.7), Color(hex: "dc2430").opacity(0.8)]), startPoint: .bottom, endPoint: .top)
+                                //MARK: - Food & Snack Section
+                                ZStack {
+                                    Color(hex: "dc2430").opacity(0.6)
+                                    
+                                    VStack(spacing: 0) {
+                                        Text("Food & Snacks")
+                                            .padding(.vertical, 7)
+                                            .foregroundColor(.black)
+                                            .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                        
+                                        Divider()
+                                            .background(Color.black)
+                                            .padding(.horizontal)
+                                        
+                                        ScrollView(.vertical, showsIndicators: false) {
+                                            ForEach(self.appManager.foodSnackList, id: \.self) { item in
+                                                Button(action: {
+                                                    
+                                                }) {
+                                                    Text(item.name)
+                                                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.black)
+                                                }
+                                                .frame(width: 100, height: 50)
+                                                .cornerRadius(10)
+                                                .background(
+                                                    Color(hex: "dc2430")
+                                                )
+                                            }
+                                        }//: ScrollView
+                                    } //: VStack
+                                } //: ZStack - Food & Snack Section
                                 
-                                LinearGradient(gradient: Gradient(colors: [Color(hex: "005C97").opacity(0.7), Color(hex: "363795").opacity(0.8)]), startPoint: .bottom, endPoint: .top)
                                 
                                 
-                            }
-                            LinearGradient(gradient: Gradient(colors: [Color(hex: "F1F2B5").opacity(0.8), Color(hex: "135058").opacity(0.7)]), startPoint: .top, endPoint: .bottom)
-                                .frame(height: 250)
+                                //MARK: - Beverage Section
+                                ZStack {
+                                    LinearGradient(gradient: Gradient(colors: [Color(hex: "005C97").opacity(0.7), Color(hex: "363795").opacity(0.8)]), startPoint: .bottom, endPoint: .top)
+                                    
+                                    VStack(spacing: 0) {
+                                        Text("Beverages")
+                                            .padding(.vertical, 7)
+                                            .foregroundColor(.black)
+                                            .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                        
+                                        Divider()
+                                            .background(Color.black)
+                                            .padding(.horizontal)
+                                        
+                                        ScrollView(.vertical, showsIndicators: false) {
+                                            ForEach(self.appManager.beverageList, id: \.self) { item in
+                                                Button(action: {
+                                                    
+                                                }) {
+                                                    Text(item.name)
+                                                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                                                        .foregroundColor(.black)
+                                                }
+                                                .frame(width: 100, height: 50)
+                                                .cornerRadius(10)
+                                                .background(
+                                                    Color.blue
+                                                )
+                                            } //: ScrollView
+                                        }
+                                    } //: VStack
+                                } //: ZStack - Beverage Section
+                                
+                                
+                            } //: HStack - Top Sections
+                            
+                            //MARK: - Frozen Section
+                            ZStack {
+                                LinearGradient(gradient: Gradient(colors: [Color(hex: "F1F2B5").opacity(0.8), Color(hex: "135058").opacity(0.7)]), startPoint: .top, endPoint: .bottom)
+                                
+                                VStack(spacing: 0) {
+                                    Text("Beverages")
+                                        .padding(.vertical, 7)
+                                        .foregroundColor(.black)
+                                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                                    
+                                    Divider()
+                                        .background(Color.black)
+                                        .padding(.horizontal)
+                                    
+                                    ScrollView(.vertical, showsIndicators: false) {
+                                        ForEach(self.appManager.frozenList, id: \.self) { item in
+                                            Button(action: {
+                                                
+                                            }) {
+                                                Text(item.name)
+                                                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                                                    .foregroundColor(.black)
+                                            }
+                                            .frame(width: 100, height: 50)
+                                            .cornerRadius(10)
+                                            .background(
+                                                Color.blue
+                                            )
+                                        }
+                                    }
+                                }
+                            } //: ZStack - Frozen Section
+                            .frame(height: 250)
                             
                         }
                         
                         LinearGradient(gradient: Gradient(colors: [Color(hex: "141E30").opacity(0.8), Color(hex: "243B55").opacity(0.7)]), startPoint: .topLeading, endPoint: .bottomTrailing)
                             .frame(width: 350)
-                    } //: HStack
+                    } //: VStack
                     
                     if self.appManager.isShowingAddItem {
                         AddInventoryView(appManager: self.appManager)
@@ -56,51 +149,11 @@ struct ContentView: View {
             
             MenuView(appManager: self.appManager) //Menu should always be at top of ZStack
         } //: ZStack
+        .onAppear {
+            self.appManager.getAllItems()
+        }
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        //        VStack {
-        //            TextField("Name", text: $name).textFieldStyle(RoundedBorderTextFieldStyle())
-        //            TextField("Age", text: $age).textFieldStyle(RoundedBorderTextFieldStyle())
-        //            Button(action: {
-        //                let config = Realm.Configuration(schemaVersion: 1)
-        //                do {
-        //                    let realm = try Realm(configuration: config)
-        //                    let newData = datatype()
-        //                    newData.name = self.name
-        //                    newData.age = self.age
-        //                    try realm.write({
-        //                        realm.add(newData)
-        //                        print("Success")
-        //                    })
-        //                } catch {
-        //                    print(error.localizedDescription)
-        //                }
-        //            }) {
-        //                Text("Save")
-        //            }
-        //            Button(action: {
-        //
-        //                let config = Realm.Configuration(schemaVersion: 1)
-        //                do {
-        //                    let realm = try Realm(configuration: config)
-        //                    let result = realm.objects(datatype.self)
-        //                    print(result)
-        //                } catch {
-        //                    print(error.localizedDescription)
-        //                }
-        //            }) {
-        //                Text("Load")
-        //            }
-        //        }
-        //        .padding()
+   
     }
     
     

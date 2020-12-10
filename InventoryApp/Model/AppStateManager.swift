@@ -13,6 +13,11 @@ class AppStateManager: ObservableObject {
     @Published var isShowingMenu: Bool      = false
     @Published var isShowingAddItem: Bool   = false
     
+    @Published var beverageList: [Item]     = []
+    @Published var foodSnackList: [Item]    = []
+    @Published var frozenList: [Item]       = []
+    @Published var otherList: [Item]        = []
+    
     
     func toggleMenu() {
         self.hapticImpact.impactOccurred()
@@ -39,7 +44,18 @@ class AppStateManager: ObservableObject {
         do {
             let realm = try Realm(configuration: config)
             let result = realm.objects(Item.self)
-            print(result)
+            for item in result {
+                switch item.type {
+                case "Beverage":
+                    beverageList.append(item)
+                case "Food / Snack":
+                    foodSnackList.append(item)
+                case "Frozen":
+                    frozenList.append(item)
+                default:
+                    otherList.append(item)
+                }
+            }
         } catch {
             print(error.localizedDescription)
         }
