@@ -11,35 +11,40 @@ import RealmSwift
 class Cart: ObservableObject {
     @Published var cartItems: [CartItem] = []
     @Published var cartTotalString: String = "$ 0.00"
-    
+
     
     func addItemToCart(item: Item) {
-        var itemIndex: Int = 0
-        let itemName = item.name
-        let type = item.type
-        var quantityToPurchase = 1
-        let price = item.retailPrice
-        
+        var itemIsInCart: Bool = false
+                
+        let tempCartItem = CartItem()
+        tempCartItem.name = item.name
+        tempCartItem.type = item.type
+        tempCartItem.retailPrice = item.retailPrice
         
         for cartItem in cartItems {
             if cartItem.name == item.name {
-                quantityToPurchase = cartItem.qtyToPurchase + 1
-                cartItems.remove(at: itemIndex)
+                itemIsInCart = true
+                increaseQuantity(forItem: cartItem)
                 break
-            } else {
-                itemIndex += 1
-                
             }
         }
         
-        let tempCartItem = CartItem(name: itemName, type: type, qtyToPurchase: quantityToPurchase, retailPrice: price)
-        
-        if cartItems.isEmpty {
-            cartItems.append(tempCartItem)
-        } else {
-            cartItems[itemIndex] = tempCartItem            
-        }
-        
+        if !itemIsInCart { cartItems.append(tempCartItem) }
+
+        updateTotal()
+    }
+    
+    func increaseQuantity(forItem cartItem: CartItem) {
+        cartItem.qtyToPurchase += 1
+        updateTotal()
+    }
+    
+    func decreaseQuantity(forItem cartItem: CartItem) {
+        cartItem.qtyToPurchase -= 1
+        updateTotal()
+    }
+    
+    func updateTotal() {
         var tempTotal: Double = 0
         for cartItem in cartItems {
             tempTotal += (Double(cartItem.retailPrice)! * Double(cartItem.qtyToPurchase))
@@ -47,6 +52,5 @@ class Cart: ObservableObject {
         
         let tempTotalString: String = String(format: "%.2f", tempTotal)
         cartTotalString = "$ \(tempTotalString)"
-        
     }
 }

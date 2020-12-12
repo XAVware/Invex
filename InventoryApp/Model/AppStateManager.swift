@@ -9,16 +9,29 @@ import SwiftUI
 import RealmSwift
 
 class AppStateManager: ObservableObject {
+    
+    enum DisplayState {
+        case makeASale, addInventory, inventoryList
+    }
+    
     var hapticImpact = UIImpactFeedbackGenerator(style: .heavy)
     @Published var isShowingMenu: Bool      = false
-    @Published var isShowingAddItem: Bool   = false
-    @Published var isShowingInventoryList: Bool = false
+    @Published var currentDisplayState: DisplayState = .makeASale
     
     @Published var itemList: [Item]         = []
     @Published var beverageList: [Item]     = []
     @Published var foodSnackList: [Item]    = []
     @Published var frozenList: [Item]       = []
     @Published var otherList: [Item]        = []
+    
+    
+    
+    func changeDisplay(to newDisplayState: DisplayState) {
+        self.currentDisplayState = newDisplayState
+        withAnimation {
+            self.isShowingMenu.toggle()
+        }
+    }
     
     
     func toggleMenu() {
@@ -65,23 +78,4 @@ class AppStateManager: ObservableObject {
         }
     }
     
-    func goToAddInventory() {
-        self.hapticImpact.impactOccurred()
-        
-        self.isShowingAddItem.toggle()
-        self.toggleMenu()
-        
-    }
-    
-    func goToMakeASale() {
-        self.hapticImpact.impactOccurred()
-        self.isShowingAddItem.toggle()
-        self.toggleMenu()
-    }
-    
-    func goToInventoryList() {
-        self.hapticImpact.impactOccurred()
-        self.isShowingInventoryList.toggle()
-        self.toggleMenu()
-    }
 }

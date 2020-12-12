@@ -23,6 +23,7 @@ struct AddInventoryView: View {
     
     
     var body: some View {
+
         VStack {
             HStack(spacing: 20) {
                 Image(systemName: "dollarsign.square")
@@ -73,7 +74,7 @@ struct AddInventoryView: View {
                     Picker(selection: $typeID, label: Text("")) {
                         ForEach(0..<types.count) { index in
                             Text(self.types[index]).foregroundColor(.black).tag(index)
-                                
+                            
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
@@ -208,7 +209,7 @@ struct AddInventoryView: View {
                 .frame(height: 50)
                 
                 Divider()
-                    
+                
                 //MARK: - Package Price Field
                 HStack {
                     Text("Cost of Package:")
@@ -277,7 +278,7 @@ struct AddInventoryView: View {
             Button(action: {
                 let tempAvgCost = Double(cost)! / Double(quantityPurchased)
                 let formattedAvgCost = Double(String(format: "%.2f", tempAvgCost))!
-
+                
                 
                 //This should return a success/failure result in case they try and add a new item that already exists
                 let newItem = Item()
@@ -304,10 +305,12 @@ struct AddInventoryView: View {
             
             Spacer()
         }
-        .padding()
         .background(Color.white)
-        .accentColor(.black)
+        .navigationBarHidden(true)
+        
+        
     }
+    
     
     
     

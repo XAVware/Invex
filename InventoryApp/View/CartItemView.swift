@@ -8,19 +8,23 @@
 import SwiftUI
 
 struct CartItemView: View {
-    @State var quantity: Int = 1
+    @StateObject var cart: Cart
+    @ObservedObject var cartItem: CartItem
     
     var body: some View {
         VStack(spacing: 5) {
             HStack {
-                Text("Pepsi")
+                Text(cartItem.name)
+                    .padding(.leading)
                     .font(.system(size: 18, weight: .semibold, design: .rounded))
                     .foregroundColor(.white)
                     .frame(width: 120, alignment: .leading)
                 
                 HStack(spacing: 0) {
                     Button(action: {
-                        self.quantity += 1
+                        if cartItem.qtyToPurchase != 0 {
+                            self.cart.decreaseQuantity(forItem: self.cartItem)
+                        }
                     }) {
                         Image(systemName: "minus.circle")
                             .resizable()
@@ -29,16 +33,19 @@ struct CartItemView: View {
                             .accentColor(Color.white)
                     }
                     
-                    Text("\(quantity)")
+                    Text("\(self.cartItem.qtyToPurchase)")
                         .padding()
                         .foregroundColor(.white)
-                        .frame(width: 50, height: 40, alignment: .center)
+                        .frame(minWidth: 40, idealWidth: 50, maxWidth: 60, minHeight: 40, idealHeight: 40, maxHeight: 40, alignment: .center)
+//                        .frame(width: 50, height: 40, alignment: .center)
                         .multilineTextAlignment(.center)
-                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
                     
                     
                     Button(action: {
-                        self.quantity -= 1
+                        if cartItem.qtyToPurchase < 24 {
+                            self.cart.increaseQuantity(forItem: self.cartItem)
+                        }
                     }) {
                         Image(systemName: "plus.circle.fill")
                             .resizable()
@@ -48,7 +55,8 @@ struct CartItemView: View {
                     }
                 } //: HStack - Stepper
                 
-                Text("$ 1.00")
+                Text("$ \(self.cartItem.retailPrice)")
+                    .padding(.trailing)
                     .font(.system(size: 18, weight: .semibold, design: .rounded))
                     .foregroundColor(.white)
                     .frame(width: 120, alignment: .trailing)
@@ -60,9 +68,9 @@ struct CartItemView: View {
     }
 }
 
-struct CartItemView_Previews: PreviewProvider {
-    static var previews: some View {
-        CartItemView()
-            .previewLayout(.sizeThatFits)
-    }
-}
+//struct CartItemView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CartItemView()
+//            .previewLayout(.sizeThatFits)
+//    }
+//}

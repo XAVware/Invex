@@ -30,13 +30,16 @@ struct InventoryListView: View {
             .padding()
             
             Spacer()
+            
             VStack(alignment: .center, spacing: 0) {
-                HStack {
+                
+                HStack(alignment: .center, spacing: 0) {
+                    
                     Text("Item Name:")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.black)
                         .opacity(0.7)
-                        .frame(width: 160)
+                        .frame(width: 160, alignment: .leading)
                     
                     Text("Type:")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
@@ -56,23 +59,25 @@ struct InventoryListView: View {
                         .opacity(0.7)
                         .frame(width: 160)
                     
-                    Text("Avg. Cost / Unit:")
+                    Text("Cost / Unit:")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.black)
                         .opacity(0.7)
-                        .frame(width: 160)
+                        .frame(width: 160, alignment: .trailing)
                     
                 } //: HStack
+                .padding(.horizontal)
                 .frame(height: 40)
                 
                 Divider()
                 
-                Spacer().frame(height: 5)
                 
-                ScrollView {
+                List {
                     ForEach(self.appManager.itemList, id: \.self) { item in
                         InventoryListRowView(item: item)
+                            
                     }
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 } //: List
                     
                 

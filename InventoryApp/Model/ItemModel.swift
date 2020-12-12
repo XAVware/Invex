@@ -17,9 +17,17 @@ class Item: Object {
 }
 
 
-struct CartItem: Hashable {
-    var name: String
-    var type: String
-    var qtyToPurchase: Int
-    var retailPrice: String
+class CartItem: ObservableObject {
+    var id = UUID()
+    @Published var name: String = ""
+    @Published var type: String = ""
+    @Published var qtyToPurchase: Int = 1
+    @Published var retailPrice: String = ""
+    
+//    init(name: String, type: String, qtyToPurchase: Int, retailPrice: String) {
+//        self.name = name
+//        self.type = type
+//        self.qtyToPurchase = qtyToPurchase
+//        self.retailPrice = retailPrice
+//    }
 }

@@ -15,7 +15,7 @@ struct InventoryListRowView: View {
             Text(item.name)
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
                 .foregroundColor(.black)
-                .frame(width: 160)
+                .frame(width: 160, alignment: .leading)
             
             Text(item.type)
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
@@ -35,7 +35,7 @@ struct InventoryListRowView: View {
             Text("$ \(String(format: "%.2f", item.avgCostPer))")
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
                 .foregroundColor(.black)
-                .frame(width: 160)
+                .frame(width: 160, alignment: .trailing)
         }
         .background(
             Color.white

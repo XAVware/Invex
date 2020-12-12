@@ -14,35 +14,42 @@ struct MenuView: View {
     
     var body: some View {
         HStack {
+            
             VStack(spacing: 15) {
-                Spacer().frame(height: 10)
+                
                 Text("Menu")
-                    .padding(.horizontal)
+                    .padding()
                     .font(.system(size: 36, weight: .semibold, design: .rounded))
                     .foregroundColor(.white)
                     .frame(width: menuWidth, height: 50, alignment: .leading)
+                
+                
+                
                 Button(action: {
-                    self.appManager.goToMakeASale()
+                    self.appManager.changeDisplay(to: .makeASale)
+                    
                 }) {
                     Text("Make A Sale")
-                        .underline()
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                         .frame(height: 60)
                         .foregroundColor(.white)
                 }
                 
+                Divider().background(Color.white)
+                
                 Button(action: {
-                    self.appManager.goToAddInventory()
+                    self.appManager.changeDisplay(to: .addInventory)
                 }) {
                     Text("Add Inventory")
-                        .underline()
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                         .frame(height: 60)
                         .foregroundColor(.white)
                 }
                 
+                Divider().background(Color.white)
+                
                 Button(action: {
-                    self.appManager.goToInventoryList()
+                    self.appManager.changeDisplay(to: .inventoryList)
                 }) {
                     Text("Inventory List")
                         .underline()
@@ -73,6 +80,7 @@ struct MenuView: View {
         )
         .edgesIgnoringSafeArea(.all)
     }
+    
 }
 
 struct MenuView_Previews: PreviewProvider {
