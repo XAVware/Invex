@@ -13,8 +13,6 @@
 		94003D98258161A70056928E /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94003D97258161A70056928E /* HeaderView.swift */; };
 		94003D9B258164EA0056928E /* AddInventoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94003D9A258164EA0056928E /* AddInventoryView.swift */; };
 		94003D9E258165590056928E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94003D9D258165590056928E /* Extensions.swift */; };
-		940E200E2586AFE000036B96 /* RestockItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E200D2586AFE000036B96 /* RestockItemView.swift */; };
-		940E20112586B6F500036B96 /* RestockItemRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E20102586B6F500036B96 /* RestockItemRowView.swift */; };
 		940E20172586C09900036B96 /* SaveItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E20162586C09900036B96 /* SaveItemButton.swift */; };
 		943D6066258195BB00C6C712 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D6065258195BB00C6C712 /* ItemModel.swift */; };
 		943D60692581ABEE00C6C712 /* InventoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D60682581ABEE00C6C712 /* InventoryListView.swift */; };
@@ -38,8 +36,6 @@
 		94003D97258161A70056928E /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		94003D9A258164EA0056928E /* AddInventoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInventoryView.swift; sourceTree = "<group>"; };
 		94003D9D258165590056928E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		940E200D2586AFE000036B96 /* RestockItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestockItemView.swift; sourceTree = "<group>"; };
-		940E20102586B6F500036B96 /* RestockItemRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestockItemRowView.swift; sourceTree = "<group>"; };
 		940E20162586C09900036B96 /* SaveItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveItemButton.swift; sourceTree = "<group>"; };
 		943D6065258195BB00C6C712 /* ItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
 		943D60682581ABEE00C6C712 /* InventoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryListView.swift; sourceTree = "<group>"; };
@@ -99,8 +95,6 @@
 				94EEFDEB2581CDAD0096DB87 /* InventoryListRowView.swift */,
 				94EEFDF12582B7870096DB87 /* CartItemView.swift */,
 				94B656A825841A6000CDFB12 /* MakeASaleView.swift */,
-				940E200D2586AFE000036B96 /* RestockItemView.swift */,
-				940E20102586B6F500036B96 /* RestockItemRowView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -278,7 +272,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				940E20112586B6F500036B96 /* RestockItemRowView.swift in Sources */,
 				94F63773258E9FB000A63032 /* Constants.swift in Sources */,
 				940E20172586C09900036B96 /* SaveItemButton.swift in Sources */,
 				94003D98258161A70056928E /* HeaderView.swift in Sources */,
@@ -289,7 +282,6 @@
 				94EEFDEC2581CDAD0096DB87 /* InventoryListRowView.swift in Sources */,
 				94003D9B258164EA0056928E /* AddInventoryView.swift in Sources */,
 				94003D9025815E130056928E /* AppStateManager.swift in Sources */,
-				940E200E2586AFE000036B96 /* RestockItemView.swift in Sources */,
 				94586EDB2580A1F5001A42C4 /* InventoryAppApp.swift in Sources */,
 				94EEFDEF258293250096DB87 /* CartModel.swift in Sources */,
 				943D60692581ABEE00C6C712 /* InventoryListView.swift in Sources */,
