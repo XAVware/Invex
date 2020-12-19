@@ -52,7 +52,6 @@ struct MenuView: View {
                     self.appManager.changeDisplay(to: .inventoryList)
                 }) {
                     Text("Inventory List")
-                        .underline()
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                         .frame(height: 60)
                         .foregroundColor(.white)

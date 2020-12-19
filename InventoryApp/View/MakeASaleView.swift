@@ -45,14 +45,15 @@ struct MakeASaleView: View {
                     .padding()
                 }
                 
+                
             }
+            .background(Color.white)
             .padding()
             .frame(width: (UIScreen.main.bounds.width / 3) * 2)
             
             //MARK: - Cart Section
             ZStack {
-                LinearGradient(gradient: Gradient(colors: [Color(hex: "141E30").opacity(0.8), Color(hex: "243B55").opacity(0.7)]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                
+                K.BackgroundGradients.cartView
                 
                 VStack(spacing: 0) {
                     Text("Cart")
@@ -94,9 +95,7 @@ struct MakeASaleView: View {
                         })
                     }
                     
-                    Divider()
-                        .background(Color.white)
-                        .padding(.horizontal)
+                    Divider().background(Color.white).padding(.horizontal)
                     
                     HStack {
                         Text("Total: ")
@@ -121,19 +120,20 @@ struct MakeASaleView: View {
                             .font(.system(size: 24, weight: .semibold, design: .rounded))
                     }
                     .frame(maxWidth: .infinity, minHeight: 60)
-                    .background(Color.green)
+                    .background(K.BackgroundGradients.checkoutButton)
                 }
             } //: ZStack - Cart Section
             .frame(width: UIScreen.main.bounds.width / 3)
             
-        } //: VStack
-        
+        } //: HStack
+        .background(Color.white)
     } //: VStack used to keep header above all pages
     
     init(appManager: AppStateManager, cart: Cart) {
         self.appManager = appManager
         self.cart = cart
         UITableView.appearance().backgroundColor = UIColor.clear
+        UITableViewCell.appearance().backgroundColor = UIColor.clear
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(named: "ColorWatermelonDark")
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)

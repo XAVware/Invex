@@ -75,25 +75,25 @@ struct InventoryListView: View {
                 List {
                     ForEach(self.appManager.itemList, id: \.self) { item in
                         InventoryListRowView(item: item)
+                            .background(Color.white)
                             
                     }
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .background(Color.white)
                 } //: List
-                    
+                .background(Color.white)
                 
                 
                 Spacer()
             } //: VStack
             .frame(maxWidth: 800)
-            
+            .background(Color.white)
         } //: VStack
-        .padding()
         .background(Color.white)
     }
     
     init(appManager: AppStateManager) {
         self.appManager = appManager
-        
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear
     }

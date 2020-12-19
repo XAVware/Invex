@@ -37,10 +37,8 @@ struct InventoryListRowView: View {
                 .foregroundColor(.black)
                 .frame(width: 160, alignment: .trailing)
         }
-        .background(
-            Color.white
-        )
-        .frame(maxWidth: 800, maxHeight: 40)
+        .background(Color.white)
+        .frame(maxWidth: 800, maxHeight: 45)
     }
 }
 

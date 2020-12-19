@@ -27,10 +27,12 @@ class AppStateManager: ObservableObject {
     
     
     func changeDisplay(to newDisplayState: DisplayState) {
-        self.currentDisplayState = newDisplayState
         withAnimation {
             self.isShowingMenu.toggle()
         }
+        guard newDisplayState != currentDisplayState else { return }
+        self.currentDisplayState = newDisplayState
+        self.getAllItems()
     }
     
     
@@ -45,16 +47,22 @@ class AppStateManager: ObservableObject {
         let config = Realm.Configuration(schemaVersion: 1)
         do {
             let realm = try Realm(configuration: config)
-            try realm.write({
+            try realm.write ({
                 realm.add(newItem)
-                print("Success")
             })
         } catch {
             print(error.localizedDescription)
         }
     }
     
+    
     func getAllItems() {
+        self.itemList.removeAll()
+        self.beverageList.removeAll()
+        self.foodSnackList.removeAll()
+        self.frozenList.removeAll()
+        self.otherList.removeAll()
+        
         let config = Realm.Configuration(schemaVersion: 1)
         do {
             let realm = try Realm(configuration: config)
