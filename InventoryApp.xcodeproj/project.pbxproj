@@ -20,6 +20,9 @@
 		9449E460258FC9EF00FD232C /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9449E45F258FC9EF00FD232C /* MenuButton.swift */; };
 		9449E463258FD41F00FD232C /* HeaderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9449E462258FD41F00FD232C /* HeaderLabel.swift */; };
 		9449E46B258FDE6500FD232C /* AddInventoryDetailLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9449E46A258FDE6500FD232C /* AddInventoryDetailLabel.swift */; };
+		9449E46F258FE5BD00FD232C /* QuantityPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9449E46E258FE5BD00FD232C /* QuantityPicker.swift */; };
+		9449E472258FE7EC00FD232C /* QuantityButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9449E471258FE7EC00FD232C /* QuantityButton.swift */; };
+		9449E476258FEEEC00FD232C /* QuantityStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9449E475258FEEEC00FD232C /* QuantityStepper.swift */; };
 		94586EDB2580A1F5001A42C4 /* InventoryAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94586EDA2580A1F5001A42C4 /* InventoryAppApp.swift */; };
 		94586EDD2580A1F5001A42C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94586EDC2580A1F5001A42C4 /* ContentView.swift */; };
 		94586EDF2580A1F5001A42C4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94586EDE2580A1F5001A42C4 /* Assets.xcassets */; };
@@ -46,6 +49,9 @@
 		9449E45F258FC9EF00FD232C /* MenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
 		9449E462258FD41F00FD232C /* HeaderLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderLabel.swift; sourceTree = "<group>"; };
 		9449E46A258FDE6500FD232C /* AddInventoryDetailLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInventoryDetailLabel.swift; sourceTree = "<group>"; };
+		9449E46E258FE5BD00FD232C /* QuantityPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityPicker.swift; sourceTree = "<group>"; };
+		9449E471258FE7EC00FD232C /* QuantityButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityButton.swift; sourceTree = "<group>"; };
+		9449E475258FEEEC00FD232C /* QuantityStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantityStepper.swift; sourceTree = "<group>"; };
 		94586ED72580A1F5001A42C4 /* InventoryApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InventoryApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94586EDA2580A1F5001A42C4 /* InventoryAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryAppApp.swift; sourceTree = "<group>"; };
 		94586EDC2580A1F5001A42C4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -102,6 +108,7 @@
 				94EEFDEB2581CDAD0096DB87 /* InventoryListRowView.swift */,
 				94EEFDF12582B7870096DB87 /* CartItemView.swift */,
 				94B656A825841A6000CDFB12 /* MakeASaleView.swift */,
+				9449E474258FEEA600FD232C /* CustomUIComponents */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -122,6 +129,7 @@
 				943D606C2581B85700C6C712 /* ItemButton.swift */,
 				940E20162586C09900036B96 /* SaveItemButton.swift */,
 				9449E45F258FC9EF00FD232C /* MenuButton.swift */,
+				9449E471258FE7EC00FD232C /* QuantityButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -133,6 +141,15 @@
 				9449E46A258FDE6500FD232C /* AddInventoryDetailLabel.swift */,
 			);
 			path = Labels;
+			sourceTree = "<group>";
+		};
+		9449E474258FEEA600FD232C /* CustomUIComponents */ = {
+			isa = PBXGroup;
+			children = (
+				9449E46E258FE5BD00FD232C /* QuantityPicker.swift */,
+				9449E475258FEEEC00FD232C /* QuantityStepper.swift */,
+			);
+			path = CustomUIComponents;
 			sourceTree = "<group>";
 		};
 		94586ECE2580A1F4001A42C4 = {
@@ -299,12 +316,15 @@
 				9449E463258FD41F00FD232C /* HeaderLabel.swift in Sources */,
 				94EEFDEC2581CDAD0096DB87 /* InventoryListRowView.swift in Sources */,
 				94003D9B258164EA0056928E /* AddInventoryView.swift in Sources */,
+				9449E472258FE7EC00FD232C /* QuantityButton.swift in Sources */,
 				9449E460258FC9EF00FD232C /* MenuButton.swift in Sources */,
 				9449E46B258FDE6500FD232C /* AddInventoryDetailLabel.swift in Sources */,
 				94003D9025815E130056928E /* AppStateManager.swift in Sources */,
 				94586EDB2580A1F5001A42C4 /* InventoryAppApp.swift in Sources */,
 				94EEFDEF258293250096DB87 /* CartModel.swift in Sources */,
 				943D60692581ABEE00C6C712 /* InventoryListView.swift in Sources */,
+				9449E46F258FE5BD00FD232C /* QuantityPicker.swift in Sources */,
+				9449E476258FEEEC00FD232C /* QuantityStepper.swift in Sources */,
 				94003D9E258165590056928E /* Extensions.swift in Sources */,
 				94EEFDF22582B7870096DB87 /* CartItemView.swift in Sources */,
 				94B656A925841A6000CDFB12 /* MakeASaleView.swift in Sources */,

@@ -103,123 +103,15 @@ struct AddInventoryView: View {
                     
                     Divider()
                     
-                    //MARK: - Quantity Purchased Field
                     HStack {
                         AddInventoryDetailLabel(title: "Quantity Purchased: ")
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
-                        //MARK: - Quantity Buttons
-                        HStack {
-                            Spacer(minLength: 0)
-                            
-                            Button(action: {
-                                if self.isCustomQuantity { withAnimation { self.isCustomQuantity.toggle() } }
-                                self.quantityPurchased = 12
-                            }) {
-                                Text("12")
-                                    .font(.system(size: 18, weight: quantityPurchased == 12 ? .semibold : .light, design: .rounded))
-                                    .foregroundColor(.black)
-                            }
-                            .frame(width: 30)
-                            
-                            Button(action: {
-                                if self.isCustomQuantity { withAnimation { self.isCustomQuantity.toggle() } }
-                                self.quantityPurchased = 18
-                            }) {
-                                Text("18")
-                                    .font(.system(size: 18, weight: quantityPurchased == 18 ? .semibold : .light, design: .rounded))
-                                    .foregroundColor(.black)
-                            }
-                            .frame(width: 30)
-                            
-                            Button(action: {
-                                if self.isCustomQuantity { withAnimation { self.isCustomQuantity.toggle() } }
-                                self.quantityPurchased = 24
-                            }) {
-                                Text("24")
-                                    .font(.system(size: 18, weight: quantityPurchased == 24 ? .semibold : .light, design: .rounded))
-                                    .foregroundColor(.black)
-                            }
-                            .frame(width: 30)
-                            
-                            Button(action: {
-                                if self.isCustomQuantity { withAnimation { self.isCustomQuantity.toggle() } }
-                                self.quantityPurchased = 30
-                            }) {
-                                Text("30")
-                                    .font(.system(size: 18, weight: quantityPurchased == 30 ? .semibold : .light, design: .rounded))
-                                    .foregroundColor(.black)
-                            }
-                            .frame(width: 30)
-                            
-                            Button(action: {
-                                if self.isCustomQuantity { withAnimation { self.isCustomQuantity.toggle() } }
-                                self.quantityPurchased = 36
-                            }) {
-                                Text("36")
-                                    .font(.system(size: 18, weight: quantityPurchased == 36 ? .semibold : .light, design: .rounded))
-                                    .foregroundColor(.black)
-                            }
-                            .frame(width: 30)
-                            
-                            Button(action: {
-                                self.quantityPurchased = 0
-                                withAnimation {
-                                    self.isCustomQuantity.toggle()
-                                }
-                            }) {
-                                Text("Custom")
-                                    .font(.system(size: 18, weight: self.isCustomQuantity ? .semibold : .light, design: .rounded))
-                                    .foregroundColor(.black)
-                            }
-                            .frame(width: 70)
-                            
-                            
-                            if self.isCustomQuantity {
-                                HStack(spacing: 10) {
-                                    Button(action: {
-                                        
-                                    }) {
-                                        Image(systemName: "minus.circle.fill")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 20, height: 20)
-                                            .accentColor(Color.blue.opacity(0.8))
-                                    }
-                                    
-                                    TextField("", text: $customValue)
-                                        .padding()
-                                        .foregroundColor(.black)
-                                        .background(
-                                            Color(UIColor.tertiarySystemFill)
-                                                .cornerRadius(9)
-                                                .frame(height: 30, alignment: .center)
-                                        )
-                                        .frame(width: 80, height: 40, alignment: .center)
-                                        .multilineTextAlignment(.center)
-                                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                                    
-                                    
-                                    Button(action: {
-                                        
-                                    }) {
-                                        Image(systemName: "plus.circle.fill")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 20, height: 20)
-                                            .accentColor(Color.blue.opacity(0.8))
-                                    }
-                                }
-                                
-                            }
-                            
-                        }//: HStack
-                        .frame(width: 410, height: 30)
-                        
-                        
-                    } //: HStack - Quantity Purchased
+                        QuantityPicker(selectedQuantity: $quantityPurchased)
+                    }
                     .frame(height: 50)
+                    
                     
                     Divider()
                     
@@ -250,6 +142,9 @@ struct AddInventoryView: View {
                         
                     } //: HStack - Package Cost
                     .frame(height: 50)
+                    .onTapGesture {
+                        print(self.quantityPurchased)
+                    }
                     
                     Divider()
                     
