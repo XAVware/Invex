@@ -31,30 +31,20 @@ struct AddInventoryView: View {
         
         ScrollView {
             VStack {
+                //MARK: - Title Section
                 HStack(spacing: 20) {
-                    Image(systemName: "dollarsign.square")
-                        .resizable()
-                        .scaledToFit()
-                        .font(.system(size: 36, weight: .semibold))
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.black)
-                    
-                    Text("Add Inventory")
-                        .font(.system(size: 36, weight: .bold, design: .rounded))
-                        .foregroundColor(.black)
+                    HeaderLabel(title: "Add Inventory")
                     
                     Spacer()
                     
-                    Text("Item Type:")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundColor(.black)
-                    
+                    AddInventoryDetailLabel(title: "Item Type:")
                     
                     Picker(selection: $concessionTypeID, label: Text("")) {
                         ForEach(0 ..< concessionTypes.count) { index in
                             Text(self.concessionTypes[index]).foregroundColor(.black).tag(index)
                         }
                     }
+                    .padding(.trailing)
                     .pickerStyle(SegmentedPickerStyle())
                     .frame(width: 400)
                     .onChange(of: concessionTypeID, perform: { value in
@@ -65,11 +55,7 @@ struct AddInventoryView: View {
                             }
                         }
                     })
-                    
-                    
-                } //: HStack - Title
-                .padding(.horizontal, 30)
-                .padding(.top)
+                } //: HStack - Title Section
                 
                 Divider()
                 
@@ -113,15 +99,13 @@ struct AddInventoryView: View {
                             
                         }
                     } //: HStack - Title Field
-                    .frame(height: restockTypeID == 0 ? 180 : 70)
+                    .frame(height: withAnimation { restockTypeID == 0 ? 180 : 70 })
                     
                     Divider()
                     
                     //MARK: - Quantity Purchased Field
                     HStack {
-                        Text("Quantity Purchased:")
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
-                            .foregroundColor(.black)
+                        AddInventoryDetailLabel(title: "Quantity Purchased: ")
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
@@ -241,9 +225,7 @@ struct AddInventoryView: View {
                     
                     //MARK: - Package Price Field
                     HStack {
-                        Text("Cost of Package:")
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
-                            .foregroundColor(.black)
+                        AddInventoryDetailLabel(title: "Cost of Package:")
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
@@ -273,9 +255,7 @@ struct AddInventoryView: View {
                     
                     //MARK: - Retail Price Field
                     HStack {
-                        Text("Retail Price:")
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
-                            .multilineTextAlignment(.leading)
+                        AddInventoryDetailLabel(title: "Retail Price:")
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .foregroundColor(.black)
                         
@@ -324,8 +304,9 @@ struct AddInventoryView: View {
                 })
                 
                 Spacer()
+                
             } //: VStack
-            .padding()
+            
         } //: Scroll
         .background(Color.white)
         .navigationBarHidden(true)
@@ -336,18 +317,6 @@ struct AddInventoryView: View {
     
     init(appManager: AppStateManager) {
         self.appManager = appManager
-        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(named: "ColorWatermelonDark")
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-        
         UITextField.appearance().attributedText = NSAttributedString(string: "Ex. Mt. Dew", attributes: [NSAttributedString.Key.foregroundColor: Color.black])
-        
-    }
-}
-
-struct AddInventoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddInventoryView(appManager: AppStateManager())
-            .previewLayout(.fixed(width: 1024, height: 786))
     }
 }

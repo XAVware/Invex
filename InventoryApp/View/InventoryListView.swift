@@ -12,22 +12,8 @@ struct InventoryListView: View {
     
     var body: some View {
         VStack {
-            HStack(spacing: 20) {
-                Image(systemName: "newspaper")
-                    .resizable()
-                    .scaledToFit()
-                    .font(.system(size: 36, weight: .semibold))
-                    .foregroundColor(.black)
-                    .frame(width: 40, height: 40)
-                
-                Text("Current Inventory")
-                    .font(.system(size: 36, weight: .bold, design: .rounded))
-                    .foregroundColor(.black)
-                
-                Spacer()
-                
-            } //: HStack - Title
-            .padding()
+
+            HeaderLabel(title: "Current Inventory")
             
             Spacer()
             
@@ -92,11 +78,6 @@ struct InventoryListView: View {
         .background(Color.white)
     }
     
-    init(appManager: AppStateManager) {
-        self.appManager = appManager
-        UITableView.appearance().backgroundColor = .clear
-        UITableViewCell.appearance().backgroundColor = .clear
-    }
 }
 
 struct InventoryListView_Previews: PreviewProvider {

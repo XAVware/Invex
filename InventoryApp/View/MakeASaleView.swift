@@ -129,15 +129,6 @@ struct MakeASaleView: View {
         .background(Color.white)
     } //: VStack used to keep header above all pages
     
-    init(appManager: AppStateManager, cart: Cart) {
-        self.appManager = appManager
-        self.cart = cart
-        UITableView.appearance().backgroundColor = UIColor.clear
-        UITableViewCell.appearance().backgroundColor = UIColor.clear
-        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(named: "ColorWatermelonDark")
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
-        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
-    }
 }
 
 //struct MakeASaleView_Previews: PreviewProvider {

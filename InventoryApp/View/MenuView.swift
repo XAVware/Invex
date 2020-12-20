@@ -10,67 +10,34 @@ import SwiftUI
 struct MenuView: View {
     @ObservedObject var appManager: AppStateManager
     
-    var menuWidth: CGFloat = 350
-    
     var body: some View {
         HStack {
             
+            //MARK: - Menu View
             VStack(spacing: 15) {
                 
-                Text("Menu")
-                    .padding()
-                    .font(.system(size: 36, weight: .semibold, design: .rounded))
-                    .foregroundColor(.white)
-                    .frame(width: menuWidth, height: 50, alignment: .leading)
+                HeaderLabel(title: "Menu")
+//                    .frame(width: K.Sizes.menuWidth, height: 50, alignment: .leading)
                 
-                
-                
-                Button(action: {
+                MenuButton(title: "Make A Sale") {
                     self.appManager.changeDisplay(to: .makeASale)
-                    
-                }) {
-                    Text("Make A Sale")
-                        .font(.system(size: 24, weight: .semibold, design: .rounded))
-                        .frame(height: 60)
-                        .foregroundColor(.white)
                 }
                 
-                Divider().background(Color.white)
-                
-                Button(action: {
+                MenuButton(title: "Add Inventory") {
                     self.appManager.changeDisplay(to: .addInventory)
-                }) {
-                    Text("Add Inventory")
-                        .font(.system(size: 24, weight: .semibold, design: .rounded))
-                        .frame(height: 60)
-                        .foregroundColor(.white)
                 }
                 
-                Divider().background(Color.white)
-                
-                Button(action: {
+                MenuButton(title: "Inventory List") {
                     self.appManager.changeDisplay(to: .inventoryList)
-                }) {
-                    Text("Inventory List")
-                        .font(.system(size: 24, weight: .semibold, design: .rounded))
-                        .frame(height: 60)
-                        .foregroundColor(.white)
                 }
                 
+                Spacer()
                 
-                Spacer(minLength: 0)
-            } //: VStack
-            .frame(width: menuWidth)
-            .background(
-//                LinearGradient(gradient: Gradient(colors: [Color(hex: "f0f2f0"), Color(hex: "000c40")]), startPoint: .bottom, endPoint: .top)
-                ZStack {
-                    Color(hex: "0f2027")
-                    
-                    RadialGradient(gradient: Gradient(colors: [Color(hex: "0f2027"), Color(hex: "203a43"), Color(hex: "2c5354")]), center: .topLeading, startRadius: 40, endRadius: UIScreen.main.bounds.width)
-                }
-            )
-            .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom)
-            .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
+            } //: VStack - Menu View
+            .frame(width: K.Sizes.menuWidth)
+            .background(K.BackgroundGradients.menuView)
+            .padding(.bottom, K.SafeAreas.bottom)
+            .padding(.top, K.SafeAreas.top)
             
             Spacer(minLength: 0)
         } //: HStack - MenuView

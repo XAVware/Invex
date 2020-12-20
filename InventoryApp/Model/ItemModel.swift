@@ -23,11 +23,4 @@ class CartItem: ObservableObject {
     @Published var type: String = ""
     @Published var qtyToPurchase: Int = 1
     @Published var retailPrice: String = ""
-    
-//    init(name: String, type: String, qtyToPurchase: Int, retailPrice: String) {
-//        self.name = name
-//        self.type = type
-//        self.qtyToPurchase = qtyToPurchase
-//        self.retailPrice = retailPrice
-//    }
 }

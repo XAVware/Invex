@@ -37,7 +37,6 @@ struct CartItemView: View {
                         .padding()
                         .foregroundColor(.white)
                         .frame(minWidth: 40, idealWidth: 50, maxWidth: 60, minHeight: 40, idealHeight: 40, maxHeight: 40, alignment: .center)
-//                        .frame(width: 50, height: 40, alignment: .center)
                         .multilineTextAlignment(.center)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                     

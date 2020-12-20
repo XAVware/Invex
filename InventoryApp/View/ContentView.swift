@@ -12,8 +12,6 @@ struct ContentView: View {
     @StateObject var appManager = AppStateManager()
     @StateObject var cart = Cart()
     
-    
-    
     var body: some View {
         NavigationView {
             
@@ -32,23 +30,26 @@ struct ContentView: View {
                         InventoryListView(appManager: self.appManager)
                     }
                     
-                    
                 } //: VStack used to keep header above all pages
                 
-                
                 MenuView(appManager: self.appManager) //Menu should always be at top of ZStack
-            }
+            } //: ZStack
+            .navigationBarHidden(true)
             .onAppear {
                 self.appManager.getAllItems()
             }
             
-            
-            .navigationBarHidden(true)
-        }
+        } //: NavigationView
         .navigationViewStyle(StackNavigationViewStyle())
     } //: Body
     
-    
+    init() {
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(named: "ColorWatermelonDark")
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        UITableView.appearance().backgroundColor = .clear
+        UITableViewCell.appearance().backgroundColor = .clear
+    }
     
 }
 
