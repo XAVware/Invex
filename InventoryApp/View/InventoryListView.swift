@@ -63,11 +63,17 @@ struct InventoryListView: View {
                         InventoryListRowView(item: item)
                             .background(Color.white)
                             
+                            
                     }
+                    .onDelete(perform: { indexSet in
+                        self.appManager.deleteItem(atOffsets: indexSet)
+                    })
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                     .background(Color.white)
+                    
                 } //: List
                 .background(Color.white)
+                
                 
                 
                 Spacer()

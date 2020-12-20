@@ -142,9 +142,6 @@ struct AddInventoryView: View {
                         
                     } //: HStack - Package Cost
                     .frame(height: 50)
-                    .onTapGesture {
-                        print(self.quantityPurchased)
-                    }
                     
                     Divider()
                     

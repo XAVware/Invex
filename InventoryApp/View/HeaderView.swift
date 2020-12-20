@@ -44,9 +44,7 @@ struct HeaderView: View {
                 
             }
             .frame(height: 40)
-            .background(
-                LinearGradient(gradient: Gradient(colors: [Color(hex: "000000").opacity(0.9), Color(hex: "434343").opacity(0.9)]), startPoint: .top, endPoint: .bottom)
-            )
+            .background(K.BackgroundGradients.navBar)
         
     }
 }

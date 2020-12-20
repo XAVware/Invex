@@ -10,7 +10,6 @@ import SwiftUI
 struct QuantityPicker: View {
     @Binding var selectedQuantity: Int
     @State var isCustomQuantity: Bool       = false
-    @State var customValue: String          = "10"
     
     var body: some View {
         HStack {
@@ -38,7 +37,6 @@ struct QuantityPicker: View {
             
             Button(action: {
                 withAnimation { self.isCustomQuantity.toggle() }
-                self.customValue = "\(self.selectedQuantity)"
             }) {
                 Text("Custom")
                     .font(.system(size: 18, weight: self.isCustomQuantity ? .semibold : .light, design: .rounded))

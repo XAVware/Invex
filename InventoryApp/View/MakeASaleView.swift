@@ -86,12 +86,13 @@ struct MakeASaleView: View {
                     
                     Spacer().frame(height: 10)
                     
+                    //Change to list
                     ScrollView(.vertical, showsIndicators: false) {
                         ForEach(self.cart.cartItems, id: \.id) { cartItem in
                             CartItemView(cart: self.cart, cartItem: cartItem)
                         }
                         .onDelete(perform: { indexSet in
-                            print("Delete IndexSet: \(indexSet)")
+                            self.cart.cartItems.remove(atOffsets: indexSet)
                         })
                     }
                     

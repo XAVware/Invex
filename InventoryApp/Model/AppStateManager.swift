@@ -45,6 +45,35 @@ class AppStateManager: ObservableObject {
     
     }
     
+    func deleteItem(atOffsets offsets: IndexSet) {
+        guard let itemIndex = offsets.first else {
+            print("Unable to retrieve selected item index. See deleteItem() -- Returning")
+            return
+        }
+        
+        let selectedItem = self.itemList[itemIndex]
+        
+        
+        let config = Realm.Configuration(schemaVersion: 1)
+        do {
+            let realm = try Realm(configuration: config)
+            let result = realm.objects(Item.self)
+            
+            for item in result {
+                if item.name == selectedItem.name {
+                    try realm.write ({
+                        realm.delete(item)
+                    })
+                    self.getAllItems()
+                    return
+                }
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+    }
+    
     
     
     func changeDisplay(to newDisplayState: DisplayState) {
@@ -89,35 +118,58 @@ class AppStateManager: ObservableObject {
         }
     }
     
-    
-    func getAllItems() {
+    func clearLists() {
         self.itemList.removeAll()
         self.beverageList.removeAll()
         self.foodSnackList.removeAll()
         self.frozenList.removeAll()
         self.otherList.removeAll()
+    }
+    
+    
+    func getAllItems() {
+        self.clearLists()
+        
+        var tempItemList: [Item] = []
+        var tempBeverageList: [Item] = []
+        var tempFoodSnackList: [Item] = []
+        var tempFrozenList: [Item] = []
+        var tempOtherList: [Item] = []
         
         let config = Realm.Configuration(schemaVersion: 1)
         do {
             let realm = try Realm(configuration: config)
             let result = realm.objects(Item.self)
             for item in result {
-                itemList.append(item)
+                tempItemList.append(item)
+                //self.itemList.append(item)
                 
                 switch item.type {
                 case "Beverage":
-                    beverageList.append(item)
+                    tempBeverageList.append(item)
+//                    beverageList.append(item)
                 case "Food / Snack":
-                    foodSnackList.append(item)
+                    tempFoodSnackList.append(item)
+//                    foodSnackList.append(item)
                 case "Frozen":
-                    frozenList.append(item)
+                    tempFrozenList.append(item)
+//                    frozenList.append(item)
                 default:
-                    otherList.append(item)
+                    tempOtherList.append(item)
+//                    otherList.append(item)
                 }
             }
         } catch {
+            print("Triggered In Get all")
+            
             print(error.localizedDescription)
         }
+        
+        self.itemList = tempItemList
+        self.beverageList = tempBeverageList
+        self.foodSnackList = tempFoodSnackList
+        self.frozenList = tempFrozenList
+        self.otherList = tempOtherList
     }
     
 }

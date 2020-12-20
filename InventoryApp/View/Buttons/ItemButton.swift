@@ -18,7 +18,7 @@ struct ItemButton: View {
         case "Food / Snack":
             return Color(hex: "f7797d")
         case "Beverage":
-            return Color(hex: "193658")
+            return Color(hex: "f2c94c")
         case "Frozen":
             return Color(hex: "6dd5ed")
         default:
