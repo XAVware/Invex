@@ -25,6 +25,27 @@ class AppStateManager: ObservableObject {
     @Published var otherList: [Item]        = []
     
     
+    func restockItem(itemIndex: Int, quantity: Int) {
+        let tempItem = self.itemList[itemIndex]
+        let newQuantity = tempItem.onHandQty + quantity
+        let predicate = NSPredicate(format: "name CONTAINS %@", tempItem.name)
+        let config = Realm.Configuration(schemaVersion: 1)
+        do {
+            let realm = try Realm(configuration: config)
+            let result = realm.objects(Item.self).filter(predicate)
+            for item in result {
+                try realm.write ({
+                    item.onHandQty = newQuantity
+                    realm.add(item)
+                })
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    
+    }
+    
+    
     
     func changeDisplay(to newDisplayState: DisplayState) {
         withAnimation {
@@ -33,6 +54,19 @@ class AppStateManager: ObservableObject {
         guard newDisplayState != currentDisplayState else { return }
         self.currentDisplayState = newDisplayState
         self.getAllItems()
+    }
+    
+    func getItemList(forType type: String) -> [Item] {
+        var tempList: [Item] = []
+        
+        let predicate = NSPredicate(format: "type CONTAINS %@", type)
+        let realm = try! Realm()
+        let result = realm.objects(Item.self).filter(predicate)
+        for item in result {
+            tempList.append(item)
+        }
+        
+        return tempList
     }
     
     

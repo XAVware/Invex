@@ -10,7 +10,7 @@ import SwiftUI
 struct AddInventoryView: View {
     @ObservedObject var appManager: AppStateManager
     
-    @State var newItemName: String             = ""
+    @State var newItemName: String          = ""
     @State var quantityPurchased: Int       = 24
     @State var isCustomQuantity: Bool       = false
     @State var customValue: String          = "10"
@@ -25,8 +25,7 @@ struct AddInventoryView: View {
     
     var quantities: [String]                = ["12", "18", "24", "30", "36", "Custom"]
     
-    @State var itemID: Int                  = 0
-    
+    @State var selectedItemIndex: Int = 0
     
     var body: some View {
         
@@ -54,11 +53,19 @@ struct AddInventoryView: View {
                     Picker(selection: $concessionTypeID, label: Text("")) {
                         ForEach(0 ..< concessionTypes.count) { index in
                             Text(self.concessionTypes[index]).foregroundColor(.black).tag(index)
-                            
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .frame(width: 400)
+                    .onChange(of: concessionTypeID, perform: { value in
+                        for item in self.appManager.itemList {
+                            if item.type == concessionTypes[concessionTypeID] {
+                                self.selectedItemIndex = self.appManager.itemList.firstIndex(of: item)!
+                                return
+                            }
+                        }
+                    })
+                    
                     
                 } //: HStack - Title
                 .padding(.horizontal, 30)
@@ -75,6 +82,7 @@ struct AddInventoryView: View {
                 .padding(.vertical, 20)
                 .pickerStyle(SegmentedPickerStyle())
                 .frame(width: 400)
+                
 
                 //MARK: Item Info Stack
                 VStack(alignment: .center, spacing: 0) {
@@ -93,16 +101,15 @@ struct AddInventoryView: View {
                                 .cornerRadius(9)
                                 .font(.system(size: 18, weight: .bold, design: .rounded))
                         } else {
-                            Picker(selection: $itemID, label: Text("")) {
-                                ForEach(self.appManager.itemList, id: \.self) { item in
-                                    if item.type == concessionTypes[concessionTypeID] {
-                                        Text("\(item.name)").foregroundColor(.black)
+                            Picker(selection: $selectedItemIndex, label: Text("")) {
+                                ForEach(0 ..< self.appManager.itemList.count) { itemIndex in
+                                    let tempItem = self.appManager.itemList[itemIndex]
+                                    if tempItem.type == concessionTypes[concessionTypeID] {
+                                        Text("\(tempItem.name)").foregroundColor(.black)
                                     }
                                 }
                             }
                             .frame(width: 400, height: 180)
-                            .foregroundColor(.black)
-                            .accentColor(.black)
                             
                         }
                     } //: HStack - Title Field
@@ -299,7 +306,7 @@ struct AddInventoryView: View {
                 
                 SaveItemButton(action: {
                     if restockTypeID == 0 {
-                        print("Restock Item Save Triggered")
+                        self.appManager.restockItem(itemIndex: self.selectedItemIndex, quantity: self.quantityPurchased)
                     } else {
                         let tempAvgCost = Double(cost)! / Double(quantityPurchased)
                         let formattedAvgCost = Double(String(format: "%.2f", tempAvgCost))!
@@ -322,6 +329,7 @@ struct AddInventoryView: View {
         } //: Scroll
         .background(Color.white)
         .navigationBarHidden(true)
+        
         
         
     } //: Body
