@@ -28,6 +28,7 @@ struct K {
     struct Sizes {
         static let screenWidth: CGFloat = UIScreen.main.bounds.width
         static let menuWidth: CGFloat = 350
+        static let cartWidth: CGFloat = UIScreen.main.bounds.width * 0.34
     }
     
     
