@@ -29,7 +29,7 @@ struct AddInventoryView: View {
     
     var body: some View {
         
-        ScrollView {
+        
             VStack {
                 //MARK: - Title Section
                 HStack(spacing: 20) {
@@ -198,10 +198,10 @@ struct AddInventoryView: View {
                 Spacer()
                 
             } //: VStack
+            .background(Color.white)
+            .navigationBarHidden(true)
             
-        } //: Scroll
-        .background(Color.white)
-        .navigationBarHidden(true)
+        
         
         
         

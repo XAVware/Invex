@@ -12,15 +12,17 @@ struct ContentView: View {
     @StateObject var appManager = AppStateManager()
     @StateObject var cart = Cart()
     
+    @State var isShowingKeyboard: Bool = false
+    
     var body: some View {
-        NavigationView {
+        ZStack {
             
-            ZStack {
+            ScrollView(self.isShowingKeyboard ? .vertical : []) {
                 
                 VStack(spacing: 0) {
                     
                     HeaderView(appManager: self.appManager)
-     
+                    
                     switch self.appManager.currentDisplayState {
                     case .makeASale:
                         MakeASaleView(appManager: self.appManager, cart: self.cart)
@@ -32,33 +34,41 @@ struct ContentView: View {
                     
                 } //: VStack used to keep header above all pages
                 
-                MenuView(appManager: self.appManager) //Menu should always be at top of ZStack
-            } //: ZStack
-            .navigationBarHidden(true)
-            .onAppear {
-                self.appManager.getAllItems()
+            } //: Scroll
+            
+            MenuView(appManager: self.appManager) //Menu should always be at top of ZStack
+            
+        } //: ZStack
+        .onAppear {
+            self.appManager.getAllItems()
+            
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { (not) in
+                self.isShowingKeyboard = true
             }
             
-        } //: NavigationView
-        .navigationViewStyle(StackNavigationViewStyle())
+            NotificationCenter.default.addObserver(forName: UIResponder.keyboardDidHideNotification, object: nil, queue: .main) { (not) in
+                self.isShowingKeyboard = false
+            }
+        }
     } //: Body
     
     init() {
         UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(named: "ColorWatermelonDark")
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        UITextField.appearance().textColor = .black
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear
     }
     
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .previewLayout(.fixed(width: 1024, height: 786))
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//            .previewLayout(.fixed(width: 1024, height: 786))
+//    }
+//}
 
 
 
