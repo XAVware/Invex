@@ -80,21 +80,21 @@ struct MakeASaleView: View {
                             .frame(width: 120, alignment: .trailing)
                     }
                     
-                    Divider()
-                        .background(Color.white)
-                        .padding(.horizontal)
+                    Divider().background(Color.white).padding(.horizontal)
                     
                     Spacer().frame(height: 10)
                     
-                    //Change to list
-                    ScrollView(.vertical, showsIndicators: false) {
+                    List {
                         ForEach(self.cart.cartItems, id: \.id) { cartItem in
                             CartItemView(cart: self.cart, cartItem: cartItem)
                         }
                         .onDelete(perform: { indexSet in
-                            self.cart.cartItems.remove(atOffsets: indexSet)
+                            self.cart.removeItem(atOffsets: indexSet)
                         })
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                     }
+                    .padding(0)
                     
                     Divider().background(Color.white).padding(.horizontal)
                     

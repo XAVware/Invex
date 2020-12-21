@@ -34,6 +34,11 @@ class Cart: ObservableObject {
         updateTotal()
     }
     
+    func removeItem(atOffsets offsets: IndexSet) {
+        self.cartItems.remove(atOffsets: offsets)
+        updateTotal()
+    }
+    
     func increaseQuantity(forItem cartItem: CartItem) {
         cartItem.qtyToPurchase += 1
         updateTotal()

@@ -60,7 +60,6 @@ struct CartItemView: View {
                     .foregroundColor(.white)
                     .frame(width: 120, alignment: .trailing)
             }
-            Divider().background(Color.white).padding(.horizontal)
         }
         .frame(width: 360, height: 40)
         .background(Color.clear)
