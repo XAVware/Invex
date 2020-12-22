@@ -9,29 +9,34 @@ import SwiftUI
 import RealmSwift
 
 class Cart: ObservableObject {
-    @Published var cartItems: [CartItem] = []
+    @Published var cartItems: [SaleItem] = []
     @Published var cartTotalString: String = "$ 0.00"
-
     
-    func addItemToCart(item: Item) {
-        var itemIsInCart: Bool = false
+    @Published var isEditable: Bool = true
+    
+    func addItem(_ item: Item) {
                 
-        let tempCartItem = CartItem()
-        tempCartItem.name = item.name
-        tempCartItem.type = item.type
-        tempCartItem.retailPrice = item.retailPrice
-        
         for cartItem in cartItems {
             if cartItem.name == item.name {
-                itemIsInCart = true
-                increaseQuantity(forItem: cartItem)
-                break
+                cartItem.increaseQtyInCart()
+                self.updateTotal()
+                return
             }
         }
         
-        if !itemIsInCart { cartItems.append(tempCartItem) }
-
-        updateTotal()
+        let tempCartItem = SaleItem()
+        tempCartItem.name = item.name
+        
+        guard let priceDouble = Double(item.retailPrice) else {
+            print("Error casting retail price as double -- Returning")
+            return
+        }
+        
+        tempCartItem.price = priceDouble
+        
+        self.cartItems.append(tempCartItem)
+        
+        self.updateTotal()
     }
     
     func removeItem(atOffsets offsets: IndexSet) {
@@ -39,23 +44,12 @@ class Cart: ObservableObject {
         updateTotal()
     }
     
-    func increaseQuantity(forItem cartItem: CartItem) {
-        cartItem.qtyToPurchase += 1
-        updateTotal()
-    }
-    
-    func decreaseQuantity(forItem cartItem: CartItem) {
-        cartItem.qtyToPurchase -= 1
-        updateTotal()
-    }
-    
     func updateTotal() {
         var tempTotal: Double = 0
         for cartItem in cartItems {
-            tempTotal += (Double(cartItem.retailPrice)! * Double(cartItem.qtyToPurchase))
+            tempTotal += cartItem.subtotal
         }
         
-        let tempTotalString: String = String(format: "%.2f", tempTotal)
-        cartTotalString = "$ \(tempTotalString)"
+        self.cartTotalString = "$ \(String(format: "%.2f", tempTotal))"
     }
 }

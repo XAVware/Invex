@@ -33,7 +33,7 @@ struct MakeASaleView: View {
                 .frame(width: 400, height: 15)
                 
                 ScrollView {
-                    LazyVGrid(columns: layout, spacing: 20) {
+                    LazyVGrid(columns: layout, spacing: 10) {
                         ForEach(self.appManager.itemList, id: \.self) { item in
                             if item.type == self.types[self.typeID] {
                                 ItemButton(cart: self.cart, item: item)

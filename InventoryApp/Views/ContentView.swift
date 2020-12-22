@@ -69,6 +69,7 @@ struct ContentView: View {
         UITextField.appearance().textColor = .black
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear
+        UITableView.appearance().separatorColor = .white
     }
     
 }

@@ -11,7 +11,6 @@ struct ItemButton: View {
     @ObservedObject var cart: Cart
     var item: Item
     
-    @State var colorHexString: String = ""
     
     var backgroundColor: Color {
         switch item.type {
@@ -28,8 +27,7 @@ struct ItemButton: View {
     
     var body: some View {
         Button(action: {
-            self.cart.addItemToCart(item: self.item)
-            print(cart.cartItems)
+            self.cart.addItem(self.item)
         }) {
             VStack(spacing: 0) {
                 Text(self.item.name)
@@ -45,7 +43,7 @@ struct ItemButton: View {
         }
         .frame(minWidth: 50, maxWidth: 180, minHeight: 40, maxHeight: 40)
         .background(
-            backgroundColor
+            self.backgroundColor
                 .cornerRadius(15)
                 .shadow(radius: 4)
         )
@@ -53,22 +51,6 @@ struct ItemButton: View {
 
         
     }
-    
-    init(cart: Cart, item: Item) {
-        self.cart = cart
-        self.item = item
-        if item.type == "Beverage" {
-            self.colorHexString = "f7797d"
-        } else {
-            self.colorHexString = "193658"
-        }
-    }
+
     
 }
-
-//struct BeverageButton_Previews: PreviewProvider {
-//    static var previews: some View {
-//        BeverageButton()
-//            .previewLayout(.sizeThatFits)
-//    }
-//}

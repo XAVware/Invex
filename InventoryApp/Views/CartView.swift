@@ -20,11 +20,48 @@ struct CartView: View {
             //MARK: Cart Stack
             VStack(spacing: 0) {
                 
-                Text(self.appManager.isShowingConfirmation ? "Checkout" : "         Cart         ")
-                    .padding(.vertical)
-                    .foregroundColor(.white)
-                    .font(.system(size: self.appManager.isShowingConfirmation ? 24 : 18, weight: .semibold, design: .rounded))
-                    .frame(width: self.appManager.isShowingConfirmation ? UIScreen.main.bounds.width : K.Sizes.cartWidth)
+                
+                if self.cart.isEditable {
+                    Text("Cart")
+                        .padding(.vertical)
+                        .foregroundColor(.white)
+                        .font(.system(size: 18, weight: .semibold, design: .rounded))
+                        .frame(width: K.Sizes.cartWidth)
+                } else {
+                    HStack(spacing: 0) {
+                        Button(action: {
+                            self.cart.isEditable = true
+                            withAnimation {
+                                self.appManager.isShowingConfirmation = false                                
+                            }
+                        }) {
+                            HStack(spacing: 2) {
+                                Image(systemName: "chevron.left")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 15, height: 20, alignment: .center)
+                                    .accentColor(.white)
+                                
+                                Text("Go Back")
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                            }
+                                
+                        }
+                        .frame(width: 100)
+                        .padding()
+                        
+                        Text("Checkout")
+                            .padding(.vertical)
+                            .foregroundColor(.white)
+                            .font(.system(size: 18, weight: .semibold, design: .rounded))
+                            .frame(maxWidth: .infinity)
+                        
+                        Spacer().frame(width: 100).padding()
+                        
+                    }
+                }
+                
                 
                 Text("Amount Due:  \(self.cart.cartTotalString)")
                     .padding(.vertical)
@@ -98,6 +135,7 @@ struct CartView: View {
                 
                 //MARK: - Checkout Button
                 Button(action: {
+                    self.cart.isEditable = false
                     self.appManager.beginCheckout()
                 }) {
                     Text(self.appManager.isShowingConfirmation ? "Confirm Sale" : "Checkout")
