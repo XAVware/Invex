@@ -23,13 +23,13 @@ struct HeaderView: View {
                             .scaledToFit()
                             .accentColor(.white)
                             .font(.system(size: 24, weight: .medium))
-                            .frame(width: 30, height: 40)
+                            .frame(width: 30, height: K.Sizes.headerHeight)
                         
                         Text("Menu")
                             .font(.system(size: 18, weight: .light, design: .rounded))
                             .accentColor(.white)
                     }
-                }
+                } //: Menu Button
                 .frame(width: menuButtonWidth)
                 .padding(.horizontal)
                 
@@ -38,12 +38,11 @@ struct HeaderView: View {
                     .font(.system(size: 24, weight: .semibold, design: .rounded))
                     .foregroundColor(.white)
                 
-                Spacer()
-                    .frame(width: menuButtonWidth)
-                    .padding(.horizontal)
+                Spacer().frame(width: menuButtonWidth).padding(.horizontal)
                 
             }
-            .frame(height: 40)
+            .edgesIgnoringSafeArea(.all)
+            .frame(height: K.Sizes.headerHeight)
             .background(K.BackgroundGradients.navBar)
         
     }

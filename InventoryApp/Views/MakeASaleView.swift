@@ -26,7 +26,6 @@ struct MakeASaleView: View {
                 Picker(selection: $typeID, label: Text("")) {
                     ForEach(0 ..< types.count) { index in
                         Text(self.types[index]).foregroundColor(.black).tag(index)
-                        
                     }
                 }
                 .padding()
@@ -41,25 +40,17 @@ struct MakeASaleView: View {
                             }
                         }
                     }
-                    .padding()
-                }
+                } //: ScrollView
                 
-                
-            }
-            .background(Color.white)
+            } //: VStack
             .padding()
-            .frame(width: (UIScreen.main.bounds.width / 3) * 2)
+            .frame(width: UIScreen.main.bounds.width - K.Sizes.cartWidth)
             
-            CartView(appManager: self.appManager, cart: self.cart)
+            Spacer().frame(width: K.Sizes.cartWidth)
             
         } //: HStack
         .background(Color.white)
+        
     } //: VStack used to keep header above all pages
     
 }
-
-//struct MakeASaleView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MakeASaleView()
-//    }
-//}

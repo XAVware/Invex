@@ -24,19 +24,27 @@ struct ContentView: View {
                     HeaderView(appManager: self.appManager)
                     
                     switch self.appManager.currentDisplayState {
+                    
                     case .makeASale:
-                        MakeASaleView(appManager: self.appManager, cart: self.cart)
+                        ZStack {
+                            MakeASaleView(appManager: self.appManager, cart: self.cart)
+                            
+                            CartView(appManager: self.appManager, cart: self.cart)
+                        }
+                        
                     case .addInventory:
                         AddInventoryView(appManager: self.appManager)
+                        
                     case .inventoryList:
                         InventoryListView(appManager: self.appManager)
+                        
                     }
                     
                 } //: VStack used to keep header above all pages
                 
             } //: Scroll
             
-            MenuView(appManager: self.appManager) //Menu should always be at top of ZStack
+            MenuView(appManager: self.appManager)
             
         } //: ZStack
         .onAppear {
@@ -50,6 +58,8 @@ struct ContentView: View {
                 self.isShowingKeyboard = false
             }
         }
+        
+        
     } //: Body
     
     init() {
@@ -62,13 +72,5 @@ struct ContentView: View {
     }
     
 }
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//            .previewLayout(.fixed(width: 1024, height: 786))
-//    }
-//}
-
 
 

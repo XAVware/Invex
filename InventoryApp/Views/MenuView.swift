@@ -17,7 +17,6 @@ struct MenuView: View {
             VStack(spacing: 15) {
                 
                 HeaderLabel(title: "Menu")
-//                    .frame(width: K.Sizes.menuWidth, height: 50, alignment: .leading)
                 
                 MenuButton(title: "Make A Sale") {
                     self.appManager.changeDisplay(to: .makeASale)

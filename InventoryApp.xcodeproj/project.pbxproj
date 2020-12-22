@@ -97,7 +97,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		94003D952581619B0056928E /* View */ = {
+		94003D952581619B0056928E /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				943D606B2581B83500C6C712 /* Buttons */,
@@ -109,11 +109,11 @@
 				94003D9A258164EA0056928E /* AddInventoryView.swift */,
 				943D60682581ABEE00C6C712 /* InventoryListView.swift */,
 				94EEFDEB2581CDAD0096DB87 /* InventoryListRowView.swift */,
-				94EEFDF12582B7870096DB87 /* CartItemView.swift */,
 				94B656A825841A6000CDFB12 /* MakeASaleView.swift */,
+				94EEFDF12582B7870096DB87 /* CartItemView.swift */,
 				94C34C6425902D4600FCFA40 /* CartView.swift */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		94003DA4258190060056928E /* Model */ = {
@@ -178,7 +178,7 @@
 			children = (
 				94586EDA2580A1F5001A42C4 /* InventoryAppApp.swift */,
 				94003DA4258190060056928E /* Model */,
-				94003D952581619B0056928E /* View */,
+				94003D952581619B0056928E /* Views */,
 				94586EDE2580A1F5001A42C4 /* Assets.xcassets */,
 				94586EE32580A1F5001A42C4 /* Info.plist */,
 				94586EE02580A1F5001A42C4 /* Preview Content */,

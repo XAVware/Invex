@@ -15,15 +15,21 @@ class AppStateManager: ObservableObject {
     }
     
     var hapticImpact = UIImpactFeedbackGenerator(style: .heavy)
-    @Published var isShowingMenu: Bool      = false
-    @Published var currentDisplayState: DisplayState = .makeASale
+    @Published var isShowingMenu: Bool                  = false
+    @Published var isShowingConfirmation: Bool          = false
+    @Published var currentDisplayState: DisplayState    = .makeASale
     
-    @Published var itemList: [Item]         = []
-    @Published var beverageList: [Item]     = []
-    @Published var foodSnackList: [Item]    = []
-    @Published var frozenList: [Item]       = []
-    @Published var otherList: [Item]        = []
+    @Published var itemList: [Item]                     = []
+    @Published var beverageList: [Item]                 = []
+    @Published var foodSnackList: [Item]                = []
+    @Published var frozenList: [Item]                   = []
+    @Published var otherList: [Item]                    = []
     
+    func beginCheckout() {
+        withAnimation {
+            self.isShowingConfirmation = true
+        }
+    }
     
     func restockItem(itemIndex: Int, quantity: Int) {
         let tempItem = self.itemList[itemIndex]

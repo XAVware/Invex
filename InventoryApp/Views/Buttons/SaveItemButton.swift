@@ -18,7 +18,7 @@ struct SaveItemButton: View {
         }
         .padding()
         .frame(width: 400, height: 60)
-        .background(K.BackgroundGradients.saveButton)
+        .background(K.BackgroundGradients.greenButton)
         .cornerRadius(30)
         .shadow(color: Color.black.opacity(0.4), radius: 8, x: 0, y: 4)
     }

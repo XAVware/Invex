@@ -11,9 +11,8 @@ import SwiftUI
 struct K {
     
     struct BackgroundGradients {
-        static let saveButton = RadialGradient(gradient: Gradient(colors: [Color(hex: "237a30").opacity(1), Color(hex: "237a30").opacity(0.7), Color(hex: "4ac29a").opacity(0.9)]), center: .center, startRadius: 50, endRadius: 250)
-        static let checkoutButton = RadialGradient(gradient: Gradient(colors: [Color(hex: "237a30").opacity(1), Color(hex: "237a30").opacity(0.7), Color(hex: "4ac29a").opacity(0.9)]), center: .center, startRadius: 50, endRadius: 250)
-        static let cartView = LinearGradient(gradient: Gradient(colors: [Color(hex: "141E30").opacity(0.8), Color(hex: "243B55").opacity(0.7)]), startPoint: .topLeading, endPoint: .bottomTrailing)
+        static let greenButton = RadialGradient(gradient: Gradient(colors: [Color(hex: "237a30"), Color(hex: "237a30").opacity(0.7), Color(hex: "4ac29a").opacity(0.9)]), center: .center, startRadius: 50, endRadius: 250)
+        static let cartView = LinearGradient(gradient: Gradient(colors: [Color(hex: "141E30"), Color(hex: "243B55")]), startPoint: .topLeading, endPoint: .bottomTrailing)
         static let navBar = LinearGradient(gradient: Gradient(colors: [Color(hex: "000000").opacity(0.9), Color(hex: "434343").opacity(0.9)]), startPoint: .top, endPoint: .bottom)
         static let menuView = RadialGradient(gradient: Gradient(colors: [Color(hex: "0f2027"), Color(hex: "203a43"), Color(hex: "2c5354")]), center: .topLeading, startRadius: 40, endRadius: UIScreen.main.bounds.width)
     }
@@ -26,9 +25,10 @@ struct K {
     }
     
     struct Sizes {
-        static let screenWidth: CGFloat = UIScreen.main.bounds.width
-        static let menuWidth: CGFloat = 350
-        static let cartWidth: CGFloat = UIScreen.main.bounds.width * 0.34
+        static let screenWidth: CGFloat     = UIScreen.main.bounds.width
+        static let menuWidth: CGFloat       = 350
+        static let cartWidth: CGFloat       = UIScreen.main.bounds.width * 0.40
+        static let headerHeight: CGFloat    = 40
     }
     
     
