@@ -9,13 +9,75 @@ import SwiftUI
 import RealmSwift
 
 class Cart: ObservableObject {
-    @Published var cartItems: [SaleItem] = []
+    @Published var cartItems: [CartItem] = []
     @Published var cartTotalString: String = "$ 0.00"
-    
     @Published var isEditable: Bool = true
     
+    func finishSale() {
+        guard !cartItems.isEmpty else {
+            print("There are no items in the cart -- Returning")
+            return
+        }
+        
+        let sale = Sale()
+        sale.timestamp = Date()
+        
+        var tempTotal: Double = 0.00
+        
+        for cartItem in cartItems {
+            let saleItem = SaleItem()
+            saleItem.name = cartItem.name
+            saleItem.price = cartItem.price
+            saleItem.qtyToPurchase = cartItem.qtyToPurchase
+            tempTotal += (saleItem.price * Double(saleItem.qtyToPurchase))
+            sale.items.append(saleItem)
+        }
+        
+        sale.total = tempTotal
+        
+        
+        //Save Sale
+        let config = Realm.Configuration(schemaVersion: 1)
+        do {
+            let realm = try Realm(configuration: config)
+            try realm.write ({
+                realm.add(sale)
+                print("Successfully Saved Sale")
+            })
+        } catch {
+            print("Error saving sale: -- Returning")
+            print(error.localizedDescription)
+            return
+        }
+        
+        //Adjust Quantities
+        for cartItem in cartItems {
+            let predicate = NSPredicate(format: "name CONTAINS %@", cartItem.name)
+            do {
+                let realm = try Realm(configuration: config)
+                let result = realm.objects(Item.self).filter(predicate)
+                for item in result {
+                    try realm.write ({
+                        item.onHandQty -= cartItem.qtyToPurchase
+                        realm.add(item)
+                    })
+                }
+            } catch {
+                print(error.localizedDescription)
+                return
+            }
+        }
+        
+        //Reset cart back to default
+        self.cartItems = []
+        self.cartTotalString = "$ 0.00"
+        withAnimation {
+            self.isEditable = true
+        }
+        
+    }
+    
     func addItem(_ item: Item) {
-                
         for cartItem in cartItems {
             if cartItem.name == item.name {
                 cartItem.increaseQtyInCart()
@@ -24,7 +86,7 @@ class Cart: ObservableObject {
             }
         }
         
-        let tempCartItem = SaleItem()
+        let tempCartItem = CartItem()
         tempCartItem.name = item.name
         
         guard let priceDouble = Double(item.retailPrice) else {

@@ -15,11 +15,10 @@ struct CartView: View {
         
         HStack(spacing: 0) {
             
-            Spacer().frame(width: self.appManager.isShowingConfirmation ? 0 : UIScreen.main.bounds.width - K.Sizes.cartWidth)
+            Spacer().frame(width: !self.cart.isEditable ? 0 : UIScreen.main.bounds.width - K.Sizes.cartWidth)
             
             //MARK: Cart Stack
             VStack(spacing: 0) {
-                
                 
                 if self.cart.isEditable {
                     Text("Cart")
@@ -30,9 +29,8 @@ struct CartView: View {
                 } else {
                     HStack(spacing: 0) {
                         Button(action: {
-                            self.cart.isEditable = true
                             withAnimation {
-                                self.appManager.isShowingConfirmation = false                                
+                                self.cart.isEditable = true
                             }
                         }) {
                             HStack(spacing: 2) {
@@ -67,10 +65,10 @@ struct CartView: View {
                     .padding(.vertical)
                     .foregroundColor(.white)
                     .font(.system(size: 36, weight: .semibold, design: .rounded))
-                    .frame(height: self.appManager.isShowingConfirmation ? 40 : 0)
-                    .opacity(self.appManager.isShowingConfirmation ? 1.00 : 0.00)
+                    .frame(height: !self.cart.isEditable ? 40 : 0)
+                    .opacity(!self.cart.isEditable ? 1.00 : 0.00)
                 
-                Spacer().frame(height: self.appManager.isShowingConfirmation ? 40 : 2)
+                Spacer().frame(height: !self.cart.isEditable ? 40 : 2)
                 
                 //MARK: - Receipt Stack
                 VStack(spacing: 0) {
@@ -125,34 +123,39 @@ struct CartView: View {
                             .font(.system(size: 24, weight: .semibold, design: .rounded))
                             .frame(width: 150, alignment: .trailing)
                     } //: HStack - Cart Total
-                    .frame(height: self.appManager.isShowingConfirmation ? 50 : 30)
+                    .frame(height: !self.cart.isEditable ? 50 : 30)
                     .padding()
-                    .opacity(self.appManager.isShowingConfirmation ? 0 : 1)
+                    .opacity(!self.cart.isEditable ? 0 : 1)
                     
                     
                 } //: VStack - Receipt Stack
-                .frame(maxWidth: self.appManager.isShowingConfirmation ? 600 : K.Sizes.cartWidth)
+                .frame(maxWidth: !self.cart.isEditable ? 600 : K.Sizes.cartWidth)
                 
                 //MARK: - Checkout Button
                 Button(action: {
-                    self.cart.isEditable = false
-                    self.appManager.beginCheckout()
+                    if self.cart.isEditable {
+                        withAnimation {
+                            self.cart.isEditable = false
+                        }
+                    } else {
+                        self.cart.finishSale()
+                    }
                 }) {
-                    Text(self.appManager.isShowingConfirmation ? "Confirm Sale" : "Checkout")
+                    Text(!self.cart.isEditable ? "Confirm Sale" : "Checkout")
                         .foregroundColor(.white)
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                 } //: Button - Checkout
                 .frame(maxWidth: 500, minHeight: 60)
                 .background(K.BackgroundGradients.greenButton)
-                .cornerRadius(self.appManager.isShowingConfirmation ? 15 : 0)
+                .cornerRadius(!self.cart.isEditable ? 15 : 0)
                 
-                Spacer().frame(height: self.appManager.isShowingConfirmation ? 70 : 0)
+                Spacer().frame(height: !self.cart.isEditable ? 70 : 0)
                 
             } //: VStack - Cart Stack
-            .frame(width: self.appManager.isShowingConfirmation ? UIScreen.main.bounds.width : K.Sizes.cartWidth)
+            .frame(width: !self.cart.isEditable ? UIScreen.main.bounds.width : K.Sizes.cartWidth)
             .background(K.BackgroundGradients.cartView).edgesIgnoringSafeArea(.all)
         } //: HStack
-        .frame(width: UIScreen.main.bounds.width, height: self.appManager.isShowingConfirmation ? UIScreen.main.bounds.height - K.SafeAreas.top! : UIScreen.main.bounds.height - K.Sizes.headerHeight - K.SafeAreas.top!)
-        .offset(x: 0, y: self.appManager.isShowingConfirmation ? -(K.Sizes.headerHeight) : 0)
+        .frame(width: UIScreen.main.bounds.width, height: !self.cart.isEditable ? UIScreen.main.bounds.height - K.SafeAreas.top! : UIScreen.main.bounds.height - K.Sizes.headerHeight - K.SafeAreas.top!)
+        .offset(x: 0, y: !self.cart.isEditable ? -(K.Sizes.headerHeight) : 0)
     } //: Body
 }

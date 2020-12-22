@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CartItemView: View {
     @StateObject var cart: Cart
-    @ObservedObject var cartItem: SaleItem
+    @ObservedObject var cartItem: CartItem
     
     var body: some View {
         

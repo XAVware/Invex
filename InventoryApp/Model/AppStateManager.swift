@@ -16,7 +16,6 @@ class AppStateManager: ObservableObject {
     
     var hapticImpact = UIImpactFeedbackGenerator(style: .heavy)
     @Published var isShowingMenu: Bool                  = false
-    @Published var isShowingConfirmation: Bool          = false
     @Published var currentDisplayState: DisplayState    = .makeASale
     
     @Published var itemList: [Item]                     = []
@@ -25,11 +24,6 @@ class AppStateManager: ObservableObject {
     @Published var frozenList: [Item]                   = []
     @Published var otherList: [Item]                    = []
     
-    func beginCheckout() {
-        withAnimation {
-            self.isShowingConfirmation = true
-        }
-    }
     
     func restockItem(itemIndex: Int, quantity: Int) {
         let tempItem = self.itemList[itemIndex]
@@ -89,6 +83,14 @@ class AppStateManager: ObservableObject {
         guard newDisplayState != currentDisplayState else { return }
         self.currentDisplayState = newDisplayState
         self.getAllItems()
+    }
+    
+    func getAllSales() {
+        let realm = try! Realm()
+        let result = realm.objects(Sale.self)
+        for sale in result {
+            print(sale)
+        }
     }
     
     func getItemList(forType type: String) -> [Item] {

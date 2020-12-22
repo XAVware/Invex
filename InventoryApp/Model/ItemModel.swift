@@ -16,16 +16,19 @@ class Item: Object {
     @objc dynamic var onHandQty: Int = 0
 }
 
+class SaleItem: Object {
+    @objc dynamic var name: String = ""
+    @objc dynamic var qtyToPurchase: Int = 0
+    @objc dynamic var price: Double = 0.00
+}
 
-class SaleItem: ObservableObject {
+
+class CartItem: ObservableObject {
     var id = UUID()
     @Published var name: String = ""
     @Published var qtyToPurchase: Int = 1
-//    @Published var retailPrice: String = ""
     
     @Published var price: Double = 0.00
-    
-    
     
     var subtotal: Double {
         return Double(self.qtyToPurchase) * self.price
