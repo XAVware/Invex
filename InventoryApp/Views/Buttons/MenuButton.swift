@@ -24,13 +24,3 @@ struct MenuButton: View {
         }
     }
 }
-
-struct MenuButton_Previews: PreviewProvider {
-    static var previews: some View {
-        MenuButton(title: "Make A Sale") {
-            
-        }
-        .preferredColorScheme(.dark)
-        .previewLayout(.sizeThatFits)
-    }
-}

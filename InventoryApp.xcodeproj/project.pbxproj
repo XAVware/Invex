@@ -15,6 +15,7 @@
 		94003D9E258165590056928E /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94003D9D258165590056928E /* Extensions.swift */; };
 		940E20172586C09900036B96 /* SaveItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940E20162586C09900036B96 /* SaveItemButton.swift */; };
 		9425F40C25929C2000FD916F /* SaleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F40B25929C2000FD916F /* SaleModel.swift */; };
+		9425F41A2592B61900FD916F /* InventoryColumnTitleStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F4192592B61900FD916F /* InventoryColumnTitleStack.swift */; };
 		943D6066258195BB00C6C712 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D6065258195BB00C6C712 /* ItemModel.swift */; };
 		943D60692581ABEE00C6C712 /* InventoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D60682581ABEE00C6C712 /* InventoryListView.swift */; };
 		943D606D2581B85700C6C712 /* ItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D606C2581B85700C6C712 /* ItemButton.swift */; };
@@ -46,6 +47,7 @@
 		94003D9D258165590056928E /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		940E20162586C09900036B96 /* SaveItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveItemButton.swift; sourceTree = "<group>"; };
 		9425F40B25929C2000FD916F /* SaleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleModel.swift; sourceTree = "<group>"; };
+		9425F4192592B61900FD916F /* InventoryColumnTitleStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryColumnTitleStack.swift; sourceTree = "<group>"; };
 		943D6065258195BB00C6C712 /* ItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
 		943D60682581ABEE00C6C712 /* InventoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryListView.swift; sourceTree = "<group>"; };
 		943D606C2581B85700C6C712 /* ItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemButton.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 			children = (
 				9449E462258FD41F00FD232C /* HeaderLabel.swift */,
 				9449E46A258FDE6500FD232C /* AddInventoryDetailLabel.swift */,
+				9425F4192592B61900FD916F /* InventoryColumnTitleStack.swift */,
 			);
 			path = Labels;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				94F63773258E9FB000A63032 /* Constants.swift in Sources */,
 				940E20172586C09900036B96 /* SaveItemButton.swift in Sources */,
 				94003D98258161A70056928E /* HeaderView.swift in Sources */,
+				9425F41A2592B61900FD916F /* InventoryColumnTitleStack.swift in Sources */,
 				94586EDD2580A1F5001A42C4 /* ContentView.swift in Sources */,
 				943D6066258195BB00C6C712 /* ItemModel.swift in Sources */,
 				94C34C6525902D4600FCFA40 /* CartView.swift in Sources */,
@@ -477,7 +481,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.xavware.InventoryApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -500,7 +504,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.xavware.InventoryApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};

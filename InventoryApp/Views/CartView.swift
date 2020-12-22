@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CartView: View {
-    @ObservedObject var appManager: AppStateManager
     @ObservedObject var cart: Cart
     
     var body: some View {

@@ -29,7 +29,7 @@ struct ContentView: View {
                         ZStack {
                             MakeASaleView(appManager: self.appManager, cart: self.cart)
                             
-                            CartView(appManager: self.appManager, cart: self.cart)
+                            CartView(cart: self.cart)
                         }
                         
                     case .addInventory:

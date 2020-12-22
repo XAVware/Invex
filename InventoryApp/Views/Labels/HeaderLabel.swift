@@ -55,8 +55,3 @@ struct HeaderLabel: View {
     }
 }
 
-struct HeaderLabel_Previews: PreviewProvider {
-    static var previews: some View {
-        HeaderLabel(title: "Preview")
-    }
-}

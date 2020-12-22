@@ -42,12 +42,10 @@ struct ItemButton: View {
             
         }
         .frame(minWidth: 50, maxWidth: 180, minHeight: 40, maxHeight: 40)
-        .background(
-            self.backgroundColor
-                .cornerRadius(15)
-                .shadow(radius: 4)
-        )
+        .background(self.backgroundColor)
+        .cornerRadius(15)
         .padding()
+        .shadow(radius: 4)
 
         
     }

@@ -15,9 +15,3 @@ struct AddInventoryDetailLabel: View {
             .foregroundColor(.black)
     }
 }
-
-struct InventoryDetailLabel_Previews: PreviewProvider {
-    static var previews: some View {
-        AddInventoryDetailLabel(title: "")
-    }
-}

@@ -120,26 +120,21 @@ struct AddInventoryView: View {
                     AddInventoryDetailLabel(title: "Cost of Package:")
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
+
                     Text("$")
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .foregroundColor(.black)
-                    
+
                     TextField("19.99", text: $cost)
                         .padding()
                         .multilineTextAlignment(.center)
-                        .background(
-                            Color(UIColor.tertiarySystemFill)
-                                .frame(height: 35)
-                                .cornerRadius(9)
-                        )
-                        .cornerRadius(9)
                         .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .frame(width: 100, height: 40)
+                        .frame(width: 100, height: 40, alignment: .center)
                         .foregroundColor(.black)
-                    
-                    
-                    
+                        .background(Color(UIColor.tertiarySystemFill))
+                        .cornerRadius(9)
+
+
                 } //: HStack - Package Cost
                 .frame(height: 50)
                 
@@ -150,11 +145,11 @@ struct AddInventoryView: View {
                     AddInventoryDetailLabel(title: "Retail Price:")
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .foregroundColor(.black)
-                    
+
                     Text("$")
                         .font(.system(size: 24, weight: .bold, design: .rounded))
                         .foregroundColor(.black)
-                    
+
                     TextField("1.00", text: $retailPrice)
                         .padding()
                         .multilineTextAlignment(.center)
@@ -169,7 +164,7 @@ struct AddInventoryView: View {
                         .frame(width: 100, height: 40)
                 } //: HStack - Type
                 .frame(height: 50)
-                
+
                 Divider()
             } //: VStack - Item Info Stack
             .frame(width: 800)
@@ -180,9 +175,10 @@ struct AddInventoryView: View {
                 if restockTypeID == 0 {
                     self.appManager.restockItem(itemIndex: self.selectedItemIndex, quantity: self.quantityPurchased)
                 } else {
+                    self.newItemName = self.newItemName.trimmingCharacters(in: .whitespacesAndNewlines)
                     let tempAvgCost = Double(cost)! / Double(quantityPurchased)
                     let formattedAvgCost = Double(String(format: "%.2f", tempAvgCost))!
-                    
+
                     //This should return a success/failure result in case they try and add a new item that already exists
                     let newItem = Item()
                     newItem.name = self.newItemName
@@ -190,7 +186,7 @@ struct AddInventoryView: View {
                     newItem.onHandQty += Int(self.quantityPurchased)
                     newItem.avgCostPer = formattedAvgCost
                     newItem.retailPrice = self.retailPrice
-                    
+
                     self.appManager.createNewItem(newItem: newItem)
                 }
             })

@@ -50,9 +50,6 @@ struct MakeASaleView: View {
             
         } //: HStack
         .background(Color.white)
-        .onTapGesture {
-            self.appManager.getAllSales()
-        }
         
     } //: VStack used to keep header above all pages
     

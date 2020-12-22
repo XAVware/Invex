@@ -23,9 +23,3 @@ struct SaveItemButton: View {
         .shadow(color: Color.black.opacity(0.4), radius: 8, x: 0, y: 4)
     }
 }
-
-//struct SaveItemButton_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SaveItemButton()
-//    }
-//}
