@@ -28,7 +28,6 @@ struct InventoryColumnTitleStack: View {
     }
     
     func getAlignmentFor(title: String) -> Alignment {
-        print(title)
         if title == columnTitles[0] {
             return .leading
         } else if title == columnTitles[columnTitles.count - 1] {

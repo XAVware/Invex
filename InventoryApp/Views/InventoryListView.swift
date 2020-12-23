@@ -40,7 +40,6 @@ struct InventoryListView: View {
                 Spacer()
             } //: VStack
             .frame(maxWidth: self.listWidth)
-            .padding(.horizontal)
         } //: VStack
         .background(Color.white)
     }

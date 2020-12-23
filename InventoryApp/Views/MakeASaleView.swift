@@ -17,6 +17,9 @@ struct MakeASaleView: View {
         GridItem(.adaptive(minimum: 180))
     ]
     
+    @State var test: String = ""
+    
+    
     var body: some View {
         HStack(spacing: 0) {
             
@@ -31,6 +34,7 @@ struct MakeASaleView: View {
                 .padding()
                 .pickerStyle(SegmentedPickerStyle())
                 .frame(width: 400, height: 15)
+                
                 
                 ScrollView {
                     LazyVGrid(columns: layout, spacing: 10) {
