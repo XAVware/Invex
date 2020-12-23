@@ -16,11 +16,12 @@ struct QuantityButton: View {
         Button(action: {
             self.selectedQuantity = self.value
         }) {
-            Text("\(value)")
-                .font(.system(size: 18, weight: selectedQuantity == value ? .semibold : .light, design: .rounded))
-                .foregroundColor(.black)
+            Text("\(value)").underline(self.selectedQuantity == self.value ? true : false)
+                .font(.system(size: 32, weight: .bold, design: .rounded))
+                .foregroundColor(Color(hex: "365cc4"))
+                .opacity(self.selectedQuantity == self.value ? 1.0 : 0.7)
         }
-        .frame(width: 30)
+        .frame(width: 60)
     }
 }
 

@@ -156,5 +156,10 @@ struct CartView: View {
         } //: HStack
         .frame(width: UIScreen.main.bounds.width, height: !self.cart.isEditable ? UIScreen.main.bounds.height - K.SafeAreas.top! : UIScreen.main.bounds.height - K.Sizes.headerHeight - K.SafeAreas.top!)
         .offset(x: 0, y: !self.cart.isEditable ? -(K.Sizes.headerHeight) : 0)
+        .onAppear {
+            print(UIScreen.main.bounds.width)
+            print(UIScreen.main.bounds.height)
+        }
     } //: Body
 }
+
