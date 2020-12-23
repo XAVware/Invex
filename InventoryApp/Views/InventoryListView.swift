@@ -11,17 +11,17 @@ struct InventoryListView: View {
     @ObservedObject var appManager: AppStateManager
     
     var listWidth: CGFloat = 800
+    var columnTitles: [String] = ["Item Name:", "Type:", "On-Hand Qty:", "Price:", "Cost / Unit:"]
     
     var body: some View {
         VStack {
-            
             HeaderLabel(title: "Current Inventory")
             
             Spacer()
             
             VStack(alignment: .center, spacing: 0) {
                 
-                InventoryColumnTitleStack(listWidth: self.listWidth)
+                ListTitles(columnTitles: self.columnTitles, listWidth: self.listWidth)
                 
                 Divider().padding(.bottom, 10)
                 

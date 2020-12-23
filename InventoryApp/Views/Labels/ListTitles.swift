@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-struct InventoryColumnTitleStack: View {
+struct ListTitles: View {
+    var columnTitles: [String]
     @State var listWidth: CGFloat
-    
-    var columnTitles: [String] = ["Item Name:", "Type:", "On-Hand Qty:", "Price:", "Cost / Unit:"]
     
     var body: some View {
         HStack(spacing: 0) {

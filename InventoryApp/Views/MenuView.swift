@@ -30,6 +30,10 @@ struct MenuView: View {
                     self.appManager.changeDisplay(to: .inventoryList)
                 }
                 
+                MenuButton(title: "Sales History") {
+                    self.appManager.changeDisplay(to: .salesHistory)
+                }
+                
                 Spacer()
                 
             } //: VStack - Menu View

@@ -38,6 +38,8 @@ struct ContentView: View {
                     case .inventoryList:
                         InventoryListView(appManager: self.appManager)
                         
+                    case .salesHistory:
+                        SalesHistoryView(appManager: self.appManager)
                     }
                     
                 } //: VStack used to keep header above all pages

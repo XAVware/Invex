@@ -11,7 +11,7 @@ import RealmSwift
 class AppStateManager: ObservableObject {
     
     enum DisplayState {
-        case makeASale, addInventory, inventoryList
+        case makeASale, addInventory, inventoryList, salesHistory
     }
     
     var hapticImpact = UIImpactFeedbackGenerator(style: .heavy)
@@ -85,13 +85,6 @@ class AppStateManager: ObservableObject {
         self.getAllItems()
     }
     
-    func getAllSales() {
-        let realm = try! Realm()
-        let result = realm.objects(Sale.self)
-        for sale in result {
-            print(sale)
-        }
-    }
     
     func getItemList(forType type: String) -> [Item] {
         var tempList: [Item] = []

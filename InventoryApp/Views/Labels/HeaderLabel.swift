@@ -16,26 +16,16 @@ struct HeaderLabel: View {
             return "dollarsign.square"
         case "Current Inventory":
             return "newspaper"
+        case "Sales History":
+            return "dollarsign.circle"
         default:
             return ""
         }
     }
     
-    var labelWidth: CGFloat {
-        switch title {
-        case "Menu":
-            return K.Sizes.menuWidth
-        case "Current Inventory":
-            return K.Sizes.screenWidth - 100
-        case "Add Inventory":
-            return 300
-        default:
-            return 400
-        }
-    }
-    
     var body: some View {
         HStack(spacing: 20) {
+            
             if self.title != "Menu" {
                 Image(systemName: self.imageName)
                     .resizable()
@@ -49,7 +39,8 @@ struct HeaderLabel: View {
                 .padding()
                 .font(.system(size: 36, weight: .semibold, design: .rounded))
                 .foregroundColor(self.title == "Menu" ? Color.white : Color.black)
-                .frame(width: self.labelWidth, height: 50, alignment: .leading)
+                .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
+            
         } //: HStack
         .padding()
     }
