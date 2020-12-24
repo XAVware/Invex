@@ -45,16 +45,8 @@ struct MenuView: View {
             Spacer(minLength: 0)
         } //: HStack - MenuView
         .offset(x: self.appManager.isShowingMenu ? 0 : -UIScreen.main.bounds.width - 60)
-        .background(Color.black.opacity(self.appManager.isShowingMenu ? 0.28 : 0).edgesIgnoringSafeArea(.all).onTapGesture { self.appManager.toggleMenu() }
-        )
+        .background(Color.black.opacity(self.appManager.isShowingMenu ? 0.28 : 0).edgesIgnoringSafeArea(.all).onTapGesture { self.appManager.toggleMenu() })
         .edgesIgnoringSafeArea(.all)
     }
     
-}
-
-struct MenuView_Previews: PreviewProvider {
-    static var previews: some View {
-        MenuView(appManager: AppStateManager())
-            .previewLayout(.sizeThatFits)
-    }
 }

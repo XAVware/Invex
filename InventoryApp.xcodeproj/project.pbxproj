@@ -18,6 +18,10 @@
 		9425F41A2592B61900FD916F /* ListTitles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F4192592B61900FD916F /* ListTitles.swift */; };
 		9425F4212592E11C00FD916F /* SalesHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F4202592E11C00FD916F /* SalesHistoryView.swift */; };
 		9425F4292593D6EC00FD916F /* NewAddInventoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F4282593D6EC00FD916F /* NewAddInventoryView.swift */; };
+		9425F42C259419E700FD916F /* DollarAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F42B259419E700FD916F /* DollarAmountView.swift */; };
+		9425F42F2595171200FD916F /* NewItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F42E2595171200FD916F /* NewItemView.swift */; };
+		9425F432259524A200FD916F /* NewInventoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F431259524A200FD916F /* NewInventoryListView.swift */; };
+		9425F43925952A2700FD916F /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9425F43825952A2700FD916F /* ItemDetailView.swift */; };
 		943D6066258195BB00C6C712 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D6065258195BB00C6C712 /* ItemModel.swift */; };
 		943D60692581ABEE00C6C712 /* InventoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D60682581ABEE00C6C712 /* InventoryListView.swift */; };
 		943D606D2581B85700C6C712 /* ItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D606C2581B85700C6C712 /* ItemButton.swift */; };
@@ -52,6 +56,10 @@
 		9425F4192592B61900FD916F /* ListTitles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTitles.swift; sourceTree = "<group>"; };
 		9425F4202592E11C00FD916F /* SalesHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesHistoryView.swift; sourceTree = "<group>"; };
 		9425F4282593D6EC00FD916F /* NewAddInventoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAddInventoryView.swift; sourceTree = "<group>"; };
+		9425F42B259419E700FD916F /* DollarAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DollarAmountView.swift; sourceTree = "<group>"; };
+		9425F42E2595171200FD916F /* NewItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewItemView.swift; sourceTree = "<group>"; };
+		9425F431259524A200FD916F /* NewInventoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewInventoryListView.swift; sourceTree = "<group>"; };
+		9425F43825952A2700FD916F /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
 		943D6065258195BB00C6C712 /* ItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
 		943D60682581ABEE00C6C712 /* InventoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryListView.swift; sourceTree = "<group>"; };
 		943D606C2581B85700C6C712 /* ItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemButton.swift; sourceTree = "<group>"; };
@@ -122,6 +130,10 @@
 				94C34C6425902D4600FCFA40 /* CartView.swift */,
 				9425F4202592E11C00FD916F /* SalesHistoryView.swift */,
 				9425F4282593D6EC00FD916F /* NewAddInventoryView.swift */,
+				9425F42B259419E700FD916F /* DollarAmountView.swift */,
+				9425F42E2595171200FD916F /* NewItemView.swift */,
+				9425F431259524A200FD916F /* NewInventoryListView.swift */,
+				9425F43825952A2700FD916F /* ItemDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -324,6 +336,7 @@
 				94F63773258E9FB000A63032 /* Constants.swift in Sources */,
 				940E20172586C09900036B96 /* SaveItemButton.swift in Sources */,
 				94003D98258161A70056928E /* HeaderView.swift in Sources */,
+				9425F43925952A2700FD916F /* ItemDetailView.swift in Sources */,
 				9425F41A2592B61900FD916F /* ListTitles.swift in Sources */,
 				94586EDD2580A1F5001A42C4 /* ContentView.swift in Sources */,
 				943D6066258195BB00C6C712 /* ItemModel.swift in Sources */,
@@ -331,6 +344,7 @@
 				94003D9325815FF00056928E /* MenuView.swift in Sources */,
 				9425F4212592E11C00FD916F /* SalesHistoryView.swift in Sources */,
 				943D606D2581B85700C6C712 /* ItemButton.swift in Sources */,
+				9425F42C259419E700FD916F /* DollarAmountView.swift in Sources */,
 				9425F40C25929C2000FD916F /* SaleModel.swift in Sources */,
 				9449E463258FD41F00FD232C /* HeaderLabel.swift in Sources */,
 				9425F4292593D6EC00FD916F /* NewAddInventoryView.swift in Sources */,
@@ -340,9 +354,11 @@
 				9449E460258FC9EF00FD232C /* MenuButton.swift in Sources */,
 				9449E46B258FDE6500FD232C /* AddInventoryDetailLabel.swift in Sources */,
 				94003D9025815E130056928E /* AppStateManager.swift in Sources */,
+				9425F42F2595171200FD916F /* NewItemView.swift in Sources */,
 				94586EDB2580A1F5001A42C4 /* InventoryAppApp.swift in Sources */,
 				94EEFDEF258293250096DB87 /* CartModel.swift in Sources */,
 				943D60692581ABEE00C6C712 /* InventoryListView.swift in Sources */,
+				9425F432259524A200FD916F /* NewInventoryListView.swift in Sources */,
 				9449E46F258FE5BD00FD232C /* QuantityPicker.swift in Sources */,
 				9449E476258FEEEC00FD232C /* QuantityStepper.swift in Sources */,
 				94003D9E258165590056928E /* Extensions.swift in Sources */,

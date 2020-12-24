@@ -36,7 +36,8 @@ struct ContentView: View {
 //                        AddInventoryView(appManager: self.appManager)
                         NewAddInventoryView()
                     case .inventoryList:
-                        InventoryListView(appManager: self.appManager)
+//                        InventoryListView(appManager: self.appManager)
+                        NewInventoryListView()
                         
                     case .salesHistory:
                         SalesHistoryView(appManager: self.appManager)
