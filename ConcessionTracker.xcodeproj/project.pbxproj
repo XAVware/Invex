@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		82E30FC69E20E4C5504771EB /* Pods_ConcessionTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82FE47A2D29D04391196E440 /* Pods_ConcessionTracker.framework */; };
 		9421EA7425B8BC0B00E9D6FB /* ConcessionTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421EA7325B8BC0A00E9D6FB /* ConcessionTrackerApp.swift */; };
 		9421EA7625B8BC0B00E9D6FB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421EA7525B8BC0B00E9D6FB /* ContentView.swift */; };
 		9421EA7825B8BC0B00E9D6FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9421EA7725B8BC0B00E9D6FB /* Assets.xcassets */; };
@@ -14,6 +15,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		27E2FBF7E75508960D1C848B /* Pods-ConcessionTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConcessionTracker.release.xcconfig"; path = "Target Support Files/Pods-ConcessionTracker/Pods-ConcessionTracker.release.xcconfig"; sourceTree = "<group>"; };
+		565120A290F77DC0587A5627 /* Pods-ConcessionTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConcessionTracker.debug.xcconfig"; path = "Target Support Files/Pods-ConcessionTracker/Pods-ConcessionTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		82FE47A2D29D04391196E440 /* Pods_ConcessionTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ConcessionTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9421EA7025B8BC0A00E9D6FB /* ConcessionTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ConcessionTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9421EA7325B8BC0A00E9D6FB /* ConcessionTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcessionTrackerApp.swift; sourceTree = "<group>"; };
 		9421EA7525B8BC0B00E9D6FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -27,17 +31,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82E30FC69E20E4C5504771EB /* Pods_ConcessionTracker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1E561EBB9BF3FE87E4FB3E33 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				82FE47A2D29D04391196E440 /* Pods_ConcessionTracker.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		528B155CE8030A432449F74D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				565120A290F77DC0587A5627 /* Pods-ConcessionTracker.debug.xcconfig */,
+				27E2FBF7E75508960D1C848B /* Pods-ConcessionTracker.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		9421EA6725B8BC0A00E9D6FB = {
 			isa = PBXGroup;
 			children = (
 				9421EA7225B8BC0A00E9D6FB /* ConcessionTracker */,
 				9421EA7125B8BC0A00E9D6FB /* Products */,
+				528B155CE8030A432449F74D /* Pods */,
+				1E561EBB9BF3FE87E4FB3E33 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -52,6 +76,9 @@
 		9421EA7225B8BC0A00E9D6FB /* ConcessionTracker */ = {
 			isa = PBXGroup;
 			children = (
+				949A0A8225B8BE89000EDF2E /* Model */,
+				949A0A8125B8BE84000EDF2E /* View */,
+				949A0A8025B8BE77000EDF2E /* Data */,
 				9421EA7325B8BC0A00E9D6FB /* ConcessionTrackerApp.swift */,
 				9421EA7525B8BC0B00E9D6FB /* ContentView.swift */,
 				9421EA7725B8BC0B00E9D6FB /* Assets.xcassets */,
@@ -69,6 +96,27 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		949A0A8025B8BE77000EDF2E /* Data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		949A0A8125B8BE84000EDF2E /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		949A0A8225B8BE89000EDF2E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -76,9 +124,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9421EA7F25B8BC0B00E9D6FB /* Build configuration list for PBXNativeTarget "ConcessionTracker" */;
 			buildPhases = (
+				D80E243B5855605102FCB6A2 /* [CP] Check Pods Manifest.lock */,
 				9421EA6C25B8BC0A00E9D6FB /* Sources */,
 				9421EA6D25B8BC0A00E9D6FB /* Frameworks */,
 				9421EA6E25B8BC0A00E9D6FB /* Resources */,
+				8F6C2A511BD2EFCACBE9E880 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -132,6 +182,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8F6C2A511BD2EFCACBE9E880 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConcessionTracker/Pods-ConcessionTracker-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ConcessionTracker/Pods-ConcessionTracker-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ConcessionTracker/Pods-ConcessionTracker-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D80E243B5855605102FCB6A2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ConcessionTracker-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9421EA6C25B8BC0A00E9D6FB /* Sources */ = {
@@ -264,6 +356,7 @@
 		};
 		9421EA8025B8BC0B00E9D6FB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 565120A290F77DC0587A5627 /* Pods-ConcessionTracker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -272,7 +365,7 @@
 				DEVELOPMENT_TEAM = FV4ACN6AD6;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ConcessionTracker/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -280,12 +373,13 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.xavware.ConcessionTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
 		9421EA8125B8BC0B00E9D6FB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 27E2FBF7E75508960D1C848B /* Pods-ConcessionTracker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -294,7 +388,7 @@
 				DEVELOPMENT_TEAM = FV4ACN6AD6;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ConcessionTracker/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -302,7 +396,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = co.xavware.ConcessionTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
