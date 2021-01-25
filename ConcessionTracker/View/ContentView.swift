@@ -10,21 +10,20 @@ import RealmSwift
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        AddInventoryView()
     }
     
     init() {
         let config = Realm.Configuration(
             schemaVersion: 1,
-
+            
             migrationBlock: { migration, oldSchemaVersion in
                 if (oldSchemaVersion < 1) {
                     migration.enumerateObjects(ofType: Item.className()) { (oldObject, newObject) in
-
+                        
                     }
                     migration.enumerateObjects(ofType: Sale.className()) { oldObject, newObject in
-
+                        
                     }
                 }
             })
