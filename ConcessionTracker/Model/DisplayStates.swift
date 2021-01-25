@@ -9,5 +9,5 @@ import SwiftUI
 
 enum DisplayStates {
 //    case makeASale, addInventory, inventoryList, salesHistory, inventoryStatus
-    case addInventory
+    case addInventory, makeASale
 }

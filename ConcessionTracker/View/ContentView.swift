@@ -9,8 +9,25 @@ import SwiftUI
 import RealmSwift
 
 struct ContentView: View {
+    @State var displayState: DisplayStates      = .makeASale
+    @StateObject var cart                       = Cart()
+    
     var body: some View {
-        AddInventoryView()
+        ZStack {
+            switch self.displayState {
+            case .makeASale:
+                ZStack {
+                    MakeASaleView(cart: self.cart)
+                    CartView(cart: self.cart)
+                }
+            case .addInventory:
+                AddInventoryView()
+            }
+            
+            if !self.cart.isConfirmation {
+                MenuView(displayState: self.$displayState)
+            }
+        } //: ZStack
     }
     
     init() {
@@ -33,5 +50,12 @@ struct ContentView: View {
         } catch let error as NSError {
             print("Error initializing realm with error-- \(error.localizedDescription)")
         }
+        
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color("ThemeColor"))
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        UITableView.appearance().backgroundColor = .clear
+        UITableViewCell.appearance().backgroundColor = .clear
+        UITableView.appearance().separatorColor = .white
     }
 }

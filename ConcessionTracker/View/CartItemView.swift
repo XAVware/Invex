@@ -17,19 +17,17 @@ struct CartItemView: View {
         HStack {
             LazyVStack {
                 Text(self.cartItem.name)
-                    .padding(.leading)
                     .font(.system(size: 18, weight: .semibold, design: .rounded))
-                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 if self.cartItem.name != "" {
                     Text(self.cartItem.subtype)
-                        .padding(.leading)
                         .font(.system(size: 12, weight: .semibold, design: .rounded))
-                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
+            .foregroundColor(.white)
+            
             
             
             HStack(spacing: 0) {
@@ -71,7 +69,6 @@ struct CartItemView: View {
             .frame(maxWidth: .infinity)
             
             Text(self.cartItem.subtotalString)
-                .padding(.trailing)
                 .font(.system(size: 18, weight: .semibold, design: .rounded))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .trailing)

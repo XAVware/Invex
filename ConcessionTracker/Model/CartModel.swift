@@ -94,16 +94,8 @@ class Cart: ObservableObject {
         let tempCartItem = CartItem()
         tempCartItem.name = item.name
         tempCartItem.subtype = item.subtype
-        
-//        guard let priceDouble = Double(item.retailPrice) else {
-//            print("Error casting retail price as double -- Returning")
-//            return
-//        }
-//
-//        tempCartItem.price = priceDouble
-        
+        tempCartItem.price = item.retailPrice
         self.cartItems.append(tempCartItem)
-        
         self.updateTotal()
     }
     

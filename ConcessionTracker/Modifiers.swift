@@ -44,6 +44,33 @@ struct TextFieldModifier: ViewModifier {
     }
 }
 
+struct MenuButtonModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 24, weight: .semibold, design: .rounded))
+            .frame(height: 60)
+            .foregroundColor(.white)
+    }
+}
+
+struct SaveButtonModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 24, weight: .semibold, design: .rounded))
+            .frame(maxWidth: 500, minHeight: 60)
+            .background(Color("GreenBackground"))
+    }
+}
+
+struct ListHeaderModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(.horizontal)
+            .opacity(0.8)
+            .font(.system(size: 18, weight: .semibold, design: .rounded))
+    }
+}
+
 
 struct IpadMiniPreviewModifier: ViewModifier {
     func body(content: Content) -> some View {

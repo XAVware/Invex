@@ -13,6 +13,10 @@
 		940DBF3425BF3D80007B3F10 /* ItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940DBF3325BF3D80007B3F10 /* ItemButton.swift */; };
 		940DBF3725BF3E2B007B3F10 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940DBF3625BF3E2B007B3F10 /* Extensions.swift */; };
 		940DBF3A25BF3EC8007B3F10 /* CartItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940DBF3925BF3EC8007B3F10 /* CartItemView.swift */; };
+		940DBF3D25BF3F8C007B3F10 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940DBF3C25BF3F8B007B3F10 /* MenuView.swift */; };
+		940DBF4025BF4231007B3F10 /* TypePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940DBF3F25BF4231007B3F10 /* TypePickerView.swift */; };
+		940DBF4425BF62F5007B3F10 /* ConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940DBF4325BF62F5007B3F10 /* ConfirmationView.swift */; };
+		940DBF4725BF646B007B3F10 /* ActiveReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940DBF4625BF646B007B3F10 /* ActiveReceiptView.swift */; };
 		941F72E925BA84860049F6A4 /* RestockItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941F72E825BA84860049F6A4 /* RestockItemView.swift */; };
 		941F72EC25BB83090049F6A4 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941F72EB25BB83090049F6A4 /* ItemDetailView.swift */; };
 		9421EA7425B8BC0B00E9D6FB /* ConcessionTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421EA7325B8BC0A00E9D6FB /* ConcessionTrackerApp.swift */; };
@@ -50,6 +54,10 @@
 		940DBF3325BF3D80007B3F10 /* ItemButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemButton.swift; sourceTree = "<group>"; };
 		940DBF3625BF3E2B007B3F10 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		940DBF3925BF3EC8007B3F10 /* CartItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartItemView.swift; sourceTree = "<group>"; };
+		940DBF3C25BF3F8B007B3F10 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		940DBF3F25BF4231007B3F10 /* TypePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypePickerView.swift; sourceTree = "<group>"; };
+		940DBF4325BF62F5007B3F10 /* ConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationView.swift; sourceTree = "<group>"; };
+		940DBF4625BF646B007B3F10 /* ActiveReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveReceiptView.swift; sourceTree = "<group>"; };
 		941F72E825BA84860049F6A4 /* RestockItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestockItemView.swift; sourceTree = "<group>"; };
 		941F72EB25BB83090049F6A4 /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
 		9421EA7025B8BC0A00E9D6FB /* ConcessionTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ConcessionTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,8 +180,12 @@
 				94DC962125BA6530001A4547 /* QuantitySelector.swift */,
 				94DC962525BA747E001A4547 /* AnimatedCheckmarkView.swift */,
 				940DBF2D25BF3CC9007B3F10 /* CartView.swift */,
+				940DBF4325BF62F5007B3F10 /* ConfirmationView.swift */,
+				940DBF4625BF646B007B3F10 /* ActiveReceiptView.swift */,
 				940DBF3925BF3EC8007B3F10 /* CartItemView.swift */,
 				940DBF3025BF3CD3007B3F10 /* MakeASaleView.swift */,
+				940DBF3C25BF3F8B007B3F10 /* MenuView.swift */,
+				940DBF3F25BF4231007B3F10 /* TypePickerView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -327,6 +339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				940DBF3D25BF3F8C007B3F10 /* MenuView.swift in Sources */,
 				949A0A9F25B8C844000EDF2E /* AddInventoryView.swift in Sources */,
 				949A0AAE25B8C8AA000EDF2E /* SaveItemButton.swift in Sources */,
 				949A0A8A25B8C082000EDF2E /* DisplayStates.swift in Sources */,
@@ -338,6 +351,8 @@
 				940DBF3125BF3CD3007B3F10 /* MakeASaleView.swift in Sources */,
 				94DC962225BA6530001A4547 /* QuantitySelector.swift in Sources */,
 				94DC961E25B8D93B001A4547 /* TypeSelectorView.swift in Sources */,
+				940DBF4725BF646B007B3F10 /* ActiveReceiptView.swift in Sources */,
+				940DBF4025BF4231007B3F10 /* TypePickerView.swift in Sources */,
 				949A0A9325B8C158000EDF2E /* ItemModel.swift in Sources */,
 				949A0A9025B8C158000EDF2E /* SaleModel.swift in Sources */,
 				949A0A8725B8BFB8000EDF2E /* TypeData.swift in Sources */,
@@ -346,6 +361,7 @@
 				940DBF3425BF3D80007B3F10 /* ItemButton.swift in Sources */,
 				9421EA7425B8BC0B00E9D6FB /* ConcessionTrackerApp.swift in Sources */,
 				941F72E925BA84860049F6A4 /* RestockItemView.swift in Sources */,
+				940DBF4425BF62F5007B3F10 /* ConfirmationView.swift in Sources */,
 				949A0A9625B8C2B4000EDF2E /* SaleItemModel.swift in Sources */,
 				949A0AB525B8CA14000EDF2E /* QuantityPicker.swift in Sources */,
 				949A0A9225B8C158000EDF2E /* SaleDateManager.swift in Sources */,
