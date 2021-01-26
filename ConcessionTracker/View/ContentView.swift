@@ -22,6 +22,12 @@ struct ContentView: View {
                 }
             case .addInventory:
                 AddInventoryView()
+            case .inventoryList:
+                InventoryListView()
+            case .salesHistory:
+                SalesHistoryView()
+            case .inventoryStatus:
+                InventoryStatusView()
             }
             
             if !self.cart.isConfirmation {
@@ -32,10 +38,10 @@ struct ContentView: View {
     
     init() {
         let config = Realm.Configuration(
-            schemaVersion: 1,
+            schemaVersion: 2,
             
             migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 1) {
+                if (oldSchemaVersion < 2) {
                     migration.enumerateObjects(ofType: Item.className()) { (oldObject, newObject) in
                         
                     }

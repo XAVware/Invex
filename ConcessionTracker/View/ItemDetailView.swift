@@ -245,6 +245,7 @@ struct ItemDetailView: View {
                             guard self.restockItem() == .success else {
                                 return
                             }
+                        
                         }
                         
                         self.savedSuccessfully = true
@@ -367,4 +368,6 @@ struct ItemDetailView: View {
         }
         return .failure
     }
+    
+
 }

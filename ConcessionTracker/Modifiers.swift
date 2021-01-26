@@ -31,7 +31,7 @@ struct PlusMinusButtonModifier: ViewModifier {
             .scaledToFit()
             .shadow(radius: 2)
             .frame(width: 40)
-            .accentColor(Color("ThemeColor"))
+            .foregroundColor(Color("ThemeColor"))
     }
 }
 

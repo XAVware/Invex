@@ -26,12 +26,13 @@ class Cart: ObservableObject {
         
         for cartItem in cartItems {
             let saleItem = SaleItem()
-            if cartItem.subtype == "" {
-                saleItem.name = cartItem.name
-            } else {
-                saleItem.name = "\(cartItem.name) - \(cartItem.subtype)"
-            }
-            
+            //            if cartItem.subtype == "" {
+            //                saleItem.name = cartItem.name
+            //            } else {
+            //                saleItem.name = "\(cartItem.name) - \(cartItem.subtype)"
+            //            }
+            saleItem.name = cartItem.name
+            saleItem.subtype = cartItem.subtype
             saleItem.price = cartItem.price
             saleItem.qtyToPurchase = cartItem.qtyToPurchase
             tempTotal += (saleItem.price * Double(saleItem.qtyToPurchase))
@@ -47,7 +48,6 @@ class Cart: ObservableObject {
             let realm = try Realm(configuration: config)
             try realm.write ({
                 realm.add(sale)
-                print("Successfully Saved Sale")
             })
         } catch {
             print("Error saving sale: -- Returning")
@@ -57,15 +57,17 @@ class Cart: ObservableObject {
         
         //Adjust Quantities
         for cartItem in cartItems {
-            let predicate = NSPredicate(format: "name CONTAINS %@", cartItem.name)
+            let predicate = NSPredicate(format: "name == %@", cartItem.name)
             do {
                 let realm = try Realm(configuration: config)
                 let result = realm.objects(Item.self).filter(predicate)
                 for item in result {
-                    try realm.write ({
-                        item.onHandQty -= cartItem.qtyToPurchase
-                        realm.add(item)
-                    })
+                    if item.subtype == cartItem.subtype {
+                        try realm.write ({
+                            item.onHandQty -= cartItem.qtyToPurchase
+                            realm.add(item)
+                        })
+                    }
                 }
             } catch {
                 print(error.localizedDescription)
@@ -78,6 +80,7 @@ class Cart: ObservableObject {
         self.cartTotalString = "$ 0.00"
         withAnimation {
             self.isEditable = true
+            self.isConfirmation = false
         }
         
     }

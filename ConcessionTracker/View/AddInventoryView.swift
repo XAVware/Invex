@@ -64,22 +64,21 @@ struct AddInventoryView: View {
                         VStack(spacing: 0) {
                             ForEach(self.results, id: \.self) { item in
                                 Button(action: {
-                                    self.selectedItemName = item.name
-                                    self.selectedItemSubtype = item.subtype
-                                    self.activeSheet = .restockItem
-                                    self.isShowingDetailView = true
+                                    self.selectedItemName       = item.name
+                                    self.selectedItemSubtype    = item.subtype
+                                    self.activeSheet            = .restockItem
+                                    self.isShowingDetailView    = true
                                 }) {
                                     HStack {
                                         Text("\(item.name) \(item.subtype == "" ? "" : "- \(item.subtype)")")
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                            .font(.system(size: 18, weight: .light, design: .rounded))
                                         
                                         Image(systemName: "chevron.right")
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 10, height: 15)
-                                            .font(.system(size: 18, weight: .light, design: .rounded))
                                     } //: HStack
+                                    .font(.system(size: 18, weight: .light, design: .rounded))
                                     .foregroundColor(.black)
                                 } //: Button - Item
                                 .padding(.horizontal)
@@ -90,7 +89,7 @@ struct AddInventoryView: View {
                         } //: VStack
                     } //: ScrollView
                     .frame(width: geometry.size.width * 0.70)
-                }
+                } //: HStack - Item Selector
                 
             } //: VStack -- Main Stack
             .fullScreenCover(isPresented: self.$isShowingDetailView, onDismiss: {

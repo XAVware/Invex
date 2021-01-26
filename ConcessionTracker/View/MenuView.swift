@@ -45,36 +45,60 @@ struct MenuView: View {
                 } //: HStack
                 .padding(.top)
                 
-                Button(action: {
-                    self.changeStateTo(.makeASale)
-                }) {
-                    Text("Make A Sale")
+                Group {
+                    Button(action: {
+                        self.changeStateTo(.makeASale)
+                    }) {
+                        Text("Make A Sale")
+                    }
+                    .modifier(MenuButtonModifier())
+                    
+                    Divider().background(Color.white)
                 }
-                .modifier(MenuButtonModifier())
                 
-                Divider().background(Color.white)
-                
-                Button(action: {
-                    self.changeStateTo(.addInventory)
-                }) {
-                    Text("Add Inventory")
+                Group {
+                    Button(action: {
+                        self.changeStateTo(.addInventory)
+                    }) {
+                        Text("Add Inventory")
+                    }
+                    .modifier(MenuButtonModifier())
+                    
+                    Divider().background(Color.white)
                 }
-                .modifier(MenuButtonModifier())
                 
-                Divider().background(Color.white)
+                Group {
+                    Button(action: {
+                        self.changeStateTo(.inventoryList)
+                    }) {
+                        Text("Inventory List")
+                    }
+                    .modifier(MenuButtonModifier())
+                    
+                    Divider().background(Color.white)
+                }
                 
+                Group {
+                    Button(action: {
+                        self.changeStateTo(.salesHistory)
+                    }) {
+                        Text("Sales History")
+                    }
+                    .modifier(MenuButtonModifier())
+                    
+                    Divider().background(Color.white)
+                }
                 
-//                MenuButton(title: "Inventory List") {
-//                    self.changeStateTo(.inventoryList)
-//                }
-//
-//                MenuButton(title: "Sales History") {
-//                    self.changeStateTo(.salesHistory)
-//                }
-//
-//                MenuButton(title: "Inventory Status") {
-//                    self.changeStateTo(.inventoryStatus)
-//                }
+                Group {
+                    Button(action: {
+                        self.changeStateTo(.inventoryStatus)
+                    }) {
+                        Text("Inventory Status")
+                    }
+                    .modifier(MenuButtonModifier())
+                    
+                    Divider().background(Color.white)
+                }
                 
                 Spacer()
                 
