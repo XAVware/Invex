@@ -1,9 +1,4 @@
-//
-//  ItemSelectorView.swift
-//  InventoryV2
-//
-//  Created by Ryan Smetana on 12/27/20.
-//
+
 
 import SwiftUI
 import RealmSwift
@@ -29,14 +24,10 @@ struct ItemSelectorView: View {
                         HStack {
                             Text(item.name)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .font(.system(size: 18, weight: .light, design: .rounded))
                             
-                            Image(systemName: "chevron.right")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 10, height: 15)
-                                .font(.system(size: 18, weight: .light, design: .rounded))
+                            RightChevron()
                         } //: HStack
+                        .font(.system(size: 18, weight: .light, design: .rounded))
                         .foregroundColor(.black)
                     } //: Button - Item
                     .padding(.horizontal)

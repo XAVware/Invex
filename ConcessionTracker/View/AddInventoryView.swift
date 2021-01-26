@@ -1,9 +1,4 @@
-//
-//  NewAddInventoryView.swift
-//  InventoryApp
-//
-//  Created by Ryan Smetana on 12/23/20.
-//
+
 
 import SwiftUI
 import RealmSwift
@@ -13,11 +8,12 @@ enum DetailViewType {
 }
 
 struct AddInventoryView: View {
-    @State var activeSheet: DetailViewType = .newItem
-    @State var selectedConcessionType: String = concessionTypes[0].type
-    @State var selectedItemName: String = ""
-    @State var selectedItemSubtype: String = ""
-    @State var isShowingDetailView: Bool = false
+    @State var activeSheet: DetailViewType      = .newItem
+    @State var selectedConcessionType: String   = concessionTypes[0].type
+    @State var selectedItemName: String         = ""
+    @State var selectedItemSubtype: String      = ""
+    @State var isShowingDetailView: Bool        = false
+    
     
     
     var results: Results<Item> {
@@ -46,10 +42,10 @@ struct AddInventoryView: View {
                         
                     }
                 } //: HStack - Header
-                .padding()
+                .padding(.horizontal)
                 
                 Text("Select an item below to restock, or tap the '+' to add a new item.")
-                    .font(.footnote)
+                    .font(.system(size: 16))
                     .padding(.bottom)
                 
                 Divider()
@@ -59,43 +55,42 @@ struct AddInventoryView: View {
                         .frame(width: geometry.size.width * 0.30)
                     
                     Divider()
-                    
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: 0) {
-                            ForEach(self.results, id: \.self) { item in
-                                Button(action: {
-                                    self.selectedItemName       = item.name
-                                    self.selectedItemSubtype    = item.subtype
-                                    self.activeSheet            = .restockItem
-                                    self.isShowingDetailView    = true
-                                }) {
-                                    HStack {
-                                        Text("\(item.name) \(item.subtype == "" ? "" : "- \(item.subtype)")")
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                        
-                                        Image(systemName: "chevron.right")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 10, height: 15)
-                                    } //: HStack
-                                    .font(.system(size: 18, weight: .light, design: .rounded))
-                                    .foregroundColor(.black)
-                                } //: Button - Item
-                                .padding(.horizontal)
-                                .frame(height: 40)
-                                
-                                Divider()
-                            } //: ForEach
-                        } //: VStack
-                    } //: ScrollView
-                    .frame(width: geometry.size.width * 0.70)
+                    if !self.isShowingDetailView {
+                        ScrollView(.vertical, showsIndicators: false) {
+                            VStack(spacing: 0) {
+                                ForEach(self.results, id: \.self) { item in
+                                    Button(action: {
+                                        self.selectedItemName       = item.name
+                                        self.selectedItemSubtype    = item.subtype
+                                        self.activeSheet            = .restockItem
+                                        self.isShowingDetailView    = true
+                                    }) {
+                                        HStack {
+                                            Text("\(item.name) \(item.subtype == "" ? "" : "- \(item.subtype)")")
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                            
+                                            RightChevron()
+                                        } //: HStack
+                                        .font(.system(size: 18, weight: .light, design: .rounded))
+                                        .foregroundColor(.black)
+                                    } //: Button - Item
+                                    .padding(.horizontal)
+                                    .frame(height: 40)
+                                    
+                                    Divider()
+                                } //: ForEach
+                            } //: VStack
+                        } //: ScrollView
+                        .frame(width: geometry.size.width * 0.70)
+                    } else {
+                        Spacer().frame(width: geometry.size.width * 0.70)
+                    }
                 } //: HStack - Item Selector
                 
             } //: VStack -- Main Stack
             .fullScreenCover(isPresented: self.$isShowingDetailView, onDismiss: {
                 self.selectedItemName = ""
                 self.selectedItemSubtype = ""
-                
             }) {
                 ItemDetailView(viewType: self.activeSheet, itemName: self.selectedItemName, itemSubtype: self.selectedItemSubtype)
             }
@@ -108,5 +103,5 @@ struct AddInventoryView: View {
         
         
     } //: Body
-
+    
 }

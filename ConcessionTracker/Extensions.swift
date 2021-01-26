@@ -1,9 +1,4 @@
-//
-//  Extensions.swift
-//  InventoryApp
-//
-//  Created by Ryan Smetana on 12/9/20.
-//
+
 
 import SwiftUI
 import Combine
@@ -15,9 +10,7 @@ extension View {
     }
 }
 
-
 struct RoundedCorner: Shape {
-
     var radius: CGFloat = .infinity
     var corners: UIRectCorner = .allCorners
 

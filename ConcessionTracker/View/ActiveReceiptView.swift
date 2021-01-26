@@ -1,9 +1,4 @@
-//
-//  ActiveReceiptView.swift
-//  ConcessionTracker
-//
-//  Created by Ryan Smetana on 1/25/21.
-//
+
 
 import SwiftUI
 
@@ -26,7 +21,7 @@ struct ActiveReceiptView: View {
                     Text("Price:")
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 } //: HStack - Column Titles
-                .modifier(ListHeaderModifier())
+                .modifier(DetailTextModifier())
                 
                 Divider().background(Color.white).padding(.horizontal)
                 
@@ -40,7 +35,6 @@ struct ActiveReceiptView: View {
                     .onDelete(perform: { indexSet in
                         self.cart.removeItem(atOffsets: indexSet)
                     })
-                    
                     .listRowBackground(Color.clear)
                 } //: ScrollView - Cart Items
                 
@@ -66,9 +60,7 @@ struct ActiveReceiptView: View {
                         currentIndex += 1
                     }
                     
-                    guard !self.cart.cartItems.isEmpty else {
-                        return
-                    }
+                    guard !self.cart.cartItems.isEmpty else { return }
                     
                     withAnimation { self.cart.isConfirmation = true }
                     
@@ -79,6 +71,6 @@ struct ActiveReceiptView: View {
                 .cornerRadius(30, corners: self.cart.isConfirmation ? [.allCorners] : [.bottomLeft])
             } //: VStack
             .frame(maxWidth: 500)
-        }
+        } //: VStack
     }
 }

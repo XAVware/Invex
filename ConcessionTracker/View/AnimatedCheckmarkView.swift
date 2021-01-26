@@ -1,9 +1,4 @@
-//
-//  SuccessView.swift
-//  ConcessionTracker
-//
-//  Created by Ryan Smetana on 1/21/21.
-//
+
 
 import SwiftUI
 
@@ -26,6 +21,7 @@ struct AnimatedCheckmarkView: View {
                             .fill(Color("GreenBackground"))
                     )
                     .animation(.spring(response: self.duration, dampingFraction: 1.0, blendDuration: 1.0))
+                
                 Image(systemName: "checkmark")
                     .resizable()
                     .scaledToFit()
@@ -43,12 +39,11 @@ struct AnimatedCheckmarkView: View {
                 
             }
             Spacer().frame(height: 30)
+            
             Text("Successfully Saved")
                 .font(.system(size: 24, weight: .semibold, design: .rounded))
                 .foregroundColor(Color("GreenBackground"))
         }
-        
-        
     }
 }
 

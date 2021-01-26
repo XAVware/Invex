@@ -1,9 +1,4 @@
-//
-//  TypePickerView.swift
-//  ConcessionTracker
-//
-//  Created by Ryan Smetana on 1/25/21.
-//
+
 
 import SwiftUI
 

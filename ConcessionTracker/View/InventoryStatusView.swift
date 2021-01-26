@@ -1,9 +1,4 @@
-//
-//  InventoryStatusView.swift
-//  InventoryV2
-//
-//  Created by Ryan Smetana on 1/19/21.
-//
+
 
 import SwiftUI
 import RealmSwift
@@ -20,7 +15,6 @@ struct InventoryStatusView: View {
         VStack {
             Text("Inventory Status")
                 .modifier(TitleModifier())
-                .padding()
             
             TypePickerView(typeID: self.$typeID)
 

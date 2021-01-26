@@ -1,9 +1,4 @@
-//
-//  SaleDateManager.swift
-//  InventoryV2
-//
-//  Created by Ryan Smetana on 1/19/21.
-//
+
 
 import SwiftUI
 

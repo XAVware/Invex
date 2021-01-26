@@ -1,12 +1,11 @@
-//
-//  ContentView.swift
-//  ConcessionTracker
-//
-//  Created by Ryan Smetana on 1/20/21.
-//
+
 
 import SwiftUI
 import RealmSwift
+
+enum DisplayStates {
+    case makeASale, addInventory, inventoryList, salesHistory, inventoryStatus
+}
 
 struct ContentView: View {
     @State var displayState: DisplayStates      = .makeASale

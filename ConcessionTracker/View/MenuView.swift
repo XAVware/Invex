@@ -1,9 +1,4 @@
-//
-//  NewMenu.swift
-//  InventoryV2
-//
-//  Created by Ryan Smetana on 12/26/20.
-//
+
 
 import SwiftUI
 
@@ -15,12 +10,10 @@ struct MenuView: View {
     var body: some View {
         HStack {
             VStack(spacing: 15) {
-                
                 HStack {
                     Text("Menu")
                         .padding()
                         .font(.system(size: 36, weight: .semibold, design: .rounded))
-                        .foregroundColor(Color.white)
                         .frame(maxWidth: .infinity, maxHeight: 50, alignment: .leading)
                     
                     Button(action: {
@@ -31,7 +24,6 @@ struct MenuView: View {
                         Image(systemName: self.isShowingMenu ? "chevron.right" : "line.horizontal.3")
                             .resizable()
                             .scaledToFit()
-                            .accentColor(.white)
                             .font(.system(size: 24, weight: .medium))
                             .frame(width: 25, height: self.isShowingMenu ? 20 : 40)
                     }
@@ -43,7 +35,8 @@ struct MenuView: View {
                     .offset(x: self.isShowingMenu ? 0 : 50, y: 0)
                     
                 } //: HStack
-                .padding(.top)
+                .padding(.top, 25)
+                .foregroundColor(Color.white)
                 
                 Group {
                     Button(action: {

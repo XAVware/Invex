@@ -1,9 +1,4 @@
-//
-//  QuantitySelector.swift
-//  ConcessionTracker
-//
-//  Created by Ryan Smetana on 1/21/21.
-//
+
 
 import SwiftUI
 
@@ -22,13 +17,14 @@ struct QuantitySelector: View {
                         .foregroundColor(.black)
                 }
                 .frame(maxWidth: 150)
-                .padding(.bottom)
             }
             
             if self.isCustomQuantity || !self.showsCustomToggle {
-                
                 HStack(spacing: 20) {
                     Button(action: {
+                        guard self.selectedQuantity >= 0 else {
+                            return
+                        }
                         self.selectedQuantity -= 1
                     }) {
                         Image(systemName: "minus.circle.fill")
@@ -62,12 +58,13 @@ struct QuantitySelector: View {
                                 .font(.system(size: 32, weight: .bold, design: .rounded))
                                 .opacity(self.selectedQuantity == value ? 1.0 : 0.5)
                         }
+                        .frame(width: 60)
                     }
-                    .frame(width: 60)
                 } //: HStack
                 .foregroundColor(.black)
             }
             
-        }
+        } //: VStack
+        .padding()
     }
 }

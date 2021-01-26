@@ -1,9 +1,4 @@
-//
-//  SaleRowView.swift
-//  InventoryV2
-//
-//  Created by Ryan Smetana on 12/27/20.
-//
+
 
 import SwiftUI
 
@@ -18,7 +13,6 @@ struct SaleRowView: View {
                     Divider().padding(.vertical, 8)
                     Text("Items: ")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(.black)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     VStack {
@@ -31,13 +25,13 @@ struct SaleRowView: View {
                                 
                                 Text("\(saleItem.name) \(saleItem.subtype == "" ? "x\(saleItem.qtyToPurchase)" : "- \(saleItem.subtype) x\(saleItem.qtyToPurchase)")")
                                     .font(.system(size: 16, weight: .bold, design: .rounded))
-                                    .foregroundColor(.black)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             .padding(.horizontal)
                         }
-                    }
-                }
+                    } //: VStack
+                } //: VStack
+                .foregroundColor(.black)
             } label: {
                 Button(action: {
                     withAnimation {
@@ -46,19 +40,16 @@ struct SaleRowView: View {
                 }) {
                     HStack {
                         Text("\(self.formatDate(date: sale.timestamp))")
-                            .font(.system(size: 16, weight: .bold, design: .rounded))
-                            .foregroundColor(.black)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
                         Text("$\(String(format: "%.2f", sale.total))")
-                            .font(.system(size: 16, weight: .bold, design: .rounded))
-                            .foregroundColor(.black)
                             .frame(maxWidth: .infinity, alignment: .trailing)
-                    }
-                    
-                }
+                    } //: HStack
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundColor(.black)
+                } //: Button
             } //: DisclosureGroup
-        }
+        } //: GroupBox
         .padding(.horizontal)
     }
     

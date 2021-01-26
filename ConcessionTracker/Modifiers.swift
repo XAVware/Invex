@@ -1,9 +1,3 @@
-//
-//  Modifiers.swift
-//  ConcessionTracker
-//
-//  Created by Ryan Smetana on 1/20/21.
-//
 
 import SwiftUI
 
@@ -13,6 +7,7 @@ struct TitleModifier: ViewModifier {
             .frame(maxWidth: .infinity, alignment: .center)
             .font(.system(size: 24, weight: .semibold, design: .rounded))
             .foregroundColor(Color("ThemeColor"))
+            .padding()
     }
 }
 
@@ -62,15 +57,24 @@ struct SaveButtonModifier: ViewModifier {
     }
 }
 
-struct ListHeaderModifier: ViewModifier {
+struct DetailTextModifier: ViewModifier {
+    @State var textColor: Color = Color.white
     func body(content: Content) -> some View {
         content
             .padding(.horizontal)
-            .opacity(0.8)
-            .font(.system(size: 18, weight: .semibold, design: .rounded))
+            .padding(.bottom, 5)
+            .font(.system(size: 18))
+            .foregroundColor(self.textColor)
     }
 }
 
+struct TitleDetailModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 16))
+            .padding(.bottom)
+    }
+}
 
 struct IpadMiniPreviewModifier: ViewModifier {
     func body(content: Content) -> some View {

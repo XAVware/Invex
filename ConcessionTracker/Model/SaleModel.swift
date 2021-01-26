@@ -1,9 +1,4 @@
-//
-//  SaleModel.swift
-//  InventoryApp
-//
-//  Created by Ryan Smetana on 12/22/20.
-//
+
 
 import Foundation
 import RealmSwift

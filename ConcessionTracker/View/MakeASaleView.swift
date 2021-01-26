@@ -1,9 +1,4 @@
-//
-//  MakeASaleView.swift
-//  InventoryApp
-//
-//  Created by Ryan Smetana on 12/11/20.
-//
+
 
 import SwiftUI
 import RealmSwift

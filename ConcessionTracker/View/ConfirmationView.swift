@@ -1,9 +1,4 @@
-//
-//  ConfirmationView.swift
-//  ConcessionTracker
-//
-//  Created by Ryan Smetana on 1/25/21.
-//
+
 
 import SwiftUI
 
@@ -32,7 +27,7 @@ struct ConfirmationView: View {
                 Text("Price:")
                     .frame(maxWidth: .infinity, alignment: .trailing)
             } //: HStack - Column Titles
-            .modifier(ListHeaderModifier())
+            .modifier(DetailTextModifier())
             
             Divider().background(Color.white).padding(.horizontal)
             
@@ -43,7 +38,6 @@ struct ConfirmationView: View {
                     HStack {
                         LazyVStack {
                             Text(cartItem.name)
-                                .font(.system(size: 18, weight: .semibold, design: .rounded))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
                             if cartItem.name != "" {
@@ -52,20 +46,15 @@ struct ConfirmationView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
-                        
                         Text("\(cartItem.qtyToPurchase)")
                             .frame(maxWidth: .infinity, maxHeight: 40, alignment: .center)
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
                         
                         Text(cartItem.subtotalString)
-                            .font(.system(size: 18, weight: .semibold, design: .rounded))
                             .frame(maxWidth: .infinity, alignment: .trailing)
-                        
                     } //: HStack
-                    .foregroundColor(.white)
+                    .modifier(DetailTextModifier())
                     .frame(height:50)
-                    .padding(.horizontal)
-                }
+                } //: ForEach
             } //: ScrollView - Cart Items
             
             Divider().background(Color.white).padding(.horizontal)

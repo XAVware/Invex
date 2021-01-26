@@ -11,7 +11,6 @@ struct ItemButton: View {
     @ObservedObject var cart: Cart
     var item: Item
     
-    
     var backgroundColor: Color {
         switch item.itemType {
         case "Food / Snack":
@@ -32,21 +31,15 @@ struct ItemButton: View {
             VStack(spacing: 0) {
                 Text(self.item.name)
                     .font(.system(size: 18, weight: .semibold, design:.rounded))
-                    .foregroundColor(.black)
                 
                 Text(self.item.subtype)
                     .font(.system(size: 12, weight: .light, design:.rounded))
-                    .foregroundColor(.black)
-                    
             }
+            .foregroundColor(.black)
             .frame(width: 140, height: 60)
             .background(self.backgroundColor)
         }
         .cornerRadius(9)
         .padding()
-
-        
     }
-
-    
 }

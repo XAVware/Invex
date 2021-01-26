@@ -1,9 +1,4 @@
-//
-//  CartModel.swift
-//  InventoryApp
-//
-//  Created by Ryan Smetana on 12/10/20.
-//
+
 
 import SwiftUI
 import RealmSwift
@@ -26,11 +21,6 @@ class Cart: ObservableObject {
         
         for cartItem in cartItems {
             let saleItem = SaleItem()
-            //            if cartItem.subtype == "" {
-            //                saleItem.name = cartItem.name
-            //            } else {
-            //                saleItem.name = "\(cartItem.name) - \(cartItem.subtype)"
-            //            }
             saleItem.name = cartItem.name
             saleItem.subtype = cartItem.subtype
             saleItem.price = cartItem.price
@@ -82,7 +72,6 @@ class Cart: ObservableObject {
             self.isEditable = true
             self.isConfirmation = false
         }
-        
     }
     
     func addItem(_ item: Item) {
@@ -112,7 +101,6 @@ class Cart: ObservableObject {
         for cartItem in cartItems {
             tempTotal += cartItem.subtotal
         }
-        
         self.cartTotalString = "$ \(String(format: "%.2f", tempTotal))"
     }
 }

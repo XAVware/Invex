@@ -1,9 +1,4 @@
-//
-//  SalesHistoryView.swift
-//  InventoryApp
-//
-//  Created by Ryan Smetana on 12/22/20.
-//
+
 
 import SwiftUI
 import RealmSwift
@@ -38,89 +33,65 @@ struct SalesHistoryView: View {
         return tempTotal
     }
     
-    
-    
     var body: some View {
         VStack(spacing: 0) {
             Text("Sales History")
                 .modifier(TitleModifier())
-                .padding()
             
-            Spacer().frame(height: 30)
+            Spacer().frame(height: 20)
             
             Divider()
+            
             HStack(spacing: 0) {
                 List {
                     ForEach(self.filters, id: \.self) { filter in
-                        
                         Button(action: {
                             self.selectedFilter = filter
                         }) {
-                            
                             HStack {
                                 Text(filter)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .font(.system(size: 18, weight: self.selectedFilter == filter ? .semibold : .light, design: .rounded))
                                 
-                                Image(systemName: "chevron.right")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 10, height: 15)
-                                    .font(.system(size: 18, weight: self.selectedFilter == filter ? .semibold : .light, design: .rounded))
-                            }
+                                RightChevron()
+                            } //: HStack
                         } //: Button
+                        .font(.system(size: 18, weight: self.selectedFilter == filter ? .semibold : .light, design: .rounded))
                         .foregroundColor(Color.black)
                         .frame(height: 50)
                         .padding(.horizontal)
                         .background(self.selectedFilter == filter ? Color.gray.opacity(0.8) : Color.clear)
+                        
                     } //: ForEach
-                    .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                     
-                } //: List - Item Type
+                } //: List - Range Filters
                 .frame(width: UIScreen.main.bounds.width * 0.30)
-                .background(Color.white)
                 
                 Divider()
                 
                 VStack {
-                    
                     Text("Income:  $\(String(format: "%.2f", self.rangeTotal))")
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .font(.system(size: 24, weight: .semibold, design: .rounded))
-                        .foregroundColor(Color("ThemeColor"))
+                        .modifier(TitleModifier())
                     
                     HStack {
                         Text("Timestamp")
-                            .font(.system(size: 16, weight: .bold, design: .rounded))
-                            .foregroundColor(.black)
-                            .opacity(0.7)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         
                         Text("Subtotal")
-                            .font(.system(size: 16, weight: .bold, design: .rounded))
-                            .foregroundColor(.black)
-                            .opacity(0.7)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     } //HStack: Titles
-                    .padding(.leading, 32)
-                    .padding(.trailing, 45)
-                    List {
-                        ForEach(self.rangeSales, id: \.self) { sale in
-                            SaleRowView(sale: sale)
-                        }
-                        .listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
-                        .background(Color.white)
-                        
-                    } //: List
+                    .modifier(DetailTextModifier(textColor: .black))
+                    .padding(.trailing, 30)
                     
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack {
+                            ForEach(self.rangeSales, id: \.self) { sale in
+                                SaleRowView(sale: sale)
+                            }
+                        } //: VStack
+                    } //: List
                 } //: VStack
-                
             } //: HStack
-            
         } //: VStack
-        
     }
-    
 }

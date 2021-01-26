@@ -1,9 +1,4 @@
-//
-//  EditItemView.swift
-//  ConcessionTracker
-//
-//  Created by Ryan Smetana on 1/25/21.
-//
+
 
 import SwiftUI
 import RealmSwift
@@ -40,24 +35,10 @@ struct EditItemView: View {
             
             ScrollView(.vertical, showsIndicators: false) {
                 GroupBox {
-                    HStack {
-                        Text("Item:")
-                            .frame(maxWidth:.infinity, alignment: .leading)
-                            .font(.title2)
-                        
-                        Text("\(self.selectedItem.name) \(self.selectedItem.subtype == "" ? "" : "- \(self.selectedItem.subtype)")")
-                            .frame(maxWidth:.infinity, alignment: .center)
-                            .font(.title2)
-                        
-                        Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Text("Change")
-                                .frame(maxWidth:.infinity, alignment: .trailing)
-                                .font(.footnote)
-                        }
-                    } //: HStack
-                    .foregroundColor(.black)
+                    Text("\(self.selectedItem.name) \(self.selectedItem.subtype == "" ? "" : "- \(self.selectedItem.subtype)")")
+                        .frame(maxWidth:.infinity, alignment: .center)
+                        .font(.title2)
+                        .foregroundColor(.black)
                 } //: GroupBox
                 
                 GroupBox {
@@ -74,7 +55,7 @@ struct EditItemView: View {
                             
                             Text("$\(String(format: "%.2f", self.tempPrice))")
                                 .frame(maxWidth:.infinity, alignment: .center)
-                                .font(.system(size: 24, weight: .semibold, design: .rounded))
+                                .font(.system(size: 18, weight: .semibold, design: .rounded))
                             
                             Text(self.priceExpanded ? "Confirm" : "Change")
                                 .frame(maxWidth: .infinity, alignment: .trailing)
@@ -91,6 +72,7 @@ struct EditItemView: View {
                         VStack {
                             Divider().padding(.vertical)
                             QuantitySelector(selectedQuantity: self.$tempQuantity, showsCustomToggle: false)
+                                .padding(.bottom)
                         }
                     } label: {
                         HStack {
@@ -100,7 +82,7 @@ struct EditItemView: View {
                             
                             Text("\(self.tempQuantity)")
                                 .frame(maxWidth:.infinity, alignment: .center)
-                                .font(.system(size: 24, weight: .semibold, design: .rounded))
+                                .font(.system(size: 18, weight: .semibold, design: .rounded))
                             
                             Text(self.quantityExpanded ? "Confirm" : "Change")
                                 .frame(maxWidth: .infinity, alignment: .trailing)
@@ -117,9 +99,7 @@ struct EditItemView: View {
                 self.priceExpanded = false
                 self.quantityExpanded = false
                 
-                guard self.saveItem() == .success else {
-                    return
-                }
+                guard self.saveItem() == .success else { return }
                 
                 self.savedSuccessfully = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -130,9 +110,7 @@ struct EditItemView: View {
             .buttonStyle(PlainButtonStyle())
             .padding()
             
-            Button(action: {
-                self.willDelete = true
-            }) {
+            Button(action: { self.willDelete = true }) {
                 Text("Delete Item")
             }
             .foregroundColor(Color.red)
@@ -179,11 +157,9 @@ struct EditItemView: View {
                 }
                 
                 if self.savedSuccessfully {
-                    
                     AnimatedCheckmarkView()
                 }
             }
-            
         )
         .onAppear {
             self.tempPrice = selectedItem.retailPrice

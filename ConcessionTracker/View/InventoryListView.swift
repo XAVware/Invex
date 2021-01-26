@@ -1,9 +1,4 @@
-//
-//  NewInventoryListView.swift
-//  InventoryApp
-//
-//  Created by Ryan Smetana on 12/24/20.
-//
+
 
 import SwiftUI
 import RealmSwift
@@ -24,17 +19,15 @@ struct InventoryListView: View {
             VStack(spacing: 0) {
                 Text("Inventory List")
                     .modifier(TitleModifier())
-                    .padding()
                 
                 Text("Tap an item to edit it.")
-                    .font(.footnote)
-                    .padding(.bottom)
+                    .modifier(TitleDetailModifier())
                 
                 HStack(spacing: 0) {
                     Text("Item Type:")
                         .frame(width: geometry.size.width * 0.30, alignment: .leading)
                     
-                    Text("Item:")
+                    Text("Item Name:")
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Text("On-Hand Qty:")
@@ -45,10 +38,7 @@ struct InventoryListView: View {
                     
                     Spacer().frame(width: 16)
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 5)
-                .font(.system(size: 12, design: .rounded))
-                .foregroundColor(Color.black)
+                .modifier(DetailTextModifier(textColor: .black))
                 
                 Divider()
                 
@@ -58,44 +48,38 @@ struct InventoryListView: View {
                     
                     Divider()
                     
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: 0) {
-                            ForEach(self.results, id: \.self) { item in
-                                Button(action: {
-                                    self.selectedItem = item
-                                    self.isShowingDetailView = true
-                                }) {
-                                    HStack {
-                                        Text("\(item.name) \(item.subtype == "" ? "" : "- \(item.subtype)")")
-                                            .frame(maxWidth: .infinity, alignment: .leading)
-                                            .font(.system(size: 18, weight: .light, design: .rounded))
-                                        
-                                        Text("\(item.onHandQty)")
-                                            .frame(maxWidth: .infinity, alignment: .center)
-                                            .font(.system(size: 18, weight:.light, design: .rounded))
-                                        
-                                        Text("$\(String(format: "%.2f", item.retailPrice))")
-                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                            .font(.system(size: 18, weight:.light, design: .rounded))
-                                        
-                                        Image(systemName: "chevron.right")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 10, height: 15)
-                                            .font(.system(size: 18, weight: .light, design: .rounded))
-                                    } //: HStack
-                                    .foregroundColor(.black)
+                    if !self.isShowingDetailView {
+                        ScrollView(.vertical, showsIndicators: false) {
+                            VStack(spacing: 0) {
+                                ForEach(self.results, id: \.self) { item in
+                                    Button(action: {
+                                        self.selectedItem = item
+                                        self.isShowingDetailView = true
+                                    }) {
+                                        HStack {
+                                            Text("\(item.name) \(item.subtype == "" ? "" : "- \(item.subtype)")")
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                            
+                                            Text("\(item.onHandQty)")
+                                                .frame(maxWidth: .infinity, alignment: .center)
+                                            
+                                            Text("$\(String(format: "%.2f", item.retailPrice))")
+                                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                            
+                                            RightChevron()
+                                        } //: HStack
+                                    } //: Button - Item
+                                    .modifier(DetailTextModifier(textColor: .black))
+                                    .frame(height: 40)
                                     
-                                } //: Button - Item
-                                .padding(.horizontal)
-                                .frame(height: 40)
-                                
-                                Divider()
-                            } //: ForEach
-                        } //: VStack
-                    } //: ScrollView
-                    .frame(width: geometry.size.width * 0.70)
-                    
+                                    Divider()
+                                } //: ForEach
+                            } //: VStack
+                        } //: ScrollView
+                        .frame(width: geometry.size.width * 0.70)
+                    } else {
+                        Spacer().frame(width: geometry.size.width * 0.70)
+                    }
                 } //: HStack - Item Selector
             }
         }

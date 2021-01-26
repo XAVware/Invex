@@ -1,9 +1,4 @@
-//
-//  ItemDetailView.swift
-//  ConcessionTracker
-//
-//  Created by Ryan Smetana on 1/22/21.
-//
+
 
 import SwiftUI
 import RealmSwift
@@ -49,14 +44,12 @@ struct ItemDetailView: View {
             } //: HStack - Header
             .modifier(HeaderModifier())
             
-            
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 20) {
-                    
                     if self.viewType == .newItem {
                         VStack {
                             Text(self.$errorMessage.wrappedValue)
-                                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                .font(.system(size: 16, weight: .semibold, design: .rounded))
                                 .foregroundColor(.red)
                             
                             TextField("Item Name:", text: $itemName)
@@ -75,12 +68,10 @@ struct ItemDetailView: View {
                                 withAnimation { self.hasSubtype.toggle() }
                             }) {
                                 Text(self.hasSubtype ? "- Remove Subtype" : "+ Add Subtype")
-                                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-                                    .foregroundColor(Color("ThemeColor"))
-                                    .opacity(0.8)
+                                    .modifier(DetailTextModifier(textColor: Color("ThemeColor")))
                             }
                             
-                        }
+                        } //: VStack
                         .padding(.vertical)
                         
                         GroupBox {
@@ -102,24 +93,19 @@ struct ItemDetailView: View {
                                                     .resizable()
                                                     .scaledToFit()
                                                     .frame(width: 20, height: 20)
-                                                    .imageScale(.small)
-                                                    .accentColor(Color("ThemeColor"))
-                                                
+                                                    .foregroundColor(Color("ThemeColor"))
                                             } //: HStack
-                                        }
+                                        } //: Button - Concession Type
                                         if concessionType.type != concessionTypes[concessionTypes.count - 1].type {
                                             Divider()
                                         }
-                                        
                                     } //: ForEach
                                 } // VStack
-                                
                             } label: {
                                 HStack {
                                     Text("Item Type:")
                                         .frame(maxWidth:.infinity, alignment: .leading)
                                         .font(.callout)
-                                        .foregroundColor(.black)
                                     
                                     Text("\(self.$newItemType.wrappedValue)")
                                         .frame(maxWidth:.infinity, alignment: .center)
@@ -128,9 +114,8 @@ struct ItemDetailView: View {
                                     Text(self.typeExpanded ? "Confirm" : "Change")
                                         .frame(maxWidth:.infinity, alignment: .trailing)
                                         .font(.footnote)
-                                        .foregroundColor(.black)
                                 } //: HStack
-                                
+                                .foregroundColor(.black)
                             } //: DisclosureGroup
                         } //: GroupBox - Item Type
                         .onTapGesture { withAnimation { self.typeExpanded.toggle() } }
@@ -158,7 +143,6 @@ struct ItemDetailView: View {
                             } //: DisclosureGroup
                             .foregroundColor(.black)
                             .onTapGesture { withAnimation { self.priceExpanded.toggle() } }
-                            
                         } //GroupBox - Price
                     } else {
                         GroupBox {
@@ -166,12 +150,10 @@ struct ItemDetailView: View {
                                 Text("Item:")
                                     .frame(maxWidth:.infinity, alignment: .leading)
                                     .font(.title2)
-                                    .foregroundColor(.black)
                                 
                                 Text("\(itemName) \(itemSubtype == "" ? "" : "- \(itemSubtype)")")
                                     .frame(maxWidth:.infinity, alignment: .center)
                                     .font(.title)
-                                    .foregroundColor(.black)
                                 
                                 Button(action: {
                                     self.presentationMode.wrappedValue.dismiss()
@@ -179,10 +161,9 @@ struct ItemDetailView: View {
                                     Text("Change")
                                         .frame(maxWidth:.infinity, alignment: .trailing)
                                         .font(.footnote)
-                                        .foregroundColor(.black)
                                 }
-                                
                             } //: HStack
+                            .foregroundColor(.black)
                         } //: GroupBox
                         
                         Spacer().frame(height: 20)
@@ -219,8 +200,6 @@ struct ItemDetailView: View {
                         .foregroundColor(.black)
                     } //: GroupBox
                     
-                    
-                    
                     SaveItemButton(action: {
                         self.typeExpanded = false
                         self.priceExpanded = false
@@ -245,7 +224,6 @@ struct ItemDetailView: View {
                             guard self.restockItem() == .success else {
                                 return
                             }
-                        
                         }
                         
                         self.savedSuccessfully = true
@@ -288,8 +266,6 @@ struct ItemDetailView: View {
                 self.priceExpanded = false
             }
         })
-
-        
     }
     
     func getOnHandQuantity() -> Int {

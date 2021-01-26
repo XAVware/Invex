@@ -1,9 +1,4 @@
-//
-//  CartView.swift
-//  InventoryApp
-//
-//  Created by Ryan Smetana on 12/20/20.
-//
+
 
 import SwiftUI
 
@@ -15,14 +10,12 @@ struct CartView: View {
             HStack {
                 Spacer(minLength: 0)
                 VStack(spacing: 16) {
-                    
                     switch self.cart.isConfirmation {
                     case false:
                         ActiveReceiptView(cart: self.cart)
                     case true:
                         ConfirmationView(cart: self.cart)
                     }
-                    
                 } //: VStack
                 .foregroundColor(.white)
                 .frame(width: self.cart.isConfirmation ? geometry.size.width : geometry.size.width * 0.40, height: geometry.size.height)
@@ -55,7 +48,6 @@ struct CartView: View {
                     .frame(width: 100)
                     .padding()
                     .opacity(self.cart.isConfirmation ? 1 : 0)
-                    
                     , alignment: .topLeading)
             }
             
