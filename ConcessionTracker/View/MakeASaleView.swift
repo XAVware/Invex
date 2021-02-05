@@ -10,7 +10,7 @@ struct MakeASaleView: View {
     let cartWidthPercentage: CGFloat = 0.40
     
     var results: Results<Item> {
-        let predicate = NSPredicate(format: "itemType CONTAINS %@", concessionTypes[selectedTypeID].type)
+        let predicate = NSPredicate(format: "itemType == %@", concessionTypes[selectedTypeID].type)
         return try! Realm().objects(Item.self).filter(predicate)
     }
     
@@ -18,21 +18,22 @@ struct MakeASaleView: View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
                 //MARK: - Make A Sale Item Button Dashboard
-                VStack(alignment: .center, spacing: 5) {
-                    TypePickerView(typeID: self.$selectedTypeID)
-                    ScrollView {
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 10) {
-                            ForEach(self.getItems(), id: \.self) { item in
-                                ItemButton(cart: self.cart, item: item)
-                                    .shadow(radius: 8)
+                if !self.cart.isConfirmation {
+                    VStack(alignment: .center, spacing: 5) {
+                        TypePickerView(typeID: self.$selectedTypeID)
+                        ScrollView {
+                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
+                                ForEach(self.getItems(), id: \.self) { item in
+                                    ItemButton(cart: self.cart, item: item)
+                                        .shadow(radius: 8)
+                                }
                             }
-                        }
-                        .padding(.horizontal, 10)
-                    } //: ScrollView
-                } //: VStack
-                .frame(width: geometry.size.width - (geometry.size.width * cartWidthPercentage))
-                Spacer().frame(width: geometry.size.width * cartWidthPercentage)
-                
+                            .padding(.horizontal, 10)
+                        } //: ScrollView
+                    } //: VStack
+                    .frame(width: geometry.size.width - (geometry.size.width * cartWidthPercentage))
+                    Spacer().frame(width: geometry.size.width * cartWidthPercentage)
+                }
             } //: HStack
         }
         

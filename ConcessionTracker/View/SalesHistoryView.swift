@@ -81,7 +81,7 @@ struct SalesHistoryView: View {
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     } //HStack: Titles
                     .modifier(DetailTextModifier(textColor: .black))
-                    .padding(.trailing, 30)
+                    .padding(.trailing, 35)
                     
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack {
@@ -93,5 +93,6 @@ struct SalesHistoryView: View {
                 } //: VStack
             } //: HStack
         } //: VStack
+        
     }
 }

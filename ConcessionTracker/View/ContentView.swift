@@ -33,14 +33,17 @@ struct ContentView: View {
                 MenuView(displayState: self.$displayState)
             }
         } //: ZStack
+        .onChange(of: self.displayState, perform: { value in
+            self.cart.resetCart()
+        })
     }
     
     init() {
         let config = Realm.Configuration(
-            schemaVersion: 2,
+            schemaVersion: 1,
             
             migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 2) {
+                if (oldSchemaVersion < 1) {
                     migration.enumerateObjects(ofType: Item.className()) { (oldObject, newObject) in
                         
                     }

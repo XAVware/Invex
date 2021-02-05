@@ -4,10 +4,10 @@ import SwiftUI
 import RealmSwift
 
 class Cart: ObservableObject {
-    @Published var cartItems: [CartItem] = []
-    @Published var cartTotalString: String = "$ 0.00"
-    @Published var isEditable: Bool = true
-    @Published var isConfirmation: Bool = false
+    @Published var cartItems: [CartItem]        = []
+    @Published var cartTotalString: String      = "$ 0.00"
+    @Published var isEditable: Bool             = true
+    @Published var isConfirmation: Bool         = false
     
     func finishSale() {
         guard !cartItems.isEmpty else {
@@ -65,7 +65,10 @@ class Cart: ObservableObject {
             }
         }
         
-        //Reset cart back to default
+        self.resetCart()
+    }
+    
+    func resetCart() {
         self.cartItems = []
         self.cartTotalString = "$ 0.00"
         withAnimation {

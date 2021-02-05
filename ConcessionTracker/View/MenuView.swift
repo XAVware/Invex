@@ -110,6 +110,7 @@ struct MenuView: View {
                 .edgesIgnoringSafeArea(.all)
                 .onTapGesture {withAnimation { self.isShowingMenu = false }})
         .edgesIgnoringSafeArea(.all)
+
     }
     
     func changeStateTo(_ newState: DisplayStates) {

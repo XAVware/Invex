@@ -27,7 +27,7 @@ struct InventoryListView: View {
                     Text("Item Type:")
                         .frame(width: geometry.size.width * 0.30, alignment: .leading)
                     
-                    Text("Item Name:")
+                    Text("Name:")
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Text("On-Hand Qty:")

@@ -33,10 +33,10 @@ struct ItemButton: View {
                     .font(.system(size: 18, weight: .semibold, design:.rounded))
                 
                 Text(self.item.subtype)
-                    .font(.system(size: 12, weight: .light, design:.rounded))
+                    .font(.system(size: 14, weight: .light, design:.rounded))
             }
             .foregroundColor(.black)
-            .frame(width: 140, height: 60)
+            .frame(width: 140, height: 80)
             .background(self.backgroundColor)
         }
         .cornerRadius(9)
