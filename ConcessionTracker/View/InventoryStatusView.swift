@@ -8,7 +8,7 @@ struct InventoryStatusView: View {
 
     var items: Results<Item> {
         let query = NSCompoundPredicate(type: .and, subpredicates: [NSPredicate(format: "itemType == %@", concessionTypes[typeID].type), NSPredicate(format: "onHandQty <= \(concessionTypes[typeID].restockNumber)")])
-        return try! Realm().objects(Item.self).filter(query)
+        return try! Realm().objects(Item.self).filter(query).sorted(byKeyPath: "name", ascending: true)
     }
     
     var body: some View {
@@ -34,7 +34,7 @@ struct InventoryStatusView: View {
                 
                 List(self.items, id: \.self) { item in
                     HStack {
-                        Text(item.name)
+                        Text("\(item.name) \(item.subtype == "" ? "" : "- \(item.subtype)")")
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                         Text("\(item.onHandQty)")

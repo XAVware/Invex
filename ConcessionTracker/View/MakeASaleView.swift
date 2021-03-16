@@ -11,7 +11,7 @@ struct MakeASaleView: View {
     
     var results: Results<Item> {
         let predicate = NSPredicate(format: "itemType == %@", concessionTypes[selectedTypeID].type)
-        return try! Realm().objects(Item.self).filter(predicate)
+        return try! Realm().objects(Item.self).filter(predicate).sorted(byKeyPath: "name", ascending: true)
     }
     
     var body: some View {

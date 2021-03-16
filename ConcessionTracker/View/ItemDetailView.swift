@@ -13,7 +13,6 @@ struct ItemDetailView: View {
     @State var itemName: String
     @State var itemSubtype: String
     
-    @State var hasSubtype: Bool             = false
     @State var newItemType: String          = "-Select Type-"
     @State var newItemPrice: Double         = 1.00
     @State var quantityPurchased: Int       = 24
@@ -55,21 +54,9 @@ struct ItemDetailView: View {
                             TextField("Item Name:", text: $itemName)
                                 .modifier(TextFieldModifier())
                             
-                            if self.hasSubtype {
-                                TextField("Subtype:", text: $itemSubtype)
-                                    .modifier(TextFieldModifier())
-                                    .frame(maxWidth: 450)
-                            }
-                            
-                            Button(action: {
-                                if self.hasSubtype {
-                                    self.itemSubtype = ""
-                                }
-                                withAnimation { self.hasSubtype.toggle() }
-                            }) {
-                                Text(self.hasSubtype ? "- Remove Subtype" : "+ Add Subtype")
-                                    .modifier(DetailTextModifier(textColor: Color("ThemeColor")))
-                            }
+                            TextField("Subtype: (Optional)", text: $itemSubtype)
+                                .modifier(TextFieldModifier())
+                                .frame(maxWidth: 450)
                             
                         } //: VStack
                         .padding(.vertical)

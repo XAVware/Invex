@@ -32,8 +32,11 @@ struct ItemButton: View {
                 Text(self.item.name)
                     .font(.system(size: 18, weight: .semibold, design:.rounded))
                 
-                Text(self.item.subtype)
-                    .font(.system(size: 14, weight: .light, design:.rounded))
+                if (self.item.subtype != "") {
+                    Text(self.item.subtype)
+                        .font(.system(size: 14, weight: .light, design:.rounded))
+                }
+                
             }
             .foregroundColor(.black)
             .frame(width: 140, height: 80)
