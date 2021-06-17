@@ -26,16 +26,18 @@ struct ItemButton: View {
     
     var body: some View {
         Button(action: {
-            self.cart.addItem(self.item)
+//            self.cart.addItem(self.item)
         }) {
             VStack(spacing: 0) {
-                Text(self.item.name)
-                    .font(.system(size: 18, weight: .semibold, design:.rounded))
+//                Text(self.item.name)
+//                    .font(.system(size: 18, weight: .semibold, design:.rounded))
+//
+//                if (self.item.subtype != "") {
+//                    Text(self.item.subtype)
+//                        .font(.system(size: 14, weight: .light, design:.rounded))
+//                }
                 
-                if (self.item.subtype != "") {
-                    Text(self.item.subtype)
-                        .font(.system(size: 14, weight: .light, design:.rounded))
-                }
+                Text("Test")
                 
             }
             .foregroundColor(.black)

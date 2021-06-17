@@ -9,10 +9,16 @@ struct MakeASaleView: View {
     
     let cartWidthPercentage: CGFloat = 0.40
     
+//    var results: Results<Item> {
+//        let predicate = NSPredicate(format: "itemType == %@", concessionTypes[selectedTypeID].type)
+//        return try! Realm().objects(Item.self).filter(predicate).sorted(byKeyPath: "name", ascending: true)
+//    }
+    
     var results: Results<Item> {
-        let predicate = NSPredicate(format: "itemType == %@", concessionTypes[selectedTypeID].type)
+        let predicate = NSPredicate(format: "itemType == %@", categoryList[selectedTypeID].name)
         return try! Realm().objects(Item.self).filter(predicate).sorted(byKeyPath: "name", ascending: true)
     }
+    
     
     var body: some View {
         GeometryReader { geometry in

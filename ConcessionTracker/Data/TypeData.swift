@@ -6,9 +6,23 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 var concessionTypes: [Type] = [
     Type(type: "Food / Snack", restockNumber: 10),
     Type(type: "Beverage", restockNumber: 15),
     Type(type: "Frozen", restockNumber: 10)
 ]
+
+var categoryList: [Category] {
+    print("Initialized")
+    var tempList: [Category] = []
+    
+    let results = try! Realm().objects(Category.self)
+    
+    for category in results {
+        tempList.append(category)
+    }
+    
+    return tempList
+}

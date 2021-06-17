@@ -228,8 +228,6 @@ struct OnboardingView: View {
             
                 Button(action: {
                     self.saveCategories()
-                    
-                    
                     self.currentOnboardingState = .adminPasscode
                 }, label: {
                     Text("Save & Continue")
@@ -258,7 +256,7 @@ struct OnboardingView: View {
                 
                                 
                 PasscodePad(padState: .setPasscode, finishAction: {
-                    self.savePasscode()
+                    self.savePasscodeAndProceed()
                 })
                     .padding()
             
@@ -282,8 +280,7 @@ struct OnboardingView: View {
     
     
     
-    func savePasscode() {
-        print("Called")
+    func savePasscodeAndProceed() {
         self.isOnboarding = false
     }
     
