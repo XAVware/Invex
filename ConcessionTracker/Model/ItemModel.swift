@@ -11,3 +11,8 @@ class Item: Object {
     @objc dynamic var avgCostPer: Double    = 0.00
     @objc dynamic var onHandQty: Int        = 0
 }
+
+class Category: Object {
+    @objc dynamic var name: String          = ""
+    @objc dynamic var restockNumber         = 0
+}

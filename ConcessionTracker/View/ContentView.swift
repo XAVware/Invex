@@ -11,43 +11,54 @@ struct ContentView: View {
     @State var displayState: DisplayStates      = .makeASale
     @StateObject var cart                       = Cart()
     
+    @State var isOnboarding = true
+    
     var body: some View {
-        ZStack {
-            switch self.displayState {
-            case .makeASale:
-                ZStack {
-                    MakeASaleView(cart: self.cart)
-                    CartView(cart: self.cart)
+        if isOnboarding {
+            OnboardingView(isOnboarding: self.$isOnboarding)
+        } else {
+            ZStack {
+                switch self.displayState {
+                case .makeASale:
+                    ZStack {
+                        MakeASaleView(cart: self.cart)
+                        CartView(cart: self.cart)
+                    }
+                case .addInventory:
+                    AddInventoryView()
+                case .inventoryList:
+                    InventoryListView()
+                case .salesHistory:
+                    SalesHistoryView()
+                case .inventoryStatus:
+                    InventoryStatusView()
                 }
-            case .addInventory:
-                AddInventoryView()
-            case .inventoryList:
-                InventoryListView()
-            case .salesHistory:
-                SalesHistoryView()
-            case .inventoryStatus:
-                InventoryStatusView()
-            }
-            
-            if !self.cart.isConfirmation {
-                MenuView(displayState: self.$displayState)
-            }
-        } //: ZStack
-        .onChange(of: self.displayState, perform: { value in
-            self.cart.resetCart()
-        })
+                
+                if !self.cart.isConfirmation {
+                    MenuView(displayState: self.$displayState)
+                }
+                
+                
+            } //: ZStack
+            .onChange(of: self.displayState, perform: { value in
+                self.cart.resetCart()
+            })
+        }
     }
     
     init() {
         let config = Realm.Configuration(
-            schemaVersion: 1,
+            schemaVersion: 2,
             
             migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 1) {
+                if (oldSchemaVersion < 2) {
                     migration.enumerateObjects(ofType: Item.className()) { (oldObject, newObject) in
                         
                     }
                     migration.enumerateObjects(ofType: Sale.className()) { oldObject, newObject in
+                        
+                    }
+                    migration.enumerateObjects(ofType: Category.className()) { oldObject, newObject in
                         
                     }
                 }
