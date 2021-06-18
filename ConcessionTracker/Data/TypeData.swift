@@ -14,8 +14,7 @@ var concessionTypes: [Type] = [
     Type(type: "Frozen", restockNumber: 10)
 ]
 
-var categoryList: [Category] {
-    print("Initialized")
+let categoryList: [Category] = {
     var tempList: [Category] = []
     
     let results = try! Realm().objects(Category.self)
@@ -25,4 +24,4 @@ var categoryList: [Category] {
     }
     
     return tempList
-}
+}()

@@ -9,10 +9,11 @@ enum DetailViewType {
 
 struct AddInventoryView: View {
     @State var activeSheet: DetailViewType      = .newItem
-    @State var selectedConcessionType: String   = concessionTypes[0].type
-    @State var selectedItemName: String         = ""
+//    @State var selectedConcessionType: String   = concessionTypes[0].type
+    @State var selectedConcessionType: String   = categoryList[0].name
     @State var selectedItemSubtype: String      = ""
     @State var isShowingDetailView: Bool        = false
+    @State var selectedItemName: String         = ""
     
     
     

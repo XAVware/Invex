@@ -11,7 +11,7 @@ struct ContentView: View {
     @State var displayState: DisplayStates      = .makeASale
     @StateObject var cart                       = Cart()
     
-    @State var isOnboarding = true
+    @State var isOnboarding = false
     
     var body: some View {
         if isOnboarding {

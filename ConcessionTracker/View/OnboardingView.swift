@@ -270,12 +270,12 @@ struct OnboardingView: View {
         .onTapGesture {
             print(self.results.count)
         }
-        .onAppear {
-            let realm = try! Realm()
-            try! realm.write({
-                realm.deleteAll()
-            })
-        }
+//        .onAppear {
+//            let realm = try! Realm()
+//            try! realm.write({
+//                realm.deleteAll()
+//            })
+//        }
     }
     
     
