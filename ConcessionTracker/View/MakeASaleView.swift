@@ -26,7 +26,7 @@ struct MakeASaleView: View {
                 //MARK: - Make A Sale Item Button Dashboard
                 if !self.cart.isConfirmation {
                     VStack(alignment: .center, spacing: 5) {
-                        TypePickerView(typeID: self.$selectedTypeID)
+//                        TypePickerView(typeID: self.$selectedTypeID)
                         ScrollView {
                             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
                                 ForEach(self.getItems(), id: \.self) { item in
@@ -36,6 +36,7 @@ struct MakeASaleView: View {
                             }
                             .padding(.horizontal, 10)
                         } //: ScrollView
+                        CategorySlider(categoryIndex: self.$selectedTypeID)
                     } //: VStack
                     .frame(width: geometry.size.width - (geometry.size.width * cartWidthPercentage))
                     Spacer().frame(width: geometry.size.width * cartWidthPercentage)

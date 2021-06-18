@@ -9,23 +9,27 @@ import SwiftUI
 
 struct CategorySlider: View {
     
-    @Binding var selectedCategoryName: String
+//    @Binding var selectedCategoryName: String
+    
+    @Binding var categoryIndex: Int
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false, content: {
             HStack(spacing: 2) {
                 ForEach(categoryList, id: \.self) { category in
                     Button(action: {
-                        self.selectedCategoryName = category.name
+                        self.categoryIndex = categoryList.firstIndex(of: category)!
+//                        self.selectedCategoryName = category.name
                     }, label: {
                         Text(category.name)
                             .padding(.vertical, 10)
                             .padding(.horizontal, 7)
                             .foregroundColor(.black)
-                            .opacity(self.selectedCategoryName == category.name ? 1.0 : 0.65)
+//                            .opacity(self.selectedCategoryName == category.name ? 1.0 : 0.65)
+                            .opacity(categoryList[categoryIndex].name == category.name ? 1.0 : 0.65)
                     })
                     .frame(minWidth: 150)
-                    .background(self.selectedCategoryName == category.name ? Color.green : Color.white)
+                    .background(categoryList[categoryIndex].name == category.name ? Color.green : Color.white)
                     .cornerRadius(15, corners: .bottomLeft)
                     .cornerRadius(15, corners: .bottomRight)
                     
