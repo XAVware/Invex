@@ -29,7 +29,7 @@ struct CategorySlider: View {
                             .opacity(categoryList[categoryIndex].name == category.name ? 1.0 : 0.65)
                     })
                     .frame(minWidth: 150)
-                    .background(categoryList[categoryIndex].name == category.name ? Color.green : Color.white)
+                    .background(categoryList[categoryIndex].name == category.name ? Color.white : Color(UIColor.systemGray4))
                     .cornerRadius(15, corners: .bottomLeft)
                     .cornerRadius(15, corners: .bottomRight)
                     
@@ -38,6 +38,8 @@ struct CategorySlider: View {
                 
             }
         })
+        .background(Color(UIColor.systemGray4).frame(maxWidth: .infinity))
+        .frame(maxWidth: .infinity, maxHeight: 40)
     }
 }
 

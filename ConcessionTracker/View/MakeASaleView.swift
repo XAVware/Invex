@@ -24,8 +24,12 @@ struct MakeASaleView: View {
         GeometryReader { geometry in
             HStack(spacing: 0) {
                 //MARK: - Make A Sale Item Button Dashboard
-                if !self.cart.isConfirmation {
+                if !self.cart.isConfirmation && categoryList.count > 0 {
                     VStack(alignment: .center, spacing: 5) {
+                        Text("\(categoryList[self.selectedTypeID].name)")
+                            .font(.title)
+                            .foregroundColor(Color("ThemeColor"))
+                            .padding(.bottom, 25)
 //                        TypePickerView(typeID: self.$selectedTypeID)
                         ScrollView {
                             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
@@ -42,6 +46,9 @@ struct MakeASaleView: View {
                     Spacer().frame(width: geometry.size.width * cartWidthPercentage)
                 }
             } //: HStack
+//            .onChange(of: categoryList.count) { (value) in
+//                print(value)
+//            }
         }
         
     } //: VStack used to keep header above all pages

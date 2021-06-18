@@ -11,10 +11,10 @@ struct ContentView: View {
     @State var displayState: DisplayStates      = .makeASale
     @StateObject var cart                       = Cart()
     
-    @State var isOnboarding = false
+    @State var isOnboarding: Bool = true
     
     var body: some View {
-        if isOnboarding {
+        if categoryList.count == 0 && self.isOnboarding == true {
             OnboardingView(isOnboarding: self.$isOnboarding)
         } else {
             ZStack {
@@ -43,6 +43,7 @@ struct ContentView: View {
             .onChange(of: self.displayState, perform: { value in
                 self.cart.resetCart()
             })
+            
         }
     }
     
@@ -76,5 +77,21 @@ struct ContentView: View {
         UITableView.appearance().backgroundColor = .clear
         UITableViewCell.appearance().backgroundColor = .clear
         UITableView.appearance().separatorColor = .white
+        
+//        let realm = try! Realm()
+//        try! realm.write({
+//            realm.deleteAll()
+//        })
+        
+        
+//        let categories = try! Realm().objects(Category.self)
+//
+//
+//        if categoryList.count > 0 {
+//            self.isOnboarding.toggle()
+//        }
+//
+//        print(categories.count)
+//        print(self.isOnboarding)
     }
 }
