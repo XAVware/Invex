@@ -13,11 +13,11 @@ struct ItemButton: View {
     
     var backgroundColor: Color {
         switch item.itemType {
-        case "Food / Snack":
+        case categoryList[0].name:
             return Color("SnackColor")
-        case "Beverage":
+        case categoryList[1].name:
             return Color("BeverageColor")
-        case "Frozen":
+        case categoryList[2].name:
             return Color("FrozenColor")
         default:
             return Color.white
@@ -26,19 +26,16 @@ struct ItemButton: View {
     
     var body: some View {
         Button(action: {
-//            self.cart.addItem(self.item)
+            self.cart.addItem(self.item)
         }) {
             VStack(spacing: 0) {
-//                Text(self.item.name)
-//                    .font(.system(size: 18, weight: .semibold, design:.rounded))
-//
-//                if (self.item.subtype != "") {
-//                    Text(self.item.subtype)
-//                        .font(.system(size: 14, weight: .light, design:.rounded))
-//                }
-                
-                Text("Test")
-                
+                Text(self.item.name)
+                    .font(.system(size: 18, weight: .semibold, design:.rounded))
+
+                if (self.item.subtype != "") {
+                    Text(self.item.subtype)
+                        .font(.system(size: 14, weight: .light, design:.rounded))
+                }
             }
             .foregroundColor(.black)
             .frame(width: 140, height: 80)

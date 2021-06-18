@@ -8,11 +8,11 @@
 import SwiftUI
 import RealmSwift
 
-var concessionTypes: [Type] = [
-    Type(type: "Food / Snack", restockNumber: 10),
-    Type(type: "Beverage", restockNumber: 15),
-    Type(type: "Frozen", restockNumber: 10)
-]
+//var concessionTypes: [Type] = [
+//    Type(type: "Food / Snack", restockNumber: 10),
+//    Type(type: "Beverage", restockNumber: 15),
+//    Type(type: "Frozen", restockNumber: 10)
+//]
 
 let categoryList: [Category] = {
     var tempList: [Category] = []

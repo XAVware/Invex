@@ -4,7 +4,8 @@ import SwiftUI
 import RealmSwift
 
 struct InventoryListView: View {
-    @State var selectedConcessionType: String       = concessionTypes[0].type
+//    @State var selectedConcessionType: String       = concessionTypes[0].type
+    @State var selectedConcessionType: String       = categoryList[0].name
     @State var isShowingDetailView: Bool            = false
     
     @State var selectedItem: Item = Item()

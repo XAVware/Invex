@@ -65,25 +65,25 @@ struct ItemDetailView: View {
                             DisclosureGroup(isExpanded: self.$typeExpanded) {
                                 Divider().padding(.top).padding(.bottom, 2)
                                 VStack {
-                                    ForEach(concessionTypes) { concessionType in
+                                    ForEach(categoryList, id: \.self) { category in
                                         Button(action: {
-                                            self.newItemType = concessionType.type
+                                            self.newItemType = category.name
                                         }) {
                                             HStack {
-                                                Text(concessionType.type)
+                                                Text(category.name)
                                                     .font(.system(size: 18, design: .rounded))
                                                     .foregroundColor(.black)
                                                 
                                                 Spacer()
                                                 
-                                                Image(systemName: self.newItemType == concessionType.type ? "checkmark.circle.fill" : "circle")
+                                                Image(systemName: self.newItemType == category.name ? "checkmark.circle.fill" : "circle")
                                                     .resizable()
                                                     .scaledToFit()
                                                     .frame(width: 20, height: 20)
                                                     .foregroundColor(Color("ThemeColor"))
                                             } //: HStack
                                         } //: Button - Concession Type
-                                        if concessionType.type != concessionTypes[concessionTypes.count - 1].type {
+                                        if category.name != categoryList[categoryList.count - 1].name {
                                             Divider()
                                         }
                                     } //: ForEach

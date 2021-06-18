@@ -14,18 +14,18 @@ struct CategorySlider: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false, content: {
             HStack(spacing: 2) {
-                ForEach(concessionTypes) { type in
+                ForEach(categoryList, id: \.self) { category in
                     Button(action: {
-                        self.selectedCategoryName = type.type
+                        self.selectedCategoryName = category.name
                     }, label: {
-                        Text(type.type)
+                        Text(category.name)
                             .padding(.vertical, 10)
                             .padding(.horizontal, 7)
                             .foregroundColor(.black)
-                            .opacity(self.selectedCategoryName == type.type ? 1.0 : 0.65)
+                            .opacity(self.selectedCategoryName == category.name ? 1.0 : 0.65)
                     })
                     .frame(minWidth: 150)
-                    .background(self.selectedCategoryName == type.type ? Color.green : Color.white)
+                    .background(self.selectedCategoryName == category.name ? Color.green : Color.white)
                     .cornerRadius(15, corners: .bottomLeft)
                     .cornerRadius(15, corners: .bottomRight)
                     

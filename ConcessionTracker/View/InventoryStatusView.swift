@@ -6,8 +6,13 @@ import RealmSwift
 struct InventoryStatusView: View {
     @State var typeID: Int = 0
 
+//    var items: Results<Item> {
+//        let query = NSCompoundPredicate(type: .and, subpredicates: [NSPredicate(format: "itemType == %@", concessionTypes[typeID].type), NSPredicate(format: "onHandQty <= \(concessionTypes[typeID].restockNumber)")])
+//        return try! Realm().objects(Item.self).filter(query).sorted(byKeyPath: "name", ascending: true)
+//    }
+    
     var items: Results<Item> {
-        let query = NSCompoundPredicate(type: .and, subpredicates: [NSPredicate(format: "itemType == %@", concessionTypes[typeID].type), NSPredicate(format: "onHandQty <= \(concessionTypes[typeID].restockNumber)")])
+        let query = NSCompoundPredicate(type: .and, subpredicates: [NSPredicate(format: "itemType == %@", categoryList[typeID].name), NSPredicate(format: "onHandQty <= \(categoryList[typeID].restockNumber)")])
         return try! Realm().objects(Item.self).filter(query).sorted(byKeyPath: "name", ascending: true)
     }
     
@@ -18,7 +23,7 @@ struct InventoryStatusView: View {
             
             TypePickerView(typeID: self.$typeID)
 
-            Text("Showing items of \(concessionTypes[typeID].restockNumber) or less")
+            Text("Showing items of \(categoryList[typeID].restockNumber) or less")
                 .font(.title3)
             
             VStack {

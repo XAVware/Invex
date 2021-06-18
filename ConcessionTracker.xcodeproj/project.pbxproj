@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		806E9313267C016600BAE9CB /* PasscodePadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806E9312267C016600BAE9CB /* PasscodePadButton.swift */; };
 		808F8704267C18940078D388 /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808F8703267C18940078D388 /* CategoryModel.swift */; };
-		808F8707267C22610078D388 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808F8706267C22610078D388 /* Test.swift */; };
 		82E30FC69E20E4C5504771EB /* Pods_ConcessionTracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82FE47A2D29D04391196E440 /* Pods_ConcessionTracker.framework */; };
 		940DBF2E25BF3CC9007B3F10 /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940DBF2D25BF3CC9007B3F10 /* CartView.swift */; };
 		940DBF3125BF3CD3007B3F10 /* MakeASaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940DBF3025BF3CD3007B3F10 /* MakeASaleView.swift */; };
@@ -56,7 +55,6 @@
 		565120A290F77DC0587A5627 /* Pods-ConcessionTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConcessionTracker.debug.xcconfig"; path = "Target Support Files/Pods-ConcessionTracker/Pods-ConcessionTracker.debug.xcconfig"; sourceTree = "<group>"; };
 		806E9312267C016600BAE9CB /* PasscodePadButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodePadButton.swift; sourceTree = "<group>"; };
 		808F8703267C18940078D388 /* CategoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModel.swift; sourceTree = "<group>"; };
-		808F8706267C22610078D388 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		82FE47A2D29D04391196E440 /* Pods_ConcessionTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ConcessionTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		940DBF2D25BF3CC9007B3F10 /* CartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
 		940DBF3025BF3CD3007B3F10 /* MakeASaleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakeASaleView.swift; sourceTree = "<group>"; };
@@ -140,7 +138,6 @@
 				806E9312267C016600BAE9CB /* PasscodePadButton.swift */,
 				940DBF3F25BF4231007B3F10 /* TypePickerView.swift */,
 				94F4354B267A9661001438E7 /* CategorySlider.swift */,
-				808F8706267C22610078D388 /* Test.swift */,
 				940DBF5D25C0990C007B3F10 /* RightChevron.swift */,
 			);
 			path = "Custom Components";
@@ -381,7 +378,6 @@
 				949A0A9225B8C158000EDF2E /* SaleDateManager.swift in Sources */,
 				940DBF5325BF80F5007B3F10 /* EditItemView.swift in Sources */,
 				94DC961A25B8D342001A4547 /* Modifiers.swift in Sources */,
-				808F8707267C22610078D388 /* Test.swift in Sources */,
 				940DBF2E25BF3CC9007B3F10 /* CartView.swift in Sources */,
 				94DC962625BA747E001A4547 /* AnimatedCheckmarkView.swift in Sources */,
 				949A0A9925B8C2F8000EDF2E /* CartItemModel.swift in Sources */,
