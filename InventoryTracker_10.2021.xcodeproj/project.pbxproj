@@ -7,19 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9444F0D0271A0F33002A6606 /* PasscodePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0CE271A0F33002A6606 /* PasscodePad.swift */; };
+		9444F0D1271A0F33002A6606 /* PasscodePadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0CF271A0F33002A6606 /* PasscodePadButton.swift */; };
+		9444F0D5271A102A002A6606 /* OnboardingFirstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0D4271A102A002A6606 /* OnboardingFirstView.swift */; };
+		9444F0D7271A10FB002A6606 /* OnboardingCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0D6271A10FB002A6606 /* OnboardingCategoriesView.swift */; };
+		9444F0DB271A1162002A6606 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0DA271A1162002A6606 /* Model.swift */; };
+		9444F0DD271A139C002A6606 /* TempData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0DC271A139C002A6606 /* TempData.swift */; };
+		9444F0E0271A14D9002A6606 /* OnboardingRestockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0DF271A14D9002A6606 /* OnboardingRestockView.swift */; };
+		9444F0E2271A1602002A6606 /* OnboardingPasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0E1271A1602002A6606 /* OnboardingPasscodeView.swift */; };
+		9444F0E4271A1695002A6606 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0E3271A1695002A6606 /* OnboardingCoordinator.swift */; };
 		94654EDE2718F3C2000774A7 /* InventoryTracker_10_2021App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94654EDD2718F3C2000774A7 /* InventoryTracker_10_2021App.swift */; };
 		94654EE02718F3C2000774A7 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94654EDF2718F3C2000774A7 /* ContentView.swift */; };
 		94654EE22718F3C3000774A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94654EE12718F3C3000774A7 /* Assets.xcassets */; };
 		94654EE52718F3C3000774A7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94654EE42718F3C3000774A7 /* Preview Assets.xcassets */; };
+		94654EEE2718FBA5000774A7 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94654EED2718FBA5000774A7 /* OnboardingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9444F0CE271A0F33002A6606 /* PasscodePad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodePad.swift; sourceTree = "<group>"; };
+		9444F0CF271A0F33002A6606 /* PasscodePadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodePadButton.swift; sourceTree = "<group>"; };
+		9444F0D4271A102A002A6606 /* OnboardingFirstView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFirstView.swift; sourceTree = "<group>"; };
+		9444F0D6271A10FB002A6606 /* OnboardingCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCategoriesView.swift; sourceTree = "<group>"; };
+		9444F0DA271A1162002A6606 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		9444F0DC271A139C002A6606 /* TempData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempData.swift; sourceTree = "<group>"; };
+		9444F0DF271A14D9002A6606 /* OnboardingRestockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingRestockView.swift; sourceTree = "<group>"; };
+		9444F0E1271A1602002A6606 /* OnboardingPasscodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPasscodeView.swift; sourceTree = "<group>"; };
+		9444F0E3271A1695002A6606 /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
 		94654EDA2718F3C2000774A7 /* InventoryTracker_10.2021.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InventoryTracker_10.2021.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94654EDD2718F3C2000774A7 /* InventoryTracker_10_2021App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryTracker_10_2021App.swift; sourceTree = "<group>"; };
 		94654EDF2718F3C2000774A7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		94654EE12718F3C3000774A7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94654EE42718F3C3000774A7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		94654EE62718F3C3000774A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94654EED2718FBA5000774A7 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +53,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9444F0DE271A149B002A6606 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				94654EED2718FBA5000774A7 /* OnboardingView.swift */,
+				9444F0D4271A102A002A6606 /* OnboardingFirstView.swift */,
+				9444F0D6271A10FB002A6606 /* OnboardingCategoriesView.swift */,
+				9444F0DF271A14D9002A6606 /* OnboardingRestockView.swift */,
+				9444F0E1271A1602002A6606 /* OnboardingPasscodeView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		94654ED12718F3C2000774A7 = {
 			isa = PBXGroup;
 			children = (
@@ -52,11 +84,15 @@
 		94654EDC2718F3C2000774A7 /* InventoryTracker_10.2021 */ = {
 			isa = PBXGroup;
 			children = (
+				94654EEC2718FAC1000774A7 /* View */,
 				94654EDD2718F3C2000774A7 /* InventoryTracker_10_2021App.swift */,
+				9444F0DA271A1162002A6606 /* Model.swift */,
 				94654EDF2718F3C2000774A7 /* ContentView.swift */,
 				94654EE12718F3C3000774A7 /* Assets.xcassets */,
 				94654EE62718F3C3000774A7 /* Info.plist */,
 				94654EE32718F3C3000774A7 /* Preview Content */,
+				9444F0DC271A139C002A6606 /* TempData.swift */,
+				9444F0E3271A1695002A6606 /* OnboardingCoordinator.swift */,
 			);
 			path = InventoryTracker_10.2021;
 			sourceTree = "<group>";
@@ -67,6 +103,16 @@
 				94654EE42718F3C3000774A7 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		94654EEC2718FAC1000774A7 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				9444F0DE271A149B002A6606 /* Onboarding */,
+				9444F0CE271A0F33002A6606 /* PasscodePad.swift */,
+				9444F0CF271A0F33002A6606 /* PasscodePadButton.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,8 +184,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9444F0DD271A139C002A6606 /* TempData.swift in Sources */,
+				9444F0E4271A1695002A6606 /* OnboardingCoordinator.swift in Sources */,
+				94654EEE2718FBA5000774A7 /* OnboardingView.swift in Sources */,
+				9444F0D1271A0F33002A6606 /* PasscodePadButton.swift in Sources */,
 				94654EE02718F3C2000774A7 /* ContentView.swift in Sources */,
 				94654EDE2718F3C2000774A7 /* InventoryTracker_10_2021App.swift in Sources */,
+				9444F0D5271A102A002A6606 /* OnboardingFirstView.swift in Sources */,
+				9444F0E2271A1602002A6606 /* OnboardingPasscodeView.swift in Sources */,
+				9444F0D7271A10FB002A6606 /* OnboardingCategoriesView.swift in Sources */,
+				9444F0E0271A14D9002A6606 /* OnboardingRestockView.swift in Sources */,
+				9444F0D0271A0F33002A6606 /* PasscodePad.swift in Sources */,
+				9444F0DB271A1162002A6606 /* Model.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
