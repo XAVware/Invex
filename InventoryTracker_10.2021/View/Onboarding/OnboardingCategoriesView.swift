@@ -8,25 +8,32 @@
 import SwiftUI
 
 struct OnboardingCategoriesView: View {
+    @ObservedObject var coordinator: OnboardingCoordinator
+    @State var newCategoryName: String = ""
+    
     var body: some View {
         VStack {
-            Text("First, Let's Add Some Categories")
-                .font(.title)
-                .fontWeight(.bold)
-                .foregroundColor(Color.blue)
-                .padding()
+            VStack(spacing: 20){
+                Text("First, Let's Add Some Categories")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                
+                Text("ConcessionTracker displays your inventory on each page based on their category.")
+                    .font(.callout)
+                    .multilineTextAlignment(.center)
+            }
+            .foregroundColor(Color.blue)
             
-            Text("ConcessionTracker displays your inventory on each page based on their category.")
-                .font(.callout)
-                .foregroundColor(Color.blue)
-                .multilineTextAlignment(.center)
+            
             
             Spacer().frame(height: 50)
             
-//            TextField("Category Name:", text: $newCategoryName)
+            TextField("Category Name:", text: $newCategoryName)
 //                .modifier(TextFieldModifier())
             
             Button(action: {
+                coordinator.createCategory(categoryName: newCategoryName)
 //                for category in categories {
 //                    if category.name == newCategoryName {
 //                        print("category already exists")
@@ -105,18 +112,19 @@ struct OnboardingCategoriesView: View {
             }, label: {
                 Text("Save & Continue")
                     .font(.title)
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
             })
                 .padding()
                 .frame(width: 350, height: 50)
                 .foregroundColor(Color.blue)
                 .cornerRadius(25)
         }
+        .padding()
     }
 }
 
-struct OnboardingCategoriesView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnboardingCategoriesView()
-    }
-}
+//struct OnboardingCategoriesView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        OnboardingCategoriesView()
+//    }
+//}

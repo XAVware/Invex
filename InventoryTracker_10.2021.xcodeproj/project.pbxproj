@@ -56,6 +56,7 @@
 		9444F0DE271A149B002A6606 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				9444F0E3271A1695002A6606 /* OnboardingCoordinator.swift */,
 				94654EED2718FBA5000774A7 /* OnboardingView.swift */,
 				9444F0D4271A102A002A6606 /* OnboardingFirstView.swift */,
 				9444F0D6271A10FB002A6606 /* OnboardingCategoriesView.swift */,
@@ -92,7 +93,6 @@
 				94654EE62718F3C3000774A7 /* Info.plist */,
 				94654EE32718F3C3000774A7 /* Preview Content */,
 				9444F0DC271A139C002A6606 /* TempData.swift */,
-				9444F0E3271A1695002A6606 /* OnboardingCoordinator.swift */,
 			);
 			path = InventoryTracker_10.2021;
 			sourceTree = "<group>";

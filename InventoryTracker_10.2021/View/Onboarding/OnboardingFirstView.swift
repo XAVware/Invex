@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct OnboardingFirstView: View {
+    @ObservedObject var coordinator: OnboardingCoordinator
+    
     var body: some View {
         VStack {
             Text("Welcome to ConcessionTracker!")
@@ -19,7 +21,7 @@ struct OnboardingFirstView: View {
             Spacer()
             
             Button(action: {
-//                self.currentOnboardingState = .categoryNames
+                self.coordinator.nextScreen()
             }, label: {
                 Text("Get Started")
                     .font(.title)
@@ -33,8 +35,8 @@ struct OnboardingFirstView: View {
     }
 }
 
-struct OnboardingFirstView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnboardingFirstView()
-    }
-}
+//struct OnboardingFirstView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        OnboardingFirstView()
+//    }
+//}

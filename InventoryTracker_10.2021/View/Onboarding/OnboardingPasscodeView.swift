@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct OnboardingPasscodeView: View {
+    @ObservedObject var coordinator: OnboardingCoordinator
+    
     var body: some View {
         VStack {
             Text("Finally, enter an admin passcode")
@@ -36,8 +38,8 @@ struct OnboardingPasscodeView: View {
     }
 }
 
-struct OnboardingPasscodeView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnboardingPasscodeView()
-    }
-}
+//struct OnboardingPasscodeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        OnboardingPasscodeView()
+//    }
+//}

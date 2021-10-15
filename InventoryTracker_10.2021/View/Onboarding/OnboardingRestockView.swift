@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct OnboardingRestockView: View {
+    @ObservedObject var coordinator: OnboardingCoordinator
+    
     var body: some View {
         VStack {
             Text("Next, Select Your Restock Point")
@@ -93,8 +95,8 @@ struct OnboardingRestockView: View {
     }
 }
 
-struct OnboardingRestockView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnboardingRestockView()
-    }
-}
+//struct OnboardingRestockView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        OnboardingRestockView()
+//    }
+//}
