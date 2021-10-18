@@ -33,7 +33,8 @@ struct OnboardingCategoriesView: View {
 //                .modifier(TextFieldModifier())
             
             Button(action: {
-                coordinator.createCategory(categoryName: newCategoryName)
+                print(coordinator.checkIfCategoryExists(newCategoryName))
+//                coordinator.createCategory(categoryName: newCategoryName)
 //                for category in categories {
 //                    if category.name == newCategoryName {
 //                        print("category already exists")

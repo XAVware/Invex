@@ -27,11 +27,15 @@ class OnboardingCoordinator: ObservableObject {
     }
     
     func createCategory(categoryName: String) {
-        var result = categoryList.filter({ return $0.name == categoryName })
-        guard result.isEmpty else {
-            return
-        }
-        print(result)
+        
+    }
+    
+    func checkIfCategoryExists(_ categoryName: String) -> Bool {
+//        guard categoryList.filter({ return $0.name == categoryName }).isEmpty else {
+//            return true
+//        }
+//        return false
+        return categoryList.filter({ return $0.name == categoryName }).isEmpty ? false : true
     }
     
     func deleteCategory() {
