@@ -15,12 +15,12 @@ struct OnboardingPasscodeView: View {
             Text("Finally, enter an admin passcode")
                 .font(.title)
                 .fontWeight(.bold)
-                .foregroundColor(Color("ThemeColor"))
+                .foregroundColor(Color.blue)
                 .padding()
             
             Text("This passcode should be used by administrators to access features such as inventory adjustments")
                 .font(.callout)
-                .foregroundColor(Color("ThemeColor"))
+                .foregroundColor(Color.blue)
                 .multilineTextAlignment(.center)
             
             Spacer()

@@ -46,4 +46,8 @@ class OnboardingCoordinator: ObservableObject {
     func updateCategoryList() {
         categoryList = categories
     }
+    
+    func changeRestockPoint(for categoryName: String, to restockNum: Int) {
+        
+    }
 }

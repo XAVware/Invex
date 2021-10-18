@@ -30,7 +30,7 @@ struct OnboardingCategoriesView: View {
             Spacer().frame(height: 50)
             
             TextField("Category Name:", text: $newCategoryName)
-//                .modifier(TextFieldModifier())
+            //                .modifier(TextFieldModifier())
             
             Button(action: {
                 if coordinator.checkIfCategoryExists(newCategoryName) == true {
@@ -44,59 +44,58 @@ struct OnboardingCategoriesView: View {
             }, label: {
                 Text("+ Save and Add Another Category")
             })
-                .foregroundColor(Color.blue)
-                .padding()
+            .foregroundColor(Color.blue)
+            .padding()
             
             Divider()
             
-//            VStack(spacing: 25) {
-                Text("Current Categories:")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(Color.blue)
-                    .opacity(0.8)
-                
+            Text("Current Categories:")
+                .font(.title2)
+                .fontWeight(.bold)
+                .foregroundColor(Color.blue)
+                .opacity(0.8)
+            
             List(coordinator.categoryList) { category in
-                    HStack {
-                        Text(category.name)
-
-                        Spacer()
-
-                        Button(action: {
-                            coordinator.deleteCategory(category.name)
-                        }) {
-                            Image(systemName: "trash")
-                                .foregroundColor(.red)
-                        } //: Button - Delete
-                        .buttonStyle(BorderlessButtonStyle())
-                    }//: HStack
-                }
-//            } //: VStack - Current Categories
+                HStack {
+                    Text(category.name)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        coordinator.deleteCategory(category.name)
+                    }) {
+                        Image(systemName: "trash")
+                            .foregroundColor(.red)
+                    } //: Button - Delete
+                    .buttonStyle(BorderlessButtonStyle())
+                } //: HStack
+            } //: List
             
             Button(action: {
-//                if self.newCategoryName != "" {
-//                    for category in categories {
-//                        if category.name == newCategoryName {
-//                            print("category already exists")
-//                            return
-//                        }
-//                    }
-//
-//                    let newCategory: Category = Category()
-//                    newCategory.name = self.newCategoryName
-//
-//                    self.categories.append(newCategory)
-//                }
-//                self.currentOnboardingState = .categoryRestock
+                guard self.newCategoryName != "" else {
+                    //Display Error
+                    return
+                }
+                
+                if coordinator.checkIfCategoryExists(newCategoryName) == true {
+                    //Display error - category exists
+                } else {
+                    coordinator.createCategory(categoryName: self.newCategoryName)
+                    
+                    self.newCategoryName = ""
+                    
+                    coordinator.nextScreen()
+                }
+                
             }, label: {
                 Text("Save & Continue")
                     .font(.title)
                     .foregroundColor(.black)
             })
-                .padding()
-                .frame(width: 350, height: 50)
-                .foregroundColor(Color.blue)
-                .cornerRadius(25)
+            .padding()
+            .frame(width: 350, height: 50)
+            .foregroundColor(Color.blue)
+            .cornerRadius(25)
         }
         .padding()
     }
