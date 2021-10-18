@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Category: Codable {
+struct Category: Codable, Identifiable {
+    var id: UUID                = UUID()
     var name: String            = ""
     var restockThresh: Int      = 0
 }

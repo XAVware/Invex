@@ -33,21 +33,13 @@ struct OnboardingCategoriesView: View {
 //                .modifier(TextFieldModifier())
             
             Button(action: {
-                print(coordinator.checkIfCategoryExists(newCategoryName))
-//                coordinator.createCategory(categoryName: newCategoryName)
-//                for category in categories {
-//                    if category.name == newCategoryName {
-//                        print("category already exists")
-//                        return
-//                    }
-//                }
-//
-//                let newCategory: Category = Category()
-//                newCategory.name = self.newCategoryName
-//
-//                self.categories.append(newCategory)
-//
-//                self.newCategoryName = ""
+                if coordinator.checkIfCategoryExists(newCategoryName) == true {
+                    //Display error - category exists
+                } else {
+                    coordinator.createCategory(categoryName: self.newCategoryName)
+                    
+                    self.newCategoryName = ""
+                }
                 
             }, label: {
                 Text("+ Save and Add Another Category")
@@ -57,43 +49,29 @@ struct OnboardingCategoriesView: View {
             
             Divider()
             
-            VStack(spacing: 25) {
+//            VStack(spacing: 25) {
                 Text("Current Categories:")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(Color.blue)
                     .opacity(0.8)
                 
-                ScrollView(.vertical, showsIndicators: false, content: {
-                    VStack {
-//                        ForEach(categories, id: \.self) { category in
-//                            HStack {
-//                                Text(category.name)
-//
-//                                Spacer()
-//
-//                                Button(action: {
-//                                    guard let index = self.categories.firstIndex(of: category) else {
-//                                        print("Error deleting category")
-//                                        return
-//                                    }
-//                                    self.categories.remove(at: index)
-//
-//                                }) {
-//                                    Image(systemName: "trash")
-//                                        .foregroundColor(.red)
-//                                } //: Button - Delete
-//
-//                            }//: HStack
-//                            .frame(height: 40)
-//
-//                            Divider().opacity(0.5)
-//                        }//: ForEach
-                        
-                    }//: VStack
-                    .frame(maxWidth: 400)
-                })
-            } //: VStack - Current Categories
+            List(coordinator.categoryList) { category in
+                    HStack {
+                        Text(category.name)
+
+                        Spacer()
+
+                        Button(action: {
+                            coordinator.deleteCategory(category.name)
+                        }) {
+                            Image(systemName: "trash")
+                                .foregroundColor(.red)
+                        } //: Button - Delete
+                        .buttonStyle(BorderlessButtonStyle())
+                    }//: HStack
+                }
+//            } //: VStack - Current Categories
             
             Button(action: {
 //                if self.newCategoryName != "" {

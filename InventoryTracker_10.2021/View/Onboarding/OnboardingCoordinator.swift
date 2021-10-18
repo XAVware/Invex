@@ -8,14 +8,16 @@
 import SwiftUI
 
 class OnboardingCoordinator: ObservableObject {
-    var categoryList: [Category] {
-        return categories
-    }
     
-//    @Published var newCategoryName: String = ""
+    @Published var categoryList: [Category] = []
+    
     @Published var screenIndex: Int = 0
     @Published var isShowingError: Bool = false
     @Published var adminPasscode: String = ""
+    
+    init() {
+        categoryList = categories
+    }
     
     
     func nextScreen() {
@@ -27,18 +29,21 @@ class OnboardingCoordinator: ObservableObject {
     }
     
     func createCategory(categoryName: String) {
-        
+        let newCategory: Category = Category(name: categoryName, restockThresh: 0)
+        categories.append(newCategory)
+        updateCategoryList()
     }
     
     func checkIfCategoryExists(_ categoryName: String) -> Bool {
-//        guard categoryList.filter({ return $0.name == categoryName }).isEmpty else {
-//            return true
-//        }
-//        return false
         return categoryList.filter({ return $0.name == categoryName }).isEmpty ? false : true
     }
     
-    func deleteCategory() {
-        
+    func deleteCategory(_ categoryName: String) {
+        categories.removeAll(where: { $0.name == categoryName} )
+        updateCategoryList()
+    }
+    
+    func updateCategoryList() {
+        categoryList = categories
     }
 }
