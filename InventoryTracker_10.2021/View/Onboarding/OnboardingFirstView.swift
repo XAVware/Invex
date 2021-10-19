@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OnboardingFirstView: View {
-    @ObservedObject var coordinator: OnboardingCoordinator
+    @ObservedObject var onboardingCoordinator: OnboardingCoordinator
     
     var body: some View {
         VStack {
@@ -21,7 +21,7 @@ struct OnboardingFirstView: View {
             Spacer()
             
             Button(action: {
-                self.coordinator.nextScreen()
+                onboardingCoordinator.nextScreen()
             }, label: {
                 Text("Get Started")
                     .font(.title)

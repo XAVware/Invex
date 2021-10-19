@@ -9,25 +9,25 @@ import SwiftUI
 
 
 struct OnboardingView: View {
-    @StateObject var coordinator: OnboardingCoordinator = OnboardingCoordinator()
+    @StateObject var onboardingCoordinator: OnboardingCoordinator = OnboardingCoordinator()
     
     var body: some View {
         VStack {
-            switch(coordinator.screenIndex) {
+            switch(onboardingCoordinator.screenIndex) {
             case 0:
-                OnboardingFirstView(coordinator: self.coordinator)
+                OnboardingFirstView(onboardingCoordinator: self.onboardingCoordinator)
                 
             case 1:
-                OnboardingCategoriesView(coordinator: self.coordinator)
+                OnboardingCategoriesView(onboardingCoordinator: self.onboardingCoordinator)
                 
             case 2:
-                OnboardingRestockView(coordinator: self.coordinator)
+                OnboardingRestockView(onboardingCoordinator: self.onboardingCoordinator)
                 
             case 3:
-                OnboardingPasscodeView(coordinator: self.coordinator)
+                OnboardingPasscodeView(onboardingCoordinator: self.onboardingCoordinator)
                 
             default:
-                OnboardingFirstView(coordinator: self.coordinator)
+                OnboardingFirstView(onboardingCoordinator: self.onboardingCoordinator)
                 
             } //: Switch
             
@@ -37,7 +37,7 @@ struct OnboardingView: View {
         .padding()
         .frame(maxWidth: 500)
         .onTapGesture {
-            print(self.coordinator.categoryList)
+            print(onboardingCoordinator.categoryList)
         }
         
         

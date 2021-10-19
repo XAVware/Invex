@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OnboardingCategoriesView: View {
-    @ObservedObject var coordinator: OnboardingCoordinator
+    @ObservedObject var onboardingCoordinator: OnboardingCoordinator
     @State var newCategoryName: String = ""
     
     var body: some View {
@@ -33,10 +33,10 @@ struct OnboardingCategoriesView: View {
             //                .modifier(TextFieldModifier())
             
             Button(action: {
-                if coordinator.checkIfCategoryExists(newCategoryName) == true {
+                if onboardingCoordinator.checkIfCategoryExists(newCategoryName) == true {
                     //Display error - category exists
                 } else {
-                    coordinator.createCategory(categoryName: self.newCategoryName)
+                    onboardingCoordinator.createCategory(categoryName: self.newCategoryName)
                     
                     self.newCategoryName = ""
                 }
@@ -55,14 +55,14 @@ struct OnboardingCategoriesView: View {
                 .foregroundColor(Color.blue)
                 .opacity(0.8)
             
-            List(coordinator.categoryList) { category in
+            List(onboardingCoordinator.categoryList) { category in
                 HStack {
                     Text(category.name)
                     
                     Spacer()
                     
                     Button(action: {
-                        coordinator.deleteCategory(category.name)
+                        onboardingCoordinator.deleteCategory(category.name)
                     }) {
                         Image(systemName: "trash")
                             .foregroundColor(.red)
@@ -72,21 +72,22 @@ struct OnboardingCategoriesView: View {
             } //: List
             
             Button(action: {
-                guard self.newCategoryName != "" else {
-                    //Display Error
+                if newCategoryName == "" && onboardingCoordinator.categoryList.isEmpty {
+                    //Display Error - you need at least one category
                     return
-                }
-                
-                if coordinator.checkIfCategoryExists(newCategoryName) == true {
-                    //Display error - category exists
+                } else if newCategoryName == "" {
+                    onboardingCoordinator.nextScreen()
+                    return
                 } else {
-                    coordinator.createCategory(categoryName: self.newCategoryName)
-                    
-                    self.newCategoryName = ""
-                    
-                    coordinator.nextScreen()
+                    if onboardingCoordinator.checkIfCategoryExists(newCategoryName) == true {
+                        //Display error - category exists
+                    } else {
+                        onboardingCoordinator.createCategory(categoryName: self.newCategoryName)
+                        self.newCategoryName = ""
+                        onboardingCoordinator.nextScreen()
+                    }
                 }
-                
+
             }, label: {
                 Text("Save & Continue")
                     .font(.title)

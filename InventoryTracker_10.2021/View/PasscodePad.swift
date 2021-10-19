@@ -35,7 +35,7 @@
                 } else if self.isShowingReEnter {
                     Text("Re-Enter Your Passcode")
                         .fontWeight(.bold)
-                        .foregroundColor(Color("ThemeColor"))
+                        .foregroundColor(Color.blue)
                         .font(.caption)
                 }
                 
@@ -46,7 +46,7 @@
                     Image(systemName: self.tempPasscode.count == 4 ? "circle.fill" : "circle")
                 }
                 .frame(height: 20)
-                .foregroundColor(Color("ThemeColor"))
+                .foregroundColor(Color.blue)
                 
                 
                 VStack(spacing: 25) {
@@ -95,10 +95,10 @@
                             Text("Delete").font(.caption)
                         })
                         .frame(width: 60, height: 60)
-                        .foregroundColor(Color("ThemeColor"))
+                        .foregroundColor(Color.blue)
                     } //: HStack - Numbers 0 and backspace
                 }
-                .foregroundColor(Color("ThemeColor"))
+                .foregroundColor(Color.blue)
                 .padding()
             } //: VStack
         }

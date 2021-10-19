@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OnboardingRestockView: View {
-    @ObservedObject var coordinator: OnboardingCoordinator
+    @ObservedObject var onboardingCoordinator: OnboardingCoordinator
     
     var body: some View {
         VStack {
@@ -35,7 +35,7 @@ struct OnboardingRestockView: View {
                     .foregroundColor(Color.blue)
                     .opacity(0.8)
                 
-                List(coordinator.categoryList) { category in
+                List(onboardingCoordinator.categoryList) { category in
                     HStack {
                         Text(category.name)
                         
@@ -43,7 +43,7 @@ struct OnboardingRestockView: View {
                         
                         HStack(spacing: 0) {
                             Button(action: {
-                                coordinator.changeRestockPoint(for: category.name, value: -1)
+                                onboardingCoordinator.changeRestockPoint(for: category.name, value: -1)
                             }) {
                                 Image(systemName: "minus.circle.fill")
                                     .opacity(0.7)
@@ -55,7 +55,7 @@ struct OnboardingRestockView: View {
                                 .multilineTextAlignment(.center)
                             
                             Button(action: {
-                                coordinator.changeRestockPoint(for: category.name, value: 1)
+                                onboardingCoordinator.changeRestockPoint(for: category.name, value: 1)
                             }) {
                                 Image(systemName: "plus.circle.fill")
                                     .opacity(0.7)
@@ -68,11 +68,11 @@ struct OnboardingRestockView: View {
                 
                 Button(action: {
                     //                    self.saveCategories()
-                    coordinator.nextScreen()
+                    onboardingCoordinator.nextScreen()
                 }, label: {
                     Text("Save & Continue")
                         .font(.title)
-                        .foregroundColor(.white)
+                        .foregroundColor(.blue)
                 })
                     .padding()
                     .frame(width: 350, height: 50)

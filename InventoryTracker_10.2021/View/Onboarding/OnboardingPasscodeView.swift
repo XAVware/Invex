@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OnboardingPasscodeView: View {
-    @ObservedObject var coordinator: OnboardingCoordinator
+    @ObservedObject var onboardingCoordinator: OnboardingCoordinator
     
     var body: some View {
         VStack {
