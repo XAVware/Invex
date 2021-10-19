@@ -10,25 +10,22 @@ import SwiftUI
 
 struct OnboardingView: View {
     @StateObject var onboardingCoordinator: OnboardingCoordinator = OnboardingCoordinator()
+    @ObservedObject var securityCoordinator: SecurityCoordinator
+    
     
     var body: some View {
         VStack {
             switch(onboardingCoordinator.screenIndex) {
-            case 0:
-                OnboardingFirstView(onboardingCoordinator: self.onboardingCoordinator)
-                
             case 1:
                 OnboardingCategoriesView(onboardingCoordinator: self.onboardingCoordinator)
-                
             case 2:
                 OnboardingRestockView(onboardingCoordinator: self.onboardingCoordinator)
-                
             case 3:
-                OnboardingPasscodeView(onboardingCoordinator: self.onboardingCoordinator)
-                
+                OnboardingPasscodeView(onboardingCoordinator: self.onboardingCoordinator, securityCoordinator: securityCoordinator)
+
             default:
                 OnboardingFirstView(onboardingCoordinator: self.onboardingCoordinator)
-                
+
             } //: Switch
             
             

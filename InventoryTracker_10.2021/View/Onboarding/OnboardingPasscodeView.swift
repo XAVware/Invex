@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OnboardingPasscodeView: View {
     @ObservedObject var onboardingCoordinator: OnboardingCoordinator
+    @ObservedObject var securityCoordinator: SecurityCoordinator
     
     @State var passcode = ""
     
@@ -27,12 +28,12 @@ struct OnboardingPasscodeView: View {
             
             Spacer()
             
-            PasscodePad(padState: .setPasscode, storedPasscode: $passcode)
+            PasscodePad(padState: .setPasscode, storedPasscode: $securityCoordinator.passcode)
             
         }
-        .onChange(of: $passcode.wrappedValue, perform: { value in
-            print(passcode)
-        })
+//        .onChange(of: $passcode.wrappedValue, perform: { value in
+//            securityCoordinator.setPasscode(to: passcode)
+//        })
     }
 }
 

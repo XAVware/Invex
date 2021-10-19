@@ -8,13 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var securityCoordinator: SecurityCoordinator = SecurityCoordinator()
+    
     var body: some View {
-        OnboardingView()
+        if securityCoordinator.passcode == "" {
+            OnboardingView(securityCoordinator: self.securityCoordinator)
+        } else {
+            RegisterView()
+        }
+        
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}

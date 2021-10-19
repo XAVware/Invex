@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80D76386271E7C7B00483A79 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D76385271E7C7B00483A79 /* RegisterView.swift */; };
 		9444F0D0271A0F33002A6606 /* PasscodePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0CE271A0F33002A6606 /* PasscodePad.swift */; };
 		9444F0D1271A0F33002A6606 /* PasscodePadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0CF271A0F33002A6606 /* PasscodePadButton.swift */; };
 		9444F0D5271A102A002A6606 /* OnboardingFirstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9444F0D4271A102A002A6606 /* OnboardingFirstView.swift */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		80D76385271E7C7B00483A79 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		9444F0CE271A0F33002A6606 /* PasscodePad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodePad.swift; sourceTree = "<group>"; };
 		9444F0CF271A0F33002A6606 /* PasscodePadButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodePadButton.swift; sourceTree = "<group>"; };
 		9444F0D4271A102A002A6606 /* OnboardingFirstView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFirstView.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				9444F0DE271A149B002A6606 /* Onboarding */,
 				9444F0CE271A0F33002A6606 /* PasscodePad.swift */,
 				9444F0CF271A0F33002A6606 /* PasscodePadButton.swift */,
+				80D76385271E7C7B00483A79 /* RegisterView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 				9444F0DD271A139C002A6606 /* TempData.swift in Sources */,
 				9444F0E4271A1695002A6606 /* OnboardingCoordinator.swift in Sources */,
 				94654EEE2718FBA5000774A7 /* OnboardingView.swift in Sources */,
+				80D76386271E7C7B00483A79 /* RegisterView.swift in Sources */,
 				9444F0D1271A0F33002A6606 /* PasscodePadButton.swift in Sources */,
 				94654EE02718F3C2000774A7 /* ContentView.swift in Sources */,
 				94654EDE2718F3C2000774A7 /* InventoryTracker_10_2021App.swift in Sources */,
