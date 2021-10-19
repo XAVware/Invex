@@ -35,95 +35,49 @@ struct OnboardingRestockView: View {
                     .foregroundColor(Color.blue)
                     .opacity(0.8)
                 
-            List(coordinator.categoryList) { category in
-                HStack {
-                    Text(category.name)
-                    
-                    HStack(spacing: 0) {
-                        Button(action: {
-                                guard category.restockThresh >= 0 else {
-                                    return
-                                }
-                                category.restockNumber -= 1
-                        }) {
-                            Image(systemName: "minus.circle.fill")
-                                .opacity(0.7)
-                        } //: Button
-                        .buttonStyle(BorderlessButtonStyle())
-
-                        Text("\(category.restockThresh)")
-                            .frame(width: 40)
-                            .multilineTextAlignment(.center)
-
-                        Button(action: {
-//                                category.restockNumber += 1
-                        }) {
-                            Image(systemName: "plus.circle.fill")
-                                .opacity(0.7)
-                        } //: Button
-                        .buttonStyle(BorderlessButtonStyle())
-                    }//: HStack
-                    .foregroundColor(.black)
-                } //: HStack
-            } //: List
-                
-                
-                //                ScrollView(.vertical, showsIndicators: false, content: {
-                //                    VStack {
-                //                        ForEach(categories, id: \.self) { category in
-                //                            HStack {
-                //                                Text(category.name)
-                //
-                //                                Spacer()
-                //
-                //                                HStack(spacing: 0) {
-                //                                    Button(action: {
-                //                                        guard category.restockNumber >= 0 else {
-                //                                            return
-                //                                        }
-                //                                        category.restockNumber -= 1
-                //                                    }) {
-                //                                        Image(systemName: "minus.circle.fill")
-                //                                            .opacity(0.7)
-                //                                    } //: Button
-                //
-                //                                    Text("\(category.restockNumber)")
-                //                                        .frame(width: 40)
-                //                                        .multilineTextAlignment(.center)
-                //
-                //
-                //                                    Button(action: {
-                //                                        category.restockNumber += 1
-                //                                    }) {
-                //                                        Image(systemName: "plus.circle.fill")
-                //                                            .opacity(0.7)
-                //                                    } //: Button
-                //                                }//: HStack
-                //                                .foregroundColor(.black)
-                //
-                //                            }//: HStack
-                //                            .frame(height: 40)
-                //
-                //                            Divider().opacity(0.5)
-                //                        }//: ForEach
-                
-                //                    }//: VStack
-                //                    .frame(maxWidth: 400)
-                //                })
-                //            } //: VStack - Current Categories
+                List(coordinator.categoryList) { category in
+                    HStack {
+                        Text(category.name)
+                        
+                        Spacer()
+                        
+                        HStack(spacing: 0) {
+                            Button(action: {
+                                coordinator.changeRestockPoint(for: category.name, value: -1)
+                            }) {
+                                Image(systemName: "minus.circle.fill")
+                                    .opacity(0.7)
+                            } //: Button
+                            .buttonStyle(BorderlessButtonStyle())
+                            
+                            Text("\(category.restockThresh)")
+                                .frame(width: 40)
+                                .multilineTextAlignment(.center)
+                            
+                            Button(action: {
+                                coordinator.changeRestockPoint(for: category.name, value: 1)
+                            }) {
+                                Image(systemName: "plus.circle.fill")
+                                    .opacity(0.7)
+                            } //: Button
+                            .buttonStyle(BorderlessButtonStyle())
+                        }//: HStack
+                        .foregroundColor(.black)
+                    } //: HStack
+                } //: List
                 
                 Button(action: {
-                    //                self.saveCategories()
-                    //                self.currentOnboardingState = .adminPasscode
+                    //                    self.saveCategories()
+                    coordinator.nextScreen()
                 }, label: {
                     Text("Save & Continue")
                         .font(.title)
                         .foregroundColor(.white)
                 })
-                .padding()
-                .frame(width: 350, height: 50)
-                .foregroundColor(Color.blue)
-                .cornerRadius(25)
+                    .padding()
+                    .frame(width: 350, height: 50)
+                    .foregroundColor(Color.blue)
+                    .cornerRadius(25)
             }
         }
     }

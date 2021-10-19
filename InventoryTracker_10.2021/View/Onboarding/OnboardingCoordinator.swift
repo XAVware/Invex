@@ -47,7 +47,16 @@ class OnboardingCoordinator: ObservableObject {
         categoryList = categories
     }
     
-    func changeRestockPoint(for categoryName: String, to restockNum: Int) {
+    func changeRestockPoint(for categoryName: String, value: Int) {
+        let tempCategory = categoryList.filter({ return $0.name == categoryName })[0]
         
+        if value < 0 {  guard tempCategory.restockThresh > 0 else { return } }
+        
+        if let tempCategoryIndex = categories.firstIndex(where: { $0.id == tempCategory.id }) {
+            let newCategory = Category(id: tempCategory.id, name: tempCategory.name, restockThresh: tempCategory.restockThresh + value)
+            deleteCategory(tempCategory.name)
+            categories.insert(newCategory, at: tempCategoryIndex)
+        }
+        updateCategoryList()
     }
 }
