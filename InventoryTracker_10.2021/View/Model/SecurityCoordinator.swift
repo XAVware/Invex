@@ -8,5 +8,5 @@
 import SwiftUI
 
 class SecurityCoordinator: ObservableObject {
-    
+    static var passcode: String = ""
 }

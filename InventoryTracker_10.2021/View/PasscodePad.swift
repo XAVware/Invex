@@ -8,23 +8,24 @@
     import SwiftUI
     
     struct PasscodePad: View {
-        enum PadState {
-            case setPasscode, enterPasscode
-        }
+        let keypadValues = [["1", "2", "3"],
+                            ["4", "5", "6"],
+                            ["7", "8", "9"],
+                            ["", "0", "Delete"]]
+        
+        enum PadState { case setPasscode, enterPasscode }
         
         @State var padState: PadState
+        @Binding var storedPasscode: String //load from securitycoordinator
         
-        @State var tempPasscode: String = ""
-        @State var finalPasscode: String = ""
         
-        @State var isShowingError: Bool = false
-        @State var isShowingReEnter: Bool = false
+        @State var enteredPasscode: String          = ""
+        @State var reEnteredPasscode: String        = ""
+        @State var isShowingError: Bool             = false
+        @State var isShowingReEnter: Bool           = false
+        let setPasscodeErrorMessage: String         = "The passcodes you entered do not match. Please try again"
+        let enterPasscodeErrorMessage: String       = "The passcode you entered is incorrect."
         
-        @State var finishAction: () -> Void
-        
-        let setPasscodeErrorMessage: String = "The passcodes you entered do not match. Please try again"
-        let enterPasscodeErrorMessage: String = "The passcode you entered is incorrect."
-                
         var body: some View {
             VStack(spacing: 30) {
                 
@@ -40,86 +41,72 @@
                 }
                 
                 HStack(spacing: 15) {
-                    Image(systemName: self.tempPasscode.count >= 1 ? "circle.fill" : "circle")
-                    Image(systemName: self.tempPasscode.count >= 2 ? "circle.fill" : "circle")
-                    Image(systemName: self.tempPasscode.count >= 3 ? "circle.fill" : "circle")
-                    Image(systemName: self.tempPasscode.count == 4 ? "circle.fill" : "circle")
+                    Image(systemName: self.enteredPasscode.count >= 1 ? "circle.fill" : "circle")
+                    Image(systemName: self.enteredPasscode.count >= 2 ? "circle.fill" : "circle")
+                    Image(systemName: self.enteredPasscode.count >= 3 ? "circle.fill" : "circle")
+                    Image(systemName: self.enteredPasscode.count == 4 ? "circle.fill" : "circle")
                 }
                 .frame(height: 20)
                 .foregroundColor(Color.blue)
                 
                 
                 VStack(spacing: 25) {
-                    HStack(spacing: 20) {
-                        PasscodePadButton(number: "1", tempPasscode: self.$tempPasscode) { self.finish() }
-                        
-                        PasscodePadButton(number: "2", tempPasscode: self.$tempPasscode) { self.finish() }
-                        
-                        PasscodePadButton(number: "3", tempPasscode: self.$tempPasscode) { self.finish() }
-                    } //: HStack - Numbers 1 to 3
                     
-                    HStack(spacing: 20) {
-                        PasscodePadButton(number: "4", tempPasscode: self.$tempPasscode) { self.finish() }
-                        
-                        PasscodePadButton(number: "5", tempPasscode: self.$tempPasscode) { self.finish() }
-                        
-                        PasscodePadButton(number: "6", tempPasscode: self.$tempPasscode) { self.finish() }
-                    } //: HStack - Numbers 4 to 6
-                    
-                    HStack(spacing: 20) {
-                        PasscodePadButton(number: "7", tempPasscode: self.$tempPasscode) { self.finish() }
-                        
-                        PasscodePadButton(number: "8", tempPasscode: self.$tempPasscode) { self.finish() }
-                        
-                        PasscodePadButton(number: "9", tempPasscode: self.$tempPasscode) { self.finish() }
-                    } //: HStack - Numbers 7 to 9
-                    
-                    HStack(spacing: 20) {
-                        Spacer().frame(width: 60)
-                        
-                        PasscodePadButton(number: "0", tempPasscode: self.$tempPasscode) {
-                            self.finish()
-                        }
-                        
-                        Button(action: {
-                            let currentLength = self.tempPasscode.count
-                            
-                            guard currentLength > 0 else {
-                                return
+                    ForEach(0 ..< 4) { row in
+                        HStack(spacing: 20) {
+                            ForEach(0 ..< 3) { col in
+                                if row == 3 && col == 0 {
+                                    Spacer().frame(width: 60, height: 60)
+                                } else if row == 3 && col == 2 {
+                                    Button(action: {
+                                        deleteClicked()
+                                    }, label: {
+                                        Text("Delete").font(.caption)
+                                    })
+                                    .frame(width: 60, height: 60)
+                                    .foregroundColor(Color.blue)
+                                } else {
+                                    PasscodePadButton(number: keypadValues[row][col]) {
+                                        buttonClicked(value: keypadValues[row][col])
+                                    }
+                                    .frame(width: 60, height: 60)
+                                }
                             }
-                            
-                            let newPasscode = tempPasscode.prefix(currentLength - 1)
-                            
-                            self.tempPasscode = String(newPasscode)
-                        }, label: {
-                            Text("Delete").font(.caption)
-                        })
-                        .frame(width: 60, height: 60)
-                        .foregroundColor(Color.blue)
-                    } //: HStack - Numbers 0 and backspace
-                }
+                        } //: HStack
+                    } //; ForEach
+                } //: VStack
                 .foregroundColor(Color.blue)
                 .padding()
             } //: VStack
         }
         
         func finish() {
-            if self.finalPasscode == "" {
-                self.finalPasscode = self.tempPasscode
-                self.tempPasscode = ""
+            if self.reEnteredPasscode == "" {
+                self.reEnteredPasscode = self.enteredPasscode
+                self.enteredPasscode = ""
                 self.isShowingError = false
                 self.isShowingReEnter = true
             } else {
-                guard self.finalPasscode == self.tempPasscode else {
-                    self.finalPasscode = ""
-                    self.tempPasscode = ""
+                guard self.reEnteredPasscode == self.enteredPasscode else {
+                    self.reEnteredPasscode = ""
+                    self.enteredPasscode = ""
                     self.isShowingReEnter = false
                     self.isShowingError = true
                     return
                 }
-                self.finishAction()
-                
+                storedPasscode = enteredPasscode
             }
         }
+        
+        func buttonClicked(value: String) {
+            enteredPasscode.append(value)
+            if enteredPasscode.count == 4 { finish() }
+        }
+        
+        func deleteClicked() {
+            guard enteredPasscode.count > 0 else { return }
+            let newPasscode = enteredPasscode.prefix(enteredPasscode.count - 1)
+            enteredPasscode = "\(newPasscode)"
+        }
+        
     }
-    

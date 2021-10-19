@@ -10,18 +10,13 @@ import SwiftUI
 
 struct PasscodePadButton: View {
     @State var number: String
-    @Binding var tempPasscode: String
-    @State var finishAction: () -> Void
+    @State var onClick: () -> Void
     @State var pressed: Bool = false
     
     var body: some View {
         Button(action: {
             if self.pressed {
-                self.tempPasscode.append(self.number)
-                guard self.tempPasscode.count < 4 else {
-                    finishAction()
-                    return
-                }
+                self.onClick()
             }
         }, label: {
             Text(self.number)

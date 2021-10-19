@@ -10,6 +10,8 @@ import SwiftUI
 struct OnboardingPasscodeView: View {
     @ObservedObject var onboardingCoordinator: OnboardingCoordinator
     
+    @State var passcode = ""
+    
     var body: some View {
         VStack {
             Text("Finally, enter an admin passcode")
@@ -25,16 +27,12 @@ struct OnboardingPasscodeView: View {
             
             Spacer()
             
+            PasscodePad(padState: .setPasscode, storedPasscode: $passcode)
             
-            PasscodePad(padState: .setPasscode, finishAction: {
-//                self.savePasscodeAndProceed()
-            })
-                .padding()
         }
-    }
-    
-    func savePasscodeAndProceed() {
-//        self.displayState = .makeASale
+        .onChange(of: $passcode.wrappedValue, perform: { value in
+            print(passcode)
+        })
     }
 }
 
