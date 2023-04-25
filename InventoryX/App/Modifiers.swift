@@ -6,7 +6,7 @@ struct TitleModifier: ViewModifier {
         content
             .frame(maxWidth: .infinity, alignment: .center)
             .font(.system(size: 24, weight: .semibold, design: .rounded))
-            .foregroundColor(Color("ThemeColor"))
+            .foregroundColor(primaryColor)
             .padding()
     }
 }
@@ -15,7 +15,7 @@ struct HeaderModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding()
-            .foregroundColor(Color("ThemeColor"))
+            .foregroundColor(primaryColor)
             .frame(maxWidth: .infinity, maxHeight: 40)
     }
 }
@@ -26,7 +26,7 @@ struct PlusMinusButtonModifier: ViewModifier {
             .scaledToFit()
             .shadow(radius: 2)
             .frame(width: 40)
-            .foregroundColor(Color("ThemeColor"))
+            .foregroundColor(primaryColor)
     }
 }
 
@@ -83,3 +83,11 @@ struct IpadMiniPreviewModifier: ViewModifier {
     }
 }
 
+
+struct PreviewMod: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewInterfaceOrientation(.landscapeLeft)
+    }
+}

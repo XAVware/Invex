@@ -28,7 +28,7 @@ struct PasscodePadButton: View {
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
                 .font(.title)
-                .foregroundColor(self.pressed ? Color.white : Color("ThemeColor"))
+                .foregroundColor(self.pressed ? Color.white : primaryColor)
         })
         .onTapGesture {
             withAnimation(.easeInOut(duration: 0.2)) {
@@ -42,8 +42,8 @@ struct PasscodePadButton: View {
             self.pressed = pressing
         }, perform: { })
         .frame(width: 60, height: 60)
-        .background(Color("ThemeColor").cornerRadius(25).opacity(self.pressed ? 1.0 : 0.0))
-        .overlay(Capsule().stroke(Color("ThemeColor"), lineWidth: 3))
+        .background(primaryColor.cornerRadius(25).opacity(self.pressed ? 1.0 : 0.0))
+        .overlay(Capsule().stroke(primaryColor, lineWidth: 3))
     }
     
 }

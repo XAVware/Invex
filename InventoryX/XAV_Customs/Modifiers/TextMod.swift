@@ -14,19 +14,19 @@ struct TextMod: ViewModifier {
     let weight: Font.Weight
     let fgColor: Color
     
-    init() {
-        self.font = .body
-        self.weight = .semibold
-        self.fgColor = .black
-    }
+//    init() {
+//        self.font = .body
+//        self.weight = .semibold
+//        self.fgColor = .black
+//    }
+//
+//    init(_ font: Font, _ weight: Font.Weight) {
+//        self.font = font
+//        self.weight = weight
+//        self.fgColor = .black
+//    }
     
-    init(_ font: Font, _ weight: Font.Weight) {
-        self.font = font
-        self.weight = weight
-        self.fgColor = .black
-    }
-    
-    init(_ font: Font, _ weight: Font.Weight, _ fgColor: Color) {
+    init(_ font: Font = .body, _ weight: Font.Weight = .semibold, _ fgColor: Color = primaryColor) {
         self.font = font
         self.weight = weight
         self.fgColor = fgColor

@@ -1,0 +1,12 @@
+
+1) Create the following code snippets:
+    - Shortcut: mark
+      Snippet: // MARK: - <#SECTION#>
+
+    - Shortcut: disableconstrainterrors
+      Snippet: UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+      Explanation: Add this to onAppear in the App file to fix the errors resulting from NavigationViews in SwiftUI. See https://stackoverflow.com/questions/65316497/swiftui-navigationview-navigationbartitle-layoutconstraints-issue
+
+    - Shortcut: .tm
+      Snippet: modifier(TextMod(<#FONT#>, <#WEIGHT#>))
+      Explanation: Must have XAV_Customs package or at least TextMod modifier.

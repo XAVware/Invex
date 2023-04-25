@@ -9,6 +9,7 @@ import SwiftUI
 import RealmSwift
 import Realm
 
+//Used to persist data to storage
 class CategoryEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var name: String
@@ -19,6 +20,12 @@ class CategoryEntity: Object, ObjectKeyIdentifiable {
         self.name = name
         self.restockNumber = restockNum
     }
+}
+
+//Used as temporary model
+struct CategoryModel {
+    let name: String
+    var restockNumber: Int
 }
 
 class InventoryItemEntity: Object, ObjectKeyIdentifiable {

@@ -13,8 +13,9 @@ struct RoundedButtonMod: ViewModifier {
             .foregroundColor(secondaryColor)
             .modifier(TextMod(.title2, .semibold))
             .padding()
-            .frame(height: 50)
+            .frame(maxWidth: 350, maxHeight: 50)
             .background(primaryColor)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .cornerRadius(25)
+            .shadow(radius: 3)
     }
 }

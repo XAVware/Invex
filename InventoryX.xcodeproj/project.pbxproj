@@ -62,6 +62,7 @@
 		80DBB97F29F70EE000497695 /* OnboardingView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB97E29F70EE000497695 /* OnboardingView2.swift */; };
 		80DBB98129F7115200497695 /* ColorConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB98029F7115200497695 /* ColorConstants.swift */; };
 		80DBB98329F715BA00497695 /* RoundedButtonMod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB98229F715BA00497695 /* RoundedButtonMod.swift */; };
+		94EF40D829F728EF0049DDC5 /* Tips in Resources */ = {isa = PBXBuildFile; fileRef = 94EF40D729F728EF0049DDC5 /* Tips */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -119,6 +120,7 @@
 		80DBB97E29F70EE000497695 /* OnboardingView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView2.swift; sourceTree = "<group>"; };
 		80DBB98029F7115200497695 /* ColorConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorConstants.swift; sourceTree = "<group>"; };
 		80DBB98229F715BA00497695 /* RoundedButtonMod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButtonMod.swift; sourceTree = "<group>"; };
+		94EF40D729F728EF0049DDC5 /* Tips */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tips; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,8 +200,6 @@
 				80B5EFA629F0D0C9007D9842 /* ItemDetailView.swift */,
 				80B5EF9C29F0D0C8007D9842 /* ItemSelectorView.swift */,
 				80B5EFAC29F0D0CA007D9842 /* OnboardingView.swift */,
-				80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */,
-				80B5EFC829F0D0D3007D9842 /* PasscodePadButton.swift */,
 				80B5EFC329F0D0D2007D9842 /* QuantitySelector.swift */,
 				80B5EFC529F0D0D3007D9842 /* RightChevron.swift */,
 				80B5EFC129F0D0D2007D9842 /* SaveItemButton.swift */,
@@ -243,6 +243,7 @@
 				80DBB96629F6D81500497695 /* Services */,
 				80DBB96929F6D81500497695 /* PhotoPicker.swift */,
 				80DBB98029F7115200497695 /* ColorConstants.swift */,
+				94EF40D729F728EF0049DDC5 /* Tips */,
 			);
 			path = XAV_Customs;
 			sourceTree = "<group>";
@@ -299,6 +300,8 @@
 		80DBB97729F6EF9200497695 /* New */ = {
 			isa = PBXGroup;
 			children = (
+				80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */,
+				80B5EFC829F0D0D3007D9842 /* PasscodePadButton.swift */,
 				80DBB97829F6EFA300497695 /* MainView.swift */,
 				80DBB97A29F6EFBF00497695 /* Models.swift */,
 				80DBB97E29F70EE000497695 /* OnboardingView2.swift */,
@@ -371,6 +374,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94EF40D829F728EF0049DDC5 /* Tips in Resources */,
 				80B5EF7829F0C319007D9842 /* Preview Assets.xcassets in Resources */,
 				80B5EF7529F0C319007D9842 /* Assets.xcassets in Resources */,
 			);

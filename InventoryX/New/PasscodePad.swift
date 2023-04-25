@@ -20,7 +20,7 @@
         @State var isShowingError: Bool = false
         @State var isShowingReEnter: Bool = false
         
-        @State var finishAction: () -> Void
+        @State var completion: () -> Void
         
         let setPasscodeErrorMessage: String = "The passcodes you entered do not match. Please try again"
         let enterPasscodeErrorMessage: String = "The passcode you entered is incorrect."
@@ -35,7 +35,7 @@
                 } else if self.isShowingReEnter {
                     Text("Re-Enter Your Passcode")
                         .fontWeight(.bold)
-                        .foregroundColor(Color("ThemeColor"))
+                        .foregroundColor(primaryColor)
                         .font(.caption)
                 }
                 
@@ -46,7 +46,7 @@
                     Image(systemName: self.tempPasscode.count == 4 ? "circle.fill" : "circle")
                 }
                 .frame(height: 20)
-                .foregroundColor(Color("ThemeColor"))
+                .foregroundColor(primaryColor)
                 
                 
                 VStack(spacing: 25) {
@@ -95,10 +95,10 @@
                             Text("Delete").font(.caption)
                         })
                         .frame(width: 60, height: 60)
-                        .foregroundColor(Color("ThemeColor"))
+                        .foregroundColor(primaryColor)
                     } //: HStack - Numbers 0 and backspace
                 }
-                .foregroundColor(Color("ThemeColor"))
+                .foregroundColor(primaryColor)
                 .padding()
             } //: VStack
         }
@@ -117,7 +117,7 @@
                     self.isShowingError = true
                     return
                 }
-                self.finishAction()
+                self.completion()
                 
             }
         }

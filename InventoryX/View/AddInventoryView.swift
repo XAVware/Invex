@@ -39,7 +39,7 @@ struct AddInventoryView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 40, height: 20, alignment: .center)
-                            .foregroundColor(Color("ThemeColor"))
+                            .foregroundColor(primaryColor)
                         
                     }
                 } //: HStack - Header

@@ -54,7 +54,7 @@ struct MainView: View {
             .onAppear {
                 guard let defaultCategory = categories.first else {
                     print("No Categories -- Starting Onboarding Process")
-                    vm.isOnboarding.toggle()
+                    vm.isOnboarding = true
                     return
                 }
                 
@@ -65,7 +65,7 @@ struct MainView: View {
     
     @ViewBuilder private var mainView: some View {
         if vm.isOnboarding {
-            
+            OnboardingView2(isOnboarding: $vm.isOnboarding)
         } else {
             NavigationSplitView(columnVisibility: .constant(.doubleColumn)) {
                 menuView

@@ -28,7 +28,7 @@ struct MakeASaleView: View {
                     VStack(alignment: .center, spacing: 5) {
                         Text("\(categoryList[self.selectedTypeID].name)")
                             .font(.title)
-                            .foregroundColor(Color("ThemeColor"))
+                            .foregroundColor(primaryColor)
                             .padding(.bottom, 25)
 //                        TypePickerView(typeID: self.$selectedTypeID)
                         ScrollView {

@@ -11,7 +11,7 @@ import SwiftUI
 struct InventoryXApp: App {
     
     init() {
-//        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color("ThemeColor"))
+//        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(primaryColor)
 //        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
 //        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
 //        UITableView.appearance().backgroundColor = .clear
@@ -24,6 +24,10 @@ struct InventoryXApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
+                .onAppear {
+                    print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.path)
+                    UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+                }
         }
     }
     

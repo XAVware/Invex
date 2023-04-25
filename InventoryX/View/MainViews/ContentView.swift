@@ -15,7 +15,8 @@ struct ContentView: View {
     
     var body: some View {
         if categoryList.count == 0 && self.isOnboarding == true {
-            OnboardingView(isOnboarding: self.$isOnboarding)
+            Text("Onboard")
+//            OnboardingView(isOnboarding: self.$isOnboarding)
         } else {
             ZStack {
                 switch self.displayState {
@@ -71,7 +72,7 @@ struct ContentView: View {
             print("Error initializing realm with error-- \(error.localizedDescription)")
         }
         
-        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(Color("ThemeColor"))
+        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(primaryColor)
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)
         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
         UITableView.appearance().backgroundColor = .clear

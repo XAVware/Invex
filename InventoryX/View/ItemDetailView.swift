@@ -80,7 +80,7 @@ struct ItemDetailView: View {
                                                     .resizable()
                                                     .scaledToFit()
                                                     .frame(width: 20, height: 20)
-                                                    .foregroundColor(Color("ThemeColor"))
+                                                    .foregroundColor(primaryColor)
                                             } //: HStack
                                         } //: Button - Concession Type
                                         if category.name != categoryList[categoryList.count - 1].name {

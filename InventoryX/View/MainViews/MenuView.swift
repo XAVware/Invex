@@ -30,7 +30,7 @@ struct MenuView: View {
                     .frame(width: 30, height: 30, alignment: .trailing)
                     .padding(.vertical, 5)
                     .padding(.horizontal, 15)
-                    .background(Color("ThemeColor"))
+                    .background(primaryColor)
                     .cornerRadius(9)
                     .offset(x: self.isShowingMenu ? 0 : 50, y: 0)
                     
@@ -97,7 +97,7 @@ struct MenuView: View {
                 
             } //: VStack - Menu View
             .frame(width: 350)
-            .background(Color("ThemeColor"))
+            .background(primaryColor)
             .edgesIgnoringSafeArea(.all)
             .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom)
             .padding(.top, UIApplication.shared.windows.first?.safeAreaInsets.top)
