@@ -10,7 +10,7 @@ import RealmSwift
 
 @MainActor class OnboardingViewModel: ObservableObject {
     var navCounter: Int = 0
-    @Published var currentOnboardingState: OnboardingStates = .categoryNames
+    @Published var currentOnboardingState: OnboardingStates = .start
     @Published var categories: [CategoryEntity] = []
     @Published var newCategoryName: String = ""
     @Published var newCategoryThreshold: Int = 10
@@ -23,8 +23,7 @@ import RealmSwift
     enum OnboardingStates: Int, CaseIterable {
         case start = 0
         case categoryNames = 1
-        case categoryRestock = 2
-        case adminPasscode = 3
+        case adminSetup = 2
         
         var buttonText: String {
             switch self {
@@ -32,9 +31,7 @@ import RealmSwift
                 return "Get Started"
             case .categoryNames:
                 return "Save & Continue"
-            case .categoryRestock:
-                return "Save & Continue"
-            case .adminPasscode:
+            case .adminSetup:
                 return "Finish"
             }
         }
@@ -61,15 +58,9 @@ import RealmSwift
         }
         
         let newCategory = CategoryEntity(name: newCategoryName, restockNum: newCategoryThreshold)
-        self.categories.append(newCategory)
-        self.newCategoryName = ""
-        
-    }
-    
-    func saveAndContinue() {
-        if self.newCategoryName != "" {
-            addTempCategory()
-        }
+        categories.append(newCategory)
+        newCategoryName = ""
+        newCategoryThreshold = 10
     }
     
     func nextTapped() {
@@ -85,13 +76,9 @@ import RealmSwift
         case .categoryNames:
             saveAndContinue()
             
-        case .categoryRestock:
-            // Save Restock Numbers
-            saveAndContinue()
-            
-        case .adminPasscode:
+        case .adminSetup:
             // Save admin credentials and finish onboarding
-            break
+            isOnboarding = false
         }
         
         navCounter += 1
@@ -103,19 +90,31 @@ import RealmSwift
         currentOnboardingState = newState
     }
     
+    func saveAndContinue() {
+        if self.newCategoryName != "" {
+            addTempCategory()
+        }
+        
+        categories.forEach { category in
+            saveCategory(category)
+        }
+    }
+    
     func savePasscodeAndProceed() {
         self.isOnboarding = false
     }
     
-    func saveCategories() {
-        let realm = try! Realm()
-        for category in categories {
-            try! realm.write ({
+    func saveCategory(_ category: CategoryEntity) {
+        do {
+            let realm = try Realm()
+            try realm.write ({
                 realm.add(category)
             })
+        } catch {
+            print("Error saving category to Realm: \(error.localizedDescription)")
         }
     }
-    
+
     func saveAdmin() {
         
     }
@@ -142,10 +141,7 @@ struct OnboardingView2: View {
             case .categoryNames:
                 categoriesView
                 
-            case .categoryRestock:
-                adminSetup
-                
-            case .adminPasscode:
+            case .adminSetup:
                 adminSetup
             } //: Switch
         } //: VStack
@@ -167,9 +163,12 @@ struct OnboardingView2: View {
             
             Spacer()
             
-                            
             PasscodePad(padState: .setPasscode, completion: { vm.savePasscodeAndProceed() })
                 .padding()
+            
+            Spacer()
+            
+            continueButton
         } //: VStack
     } //: Admin Setup
     
@@ -216,7 +215,6 @@ struct OnboardingView2: View {
                     .padding()
                     .foregroundColor(primaryColor)
                     .opacity(0.5)
-//                    .background(.red)
                 } else {
                     VStack(spacing: 25) {
                         Text("Current Categories:")
