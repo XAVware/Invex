@@ -13,7 +13,7 @@ import RealmSwift
     @Published var currentOnboardingState: OnboardingStates = .categoryNames
     @Published var categories: [CategoryEntity] = []
     @Published var newCategoryName: String = ""
-    @Published var newCategoryThreshold: Int = 12
+    @Published var newCategoryThreshold: Int = 10
     @Published var adminPasscode: String = ""
     
     @Published var isOnboarding: Bool = true
@@ -55,12 +55,12 @@ import RealmSwift
     func addTempCategory() {
         for category in categories {
             if category.name == newCategoryName {
-                print("category already exists")
+                print("Category already exists")
                 return
             }
         }
         
-        let newCategory: CategoryEntity = CategoryEntity(name: newCategoryName)
+        let newCategory = CategoryEntity(name: newCategoryName, restockNum: newCategoryThreshold)
         self.categories.append(newCategory)
         self.newCategoryName = ""
         
@@ -196,32 +196,59 @@ struct OnboardingView2: View {
                 
                 Divider()
                 
-                VStack(spacing: 25) {
-                    Text("Current Categories:")
-                        .modifier(TextMod(.title2, .bold))
-                    
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack {
+                if vm.categories.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "arrowshape.turn.up.left.2.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: .infinity, maxHeight: geo.size.width * 0.12, alignment: .leading)
+                            .padding()
+                        
+                        Spacer()
+                            .frame(height: 30)
+                        
+                        Text("Add A Category")
+                            .modifier(TextMod(.largeTitle, .bold))
+                        
+                        Spacer()
+                    } //: VStack
+                    .frame(maxWidth: 600, maxHeight: .infinity)
+                    .padding()
+                    .foregroundColor(primaryColor)
+                    .opacity(0.5)
+//                    .background(.red)
+                } else {
+                    VStack(spacing: 25) {
+                        Text("Current Categories:")
+                            .modifier(TextMod(.title2, .bold))
+                        
+                        ScrollView(.vertical, showsIndicators: false) {
                             ForEach(vm.categories, id: \.self) { category in
                                 CategoryRow(category: category, parent: vm)
                                     .frame(height: 40)
                                 
                                 Divider().opacity(0.5)
                             }//: ForEach
-                            
-                        }//: VStack
+                        }//: Scroll
                         .frame(maxWidth: .infinity)
-                    } //: Scroll
-                    
-                    continueButton
-                } //: VStack - Current Categories
+                        continueButton
+                    } //: VStack
+                } //: If-Else
+                
             } //: HStack
         } //: Geometry Reader
 
         
     } //: Categories View
     
-    
+    private var cover: some View {
+        Color.gray
+            .edgesIgnoringSafeArea(.all)
+            .ignoresSafeArea(edges: .all)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .opacity(0.2)
+            .shadow(radius: 20)
+    }
     
     private var categoryNameSection: some View {
         VStack(alignment: .leading, spacing: 8) {

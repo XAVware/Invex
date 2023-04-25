@@ -43,10 +43,6 @@ struct QuantitySelector: View {
             headerView
 
             presetQuantities
-            
-            if isCustom {
-                customPicker
-            }
         } //: VStack
         .frame(maxWidth: 400)
     } //: Body
@@ -99,18 +95,23 @@ struct QuantitySelector: View {
 
             Spacer()
             
-            ForEach(quantityOptions, id: \.self) { val in
-                Button {
-                    quantitySelected(value: val)
-                } label: {
-                    Text("\(val)")
-                        .underline(selectedQuantity == val ? true : false)
-                        .opacity(selectedQuantity == val ? 1.0 : 0.5)
-                        .modifier(TextMod(.title2, .bold, .black))
-                }
-            } //: For Each
+            if isCustom {
+                customPicker
+            } else {
+                ForEach(quantityOptions, id: \.self) { val in
+                    Button {
+                        quantitySelected(value: val)
+                    } label: {
+                        Text("\(val)")
+                            .underline(selectedQuantity == val ? true : false)
+                            .opacity(selectedQuantity == val ? 1.0 : 0.5)
+                            .modifier(TextMod(.title2, .bold, .black))
+                    }
+                } //: For Each
+            }
         } //: HStack
         .foregroundColor(.black)
+        .frame(height: 45)
     } //: Preset Quantities
 }
 
