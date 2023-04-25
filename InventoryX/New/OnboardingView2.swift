@@ -13,6 +13,7 @@ import RealmSwift
     @Published var currentOnboardingState: OnboardingStates = .categoryNames
     @Published var categories: [CategoryEntity] = []
     @Published var newCategoryName: String = ""
+    @Published var newCategoryThreshold: Int = 12
     @Published var adminPasscode: String = ""
     
     @Published var isOnboarding: Bool = true
@@ -142,7 +143,7 @@ struct OnboardingView2: View {
                 categoriesView
                 
             case .categoryRestock:
-                categoryRestockView
+                adminSetup
                 
             case .adminPasscode:
                 adminSetup
@@ -175,17 +176,10 @@ struct OnboardingView2: View {
     private var categoriesView: some View {
         GeometryReader { geo in
             HStack {
-                VStack(spacing: 8) {
-                    Text("Add Categories")
-                        .modifier(TextMod(.title, .bold))
-                        .padding(.bottom)
+                VStack(spacing: 16) {
+                    categoryNameSection
                     
-                    Text("Your inventory will be displayed based on their category.")
-                        .modifier(TextMod(.callout, .regular, .black))
-                        .multilineTextAlignment(.center)
-                                        
-                    AnimatedTextField(boundTo: $vm.newCategoryName, placeholder: "Category Name")
-                        .autocapitalization(UITextAutocapitalizationType.words)
+                    categoryRestockSection
                         .padding(.vertical)
                     
                     Button(action: {
@@ -194,11 +188,11 @@ struct OnboardingView2: View {
                         Text("+ Add Category")
                     })
                     .foregroundColor(primaryColor)
-                    .padding()
                     
                     Spacer()
                 } //: VStack
                 .frame(width: geo.size.width / 3)
+                .padding(.vertical)
                 
                 Divider()
                 
@@ -209,19 +203,8 @@ struct OnboardingView2: View {
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack {
                             ForEach(vm.categories, id: \.self) { category in
-                                HStack {
-                                    Text(category.name)
-                                    
-                                    Spacer()
-                                    
-                                    Button {
-                                        vm.removeTempCategory(category)
-                                    } label: {
-                                        Image(systemName: "trash")
-                                            .foregroundColor(.red)
-                                    }
-                                }//: HStack
-                                .frame(height: 40)
+                                CategoryRow(category: category, parent: vm)
+                                    .frame(height: 40)
                                 
                                 Divider().opacity(0.5)
                             }//: ForEach
@@ -238,73 +221,37 @@ struct OnboardingView2: View {
         
     } //: Categories View
     
-    private var categoryRestockView: some View {
-        VStack {
-            Text("Next, Select Your Restock Point")
-                .modifier(TextMod(.title, .bold))
-                .padding()
+    
+    
+    private var categoryNameSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Add A Category")
+                .modifier(TextMod(.title, .bold, .black))
             
-            Text("Enter the restock point for each category. ConcessionTracker will alert you when an item in the corresponding category needs to be restocked.")
-                .modifier(TextMod(.callout))
-            
-            Spacer().frame(height: 50)
-            
-            
-            Divider()
-            
-            VStack(spacing: 25) {
-                Text("Your Categories:")
-                    .modifier(TextMod(.title2, .bold))
-                    .opacity(0.8)
-                
-                ScrollView(.vertical, showsIndicators: false, content: {
-                    VStack {
-                        ForEach(vm.categories, id: \.self) { category in
-                            HStack {
-                                Text(category.name)
+            Text("Your inventory will be displayed based on their category.")
+                .modifier(TextMod(.footnote, .semibold, .gray))
+                .multilineTextAlignment(.leading)
                                 
-                                Spacer()
-                                
-                                HStack(spacing: 0) {
-                                    Button(action: {
-                                        guard category.restockNumber >= 0 else {
-                                            return
-                                        }
-                                        category.restockNumber -= 1
-                                    }) {
-                                        Image(systemName: "minus.circle.fill")
-                                            .opacity(0.7)
-                                    } //: Button
-                                    
-                                    Text("\(category.restockNumber)")
-                                        .frame(width: 40)
-                                        .multilineTextAlignment(.center)
-                                    
-                                    
-                                    Button(action: {
-                                        category.restockNumber += 1
-                                    }) {
-                                        Image(systemName: "plus.circle.fill")
-                                            .opacity(0.7)
-                                    } //: Button
-                                }//: HStack
-                                .foregroundColor(.black)
-                                
-                            }//: HStack
-                            .frame(height: 40)
-                            
-                            Divider().opacity(0.5)
-                        }//: ForEach
-                        
-                    }//: VStack
-                    .frame(maxWidth: 400)
-                })
-            } //: VStack - Current Categories
+            AnimatedTextField(boundTo: $vm.newCategoryName, placeholder: "Category Name")
+                .autocapitalization(UITextAutocapitalizationType.words)
+                .padding(.vertical)
+        } //: VStack
+    } //: Category Name Section
+    
+    private var categoryRestockSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Restock Threshold")
+                .modifier(TextMod(.title, .bold, .black))
             
-            continueButton
+            Text("If an item reaches its category's restock threshold, InventoryX will alert you.")
+                .modifier(TextMod(.footnote, .semibold, .gray))
+                .multilineTextAlignment(.leading)
             
-        }
-    } //: Category Restock View
+            QuantitySelector(selectedQuantity: $vm.newCategoryThreshold)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical)
+        } //: VStack
+    } //: Category Restock Section
     
     private var continueButton: some View {
         Button(action: {
@@ -326,6 +273,25 @@ struct OnboardingView2: View {
         } //: VStack
     } //: Welcome Page
     
+    struct CategoryRow: View {
+        let category: CategoryEntity
+        let parent: OnboardingViewModel
+        
+        var body: some View {
+            HStack {
+                Text(category.name)
+                
+                Spacer()
+                
+                Button {
+                    parent.removeTempCategory(category)
+                } label: {
+                    Image(systemName: "trash")
+                        .foregroundColor(.red)
+                }
+            }//: HStack
+        }
+    }
 }
 
 struct OnboardingView2_Previews: PreviewProvider {

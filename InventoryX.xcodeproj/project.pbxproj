@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		80A5516D29F7628E00C21448 /* QuantitySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A5516C29F7628E00C21448 /* QuantitySelector.swift */; };
 		80B5EF7129F0C318007D9842 /* InventoryXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EF7029F0C318007D9842 /* InventoryXApp.swift */; };
 		80B5EF7529F0C319007D9842 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80B5EF7429F0C319007D9842 /* Assets.xcassets */; };
 		80B5EF7829F0C319007D9842 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80B5EF7729F0C319007D9842 /* Preview Assets.xcassets */; };
@@ -40,7 +41,6 @@
 		80B5EFC929F0D0D3007D9842 /* PasscodePadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC829F0D0D3007D9842 /* PasscodePadButton.swift */; };
 		80B5EFCA29F0D0D3007D9842 /* TypePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC729F0D0D3007D9842 /* TypePickerView.swift */; };
 		80B5EFCB29F0D0D3007D9842 /* SaveItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC129F0D0D2007D9842 /* SaveItemButton.swift */; };
-		80B5EFCC29F0D0D3007D9842 /* QuantitySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC329F0D0D2007D9842 /* QuantitySelector.swift */; };
 		80B5EFCD29F0D0D3007D9842 /* PasscodePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */; };
 		80B5EFCE29F0D0D3007D9842 /* ItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC029F0D0D2007D9842 /* ItemButton.swift */; };
 		80B5EFCF29F0D0D3007D9842 /* CategorySlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC429F0D0D3007D9842 /* CategorySlider.swift */; };
@@ -66,6 +66,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		80A5516C29F7628E00C21448 /* QuantitySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantitySelector.swift; sourceTree = "<group>"; };
 		80B5EF6D29F0C318007D9842 /* InventoryX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InventoryX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80B5EF7029F0C318007D9842 /* InventoryXApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryXApp.swift; sourceTree = "<group>"; };
 		80B5EF7429F0C319007D9842 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -98,7 +99,6 @@
 		80B5EFC029F0D0D2007D9842 /* ItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemButton.swift; sourceTree = "<group>"; };
 		80B5EFC129F0D0D2007D9842 /* SaveItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveItemButton.swift; sourceTree = "<group>"; };
 		80B5EFC229F0D0D2007D9842 /* AnimatedCheckmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedCheckmarkView.swift; sourceTree = "<group>"; };
-		80B5EFC329F0D0D2007D9842 /* QuantitySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantitySelector.swift; sourceTree = "<group>"; };
 		80B5EFC429F0D0D3007D9842 /* CategorySlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySlider.swift; sourceTree = "<group>"; };
 		80B5EFC529F0D0D3007D9842 /* RightChevron.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightChevron.swift; sourceTree = "<group>"; };
 		80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodePad.swift; sourceTree = "<group>"; };
@@ -200,7 +200,6 @@
 				80B5EFA629F0D0C9007D9842 /* ItemDetailView.swift */,
 				80B5EF9C29F0D0C8007D9842 /* ItemSelectorView.swift */,
 				80B5EFAC29F0D0CA007D9842 /* OnboardingView.swift */,
-				80B5EFC329F0D0D2007D9842 /* QuantitySelector.swift */,
 				80B5EFC529F0D0D3007D9842 /* RightChevron.swift */,
 				80B5EFC129F0D0D2007D9842 /* SaveItemButton.swift */,
 				80B5EFAD29F0D0CA007D9842 /* SaleRowView.swift */,
@@ -305,6 +304,7 @@
 				80DBB97829F6EFA300497695 /* MainView.swift */,
 				80DBB97A29F6EFBF00497695 /* Models.swift */,
 				80DBB97E29F70EE000497695 /* OnboardingView2.swift */,
+				80A5516C29F7628E00C21448 /* QuantitySelector.swift */,
 			);
 			path = New;
 			sourceTree = "<group>";
@@ -404,6 +404,7 @@
 				80DBB97F29F70EE000497695 /* OnboardingView2.swift in Sources */,
 				80B5EFAE29F0D0CA007D9842 /* ItemSelectorView.swift in Sources */,
 				80B5EFB629F0D0CA007D9842 /* MenuView.swift in Sources */,
+				80A5516D29F7628E00C21448 /* QuantitySelector.swift in Sources */,
 				80DBB96B29F6D81500497695 /* UnderlinedTextField.swift in Sources */,
 				80DBB97029F6D81500497695 /* AlertManager.swift in Sources */,
 				80DBB96C29F6D81500497695 /* AnimatedTextField.swift in Sources */,
@@ -425,7 +426,6 @@
 				80B5EFB229F0D0CA007D9842 /* ConfirmationView.swift in Sources */,
 				80DBB97D29F70BC200497695 /* UIColor+Ext.swift in Sources */,
 				80B5EFCD29F0D0D3007D9842 /* PasscodePad.swift in Sources */,
-				80B5EFCC29F0D0D3007D9842 /* QuantitySelector.swift in Sources */,
 				80DBB97129F6D81500497695 /* PhotoPicker.swift in Sources */,
 				80B5EF9229F0CC49007D9842 /* CategoryModel.swift in Sources */,
 				80B5EFB129F0D0CA007D9842 /* EditItemView.swift in Sources */,

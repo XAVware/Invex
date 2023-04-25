@@ -20,7 +20,7 @@ struct AnimatedCheckmarkView: View {
                             .stroke(style: StrokeStyle(lineWidth: 10, lineCap: .round, lineJoin: .round))
                             .fill(Color("GreenBackground"))
                     )
-                    .animation(.spring(response: self.duration, dampingFraction: 1.0, blendDuration: 1.0))
+                    .animation(.spring(response: self.duration, dampingFraction: 1.0, blendDuration: 1.0), value: true)
                 
                 Image(systemName: "checkmark")
                     .resizable()

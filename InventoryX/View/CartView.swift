@@ -25,7 +25,7 @@ struct CartView: View {
                         .edgesIgnoringSafeArea(.all)
                         .shadow(color: .black, radius: 10, x: 0, y: 0)
                 )
-                .animation(.linear(duration: 0.5))
+                .animation(.linear(duration: 0.5), value: true)
                 .transition(.asymmetric(insertion: .opacity, removal: .opacity))
                 .overlay(
                     Button(action: {
