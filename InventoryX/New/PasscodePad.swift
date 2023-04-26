@@ -104,6 +104,7 @@ struct PasscodePad: View {
             }
             .frame(height: 20)
             .foregroundColor(primaryColor)
+            .padding(.vertical)
             
             VStack(spacing: 25) {
                 ForEach(0 ..< 3) { row in
