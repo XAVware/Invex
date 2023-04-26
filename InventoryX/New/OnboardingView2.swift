@@ -41,7 +41,6 @@ import RealmSwift
                 return "Finish"
             }
         }
-        
     }
     
     init() {
@@ -83,8 +82,9 @@ import RealmSwift
             saveAndContinue()
             
         case .profileSetup:
-            // Save admin credentials and finish onboarding
+            saveAdmin()
             isOnboarding = false
+            return
         }
         
         navCounter += 1
@@ -104,10 +104,6 @@ import RealmSwift
         categories.forEach { category in
             saveCategory(category)
         }
-    }
-    
-    func savePasscodeAndProceed() {
-        self.isOnboarding = false
     }
     
     func saveCategory(_ category: CategoryEntity) {
@@ -279,9 +275,11 @@ struct OnboardingView2: View {
             .padding(.vertical)
             .frame(maxWidth: .infinity)
             .sheet(isPresented: $vm.isShowingPasscodePad) {
-                PasscodePad(padState: .setPasscode, completion: {
-                    vm.passcodeConfirmed = true
-                    vm.savePasscodeAndProceed()
+                PasscodePad(padState: .createPasscode, completion: { confirmedPasscode in
+                    vm.adminPasscode = confirmedPasscode
+                    vm.isShowingPasscodePad.toggle()
+//                    vm.passcodeConfirmed = true
+//                    vm.savePasscodeAndProceed()
                 })
             }
         } //: Geometry Reader

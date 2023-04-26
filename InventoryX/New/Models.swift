@@ -53,3 +53,23 @@ class SaleItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted var qtyToPurchase: Int = 0
     @Persisted var price: Double = 0.00
 }
+
+enum UserRole: String, PersistableEnum {
+    case admin
+    case manager
+    case employee
+}
+
+class User: Object, ObjectKeyIdentifiable {
+    @Persisted(primaryKey: true) var _id: ObjectId
+    @Persisted var profileName: String = ""
+    @Persisted var email: String?
+    @Persisted var role: UserRole = UserRole.employee
+    
+    convenience init(profileName: String, email: String?, role: UserRole) {
+        self.init()
+        self.profileName = profileName
+        self.email = email
+        self.role = role
+    }
+}

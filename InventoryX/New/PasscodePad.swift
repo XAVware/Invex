@@ -8,37 +8,35 @@
 import SwiftUI
 
 struct PasscodePad: View {
-    enum PadState { case setPasscode, enterPasscode }
-    let values: [String] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "Delete"]
+    enum PadState { case createPasscode, enterPasscode }
     
     @State var padState: PadState
-    @State var completion: () -> Void
+    @State var completion: (String) -> Void
+    @State var firstPasscode: String
     
     @State var passcode: String = ""
-    @State var confirmPasscode: String = ""
-    
-    @State var finalPasscode: String = ""
-    
     @State var isShowingError: Bool = false
-    @State var isConfirming: Bool = false
     
-    @State var passcodeRowCounter: Int = 0
-    
-    init(padState: PadState, completion: @escaping () -> Void) {
-        self.padState = padState
-        self.completion = completion
+    var isConfirming: Bool {
+        return firstPasscode.isEmpty ? false : true
     }
     
     var errorMessage: String {
-        switch true {
-        case padState == .setPasscode && isShowingError:
+        guard isShowingError else { return "" }
+        switch padState {
+        case .createPasscode:
             return "The passcodes you entered do not match. Please try again"
-        case padState == .enterPasscode && isShowingError:
+        case .enterPasscode:
             return "The passcode you entered is incorrect."
-        case isConfirming:
-            return "Re-Enter Your Passcode"
-        default:
-            return ""
+        }
+    }
+    
+    var headerText: String {
+        switch padState {
+        case .createPasscode:
+            return isConfirming ? "Re-Enter Passcode" : "Enter Passcode"
+        case .enterPasscode:
+            return "Enter Passcode"
         }
     }
 
@@ -52,50 +50,62 @@ struct PasscodePad: View {
         }
     }
     
-    func finish() {
-        if finalPasscode == "" {
-            finalPasscode = passcode
-            passcode = ""
-            isShowingError = false
-            isConfirming = true
-        } else {
-            guard finalPasscode == passcode else {
-                finalPasscode = ""
-                passcode = ""
-                isConfirming = false
-                isShowingError = true
-                return
-            }
-            completion()
-        }
-    }
-    
     func deleteCharacter() {
-        let currentLength = passcode.count
-        
-        guard currentLength > 0 else { return }
-        
-        let newPasscode = passcode.prefix(currentLength - 1)
-        
-        passcode = String(newPasscode)
+        guard passcode.count > 0 else { return }
+        passcode = String(passcode.prefix(passcode.count - 1))
     }
     
     func numberClicked(value: Int) {
+        isShowingError = false
         let digitString = String(describing: value)
         passcode.append(digitString)
         if passcode.count == 4 {
-            finish()
+            comparePasscodes()
+            passcode = ""
         }
     }
     
-    func checkPasscode(code: String) {
-        if passcode.isEmpty { return }
+    func comparePasscodes() {
+        switch padState {
+        case .createPasscode:
+            if isConfirming == false {
+                firstPasscode = passcode
+            } else {
+                if firstPasscode == passcode {
+                    completion(passcode)
+                } else {
+                    firstPasscode = ""
+                    isShowingError = true
+                }
+            }
+            
+        case .enterPasscode:
+            if firstPasscode == passcode {
+                completion(passcode)
+            } else {
+                isShowingError = true
+            }
+        }
+    }
+    
+    init(passcode: String = "", padState: PadState, completion: @escaping (String) -> Void) {
+        if padState == .enterPasscode && passcode.count != 4 {
+            fatalError("Passcode pad set to .confirmPasscode but provided passcode is not correct length.")
+        }
+        self.padState = padState
+        self.firstPasscode = passcode
+        self.completion = completion
     }
     
     var body: some View {
-        VStack(spacing: 30) {
-            Text(errorMessage)
-                .modifier(TextMod(.caption, .semibold, isConfirming ? .black : .red))
+        VStack(spacing: 16) {
+            VStack(spacing: 16) {
+                Text(headerText)
+                    .modifier(TextMod(.largeTitle, .semibold, .black))
+                
+                Text(errorMessage)
+                    .modifier(TextMod(.caption, .semibold, (!isConfirming || padState == .enterPasscode) ? .red : .black))
+            }
             
             HStack(spacing: 15) {
                 ForEach(1 ..< 5) { count in
@@ -105,6 +115,7 @@ struct PasscodePad: View {
             .frame(height: 20)
             .foregroundColor(primaryColor)
             .padding(.vertical)
+            .padding(.bottom, 16)
             
             VStack(spacing: 25) {
                 ForEach(0 ..< 3) { row in
@@ -114,6 +125,7 @@ struct PasscodePad: View {
                                 numberClicked(value: row + column + getRowFactor(for: row))
                             } label: {
                                 Text("\(row + column + getRowFactor(for: row))")
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                             }
                             .modifier(PasscodeButtonMod())
                             
@@ -129,14 +141,17 @@ struct PasscodePad: View {
                         numberClicked(value: 0)
                     } label: {
                         Text("0")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
                     .modifier(PasscodeButtonMod())
                     
                     Button {
                         deleteCharacter()
                     } label: {
-                        Text("Delete")
-                            .font(.caption)
+                        Image(systemName: "delete.left")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 30)
                     }
                     .frame(width: 60, height: 60)
                     .foregroundColor(primaryColor)
@@ -158,3 +173,14 @@ struct PasscodeButtonMod: ViewModifier {
             .overlay(Capsule().stroke(primaryColor, lineWidth: 3))
     }
 }
+
+
+struct PasscodePad_Previews: PreviewProvider {
+    static var previews: some View {
+        PasscodePad(passcode: "", padState: .createPasscode, completion: { confirmedPasscode in })
+            .previewLayout(.sizeThatFits)
+            .padding()
+    }
+}
+
+

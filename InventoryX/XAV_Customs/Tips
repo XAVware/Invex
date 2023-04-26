@@ -10,3 +10,11 @@
     - Shortcut: .tm
       Snippet: modifier(TextMod(<#FONT#>, <#WEIGHT#>))
       Explanation: Must have XAV_Customs package or at least TextMod modifier.
+
+    - Shortcut: .preview
+      Snippet:
+      struct <#STRUCT_NAME#>_Previews: PreviewProvider {
+            static var previews: some View {
+                <#STRUCT_NAME#>()
+            }
+        }
