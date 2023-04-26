@@ -10,7 +10,7 @@ import RealmSwift
 
 @MainActor class OnboardingViewModel: ObservableObject {
     var navCounter: Int = 0
-    @Published var currentOnboardingState: OnboardingStates = .start
+    @Published var currentOnboardingState: OnboardingStates = .profileSetup
     @Published var categories: [CategoryEntity] = []
     @Published var newCategoryName: String = ""
     @Published var newCategoryThreshold: Int = 10
@@ -18,12 +18,15 @@ import RealmSwift
     
     @Published var isOnboarding: Bool = true
     
+    @Published var newProfileName: String = ""
+    @Published var newProfileEmail: String = ""
+    
     private let lastPageInt: Int
     
     enum OnboardingStates: Int, CaseIterable {
         case start = 0
         case categoryNames = 1
-        case adminSetup = 2
+        case profileSetup = 2
         
         var buttonText: String {
             switch self {
@@ -31,7 +34,7 @@ import RealmSwift
                 return "Get Started"
             case .categoryNames:
                 return "Save & Continue"
-            case .adminSetup:
+            case .profileSetup:
                 return "Finish"
             }
         }
@@ -76,7 +79,7 @@ import RealmSwift
         case .categoryNames:
             saveAndContinue()
             
-        case .adminSetup:
+        case .profileSetup:
             // Save admin credentials and finish onboarding
             isOnboarding = false
         }
@@ -141,36 +144,15 @@ struct OnboardingView2: View {
             case .categoryNames:
                 categoriesView
                 
-            case .adminSetup:
-                adminSetup
+            case .profileSetup:
+                profileSetup
             } //: Switch
         } //: VStack
         .padding()
         .onChange(of: vm.isOnboarding) { newValue in
-            self.isOnboarding = newValue
+            isOnboarding = newValue
         }
     }
-    
-    private var adminSetup: some View {
-        VStack {
-            Text("Finally, enter an admin passcode")
-                .modifier(TextMod(.title, .bold))
-                .padding()
-            
-            Text("This passcode should be used by administrators to access features such as inventory adjustments")
-                .modifier(TextMod(.callout))
-                .multilineTextAlignment(.center)
-            
-            Spacer()
-            
-            PasscodePad(padState: .setPasscode, completion: { vm.savePasscodeAndProceed() })
-                .padding()
-            
-            Spacer()
-            
-            continueButton
-        } //: VStack
-    } //: Admin Setup
     
     private var categoriesView: some View {
         GeometryReader { geo in
@@ -235,18 +217,7 @@ struct OnboardingView2: View {
                 
             } //: HStack
         } //: Geometry Reader
-
-        
     } //: Categories View
-    
-    private var cover: some View {
-        Color.gray
-            .edgesIgnoringSafeArea(.all)
-            .ignoresSafeArea(edges: .all)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .opacity(0.2)
-            .shadow(radius: 20)
-    }
     
     private var categoryNameSection: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -277,6 +248,109 @@ struct OnboardingView2: View {
                 .padding(.vertical)
         } //: VStack
     } //: Category Restock Section
+    
+    private var profileSetup: some View {
+        GeometryReader { geo in
+            HStack {
+                VStack(spacing: 16) {
+                    profileNameSection
+                    
+//                    profileEmailSection
+//                        .padding(.vertical)
+                    
+                    Button(action: {
+                        vm.addTempCategory()
+                    }, label: {
+                        Text("+ Add Category")
+                    })
+                    .foregroundColor(primaryColor)
+                    
+                    Spacer()
+                } //: VStack
+                .frame(width: geo.size.width / 3)
+                .padding(.vertical)
+                
+                Divider()
+                
+                if vm.categories.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "arrowshape.turn.up.left.2.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: .infinity, maxHeight: geo.size.width * 0.12, alignment: .leading)
+                            .padding()
+                        
+                        Spacer()
+                            .frame(height: 30)
+                        
+                        Text("Add A Profile")
+                            .modifier(TextMod(.largeTitle, .bold))
+                        
+                        Spacer()
+                    } //: VStack
+                    .frame(maxWidth: 600, maxHeight: .infinity)
+                    .padding()
+                    .foregroundColor(primaryColor)
+                    .opacity(0.5)
+                } else {
+                    VStack(spacing: 25) {
+                        Text("Current Categories:")
+                            .modifier(TextMod(.title2, .bold))
+                        
+                        ScrollView(.vertical, showsIndicators: false) {
+                            ForEach(vm.categories, id: \.self) { category in
+                                CategoryRow(category: category, parent: vm)
+                                    .frame(height: 40)
+                                
+                                Divider().opacity(0.5)
+                            }//: ForEach
+                        }//: Scroll
+                        .frame(maxWidth: .infinity)
+                        continueButton
+                    } //: VStack
+                } //: If-Else
+                
+            } //: HStack
+        } //: Geometry Reader
+    } //: Profile Setup
+    
+    private var profileNameSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Add A Profile")
+                .modifier(TextMod(.title, .bold, .black))
+            
+            Text("Multiple profiles allow admins to control what access other user's have. Including an email will allow you to setup InventoryX to email you alerts with restock information.")
+                .modifier(TextMod(.footnote, .semibold, .gray))
+                .multilineTextAlignment(.leading)
+                                
+            AnimatedTextField(boundTo: $vm.newProfileName, placeholder: "Profile Name")
+                .autocapitalization(UITextAutocapitalizationType.words)
+                .padding(.vertical)
+            
+            AnimatedTextField(boundTo: $vm.newProfileEmail, placeholder: "Email")
+                .autocapitalization(UITextAutocapitalizationType.words)
+        } //: VStack
+    } //: Profile Name Section
+    
+    private var adminSetup: some View {
+        VStack {
+            Text("Create An Admin Passcode")
+                .modifier(TextMod(.title, .bold, .black))
+            
+            Text("This passcode should be used by administrators to access features such as inventory adjustments")
+                .modifier(TextMod(.footnote, .semibold, .gray))
+                .multilineTextAlignment(.leading)
+            
+            Spacer()
+            
+            PasscodePad(padState: .setPasscode, completion: { vm.savePasscodeAndProceed() })
+                .padding()
+            
+            Spacer()
+            
+            continueButton
+        } //: VStack
+    } //: Admin Setup
     
     private var continueButton: some View {
         Button(action: {
