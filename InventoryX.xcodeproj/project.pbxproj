@@ -38,7 +38,6 @@
 		80B5EFBD29F0D0CA007D9842 /* InventoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFAB29F0D0CA007D9842 /* InventoryListView.swift */; };
 		80B5EFBE29F0D0CA007D9842 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFAC29F0D0CA007D9842 /* OnboardingView.swift */; };
 		80B5EFBF29F0D0CA007D9842 /* SaleRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFAD29F0D0CA007D9842 /* SaleRowView.swift */; };
-		80B5EFC929F0D0D3007D9842 /* PasscodePadButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC829F0D0D3007D9842 /* PasscodePadButton.swift */; };
 		80B5EFCA29F0D0D3007D9842 /* TypePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC729F0D0D3007D9842 /* TypePickerView.swift */; };
 		80B5EFCB29F0D0D3007D9842 /* SaveItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC129F0D0D2007D9842 /* SaveItemButton.swift */; };
 		80B5EFCD29F0D0D3007D9842 /* PasscodePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */; };
@@ -48,6 +47,7 @@
 		80B5EFD129F0D0D3007D9842 /* RightChevron.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC529F0D0D3007D9842 /* RightChevron.swift */; };
 		80B5EFD329F0D0F3007D9842 /* TypeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFD229F0D0F3007D9842 /* TypeData.swift */; };
 		80B5EFD729F0E186007D9842 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFD529F0E186007D9842 /* Modifiers.swift */; };
+		80D5025A29F8CE2B0095A547 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D5025929F8CE2B0095A547 /* SectionHeader.swift */; };
 		80DBB96A29F6D81500497695 /* TextMod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB95F29F6D81500497695 /* TextMod.swift */; };
 		80DBB96B29F6D81500497695 /* UnderlinedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB96129F6D81500497695 /* UnderlinedTextField.swift */; };
 		80DBB96C29F6D81500497695 /* AnimatedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB96229F6D81500497695 /* AnimatedTextField.swift */; };
@@ -103,9 +103,9 @@
 		80B5EFC529F0D0D3007D9842 /* RightChevron.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightChevron.swift; sourceTree = "<group>"; };
 		80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodePad.swift; sourceTree = "<group>"; };
 		80B5EFC729F0D0D3007D9842 /* TypePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypePickerView.swift; sourceTree = "<group>"; };
-		80B5EFC829F0D0D3007D9842 /* PasscodePadButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodePadButton.swift; sourceTree = "<group>"; };
 		80B5EFD229F0D0F3007D9842 /* TypeData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeData.swift; sourceTree = "<group>"; };
 		80B5EFD529F0E186007D9842 /* Modifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
+		80D5025929F8CE2B0095A547 /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
 		80DBB95F29F6D81500497695 /* TextMod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextMod.swift; sourceTree = "<group>"; };
 		80DBB96129F6D81500497695 /* UnderlinedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderlinedTextField.swift; sourceTree = "<group>"; };
 		80DBB96229F6D81500497695 /* AnimatedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedTextField.swift; sourceTree = "<group>"; };
@@ -300,11 +300,11 @@
 			isa = PBXGroup;
 			children = (
 				80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */,
-				80B5EFC829F0D0D3007D9842 /* PasscodePadButton.swift */,
 				80DBB97829F6EFA300497695 /* MainView.swift */,
 				80DBB97A29F6EFBF00497695 /* Models.swift */,
 				80DBB97E29F70EE000497695 /* OnboardingView2.swift */,
 				80A5516C29F7628E00C21448 /* QuantitySelector.swift */,
+				80D5025929F8CE2B0095A547 /* SectionHeader.swift */,
 			);
 			path = New;
 			sourceTree = "<group>";
@@ -399,6 +399,7 @@
 				80B5EFB329F0D0CA007D9842 /* AddInventoryView.swift in Sources */,
 				80B5EFBD29F0D0CA007D9842 /* InventoryListView.swift in Sources */,
 				80B5EFBF29F0D0CA007D9842 /* SaleRowView.swift in Sources */,
+				80D5025A29F8CE2B0095A547 /* SectionHeader.swift in Sources */,
 				80B5EFCB29F0D0D3007D9842 /* SaveItemButton.swift in Sources */,
 				80DBB96D29F6D81500497695 /* Extensions.swift in Sources */,
 				80DBB97F29F70EE000497695 /* OnboardingView2.swift in Sources */,
@@ -421,7 +422,6 @@
 				80B5EFB029F0D0CA007D9842 /* ContentView.swift in Sources */,
 				80B5EFCF29F0D0D3007D9842 /* CategorySlider.swift in Sources */,
 				80DBB96E29F6D81500497695 /* CameraView.swift in Sources */,
-				80B5EFC929F0D0D3007D9842 /* PasscodePadButton.swift in Sources */,
 				80DBB98129F7115200497695 /* ColorConstants.swift in Sources */,
 				80B5EFB229F0D0CA007D9842 /* ConfirmationView.swift in Sources */,
 				80DBB97D29F70BC200497695 /* UIColor+Ext.swift in Sources */,
@@ -584,7 +584,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.xavware.InventoryX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = InventoryXProfile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = InventoryXM1;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -617,7 +617,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.xavware.InventoryX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = InventoryXProfile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = InventoryXM1;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

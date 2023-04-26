@@ -20,6 +20,9 @@ import RealmSwift
     
     @Published var newProfileName: String = ""
     @Published var newProfileEmail: String = ""
+    @Published var isPasscodeProtected: Bool = false
+    @Published var isShowingPasscodePad: Bool = true
+    @Published var passcodeConfirmed: Bool = false
     
     private let lastPageInt: Int
     
@@ -117,7 +120,7 @@ import RealmSwift
             print("Error saving category to Realm: \(error.localizedDescription)")
         }
     }
-
+    
     func saveAdmin() {
         
     }
@@ -221,13 +224,8 @@ struct OnboardingView2: View {
     
     private var categoryNameSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Add A Category")
-                .modifier(TextMod(.title, .bold, .black))
+            SectionHeader(section: .addCategory)
             
-            Text("Your inventory will be displayed based on their category.")
-                .modifier(TextMod(.footnote, .semibold, .gray))
-                .multilineTextAlignment(.leading)
-                                
             AnimatedTextField(boundTo: $vm.newCategoryName, placeholder: "Category Name")
                 .autocapitalization(UITextAutocapitalizationType.words)
                 .padding(.vertical)
@@ -236,12 +234,7 @@ struct OnboardingView2: View {
     
     private var categoryRestockSection: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Restock Threshold")
-                .modifier(TextMod(.title, .bold, .black))
-            
-            Text("If an item reaches its category's restock threshold, InventoryX will alert you.")
-                .modifier(TextMod(.footnote, .semibold, .gray))
-                .multilineTextAlignment(.leading)
+            SectionHeader(section: .restockThreshold)
             
             QuantitySelector(selectedQuantity: $vm.newCategoryThreshold)
                 .frame(maxWidth: .infinity)
@@ -251,106 +244,48 @@ struct OnboardingView2: View {
     
     private var profileSetup: some View {
         GeometryReader { geo in
-            HStack {
-                VStack(spacing: 16) {
-                    profileNameSection
+            VStack {
+                VStack(spacing: 32) {
+                    VStack(spacing: 24) {
+                        SectionHeader(section: .adminSetup)
+                        
+                        AnimatedTextField(boundTo: $vm.newProfileName, placeholder: "Profile Name")
+                            .autocapitalization(UITextAutocapitalizationType.words)
+                    }
                     
-//                    profileEmailSection
-//                        .padding(.vertical)
+                    VStack {
+                        SectionHeader(section: .email)
+                        
+                        AnimatedTextField(boundTo: $vm.newProfileEmail, placeholder: "Email")
+                            .autocapitalization(UITextAutocapitalizationType.words)
+                            .padding(.vertical)
+                    }
                     
-                    Button(action: {
-                        vm.addTempCategory()
-                    }, label: {
-                        Text("+ Add Category")
-                    })
-                    .foregroundColor(primaryColor)
-                    
-                    Spacer()
+                    Toggle(isOn: $vm.isPasscodeProtected) {
+                        Text("Password Protected")
+                    }
+                    .onChange(of: vm.isPasscodeProtected) { isProtected in
+                        if isProtected {
+                            vm.isShowingPasscodePad.toggle()
+                        }
+                    }
                 } //: VStack
-                .frame(width: geo.size.width / 3)
-                .padding(.vertical)
                 
-                Divider()
+                Spacer()
                 
-                if vm.categories.isEmpty {
-                    VStack(spacing: 16) {
-                        Image(systemName: "arrowshape.turn.up.left.2.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxWidth: .infinity, maxHeight: geo.size.width * 0.12, alignment: .leading)
-                            .padding()
-                        
-                        Spacer()
-                            .frame(height: 30)
-                        
-                        Text("Add A Profile")
-                            .modifier(TextMod(.largeTitle, .bold))
-                        
-                        Spacer()
-                    } //: VStack
-                    .frame(maxWidth: 600, maxHeight: .infinity)
-                    .padding()
-                    .foregroundColor(primaryColor)
-                    .opacity(0.5)
-                } else {
-                    VStack(spacing: 25) {
-                        Text("Current Categories:")
-                            .modifier(TextMod(.title2, .bold))
-                        
-                        ScrollView(.vertical, showsIndicators: false) {
-                            ForEach(vm.categories, id: \.self) { category in
-                                CategoryRow(category: category, parent: vm)
-                                    .frame(height: 40)
-                                
-                                Divider().opacity(0.5)
-                            }//: ForEach
-                        }//: Scroll
-                        .frame(maxWidth: .infinity)
-                        continueButton
-                    } //: VStack
-                } //: If-Else
-                
-            } //: HStack
+                continueButton
+            } //: VStack
+            .frame(width: geo.size.width / 3)
+            .padding(.vertical)
+            .frame(maxWidth: .infinity)
+            .sheet(isPresented: $vm.isShowingPasscodePad) {
+                PasscodePad(padState: .setPasscode, completion: {
+                    vm.passcodeConfirmed = true
+                    vm.savePasscodeAndProceed()
+                })
+            }
         } //: Geometry Reader
     } //: Profile Setup
-    
-    private var profileNameSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Add A Profile")
-                .modifier(TextMod(.title, .bold, .black))
-            
-            Text("Multiple profiles allow admins to control what access other user's have. Including an email will allow you to setup InventoryX to email you alerts with restock information.")
-                .modifier(TextMod(.footnote, .semibold, .gray))
-                .multilineTextAlignment(.leading)
-                                
-            AnimatedTextField(boundTo: $vm.newProfileName, placeholder: "Profile Name")
-                .autocapitalization(UITextAutocapitalizationType.words)
-                .padding(.vertical)
-            
-            AnimatedTextField(boundTo: $vm.newProfileEmail, placeholder: "Email")
-                .autocapitalization(UITextAutocapitalizationType.words)
-        } //: VStack
-    } //: Profile Name Section
-    
-    private var adminSetup: some View {
-        VStack {
-            Text("Create An Admin Passcode")
-                .modifier(TextMod(.title, .bold, .black))
-            
-            Text("This passcode should be used by administrators to access features such as inventory adjustments")
-                .modifier(TextMod(.footnote, .semibold, .gray))
-                .multilineTextAlignment(.leading)
-            
-            Spacer()
-            
-            PasscodePad(padState: .setPasscode, completion: { vm.savePasscodeAndProceed() })
-                .padding()
-            
-            Spacer()
-            
-            continueButton
-        } //: VStack
-    } //: Admin Setup
     
     private var continueButton: some View {
         Button(action: {
@@ -397,7 +332,7 @@ struct OnboardingView2_Previews: PreviewProvider {
     @State static var onboarding: Bool = true
     static var previews: some View {
         OnboardingView2(isOnboarding: $onboarding)
-//            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+        //            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
             .modifier(PreviewMod())
     }
 }
