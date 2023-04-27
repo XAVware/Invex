@@ -33,7 +33,6 @@
 		80B5EFCB29F0D0D3007D9842 /* SaveItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC129F0D0D2007D9842 /* SaveItemButton.swift */; };
 		80B5EFCD29F0D0D3007D9842 /* PasscodePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */; };
 		80B5EFCE29F0D0D3007D9842 /* ItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC029F0D0D2007D9842 /* ItemButton.swift */; };
-		80B5EFCF29F0D0D3007D9842 /* CategorySlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC429F0D0D3007D9842 /* CategorySlider.swift */; };
 		80B5EFD029F0D0D3007D9842 /* AnimatedCheckmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC229F0D0D2007D9842 /* AnimatedCheckmarkView.swift */; };
 		80B5EFD329F0D0F3007D9842 /* TypeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFD229F0D0F3007D9842 /* TypeData.swift */; };
 		80B5EFD729F0E186007D9842 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFD529F0E186007D9842 /* Modifiers.swift */; };
@@ -80,7 +79,6 @@
 		80B5EFC029F0D0D2007D9842 /* ItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemButton.swift; sourceTree = "<group>"; };
 		80B5EFC129F0D0D2007D9842 /* SaveItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveItemButton.swift; sourceTree = "<group>"; };
 		80B5EFC229F0D0D2007D9842 /* AnimatedCheckmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedCheckmarkView.swift; sourceTree = "<group>"; };
-		80B5EFC429F0D0D3007D9842 /* CategorySlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySlider.swift; sourceTree = "<group>"; };
 		80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodePad.swift; sourceTree = "<group>"; };
 		80B5EFC729F0D0D3007D9842 /* TypePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypePickerView.swift; sourceTree = "<group>"; };
 		80B5EFD229F0D0F3007D9842 /* TypeData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeData.swift; sourceTree = "<group>"; };
@@ -123,7 +121,6 @@
 				80B5EFA129F0D0C9007D9842 /* AddInventoryView.swift */,
 				80B5EFC229F0D0D2007D9842 /* AnimatedCheckmarkView.swift */,
 				80B5EFAA29F0D0CA007D9842 /* CartItemView.swift */,
-				80B5EFC429F0D0D3007D9842 /* CategorySlider.swift */,
 				80B5EFA229F0D0C9007D9842 /* CartView.swift */,
 				80B5EF9E29F0D0C9007D9842 /* ContentView.swift */,
 				80B5EFA029F0D0C9007D9842 /* ConfirmationView.swift */,
@@ -366,7 +363,6 @@
 				80DBB97929F6EFA300497695 /* MainView.swift in Sources */,
 				80DBB97B29F6EFBF00497695 /* Models.swift in Sources */,
 				80B5EFB029F0D0CA007D9842 /* ContentView.swift in Sources */,
-				80B5EFCF29F0D0D3007D9842 /* CategorySlider.swift in Sources */,
 				80DBB96E29F6D81500497695 /* CameraView.swift in Sources */,
 				80DBB98129F7115200497695 /* ColorConstants.swift in Sources */,
 				80B5EFB229F0D0CA007D9842 /* ConfirmationView.swift in Sources */,

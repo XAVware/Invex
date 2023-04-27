@@ -231,7 +231,7 @@ struct OnboardingView2: View {
                     Button {
                         vm.addTempCategory()
                     } label: {
-                        Text("Add Item")
+                        Text("Add Category")
                             .modifier(TextMod(.title3, .semibold, .black))
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         

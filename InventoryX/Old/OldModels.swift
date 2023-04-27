@@ -113,7 +113,7 @@ class Cart: ObservableObject {
         }
     }
     
-    func addItem(_ item: InventoryItem) {
+    func addItem(_ item: InventoryItemEntity) {
         for cartItem in cartItems {
             if cartItem.name == item.name && cartItem.subtype == item.subtype {
                 cartItem.increaseQtyInCart()

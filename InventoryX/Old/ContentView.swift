@@ -3,9 +3,6 @@
 import SwiftUI
 import RealmSwift
 
-enum DisplayStates {
-    case makeASale, addInventory, inventoryList, salesHistory, inventoryStatus
-}
 
 struct ContentView: View {
     @State var displayState: DisplayStates      = .makeASale
@@ -22,7 +19,7 @@ struct ContentView: View {
                 switch self.displayState {
                 case .makeASale:
                     ZStack {
-                        MakeASaleView(cart: self.cart)
+//                        MakeASaleView(cart: self.cart)
                         CartView(cart: self.cart)
                     }
                 case .addInventory:
@@ -51,7 +48,6 @@ struct ContentView: View {
     init() {
         let config = Realm.Configuration(
             schemaVersion: 1,
-            
             migrationBlock: { migration, oldSchemaVersion in
                 if (oldSchemaVersion < 1) {
                     migration.enumerateObjects(ofType: InventoryItem.className()) { (oldObject, newObject) in
