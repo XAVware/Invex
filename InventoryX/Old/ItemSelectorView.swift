@@ -25,7 +25,10 @@ struct ItemSelectorView: View {
                             Text(item.name)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             
-                            RightChevron()
+                            Image(systemName: "chevron.right")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 10, height: 15)
                         } //: HStack
                         .font(.system(size: 18, weight: .light, design: .rounded))
                         .foregroundColor(.black)

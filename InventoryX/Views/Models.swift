@@ -32,7 +32,7 @@ class InventoryItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var name: String          = ""
     @Persisted var subtype: String       = ""
-    @Persisted var itemType: String      = ""
+    @Persisted var itemType: ObjectId
     @Persisted var retailPrice: Double   = 0.00
     @Persisted var avgCostPer: Double    = 0.00
     @Persisted var onHandQty: Int        = 0

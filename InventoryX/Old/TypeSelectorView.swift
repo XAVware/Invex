@@ -16,7 +16,10 @@ struct TypeSelectorView: View {
                             Text(category.name)
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                            RightChevron()
+                            Image(systemName: "chevron.right")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 10, height: 15)
                         } //: HStack
                     } //: Button - ConcessionType
                     .foregroundColor(Color.black)

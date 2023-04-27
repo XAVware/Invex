@@ -12,9 +12,7 @@ class UserManager {
     static let shared: UserManager = UserManager()
     var currentUser: UserEntity?
     
-    private init() {
-        
-    }
+    private init() { }
     
     func loginUser(_ user: UserEntity) {
         print("Logging in User: \(user)")
@@ -25,20 +23,21 @@ class UserManager {
 
 @MainActor class OnboardingViewModel: ObservableObject {
     var navCounter: Int = 0
+    private let lastPageInt: Int
+    @Published var isOnboarding: Bool = true
     @Published var currentOnboardingState: OnboardingStates = .start
+    
+    //Categories
     @Published var categories: [CategoryEntity] = []
     @Published var newCategoryName: String = ""
     @Published var newCategoryThreshold: Int = 10
-    @Published var adminPasscode: String = ""
     
-    @Published var isOnboarding: Bool = true
-    
+    //Profile
     @Published var newProfileName: String = ""
     @Published var newProfileEmail: String = ""
+    @Published var adminPasscode: String = ""
     @Published var isPasscodeProtected: Bool = false
     @Published var isShowingPasscodePad: Bool = false
-    
-    private let lastPageInt: Int
     
     enum OnboardingStates: Int, CaseIterable {
         case start = 0
@@ -89,10 +88,7 @@ class UserManager {
         case .categoryNames:
             saveAndContinue()
         case .profileSetup:
-            guard newProfileName.isNotEmpty else { return }
-            saveAdmin(profileName: newProfileName) {
-                self.isOnboarding = false
-            }
+            saveAdmin()
         }
         
         guard navCounter != lastPageInt else {
@@ -130,8 +126,9 @@ class UserManager {
         }
     }
     
-    func saveAdmin(profileName: String, completion: @escaping () -> Void) {
-        let name: String = profileName
+    func saveAdmin() {
+        guard newProfileName.isNotEmpty else { return }
+        let name: String = newProfileName
         var email: String?
         var passcode: String?
         
@@ -175,10 +172,16 @@ class UserManager {
     }
 }
 
+// MARK: - VIEW
+
 struct OnboardingView2: View {
     @StateObject var vm: OnboardingViewModel = OnboardingViewModel()
     @StateObject var alertManager: AlertManager = AlertManager.shared
     @Binding var isOnboarding: Bool
+    @ObservedResults(CategoryEntity.self) var categories
+    @State var itemCategory: String = "-Select Category-"
+    
+    
     
     var body: some View {
         VStack {
@@ -191,6 +194,7 @@ struct OnboardingView2: View {
                 
             case .profileSetup:
                 profileSetup
+                
             } //: Switch
         } //: VStack
         .padding()
@@ -200,9 +204,21 @@ struct OnboardingView2: View {
         .alert(isPresented: $alertManager.isShowing) {
             alertManager.alert
         }
-        
     } //: Body
     
+    // MARK: - WELCOME PAGE
+    private var welcomePage: some View {
+        VStack {
+            Text("Inventory X")
+                .modifier(TextMod(.largeTitle, .bold))
+            
+            Spacer()
+            
+            continueButton
+        } //: VStack
+    } //: Welcome Page
+    
+    // MARK: - ADD CATEGORIES
     private var categoriesView: some View {
         GeometryReader { geo in
             HStack {
@@ -212,12 +228,19 @@ struct OnboardingView2: View {
                     categoryRestockSection
                         .padding(.vertical)
                     
-                    Button(action: {
+                    Button {
                         vm.addTempCategory()
-                    }, label: {
-                        Text("+ Add Category")
-                    })
-                    .foregroundColor(primaryColor)
+                    } label: {
+                        Text("Add Item")
+                            .modifier(TextMod(.title3, .semibold, .black))
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        
+                        Image(systemName: "plus")
+                            .modifier(TextMod(.title3, .bold))
+                    }
+                    .frame(maxWidth: 180, maxHeight: 10)
+                    .padding()
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(primaryColor, lineWidth: 4))
                     
                     Spacer()
                 } //: VStack
@@ -227,25 +250,7 @@ struct OnboardingView2: View {
                 Divider()
                 
                 if vm.categories.isEmpty {
-                    VStack(spacing: 16) {
-                        Image(systemName: "arrowshape.turn.up.left.2.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxWidth: .infinity, maxHeight: geo.size.width * 0.12, alignment: .leading)
-                            .padding()
-                        
-                        Spacer()
-                            .frame(height: 30)
-                        
-                        Text("Add A Category")
-                            .modifier(TextMod(.largeTitle, .bold))
-                        
-                        Spacer()
-                    } //: VStack
-                    .frame(maxWidth: 600, maxHeight: .infinity)
-                    .padding()
-                    .foregroundColor(primaryColor)
-                    .opacity(0.5)
+                    PlaceholderView(text: "Add A Category")
                 } else {
                     VStack(spacing: 25) {
                         Text("Current Categories:")
@@ -263,7 +268,6 @@ struct OnboardingView2: View {
                         continueButton
                     } //: VStack
                 } //: If-Else
-                
             } //: HStack
         } //: Geometry Reader
     } //: Categories View
@@ -288,6 +292,7 @@ struct OnboardingView2: View {
         } //: VStack
     } //: Category Restock Section
     
+    // MARK: - PROFILE
     private var profileSetup: some View {
         GeometryReader { geo in
             VStack {
@@ -333,6 +338,7 @@ struct OnboardingView2: View {
         } //: Geometry Reader
     } //: Profile Setup
     
+    
     private var continueButton: some View {
         Button(action: {
             vm.nextTapped()
@@ -340,18 +346,34 @@ struct OnboardingView2: View {
             Text(vm.currentOnboardingState.buttonText)
         })
         .modifier(RoundedButtonMod())
+        .padding(.bottom)
     } //: Continue Button
     
-    private var welcomePage: some View {
-        VStack {
-            Text("Inventory X")
-                .modifier(TextMod(.largeTitle, .bold))
-            
-            Spacer()
-            
-            continueButton
-        } //: VStack
-    } //: Welcome Page
+    struct PlaceholderView: View {
+        let text: String
+        
+        var body: some View {
+            VStack(spacing: 16) {
+                Image(systemName: "arrowshape.turn.up.left.2.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity, maxHeight: 150, alignment: .leading)
+                    .padding()
+                
+                Spacer()
+                    .frame(height: 30)
+                
+                Text(text)
+                    .modifier(TextMod(.largeTitle, .bold))
+                
+                Spacer()
+            } //: VStack
+            .frame(maxWidth: 600, maxHeight: .infinity)
+            .padding()
+            .foregroundColor(primaryColor)
+            .opacity(0.5)
+        }
+    }
     
     struct CategoryRow: View {
         let category: CategoryEntity
@@ -378,7 +400,6 @@ struct OnboardingView2_Previews: PreviewProvider {
     @State static var onboarding: Bool = true
     static var previews: some View {
         OnboardingView2(isOnboarding: $onboarding)
-        //            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
             .modifier(PreviewMod())
     }
 }

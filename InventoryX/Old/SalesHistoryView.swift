@@ -52,7 +52,10 @@ struct SalesHistoryView: View {
                                 Text(filter)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 
-                                RightChevron()
+                                Image(systemName: "chevron.right")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 10, height: 15)
                             } //: HStack
                         } //: Button
                         .font(.system(size: 18, weight: self.selectedFilter == filter ? .semibold : .light, design: .rounded))

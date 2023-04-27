@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct SectionHeader: View {
-    enum Section { case addCategory, restockThreshold, adminSetup, email }
+    enum Section { case addCategory, restockThreshold, adminSetup, email, itemName, itemPrice, itemCategory }
     let section: Section
     let alignment: TextAlignment
     let horizontalAlignment: HorizontalAlignment
+    let showsHeader: Bool
+    let showsDetail: Bool
     
-    init(section: Section, alignment: TextAlignment = .leading) {
+    init(section: Section, alignment: TextAlignment = .leading, showsHeader: Bool = true, showsDetail: Bool = true) {
         self.section = section
         self.alignment = alignment
+        self.showsHeader = showsHeader
+        self.showsDetail = showsDetail
         
         switch alignment {
         case .center:
@@ -37,6 +41,12 @@ struct SectionHeader: View {
             return "Create Admin Profile"
         case .email:
             return "Add An Email"
+        case .itemName:
+            return "Add An Item"
+        case .itemPrice:
+            return "Price"
+        case .itemCategory:
+            return "Category"
         }
     }
     
@@ -50,18 +60,27 @@ struct SectionHeader: View {
             return "Your admin profile will give you full access to the app. You can create other accounts later."
         case .email:
             return "If you add an email you can receive email notifications when item inventory is low."
+        case .itemName:
+            return "Add An Item"
+        case .itemPrice:
+            return "How much do you sell this item for?"
+        case .itemCategory:
+            return "Which category does this item fall under?"
         }
     }
     
     var body: some View {
         VStack(alignment: horizontalAlignment, spacing: 8) {
-            Text(header)
-                .modifier(TextMod(.title, .bold, .black))
+            if showsHeader {
+                Text(header)
+                    .modifier(TextMod(.title, .bold, .black))
+            }
             
-            Text(detail)
-                .modifier(TextMod(.footnote, .semibold, .gray))
-                .multilineTextAlignment(alignment)
-                
+            if showsDetail {
+                Text(detail)
+                    .modifier(TextMod(.footnote, .semibold, .gray))
+                    .multilineTextAlignment(alignment)
+            }
         } //: VStack
     }
 }

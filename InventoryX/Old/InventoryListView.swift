@@ -67,7 +67,10 @@ struct InventoryListView: View {
                                             Text("$\(String(format: "%.2f", item.retailPrice))")
                                                 .frame(maxWidth: .infinity, alignment: .trailing)
                                             
-                                            RightChevron()
+                                            Image(systemName: "chevron.right")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 10, height: 15)
                                         } //: HStack
                                     } //: Button - Item
                                     .modifier(DetailTextModifier(textColor: .black))
