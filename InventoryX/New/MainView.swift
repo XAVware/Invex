@@ -60,6 +60,7 @@ struct MainView: View {
                 
                 vm.setup(categoryId: defaultCategory._id)
             }
+            
         
     } //: Body
     
@@ -79,6 +80,9 @@ struct MainView: View {
                 
             } //: Navigation Stack
             .navigationSplitViewStyle(.prominentDetail)
+            .onTapGesture {
+                print(UserManager.shared.currentUser)
+            }
         }
     }
     

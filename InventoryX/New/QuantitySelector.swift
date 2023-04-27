@@ -12,6 +12,7 @@ struct QuantitySelector: View {
     @State var showsCustomToggle: Bool = true
     @State var isCustom: Bool = false {
         willSet(newValue) {
+            //This caused the app to crash after clicking on the toggle while the CategoryName field was focused
             withAnimation { isCustom = newValue }
         }
     }

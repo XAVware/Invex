@@ -60,13 +60,14 @@ enum UserRole: String, PersistableEnum {
     case employee
 }
 
-class User: Object, ObjectKeyIdentifiable {
+class UserEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var profileName: String = ""
     @Persisted var email: String?
+    @Persisted var passcode: String?
     @Persisted var role: UserRole = UserRole.employee
     
-    convenience init(profileName: String, email: String?, role: UserRole) {
+    convenience init(profileName: String, email: String?, passcode: String?, role: UserRole) {
         self.init()
         self.profileName = profileName
         self.email = email

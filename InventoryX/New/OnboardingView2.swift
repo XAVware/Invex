@@ -8,9 +8,24 @@
 import SwiftUI
 import RealmSwift
 
+class UserManager {
+    static let shared: UserManager = UserManager()
+    var currentUser: UserEntity?
+    
+    private init() {
+        
+    }
+    
+    func loginUser(_ user: UserEntity) {
+        print("Logging in User: \(user)")
+        currentUser = user
+    }
+    
+}
+
 @MainActor class OnboardingViewModel: ObservableObject {
     var navCounter: Int = 0
-    @Published var currentOnboardingState: OnboardingStates = .profileSetup
+    @Published var currentOnboardingState: OnboardingStates = .start
     @Published var categories: [CategoryEntity] = []
     @Published var newCategoryName: String = ""
     @Published var newCategoryThreshold: Int = 10
@@ -21,8 +36,7 @@ import RealmSwift
     @Published var newProfileName: String = ""
     @Published var newProfileEmail: String = ""
     @Published var isPasscodeProtected: Bool = false
-    @Published var isShowingPasscodePad: Bool = true
-    @Published var passcodeConfirmed: Bool = false
+    @Published var isShowingPasscodePad: Bool = false
     
     private let lastPageInt: Int
     
@@ -69,21 +83,19 @@ import RealmSwift
     }
     
     func nextTapped() {
-        guard navCounter != lastPageInt else {
-            isOnboarding = false
-            return
-        }
-        
         switch currentOnboardingState {
         case .start:
             break
-            
         case .categoryNames:
             saveAndContinue()
-            
         case .profileSetup:
-            saveAdmin()
-            isOnboarding = false
+            guard newProfileName.isNotEmpty else { return }
+            saveAdmin(profileName: newProfileName) {
+                self.isOnboarding = false
+            }
+        }
+        
+        guard navCounter != lastPageInt else {
             return
         }
         
@@ -114,11 +126,44 @@ import RealmSwift
             })
         } catch {
             print("Error saving category to Realm: \(error.localizedDescription)")
+            
         }
     }
     
-    func saveAdmin() {
+    func saveAdmin(profileName: String, completion: @escaping () -> Void) {
+        let name: String = profileName
+        var email: String?
+        var passcode: String?
         
+        if newProfileEmail.isNotEmpty {
+            email = newProfileEmail
+        }
+        
+        if isPasscodeProtected && adminPasscode.isNotEmpty {
+            passcode = adminPasscode
+        }
+        
+        let newUser = UserEntity()
+        newUser.profileName = name
+        newUser.email = email
+        
+        if let passcode = passcode {
+            newUser.passcode = passcode
+        }
+        
+        newUser.role = .admin
+        
+        do {
+            let realm = try Realm()
+            try realm.write ({
+                realm.add(newUser)
+            })
+            UserManager.shared.loginUser(newUser)
+            isOnboarding = false
+        } catch {
+            print("Error saving category to Realm: \(error.localizedDescription)")
+            return
+        }
     }
     
     func removeTempCategory(_ category: CategoryEntity) {
@@ -132,6 +177,7 @@ import RealmSwift
 
 struct OnboardingView2: View {
     @StateObject var vm: OnboardingViewModel = OnboardingViewModel()
+    @StateObject var alertManager: AlertManager = AlertManager.shared
     @Binding var isOnboarding: Bool
     
     var body: some View {
@@ -151,7 +197,11 @@ struct OnboardingView2: View {
         .onChange(of: vm.isOnboarding) { newValue in
             isOnboarding = newValue
         }
-    }
+        .alert(isPresented: $alertManager.isShowing) {
+            alertManager.alert
+        }
+        
+    } //: Body
     
     private var categoriesView: some View {
         GeometryReader { geo in
@@ -278,8 +328,6 @@ struct OnboardingView2: View {
                 PasscodePad(padState: .createPasscode, completion: { confirmedPasscode in
                     vm.adminPasscode = confirmedPasscode
                     vm.isShowingPasscodePad.toggle()
-//                    vm.passcodeConfirmed = true
-//                    vm.savePasscodeAndProceed()
                 })
             }
         } //: Geometry Reader
