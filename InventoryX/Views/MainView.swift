@@ -59,6 +59,11 @@ struct MainView: View {
     @ObservedResults(InventoryItemEntity.self) var items
     
     @State var counter: Int = 0
+    @State var currentCategoryId: ObjectId!
+    
+    init() {
+        currentCategoryId = vm.selectedCategoryId
+    }
     
     @Environment(\.isPreview) var isPreview
     
@@ -85,31 +90,38 @@ struct MainView: View {
                 
                 switch vm.currentDisplay {
                 case .makeASale:
-                    ScrollView {
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
-                            ForEach(items.filter({ $0.category == vm.selectedCategoryId })) { item in
-                                Button(action: {
-                                    cart.addItem(item)
-                                }) {
-                                    VStack(spacing: 0) {
-                                        Text(item.name)
-                                            .font(.system(size: 18, weight: .semibold, design:.rounded))
-                                        
-                                        if (item.subtype != "") {
-                                            Text(item.subtype)
-                                                .font(.system(size: 14, weight: .light, design:.rounded))
+                    VStack(alignment: .center, spacing: 8) {
+//                        Text("\(categories.first(where: ({ $0._id == currentCategoryId }))!.name)")
+//                            .font(.title)
+//                            .foregroundColor(primaryColor)
+//                            .padding(.bottom, 25)
+                        
+                        ScrollView {
+                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
+                                ForEach(items.filter({ $0.category == vm.selectedCategoryId })) { item in
+                                    Button(action: {
+                                        cart.addItem(item)
+                                    }) {
+                                        VStack(spacing: 0) {
+                                            Text(item.name)
+                                                .font(.system(size: 18, weight: .semibold, design:.rounded))
+                                            
+                                            if (item.subtype != "") {
+                                                Text(item.subtype)
+                                                    .font(.system(size: 14, weight: .light, design:.rounded))
+                                            }
                                         }
+                                        .foregroundColor(.black)
+                                        .frame(width: 140, height: 80)
+                                        .background(.blue)
                                     }
-                                    .foregroundColor(.black)
-                                    .frame(width: 140, height: 80)
-                                    .background(.blue)
-                                }
-                                .cornerRadius(9)
-                                .padding()
-                                .shadow(radius: 8)
-                            } //: ForEach
-                        } //: LazyVGrid
-                    } //: ScrollView
+                                    .cornerRadius(9)
+                                    .padding()
+                                    .shadow(radius: 8)
+                                } //: ForEach
+                            } //: LazyVGrid
+                        } //: ScrollView
+                    } //: VStack
                     
                     addItemButton
                     
@@ -139,11 +151,11 @@ struct MainView: View {
             HStack(spacing: 0) {
                 if !self.cart.isConfirmation && categoryList.count > 0 {
                     VStack(alignment: .center, spacing: 5) {
-                        //                        Text("\(categoryList[self.selectedTypeID].name)")
-                        //                            .font(.title)
-                        //                            .foregroundColor(primaryColor)
-                        //                            .padding(.bottom, 25)
-                        //                        TypePickerView(typeID: self.$selectedTypeID)
+                        Text("\(categories.first(where: ({ $0._id == vm.selectedCategoryId }))!.name)")
+                            .font(.title)
+                            .foregroundColor(primaryColor)
+                            .padding(.bottom, 25)
+//                                                TypePickerView(typeID: self.$selectedTypeID)
                         ScrollView {
                             LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
                                 ForEach(items) { item in
@@ -188,18 +200,15 @@ struct MainView: View {
                 ForEach(categories, id: \.self) { category in
                     Button(action: {
                         vm.selectedCategoryId = category._id
-                        //                        self.categoryIndex = categoryList.firstIndex(of: category)!
-                        //                        self.selectedCategoryName = category.name
                     }, label: {
                         Text(category.name)
                             .padding(.vertical, 10)
                             .padding(.horizontal, 7)
                             .foregroundColor(.black)
-                        //                            .opacity(self.selectedCategoryName == category.name ? 1.0 : 0.65)
-                        //                            .opacity(categoryList[categoryIndex].name == category.name ? 1.0 : 0.65)
+                            .opacity(vm.selectedCategoryId == category._id ? 1.0 : 0.65)
                     })
                     .frame(minWidth: 150)
-                    //                    .background(categoryList[categoryIndex].name == category.name ? Color.white : Color(UIColor.systemGray4))
+                    .background(vm.selectedCategoryId == category._id ? Color.white : Color(UIColor.systemGray4))
                     .cornerRadius(15, corners: .bottomLeft)
                     .cornerRadius(15, corners: .bottomRight)
                     
