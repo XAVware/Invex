@@ -56,26 +56,18 @@ enum DisplayStates {
 struct MainView: View {
     @StateObject var vm: MainViewModel = MainViewModel()
     @ObservedResults(CategoryEntity.self) var categories
-    @ObservedResults(InventoryItemEntity.self) var items
-    
-    @State var counter: Int = 0
-    @State var currentCategoryId: ObjectId!
-    
-    init() {
-        currentCategoryId = vm.selectedCategoryId
-    }
-    
-    @Environment(\.isPreview) var isPreview
-    
+//    @ObservedResults(InventoryItemEntity.self) var items
+    @State var categoryIndex: Int = 0
+        
     var body: some View {
         mainView
             .onAppear {
-                guard let defaultCategory = categories.first else {
+                if let defaultCategory = categories.first {
+//                    currentCategory = defaultCategory
+                    vm.setup(categoryId: defaultCategory._id)
+                } else {
                     vm.isOnboarding = true
-                    return
                 }
-                
-                vm.setup(categoryId: defaultCategory._id)
             }
     } //: Body
     
@@ -90,41 +82,8 @@ struct MainView: View {
                 
                 switch vm.currentDisplay {
                 case .makeASale:
-                    VStack(alignment: .center, spacing: 8) {
-//                        Text("\(categories.first(where: ({ $0._id == currentCategoryId }))!.name)")
-//                            .font(.title)
-//                            .foregroundColor(primaryColor)
-//                            .padding(.bottom, 25)
-                        
-                        ScrollView {
-                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
-                                ForEach(items.filter({ $0.category == vm.selectedCategoryId })) { item in
-                                    Button(action: {
-                                        cart.addItem(item)
-                                    }) {
-                                        VStack(spacing: 0) {
-                                            Text(item.name)
-                                                .font(.system(size: 18, weight: .semibold, design:.rounded))
-                                            
-                                            if (item.subtype != "") {
-                                                Text(item.subtype)
-                                                    .font(.system(size: 14, weight: .light, design:.rounded))
-                                            }
-                                        }
-                                        .foregroundColor(.black)
-                                        .frame(width: 140, height: 80)
-                                        .background(.blue)
-                                    }
-                                    .cornerRadius(9)
-                                    .padding()
-                                    .shadow(radius: 8)
-                                } //: ForEach
-                            } //: LazyVGrid
-                        } //: ScrollView
-                    } //: VStack
                     
-                    addItemButton
-                    
+                                        
                     categorySlider
                 case .addInventory:
                     AddInventoryView()
@@ -146,53 +105,52 @@ struct MainView: View {
     @StateObject var cart = Cart()
     
     let cartWidthPercentage: CGFloat = 0.40
-    private var makeASaleView: some View {
-        GeometryReader { geometry in
-            HStack(spacing: 0) {
-                if !self.cart.isConfirmation && categoryList.count > 0 {
-                    VStack(alignment: .center, spacing: 5) {
-                        Text("\(categories.first(where: ({ $0._id == vm.selectedCategoryId }))!.name)")
-                            .font(.title)
-                            .foregroundColor(primaryColor)
-                            .padding(.bottom, 25)
-//                                                TypePickerView(typeID: self.$selectedTypeID)
-                        ScrollView {
-                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
-                                ForEach(items) { item in
-                                    
-                                    Button(action: {
-                                        cart.addItem(item)
-                                    }) {
-                                        VStack(spacing: 0) {
-                                            Text(item.name)
-                                                .font(.system(size: 18, weight: .semibold, design:.rounded))
-                                            
-                                            if (item.subtype != "") {
-                                                Text(item.subtype)
-                                                    .font(.system(size: 14, weight: .light, design:.rounded))
-                                            }
-                                        }
-                                        .foregroundColor(.black)
-                                        .frame(width: 140, height: 80)
-                                        .background(.blue)
-                                    }
-                                    .cornerRadius(9)
-                                    .padding()
-                                    .shadow(radius: 8)
-                                    
-                                } //: ForEach
-                            } //: LazyVGrid
-                            .padding(.horizontal, 10)
-                        } //: ScrollView
-                        //                        CategorySlider(categoryIndex: self.$selectedTypeID)
-                        categorySlider
-                    } //: VStack
-                    .frame(width: geometry.size.width - (geometry.size.width * cartWidthPercentage))
-                    Spacer().frame(width: geometry.size.width * cartWidthPercentage)
-                }
-            } //: HStack
-        }
-    } //: Make A Sale View
+//    private var makeASaleView: some View {
+//        GeometryReader { geometry in
+//            HStack(spacing: 0) {
+//                if !self.cart.isConfirmation && categoryList.count > 0 {
+//                    VStack(alignment: .center, spacing: 5) {
+//                        Text("\(categories.first(where: ({ $0._id == vm.selectedCategoryId }))!.name)")
+//                            .font(.title)
+//                            .foregroundColor(primaryColor)
+//                            .padding(.bottom, 25)
+//
+//                        ScrollView {
+//                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
+//                                ForEach(items) { item in
+//
+//                                    Button(action: {
+//                                        cart.addItem(item)
+//                                    }) {
+//                                        VStack(spacing: 0) {
+//                                            Text(item.name)
+//                                                .font(.system(size: 18, weight: .semibold, design:.rounded))
+//
+//                                            if (item.subtype != "") {
+//                                                Text(item.subtype)
+//                                                    .font(.system(size: 14, weight: .light, design:.rounded))
+//                                            }
+//                                        }
+//                                        .foregroundColor(.black)
+//                                        .frame(width: 140, height: 80)
+//                                        .background(.blue)
+//                                    }
+//                                    .cornerRadius(9)
+//                                    .padding()
+//                                    .shadow(radius: 8)
+//
+//                                } //: ForEach
+//                            } //: LazyVGrid
+//                            .padding(.horizontal, 10)
+//                        } //: ScrollView
+//                        categorySlider
+//                    } //: VStack
+//                    .frame(width: geometry.size.width - (geometry.size.width * cartWidthPercentage))
+//                    Spacer().frame(width: geometry.size.width * cartWidthPercentage)
+//                }
+//            } //: HStack
+//        }
+//    } //: Make A Sale View
     
     var categorySlider: some View {
         ScrollView(.horizontal, showsIndicators: false, content: {
@@ -221,24 +179,7 @@ struct MainView: View {
         .frame(maxWidth: .infinity, maxHeight: 40)
     }
     
-    private var addItemButton: some View {
-        Button {
-            let item = InventoryItemEntity()
-            item.name = "Item \(counter)"
-            item.category = vm.selectedCategoryId
-            
-            item.retailPrice = 1.00
-            
-            let realm = try! Realm()
-            try! realm.write {
-                realm.add(item)
-            }
-            
-            counter += 1
-        } label: {
-            Text("Add Item")
-        }
-    } //: Add Item Button
+    
     
     private var menuView: some View {
         VStack {
@@ -317,4 +258,68 @@ class MockRealms {
             fatalError("Error: \(error.localizedDescription)")
         }
     }()
+}
+
+struct SaleButtonPanel: View {
+    @ObservedRealmObject var currentCategory: CategoryEntity
+    @State var counter: Int = 0
+    
+    var body: some View {
+        VStack(alignment: .center, spacing: 8) {
+            List(currentCategory.items) { item in
+                Text(item.name)
+            }
+            addItemButton
+//                        Text("\(categories.first(where: ({ $0._id == currentCategoryId }))!.name)")
+//                            .font(.title)
+//                            .foregroundColor(primaryColor)
+//                            .padding(.bottom, 25)
+            
+//                        ScrollView {
+//                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
+//                                ForEach(items.filter({ $0.category == vm.selectedCategoryId })) { item in
+//                                    Button(action: {
+//                                        cart.addItem(item)
+//                                    }) {
+//                                        VStack(spacing: 0) {
+//                                            Text(item.name)
+//                                                .font(.system(size: 18, weight: .semibold, design:.rounded))
+//
+//                                            if (item.subtype != "") {
+//                                                Text(item.subtype)
+//                                                    .font(.system(size: 14, weight: .light, design:.rounded))
+//                                            }
+//                                        }
+//                                        .foregroundColor(.black)
+//                                        .frame(width: 140, height: 80)
+//                                        .background(.blue)
+//                                    }
+//                                    .cornerRadius(9)
+//                                    .padding()
+//                                    .shadow(radius: 8)
+//                                } //: ForEach
+//                            } //: LazyVGrid
+//                        } //: ScrollView
+        } //: VStack
+    } //: Body
+    
+    private var addItemButton: some View {
+        Button {
+            let item = InventoryItemEntity()
+            item.name = "Item \(counter)"
+//            item.category = vm.selectedCategoryId
+            
+            item.retailPrice = 1.00
+            
+            let realm = try! Realm()
+            try! realm.write {
+                $currentCategory.items.append(item)
+//                realm.add(item)
+            }
+            
+            counter += 1
+        } label: {
+            Text("Add Item")
+        }
+    } //: Add Item Button
 }
