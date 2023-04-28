@@ -62,16 +62,26 @@ import RealmSwift
     }
     
     func nextTapped() {
-        print("Next tapped")
         switch currentOnboardingState {
         case .start:
             break
+            
         case .categoryNames:
-            print("Save and Continue called")
-            saveAndContinue()
+            if self.newCategoryName != "" {
+                addTempCategory()
+            }
+            
+            tempCategories.forEach { category in
+                saveCategory(category)
+            }
+            
         case .profileSetup:
-            print("Save admin called")
-            saveAdmin()
+            guard let user = getAdmin() else {
+                print("Saving user failed")
+                return
+            }
+            
+            saveUser(user)
         }
         
         guard navCounter != lastPageInt else {
@@ -89,16 +99,7 @@ import RealmSwift
         currentOnboardingState = newState
         print("New State set to \(newState)")
     }
-    
-    func saveAndContinue() {
-        if self.newCategoryName != "" {
-            addTempCategory()
-        }
-        
-        tempCategories.forEach { category in
-            saveCategory(category)
-        }
-    }
+
     
     // MARK: - CATEGORY FUNCTIONS
     func addTempCategory() {
@@ -127,6 +128,18 @@ import RealmSwift
         }
     }
     
+    func saveUser(_ user: UserEntity) {
+        do {
+            let realm = try Realm()
+            try realm.write ({
+                realm.add(user)
+            })
+        } catch {
+            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
+            print("Error saving category to Realm: \(error.localizedDescription)")
+        }
+    }
+    
     func removeTempCategory(_ category: CategoryEntity) {
             guard let index = tempCategories.firstIndex(of: category) else {
                 print("Error deleting category")
@@ -136,8 +149,8 @@ import RealmSwift
         }
     
     // MARK: - USER FUNCTIONS
-    func saveAdmin() {
-        guard newProfileName.isNotEmpty else { return }
+    func getAdmin() -> UserEntity? {
+        guard newProfileName.isNotEmpty else { return nil }
         let name: String = newProfileName
         var email: String?
         var passcode: String?
@@ -160,16 +173,17 @@ import RealmSwift
         
         newUser.role = .admin
         
-        do {
-            let realm = try Realm()
-            try realm.write ({
-                realm.add(newUser)
-            })
-            self.currentUser = newUser
-        } catch {
-            print("Error saving category to Realm: \(error.localizedDescription)")
-            return
-        }
+        return newUser
+//        do {
+//            let realm = try Realm()
+//            try realm.write ({
+//                realm.add(newUser)
+//            })
+//            self.currentUser = newUser
+//        } catch {
+//            print("Error saving category to Realm: \(error.localizedDescription)")
+//            return
+//        }
     }
     
     

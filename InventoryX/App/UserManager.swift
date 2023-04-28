@@ -11,14 +11,16 @@ import RealmSwift
 class UserManager: ObservableObject {
 //    @Published var requireOnboarding: Bool = true
     @Published var isLoggedIn: Bool = false
-    var currentUser: UserEntity?
+    @Published var currentUser: UserEntity?
+    
 //    @ObservedResults(CategoryEntity.self) var categories
 //
-//    init() {
-//        if categories.count > 0 {
-//            requireOnboarding = false
-//        }
-//    }
+    init() {
+        if let firstUser = try! Realm().objects(UserEntity.self).first {
+            print("User Exists")
+            currentUser = firstUser
+        }
+    }
     
     func loginUser(_ user: UserEntity) {
         print("Logging in User: \(user)")

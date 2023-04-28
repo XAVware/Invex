@@ -38,8 +38,12 @@ struct InventoryXApp: SwiftUI.App {
 //                    .modifier(TextMod(.title, .bold))
 //            }
             
-            if categories.count == 0 && users.count == 0 {
+//            if categories.count == 0 && users.count == 0 {
+            if userManager.currentUser == nil {
                 onboardingView
+                    .onChange(of: users) { newValue in
+                        print("users changed to \(newValue)")
+                    }
             } else {
                 mainView
             }
