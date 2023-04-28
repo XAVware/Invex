@@ -8,15 +8,8 @@
 import SwiftUI
 import RealmSwift
 
-
-enum DisplayStates {
-    case makeASale, addInventory, inventoryList, salesHistory, inventoryStatus
-}
-
-// MARK: - MAIN VIEW MODEL
 @MainActor class MainViewModel: ObservableObject {
     @Published var selectedCategory: CategoryEntity!
-    @Published var isOnboarding: Bool = false
     @Published var currentDisplay: DisplayStates = .makeASale
     
     func deleteAllFromRealm() {
@@ -37,29 +30,16 @@ enum DisplayStates {
 // MARK: - MAIN VIEW
 
 struct MainView: View {
+    @EnvironmentObject var userManager: UserManager
     @StateObject var vm: MainViewModel = MainViewModel()
     @ObservedResults(CategoryEntity.self) var categories
+    
     @StateObject var cart = Cart()
     let cartWidthPercentage: CGFloat = 0.40
     
     var body: some View {
-        checkerView
-            .onAppear {
-                if let defaultCategory = categories.first {
-                    vm.setup(category: defaultCategory)
-                } else {
-                    vm.isOnboarding = true
-                }
-            }
+        mainView
     } //: Body
-    
-    @ViewBuilder private var checkerView: some View {
-        if vm.isOnboarding {
-            OnboardingView2(isOnboarding: $vm.isOnboarding)
-        } else {
-            mainView
-        }
-    }
     
     private var mainView: some View {
         NavigationSplitView(columnVisibility: .constant(.detailOnly)) {
@@ -198,41 +178,16 @@ struct MainView: View {
     
     private var menuView: some View {
         VStack {
-            Button {
-                vm.currentDisplay = .makeASale
-            } label: {
-                Text("Make A Sale")
+            ForEach(DisplayStates.allCases, id: \.self) { displayState in
+                Button {
+                    vm.currentDisplay = displayState
+                } label: {
+                    Text("\(displayState.menuButtonText)")
+                }
+                .frame(height: 40)
+                
+                Divider().padding(.horizontal)
             }
-            .frame(height: 40)
-            
-            Divider().padding(.horizontal)
-            
-            Button {
-                vm.currentDisplay = .inventoryList
-            } label: {
-                Text("Inventory List")
-            }
-            .frame(height: 40)
-            
-            Divider().padding(.horizontal)
-            
-            Button {
-                vm.currentDisplay = .inventoryStatus
-            } label: {
-                Text("Inventory Status")
-            }
-            .frame(height: 40)
-            
-            Divider().padding(.horizontal)
-            
-            Button {
-                vm.currentDisplay = .addInventory
-            } label: {
-                Text("Add Inventory")
-            }
-            .frame(height: 40)
-            
-            Divider().padding(.horizontal)
             
             Button {
                 vm.deleteAllFromRealm()
@@ -240,6 +195,48 @@ struct MainView: View {
                 Text("Delete Everything")
             }
             .frame(height: 40)
+//            Button {
+//                vm.currentDisplay = .makeASale
+//            } label: {
+//                Text("Make A Sale")
+//            }
+//            .frame(height: 40)
+//            
+//            Divider().padding(.horizontal)
+//            
+//            Button {
+//                vm.currentDisplay = .inventoryList
+//            } label: {
+//                Text("Inventory List")
+//            }
+//            .frame(height: 40)
+//            
+//            Divider().padding(.horizontal)
+//            
+//            Button {
+//                vm.currentDisplay = .inventoryStatus
+//            } label: {
+//                Text("Inventory Status")
+//            }
+//            .frame(height: 40)
+//            
+//            Divider().padding(.horizontal)
+//            
+//            Button {
+//                vm.currentDisplay = .addInventory
+//            } label: {
+//                Text("Add Inventory")
+//            }
+//            .frame(height: 40)
+//            
+//            Divider().padding(.horizontal)
+//            
+//            Button {
+//                vm.deleteAllFromRealm()
+//            } label: {
+//                Text("Delete Everything")
+//            }
+//            .frame(height: 40)
             
             Spacer()
         } //: VStack

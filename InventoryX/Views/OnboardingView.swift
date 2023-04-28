@@ -8,24 +8,12 @@
 import SwiftUI
 import RealmSwift
 
-class UserManager {
-    static let shared: UserManager = UserManager()
-    var currentUser: UserEntity?
-    
-    private init() { }
-    
-    func loginUser(_ user: UserEntity) {
-        print("Logging in User: \(user)")
-        currentUser = user
-    }
-    
-}
-
 @MainActor class OnboardingViewModel: ObservableObject {
     var navCounter: Int = 0
     private let lastPageInt: Int
-    @Published var isOnboarding: Bool = true
-    @Published var currentOnboardingState: OnboardingStates = .start
+    @Published var currentOnboardingState: OnboardingState = .start
+    
+    @Published var currentUser: UserEntity?
     
     //Categories
     @Published var tempCategories: [CategoryEntity] = []
@@ -39,7 +27,7 @@ class UserManager {
     @Published var isPasscodeProtected: Bool = false
     @Published var isShowingPasscodePad: Bool = false
     
-    enum OnboardingStates: Int, CaseIterable {
+    enum OnboardingState: Int, CaseIterable {
         case start = 0
         case categoryNames = 1
         case profileSetup = 2
@@ -54,11 +42,17 @@ class UserManager {
                 return "Finish"
             }
         }
+        
+//        func next() {
+//            let currentIndex = self.rawValue
+//            let newDisplay = OnboardingState.init(rawValue: currentIndex + 1)
+//            self = newDisplay
+//        }
     }
     
     init() {
         var pageInt: Int = 0
-        for navState in OnboardingStates.allCases {
+        for navState in OnboardingState.allCases {
             let pageNum = navState.rawValue
             if pageNum > pageInt {
                 pageInt = pageNum
@@ -68,26 +62,32 @@ class UserManager {
     }
     
     func nextTapped() {
+        print("Next tapped")
         switch currentOnboardingState {
         case .start:
             break
         case .categoryNames:
+            print("Save and Continue called")
             saveAndContinue()
         case .profileSetup:
+            print("Save admin called")
             saveAdmin()
         }
         
         guard navCounter != lastPageInt else {
+            print("Error 1")
             return
+            
         }
-        
+        print("Nav Counter: \(navCounter) -> \(navCounter + 1)")
         navCounter += 1
         
-        guard let newState = OnboardingStates(rawValue: navCounter) else {
+        guard let newState = OnboardingState(rawValue: navCounter) else {
             print("Error setting new state")
             return
         }
         currentOnboardingState = newState
+        print("New State set to \(newState)")
     }
     
     func saveAndContinue() {
@@ -165,8 +165,7 @@ class UserManager {
             try realm.write ({
                 realm.add(newUser)
             })
-            UserManager.shared.loginUser(newUser)
-            isOnboarding = false
+            self.currentUser = newUser
         } catch {
             print("Error saving category to Realm: \(error.localizedDescription)")
             return
@@ -178,12 +177,11 @@ class UserManager {
 
 // MARK: - VIEW
 
-struct OnboardingView2: View {
+struct OnboardingView: View {
+    @EnvironmentObject var userManager: UserManager
     @StateObject var vm: OnboardingViewModel = OnboardingViewModel()
     @StateObject var alertManager: AlertManager = AlertManager.shared
-    @Binding var isOnboarding: Bool
     @ObservedResults(CategoryEntity.self) var categories
-    @State var itemCategory: String = "-Select Category-"
     
     var body: some View {
         VStack {
@@ -200,11 +198,12 @@ struct OnboardingView2: View {
             } //: Switch
         } //: VStack
         .padding()
-        .onChange(of: vm.isOnboarding) { newValue in
-            isOnboarding = newValue
-        }
         .alert(isPresented: $alertManager.isShowing) {
             alertManager.alert
+        }
+        .onChange(of: vm.currentUser) { newUser in
+            guard let newUser = newUser else { return }
+            userManager.loginUser(newUser)
         }
     } //: Body
     
@@ -401,7 +400,8 @@ struct OnboardingView2: View {
 struct OnboardingView2_Previews: PreviewProvider {
     @State static var onboarding: Bool = true
     static var previews: some View {
-        OnboardingView2(isOnboarding: $onboarding)
+//        OnboardingView(isOnboarding: $onboarding)
+        OnboardingView()
             .modifier(PreviewMod())
     }
 }

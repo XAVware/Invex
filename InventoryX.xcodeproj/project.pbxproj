@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		802EDC0229FA32160048A9A8 /* OldModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802EDC0129FA32160048A9A8 /* OldModels.swift */; };
+		802EDC0529FB79A70048A9A8 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802EDC0429FB79A70048A9A8 /* UserManager.swift */; };
+		802EDC0729FB79E40048A9A8 /* GlobalEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802EDC0629FB79E40048A9A8 /* GlobalEnums.swift */; };
 		80A5516D29F7628E00C21448 /* QuantitySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A5516C29F7628E00C21448 /* QuantitySelector.swift */; };
 		80B5EF7129F0C318007D9842 /* InventoryXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EF7029F0C318007D9842 /* InventoryXApp.swift */; };
 		80B5EF7529F0C319007D9842 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80B5EF7429F0C319007D9842 /* Assets.xcassets */; };
@@ -42,7 +44,7 @@
 		80DBB96C29F6D81500497695 /* AnimatedTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB96229F6D81500497695 /* AnimatedTextField.swift */; };
 		80DBB96D29F6D81500497695 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB96429F6D81500497695 /* Extensions.swift */; };
 		80DBB96E29F6D81500497695 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB96529F6D81500497695 /* CameraView.swift */; };
-		80DBB96F29F6D81500497695 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB96729F6D81500497695 /* UserManager.swift */; };
+		80DBB96F29F6D81500497695 /* UserManager_Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB96729F6D81500497695 /* UserManager_Firebase.swift */; };
 		80DBB97029F6D81500497695 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB96829F6D81500497695 /* AlertManager.swift */; };
 		80DBB97129F6D81500497695 /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB96929F6D81500497695 /* PhotoPicker.swift */; };
 		80DBB97929F6EFA300497695 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB97829F6EFA300497695 /* MainView.swift */; };
@@ -58,6 +60,8 @@
 
 /* Begin PBXFileReference section */
 		802EDC0129FA32160048A9A8 /* OldModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldModels.swift; sourceTree = "<group>"; };
+		802EDC0429FB79A70048A9A8 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		802EDC0629FB79E40048A9A8 /* GlobalEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalEnums.swift; sourceTree = "<group>"; };
 		80A5516C29F7628E00C21448 /* QuantitySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuantitySelector.swift; sourceTree = "<group>"; };
 		80B5EF6D29F0C318007D9842 /* InventoryX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InventoryX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80B5EF7029F0C318007D9842 /* InventoryXApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryXApp.swift; sourceTree = "<group>"; };
@@ -91,7 +95,7 @@
 		80DBB96229F6D81500497695 /* AnimatedTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedTextField.swift; sourceTree = "<group>"; };
 		80DBB96429F6D81500497695 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		80DBB96529F6D81500497695 /* CameraView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		80DBB96729F6D81500497695 /* UserManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
+		80DBB96729F6D81500497695 /* UserManager_Firebase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserManager_Firebase.swift; sourceTree = "<group>"; };
 		80DBB96829F6D81500497695 /* AlertManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		80DBB96929F6D81500497695 /* PhotoPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		80DBB97829F6EFA300497695 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -189,6 +193,8 @@
 			children = (
 				80B5EF7029F0C318007D9842 /* InventoryXApp.swift */,
 				80B5EFD529F0E186007D9842 /* Modifiers.swift */,
+				802EDC0429FB79A70048A9A8 /* UserManager.swift */,
+				802EDC0629FB79E40048A9A8 /* GlobalEnums.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -246,7 +252,7 @@
 		80DBB96629F6D81500497695 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				80DBB96729F6D81500497695 /* UserManager.swift */,
+				80DBB96729F6D81500497695 /* UserManager_Firebase.swift */,
 				80DBB96829F6D81500497695 /* AlertManager.swift */,
 			);
 			path = Services;
@@ -381,6 +387,7 @@
 				80DBB97029F6D81500497695 /* AlertManager.swift in Sources */,
 				80DBB96C29F6D81500497695 /* AnimatedTextField.swift in Sources */,
 				80B5EFCA29F0D0D3007D9842 /* TypePickerView.swift in Sources */,
+				802EDC0729FB79E40048A9A8 /* GlobalEnums.swift in Sources */,
 				80B5EFB829F0D0CA007D9842 /* ItemDetailView.swift in Sources */,
 				80DBB97929F6EFA300497695 /* MainView.swift in Sources */,
 				80DBB97B29F6EFBF00497695 /* Models.swift in Sources */,
@@ -389,6 +396,7 @@
 				80DBB96E29F6D81500497695 /* CameraView.swift in Sources */,
 				80DBB98129F7115200497695 /* ColorConstants.swift in Sources */,
 				80B5EFB229F0D0CA007D9842 /* ConfirmationView.swift in Sources */,
+				802EDC0529FB79A70048A9A8 /* UserManager.swift in Sources */,
 				80DBB97D29F70BC200497695 /* UIColor+Ext.swift in Sources */,
 				80B5EFCD29F0D0D3007D9842 /* PasscodePad.swift in Sources */,
 				80DBB97129F6D81500497695 /* PhotoPicker.swift in Sources */,
@@ -400,7 +408,7 @@
 				80B5EF7129F0C318007D9842 /* InventoryXApp.swift in Sources */,
 				94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */,
 				80B5EFBC29F0D0CA007D9842 /* CartItemView.swift in Sources */,
-				80DBB96F29F6D81500497695 /* UserManager.swift in Sources */,
+				80DBB96F29F6D81500497695 /* UserManager_Firebase.swift in Sources */,
 				80DBB96A29F6D81500497695 /* TextMod.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
