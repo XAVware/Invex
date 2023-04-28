@@ -13,7 +13,7 @@ import RealmSwift
     private let lastPageInt: Int
     @Published var currentOnboardingState: OnboardingState = .start
     
-    @Published var currentUser: UserEntity?
+//    @Published var currentUser: UserEntity?
     
     //Categories
     @Published var tempCategories: [CategoryEntity] = []
@@ -62,6 +62,12 @@ import RealmSwift
     }
     
     func nextTapped() {
+        guard navCounter != lastPageInt else {
+            finishOnboarding()
+            return
+            
+        }
+        
         switch currentOnboardingState {
         case .start:
             break
@@ -71,9 +77,7 @@ import RealmSwift
                 addTempCategory()
             }
             
-            tempCategories.forEach { category in
-                saveCategory(category)
-            }
+            
             
         case .profileSetup:
             guard let user = getAdmin() else {
@@ -81,14 +85,10 @@ import RealmSwift
                 return
             }
             
-            saveUser(user)
+//            saveUser(user)
         }
         
-        guard navCounter != lastPageInt else {
-            print("Error 1")
-            return
-            
-        }
+        
         print("Nav Counter: \(navCounter) -> \(navCounter + 1)")
         navCounter += 1
         
@@ -98,6 +98,10 @@ import RealmSwift
         }
         currentOnboardingState = newState
         print("New State set to \(newState)")
+    }
+    
+    private func nextDisplay() {
+        
     }
 
     
@@ -114,30 +118,6 @@ import RealmSwift
         tempCategories.append(newCategory)
         newCategoryName = ""
         newCategoryThreshold = 10
-    }
-    
-    func saveCategory(_ category: CategoryEntity) {
-        do {
-            let realm = try Realm()
-            try realm.write ({
-                realm.add(category)
-            })
-        } catch {
-            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
-            print("Error saving category to Realm: \(error.localizedDescription)")
-        }
-    }
-    
-    func saveUser(_ user: UserEntity) {
-        do {
-            let realm = try Realm()
-            try realm.write ({
-                realm.add(user)
-            })
-        } catch {
-            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
-            print("Error saving category to Realm: \(error.localizedDescription)")
-        }
     }
     
     func removeTempCategory(_ category: CategoryEntity) {
@@ -174,15 +154,26 @@ import RealmSwift
         newUser.role = .admin
         
         return newUser
-//        do {
-//            let realm = try Realm()
-//            try realm.write ({
-//                realm.add(newUser)
-//            })
-//            self.currentUser = newUser
-//        } catch {
-//            print("Error saving category to Realm: \(error.localizedDescription)")
-//            return
+    }
+    
+    func finishOnboarding() {
+        debugPrint("Finishing onboarding process...")
+        guard let newUser = getAdmin() else { return }
+        
+        do {
+            let realm = try Realm()
+            try realm.write ({
+                realm.add(tempCategories)
+                realm.add(newUser)
+            })
+            debugPrint("Categories and user saved")
+        } catch {
+            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
+            print("Error saving category to Realm: \(error.localizedDescription)")
+        }
+        
+//        tempCategories.forEach { category in
+//            saveCategory(category)
 //        }
     }
     
@@ -215,10 +206,10 @@ struct OnboardingView: View {
         .alert(isPresented: $alertManager.isShowing) {
             alertManager.alert
         }
-        .onChange(of: vm.currentUser) { newUser in
-            guard let newUser = newUser else { return }
-            userManager.loginUser(newUser)
-        }
+//        .onChange(of: vm.currentUser) { newUser in
+//            guard let newUser = newUser else { return }
+//            userManager.loginUser(newUser)
+//        }
     } //: Body
     
     // MARK: - WELCOME PAGE

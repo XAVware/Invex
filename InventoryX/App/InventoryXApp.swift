@@ -26,36 +26,11 @@ struct InventoryXApp: SwiftUI.App {
 
     var body: some Scene {
         WindowGroup {
-//            switch true {
-//            case users.count > 0:
-//                mainView
-//            case categories.count == 0 && users.count == 0:
-//                onboardingView
-//            case userManager.isLoggedIn == false:
-//                onboardingView
-//            default:
-//                Text("Isssue with combinations")
-//                    .modifier(TextMod(.title, .bold))
-//            }
-            
-//            if categories.count == 0 && users.count == 0 {
-            if userManager.currentUser == nil {
+            if categories.count == 0 && users.count == 0 {
                 onboardingView
-                    .onChange(of: users) { newValue in
-                        print("users changed to \(newValue)")
-                    }
             } else {
                 mainView
             }
-            
-            
-//            if userManager.isLoggedIn == false {
-//                onboardingView
-//            } else if categories.count == 0 {
-//                onboardingView
-//            } else {
-//                mainView
-//            }
         }
     } //: Body
     

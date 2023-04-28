@@ -36,28 +36,30 @@ struct MainView: View {
     
     @StateObject var cart = Cart()
     let cartWidthPercentage: CGFloat = 0.40
+    @State var columnVisibility: NavigationSplitViewVisibility = .automatic
+    @State var counter: Int = 0
     
     var body: some View {
-        mainView
-    } //: Body
-    
-    private var mainView: some View {
-        NavigationSplitView(columnVisibility: .constant(.detailOnly)) {
+        NavigationSplitView(columnVisibility: .constant(columnVisibility)) {
             menuView
         } detail: {
             switch vm.currentDisplay {
             case .makeASale:
                 VStack(spacing: 0) {
-                    List(categories) { category in
-                        Text(category.name)
-                            .modifier(TextMod(.body, vm.selectedCategory == category ? .bold : .regular))
-                        ForEach(category.items) { item in
-                            Text(item.name)
-                        }
-                    }
+//                    List(categories) { category in
+//                        DisclosureGroup {
+//                            SaleButtonPanel(currentCategory: category)
+//
+//
+//                        } label: {
+//                            Text(category.name)
+//                                .modifier(TextMod(.body, vm.selectedCategory == category ? .bold : .regular))
+//                        }
+//
+//                    }
                     
-                    //Move onboarding logic to @main
-                    
+//                    saleButtonPanel
+                                        
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 2) {
                             ForEach(categories) { category in
@@ -96,10 +98,62 @@ struct MainView: View {
         } //: Navigation Stack
         .navigationSplitViewStyle(.prominentDetail)
         .onAppear {
+            columnVisibility = .detailOnly
             guard let defaultCategory = categories.first else { return }
             vm.setup(category: defaultCategory)
         }
-    }
+    } //: Body
+    
+//    private var saleButtonPanel: some View {
+//        VStack(alignment: .center, spacing: 8) {
+//            ScrollView {
+//                LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
+//                    ForEach(vm.selectedCategory.items) { item in
+//                        Button(action: {
+//                            cart.addItem(item)
+//                        }) {
+//                            VStack(spacing: 0) {
+//                                Text(item.name)
+//                                    .font(.system(size: 18, weight: .semibold, design:.rounded))
+//
+//                                if (item.subtype != "") {
+//                                    Text(item.subtype)
+//                                        .font(.system(size: 14, weight: .light, design:.rounded))
+//                                }
+//                            }
+//                            .foregroundColor(.black)
+//                            .frame(width: 140, height: 80)
+//                            .background(.blue)
+//                        }
+//                        .cornerRadius(9)
+//                        .padding()
+//                        .shadow(radius: 8)
+//                    } //: ForEach
+//                } //: LazyVGrid
+//                
+//                Button {
+//                    let item = InventoryItemEntity()
+//                    item.name = "Item \(counter)"
+//                    item.retailPrice = 1.00
+//                    
+//                    do {
+//                        let realm = try Realm()
+//                        try realm.write {
+//                            vm.$selectedCategory.items.append(item)
+//                            print("Item Added:")
+//                            print(item)
+//                        }
+//                    } catch {
+//                        print(error.localizedDescription)
+//                    }
+//                    counter += 1
+//                } label: {
+//                    Text("Add Item")
+//                }
+//            } //: ScrollView
+//        } //: VStack
+//    } //: Sale Button Panel
+
     
     
 //    private var makeASaleView: some View {
@@ -195,49 +249,6 @@ struct MainView: View {
                 Text("Delete Everything")
             }
             .frame(height: 40)
-//            Button {
-//                vm.currentDisplay = .makeASale
-//            } label: {
-//                Text("Make A Sale")
-//            }
-//            .frame(height: 40)
-//            
-//            Divider().padding(.horizontal)
-//            
-//            Button {
-//                vm.currentDisplay = .inventoryList
-//            } label: {
-//                Text("Inventory List")
-//            }
-//            .frame(height: 40)
-//            
-//            Divider().padding(.horizontal)
-//            
-//            Button {
-//                vm.currentDisplay = .inventoryStatus
-//            } label: {
-//                Text("Inventory Status")
-//            }
-//            .frame(height: 40)
-//            
-//            Divider().padding(.horizontal)
-//            
-//            Button {
-//                vm.currentDisplay = .addInventory
-//            } label: {
-//                Text("Add Inventory")
-//            }
-//            .frame(height: 40)
-//            
-//            Divider().padding(.horizontal)
-//            
-//            Button {
-//                vm.deleteAllFromRealm()
-//            } label: {
-//                Text("Delete Everything")
-//            }
-//            .frame(height: 40)
-            
             Spacer()
         } //: VStack
     } //: Menu View
@@ -248,68 +259,4 @@ struct MainView_Previews: PreviewProvider {
         MainView()
             .modifier(PreviewMod())
     }
-}
-
-
-
-struct SaleButtonPanel: View {
-    @ObservedRealmObject var currentCategory: CategoryEntity
-    @State var counter: Int = 0
-    
-    var body: some View {
-        VStack(alignment: .center, spacing: 8) {
-            Text("\(currentCategory.name)")
-                .font(.title)
-                .foregroundColor(primaryColor)
-                .padding(.bottom, 25)
-            
-            addItemButton
-//                        ScrollView {
-//                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
-//                                ForEach(items.filter({ $0.category == vm.selectedCategoryId })) { item in
-//                                    Button(action: {
-//                                        cart.addItem(item)
-//                                    }) {
-//                                        VStack(spacing: 0) {
-//                                            Text(item.name)
-//                                                .font(.system(size: 18, weight: .semibold, design:.rounded))
-//
-//                                            if (item.subtype != "") {
-//                                                Text(item.subtype)
-//                                                    .font(.system(size: 14, weight: .light, design:.rounded))
-//                                            }
-//                                        }
-//                                        .foregroundColor(.black)
-//                                        .frame(width: 140, height: 80)
-//                                        .background(.blue)
-//                                    }
-//                                    .cornerRadius(9)
-//                                    .padding()
-//                                    .shadow(radius: 8)
-//                                } //: ForEach
-//                            } //: LazyVGrid
-//                        } //: ScrollView
-        } //: VStack
-    } //: Body
-    
-    private var addItemButton: some View {
-        Button {
-            let item = InventoryItemEntity()
-            item.name = "Item \(counter)"
-            item.retailPrice = 1.00
-            
-            let realm = try! Realm()
-            try! realm.write {
-                $currentCategory.items.append(item)
-//                realm.add(item)
-            }
-            
-            counter += 1
-            
-            print("Item Added:")
-            print(item)
-        } label: {
-            Text("Add Item")
-        }
-    } //: Add Item Button
 }
