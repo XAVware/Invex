@@ -32,9 +32,9 @@ struct ContentView: View {
                     InventoryStatusView()
                 }
                 
-                if !self.cart.isConfirmation {
-                    MenuView(displayState: self.$displayState)
-                }
+//                if !self.cart.isConfirmation {
+//                    MenuView(displayState: self.$displayState)
+//                }
                 
                 
             } //: ZStack

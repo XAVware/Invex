@@ -10,6 +10,22 @@ import SwiftUI
 let primaryColor: Color = Color("ThemeColor")
 let secondaryColor: Color = .white
 
+struct XSS {
+    struct S {
+        //white is 100%
+        static let color90 = UIColor(hexString: "#ddeeed")
+        static let color80 = UIColor(hexString: "#bcdcda")
+        static let color70 = UIColor(hexString: "#9acbc8")
+        static let color60 = UIColor(hexString: "#78bab5")
+        static let color50 = UIColor(hexString: "#57a8a3")
+        static let color40 = UIColor(hexString: "#458782")
+        static let color30 = UIColor(hexString: "#346562")
+        static let color20 = UIColor(hexString: "#234341")
+        static let color10 = UIColor(hexString: "#122322")
+        //black is 0%
+    }
+}
+
 
 struct ColorConstants {
     static let red = UIColor(hexString: "#FF0000")

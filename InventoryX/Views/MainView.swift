@@ -8,255 +8,208 @@
 import SwiftUI
 import RealmSwift
 
-@MainActor class MainViewModel: ObservableObject {
-    @Published var selectedCategory: CategoryEntity!
-    @Published var currentDisplay: DisplayStates = .makeASale
-    
-    func deleteAllFromRealm() {
-        let realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-        }
-    }
-    
-    func setup(category: CategoryEntity) {
-        selectedCategory = category
-    }
-}
-
-
-
-
-// MARK: - MAIN VIEW
 
 struct MainView: View {
     @EnvironmentObject var userManager: UserManager
-    @StateObject var vm: MainViewModel = MainViewModel()
     @ObservedResults(CategoryEntity.self) var categories
     
     @StateObject var cart = Cart()
-    let cartWidthPercentage: CGFloat = 0.40
     @State var columnVisibility: NavigationSplitViewVisibility = .automatic
-    @State var counter: Int = 0
+    
+    @State var selectedCategory: CategoryEntity?
+    @State var currentDisplay: DisplayStates = .makeASale
+    
+    
+    
     
     var body: some View {
-        NavigationSplitView(columnVisibility: .constant(columnVisibility)) {
-            menuView
-        } detail: {
-            switch vm.currentDisplay {
-            case .makeASale:
-                VStack(spacing: 0) {
-//                    List(categories) { category in
-//                        DisclosureGroup {
-//                            SaleButtonPanel(currentCategory: category)
-//
-//
-//                        } label: {
-//                            Text(category.name)
-//                                .modifier(TextMod(.body, vm.selectedCategory == category ? .bold : .regular))
-//                        }
-//
-//                    }
-                    
-//                    saleButtonPanel
-                                        
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 2) {
-                            ForEach(categories) { category in
-                                Button {
-                                    vm.selectedCategory = category
-                                } label: {
-                                    Text(category.name)
-                                        .padding(10)
-                                        .opacity(vm.selectedCategory == category ? 1.0 : 0.65)
-                                }
-                                .frame(minWidth: 150)
-                                .background(vm.selectedCategory == category ? Color.white : Color(UIColor.systemGray4))
-                                .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
-                                
-                                Divider()
-                                    .background(Color.black)
-                                    .padding(.vertical, 4)
-                            }
-                            
-                        } //: HStack
-                    } //: Scroll
-                    .frame(maxWidth: .infinity, maxHeight: 40)
-                    .background(Color(UIColor.systemGray4).frame(maxWidth: .infinity))
-                } //: VStack
-                
-            case .addInventory:
-                AddInventoryView()
-            case .inventoryList:
-                InventoryListView()
-            case .salesHistory:
-                SalesHistoryView()
-            case .inventoryStatus:
-                InventoryStatusView()
+        GeometryReader { geo in
+            NavigationSplitView(columnVisibility: .constant(.doubleColumn)) {
+                MenuView(currentDisplay: self.$currentDisplay)
+                    .navigationSplitViewColumnWidth(ideal: geo.size.width / 6)
+                    .onTapGesture {
+                        print(geo.size.width)
+                    }
+            } detail: {
+                navContent
+                    .onTapGesture {
+                        print(geo.size.width)
+                    }
             }
-            
-        } //: Navigation Stack
-        .navigationSplitViewStyle(.prominentDetail)
-        .onAppear {
-            columnVisibility = .detailOnly
-            guard let defaultCategory = categories.first else { return }
-            vm.setup(category: defaultCategory)
+            .navigationSplitViewStyle(.prominentDetail)
+            .onAppear {
+//                columnVisibility = .detailOnly
+                guard let defaultCategory = categories.first else { return }
+                selectedCategory = defaultCategory
+            }
+            .onChange(of: categories) { newCategories in
+                guard selectedCategory == nil, newCategories.count > 0 else { return }
+                selectedCategory = newCategories.first!
+            }
         }
+
     } //: Body
     
-//    private var saleButtonPanel: some View {
-//        VStack(alignment: .center, spacing: 8) {
-//            ScrollView {
-//                LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
-//                    ForEach(vm.selectedCategory.items) { item in
-//                        Button(action: {
-//                            cart.addItem(item)
-//                        }) {
-//                            VStack(spacing: 0) {
-//                                Text(item.name)
-//                                    .font(.system(size: 18, weight: .semibold, design:.rounded))
-//
-//                                if (item.subtype != "") {
-//                                    Text(item.subtype)
-//                                        .font(.system(size: 14, weight: .light, design:.rounded))
-//                                }
-//                            }
-//                            .foregroundColor(.black)
-//                            .frame(width: 140, height: 80)
-//                            .background(.blue)
-//                        }
-//                        .cornerRadius(9)
-//                        .padding()
-//                        .shadow(radius: 8)
-//                    } //: ForEach
-//                } //: LazyVGrid
-//                
-//                Button {
-//                    let item = InventoryItemEntity()
-//                    item.name = "Item \(counter)"
-//                    item.retailPrice = 1.00
-//                    
-//                    do {
-//                        let realm = try Realm()
-//                        try realm.write {
-//                            vm.$selectedCategory.items.append(item)
-//                            print("Item Added:")
-//                            print(item)
-//                        }
-//                    } catch {
-//                        print(error.localizedDescription)
-//                    }
-//                    counter += 1
-//                } label: {
-//                    Text("Add Item")
-//                }
-//            } //: ScrollView
-//        } //: VStack
-//    } //: Sale Button Panel
-
-    
-    
-//    private var makeASaleView: some View {
-//        GeometryReader { geometry in
-//            HStack(spacing: 0) {
-//                if !self.cart.isConfirmation && categoryList.count > 0 {
-//                    VStack(alignment: .center, spacing: 5) {
-//                        Text("\(categories.first(where: ({ $0._id == vm.selectedCategoryId }))!.name)")
-//                            .font(.title)
-//                            .foregroundColor(primaryColor)
-//                            .padding(.bottom, 25)
-//
-//                        ScrollView {
-//                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
-//                                ForEach(items) { item in
-//
-//                                    Button(action: {
-//                                        cart.addItem(item)
-//                                    }) {
-//                                        VStack(spacing: 0) {
-//                                            Text(item.name)
-//                                                .font(.system(size: 18, weight: .semibold, design:.rounded))
-//
-//                                            if (item.subtype != "") {
-//                                                Text(item.subtype)
-//                                                    .font(.system(size: 14, weight: .light, design:.rounded))
-//                                            }
-//                                        }
-//                                        .foregroundColor(.black)
-//                                        .frame(width: 140, height: 80)
-//                                        .background(.blue)
-//                                    }
-//                                    .cornerRadius(9)
-//                                    .padding()
-//                                    .shadow(radius: 8)
-//
-//                                } //: ForEach
-//                            } //: LazyVGrid
-//                            .padding(.horizontal, 10)
-//                        } //: ScrollView
-//                        categorySlider
-//                    } //: VStack
-//                    .frame(width: geometry.size.width - (geometry.size.width * cartWidthPercentage))
-//                    Spacer().frame(width: geometry.size.width * cartWidthPercentage)
-//                }
-//            } //: HStack
-//        }
-//    } //: Make A Sale View
-    
-//    var categorySlider: some View {
-//        ScrollView(.horizontal, showsIndicators: false) {
-//            HStack(spacing: 2) {
-//                ForEach(categories) { category in
-//                    Button {
-//                        vm.selectedCategory = category
-//                    } label: {
-//                        Text(category.name)
-//                            .padding(.vertical, 10)
-//                            .padding(.horizontal, 7)
-//                            .opacity(vm.selectedCategory == category ? 1.0 : 0.65)
-//                    }
-//                    .frame(minWidth: 150)
-//                    .background(vm.selectedCategory == category ? Color.white : Color(UIColor.systemGray4))
-//                    .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
-//
-//                    Divider().background(Color.black).padding(.vertical, 4)
-//                }
-//
-//            } //: HStack
-//        }
-//        .background(Color(UIColor.systemGray4).frame(maxWidth: .infinity))
-//        .frame(maxWidth: .infinity, maxHeight: 40)
-//    }
-    
-    
-    
-    private var menuView: some View {
-        VStack {
-            ForEach(DisplayStates.allCases, id: \.self) { displayState in
-                Button {
-                    vm.currentDisplay = displayState
-                } label: {
-                    Text("\(displayState.menuButtonText)")
-                }
-                .frame(height: 40)
-                
-                Divider().padding(.horizontal)
+    @ViewBuilder private var navContent: some View {
+        switch currentDisplay {
+        case .makeASale:
+            if let category = selectedCategory {
+                MakeASaleView(selectedCategory: category)
+                CategorySelector(selectedCategory: self.$selectedCategory)
+            } else {
+                ProgressView()
             }
             
-            Button {
-                vm.deleteAllFromRealm()
-            } label: {
-                Text("Delete Everything")
-            }
-            .frame(height: 40)
-            Spacer()
-        } //: VStack
-    } //: Menu View
+        case .addInventory:
+            AddInventoryView()
+        case .inventoryList:
+            InventoryListView()
+        case .salesHistory:
+            SalesHistoryView()
+        case .inventoryStatus:
+            InventoryStatusView()
+        }
+    } //: Nav Content
+    
 }
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         MainView()
             .modifier(PreviewMod())
+    }
+}
+
+struct MakeASaleView: View {
+    @ObservedRealmObject var selectedCategory: CategoryEntity
+    @State var counter: Int = 0
+    
+    var body: some View {
+        HStack {
+            VStack(spacing: 0) {
+                if selectedCategory.items.count > 0 {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
+                        ForEach(selectedCategory.items) { item in
+                            Button {
+                                //                                cart.addItem(item)
+                            } label: {
+                                Text(item.name)
+                                    .font(.system(size: 18, weight: .semibold, design:.rounded))
+                                    .foregroundColor(.black)
+                                    .frame(width: 140, height: 80)
+                                    .background(.blue)
+                            }
+                            .cornerRadius(9)
+                            .padding()
+                            .shadow(radius: 8)
+                        } //: ForEach
+                    } //: LazyVGrid
+                } else {
+                    VStack {
+                        Text("No Items in this category yet.")
+                        addItemButton
+                            .modifier(RoundedButtonMod())
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } //: If-Else
+            } //: VStack
+        } //: HStack
+    } //: Body
+    
+    private var addItemButton: some View {
+        Button {
+            let item = InventoryItemEntity()
+            item.name = "Item \(counter)"
+            item.retailPrice = 1.00
+            
+            do {
+                let realm = try Realm()
+                try realm.write {
+                        $selectedCategory.items.append(item)
+                        print("Item Added: \n \(item)")
+                    
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+            counter += 1
+        } label: {
+            Text("Add Item")
+        }
+        .modifier(RoundedButtonMod())
+    } //: Add Item View
+}
+
+struct CategorySelector: View {
+    @ObservedResults(CategoryEntity.self) var categories
+    @Binding var selectedCategory: CategoryEntity?
+    
+    enum Style { case scrolling }
+    let style: Style = .scrolling
+    
+    var body: some View {
+        switch style {
+        case .scrolling:
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 2) {
+                    ForEach(categories) { category in
+                        Button {
+                            selectedCategory = category
+                        } label: {
+                            Text(category.name)
+                                .padding(10)
+                                .opacity(selectedCategory == category ? 1.0 : 0.65)
+                        }
+                        .frame(minWidth: 150)
+                        .background(selectedCategory == category ? Color.white : Color(UIColor.systemGray4))
+                        .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+                        
+                        Divider()
+                            .background(Color.black)
+                            .padding(.vertical, 4)
+                    }
+                    
+                } //: HStack
+            } //: Scroll
+            .frame(maxWidth: .infinity, maxHeight: 40)
+            .background(Color(UIColor.systemGray4).frame(maxWidth: .infinity))
+        }
+    }
+}
+
+struct MenuView: View {
+    @Binding var currentDisplay: DisplayStates
+    
+    var body: some View {
+        VStack {
+            ForEach(DisplayStates.allCases, id: \.self) { displayState in
+                Button {
+                    currentDisplay = displayState
+                } label: {
+                    Text("\(displayState.menuButtonText)")
+                        .foregroundColor(Color(XSS.S.color80))
+                }
+                .frame(height: 40)
+                
+                Divider().padding(.horizontal).tint(Color(XSS.S.color80))
+            }
+            
+            Button {
+                deleteAllFromRealm()
+            } label: {
+                Text("Delete Everything")
+            }
+            .frame(height: 40)
+            Spacer()
+        } //: VStack
+        .background(Color(XSS.S.color20))
+        .modifier(TextMod(.headline, .semibold))
+        .tint(Color(XSS.S.color80))
+    }
+    func deleteAllFromRealm() {
+        let realm = try! Realm()
+        try! realm.write {
+            realm.deleteAll()
+        }
     }
 }
