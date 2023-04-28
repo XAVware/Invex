@@ -51,6 +51,8 @@
 		80DBB97F29F70EE000497695 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB97E29F70EE000497695 /* OnboardingView.swift */; };
 		80DBB98129F7115200497695 /* ColorConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB98029F7115200497695 /* ColorConstants.swift */; };
 		80DBB98329F715BA00497695 /* RoundedButtonMod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB98229F715BA00497695 /* RoundedButtonMod.swift */; };
+		94AC8DB829FB2187006A166E /* MockRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DB729FB2187006A166E /* MockRealm.swift */; };
+		94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */; };
 		94EF40D829F728EF0049DDC5 /* Tips in Resources */ = {isa = PBXBuildFile; fileRef = 94EF40D729F728EF0049DDC5 /* Tips */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +100,8 @@
 		80DBB97E29F70EE000497695 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		80DBB98029F7115200497695 /* ColorConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorConstants.swift; sourceTree = "<group>"; };
 		80DBB98229F715BA00497695 /* RoundedButtonMod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButtonMod.swift; sourceTree = "<group>"; };
+		94AC8DB729FB2187006A166E /* MockRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRealm.swift; sourceTree = "<group>"; };
+		94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		94EF40D729F728EF0049DDC5 /* Tips */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tips; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -161,6 +165,7 @@
 		80B5EF6F29F0C318007D9842 /* InventoryX */ = {
 			isa = PBXGroup;
 			children = (
+				94AC8DBB29FB25C2006A166E /* Realm */,
 				802EDC0329FA32FC0048A9A8 /* Old */,
 				80B5EF8329F0CC1C007D9842 /* App */,
 				80DBB97729F6EF9200497695 /* Views */,
@@ -250,14 +255,31 @@
 		80DBB97729F6EF9200497695 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */,
+				94AC8DBA29FB21C3006A166E /* CustomComponents */,
 				80DBB97829F6EFA300497695 /* MainView.swift */,
 				80DBB97A29F6EFBF00497695 /* Models.swift */,
 				80DBB97E29F70EE000497695 /* OnboardingView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		94AC8DBA29FB21C3006A166E /* CustomComponents */ = {
+			isa = PBXGroup;
+			children = (
+				80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */,
 				80A5516C29F7628E00C21448 /* QuantitySelector.swift */,
 				80D5025929F8CE2B0095A547 /* SectionHeader.swift */,
 			);
-			path = Views;
+			path = CustomComponents;
+			sourceTree = "<group>";
+		};
+		94AC8DBB29FB25C2006A166E /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				94AC8DB729FB2187006A166E /* MockRealm.swift */,
+				94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */,
+			);
+			path = Realm;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -363,6 +385,7 @@
 				80DBB97929F6EFA300497695 /* MainView.swift in Sources */,
 				80DBB97B29F6EFBF00497695 /* Models.swift in Sources */,
 				80B5EFB029F0D0CA007D9842 /* ContentView.swift in Sources */,
+				94AC8DB829FB2187006A166E /* MockRealm.swift in Sources */,
 				80DBB96E29F6D81500497695 /* CameraView.swift in Sources */,
 				80DBB98129F7115200497695 /* ColorConstants.swift in Sources */,
 				80B5EFB229F0D0CA007D9842 /* ConfirmationView.swift in Sources */,
@@ -375,6 +398,7 @@
 				80DBB98329F715BA00497695 /* RoundedButtonMod.swift in Sources */,
 				80B5EFD029F0D0D3007D9842 /* AnimatedCheckmarkView.swift in Sources */,
 				80B5EF7129F0C318007D9842 /* InventoryXApp.swift in Sources */,
+				94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */,
 				80B5EFBC29F0D0CA007D9842 /* CartItemView.swift in Sources */,
 				80DBB96F29F6D81500497695 /* UserManager.swift in Sources */,
 				80DBB96A29F6D81500497695 /* TextMod.swift in Sources */,

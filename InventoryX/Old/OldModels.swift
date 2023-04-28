@@ -114,17 +114,17 @@ class Cart: ObservableObject {
     }
     
     func addItem(_ item: InventoryItemEntity) {
-        for cartItem in cartItems {
-            if cartItem.name == item.name && cartItem.subtype == item.subtype {
-                cartItem.increaseQtyInCart()
-                self.updateTotal()
-                return
-            }
-        }
+//        for cartItem in cartItems {
+//            if cartItem.name == item.name && cartItem.subtype == item.subtype {
+//                cartItem.increaseQtyInCart()
+//                self.updateTotal()
+//                return
+//            }
+//        }
         
         let tempCartItem = CartItem()
         tempCartItem.name = item.name
-        tempCartItem.subtype = item.subtype
+//        tempCartItem.subtype = item.subtype
         tempCartItem.price = item.retailPrice
         self.cartItems.append(tempCartItem)
         self.updateTotal()

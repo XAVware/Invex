@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct InventoryXApp: App {
+    let migrator: RealmMigrator = RealmMigrator(currentSchemaVersion: 4)
     
     init() {
 //        UISegmentedControl.appearance().selectedSegmentTintColor = UIColor(primaryColor)

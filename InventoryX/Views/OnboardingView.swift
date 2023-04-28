@@ -28,7 +28,7 @@ class UserManager {
     @Published var currentOnboardingState: OnboardingStates = .start
     
     //Categories
-    @Published var categories: [CategoryEntity] = []
+    @Published var tempCategories: [CategoryEntity] = []
     @Published var newCategoryName: String = ""
     @Published var newCategoryThreshold: Int = 10
     
@@ -67,20 +67,6 @@ class UserManager {
         lastPageInt = pageInt
     }
     
-    func addTempCategory() {
-        for category in categories {
-            if category.name == newCategoryName {
-                print("Category already exists")
-                return
-            }
-        }
-        
-        let newCategory = CategoryEntity(name: newCategoryName, restockNum: newCategoryThreshold)
-        categories.append(newCategory)
-        newCategoryName = ""
-        newCategoryThreshold = 10
-    }
-    
     func nextTapped() {
         switch currentOnboardingState {
         case .start:
@@ -109,9 +95,24 @@ class UserManager {
             addTempCategory()
         }
         
-        categories.forEach { category in
+        tempCategories.forEach { category in
             saveCategory(category)
         }
+    }
+    
+    // MARK: - CATEGORY FUNCTIONS
+    func addTempCategory() {
+        for category in tempCategories {
+            if category.name == newCategoryName {
+                print("Category already exists")
+                return
+            }
+        }
+        
+        let newCategory = CategoryEntity(name: newCategoryName, restockNum: newCategoryThreshold)
+        tempCategories.append(newCategory)
+        newCategoryName = ""
+        newCategoryThreshold = 10
     }
     
     func saveCategory(_ category: CategoryEntity) {
@@ -121,11 +122,20 @@ class UserManager {
                 realm.add(category)
             })
         } catch {
+            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
             print("Error saving category to Realm: \(error.localizedDescription)")
-            
         }
     }
     
+    func removeTempCategory(_ category: CategoryEntity) {
+            guard let index = tempCategories.firstIndex(of: category) else {
+                print("Error deleting category")
+                return
+            }
+            tempCategories.remove(at: index)
+        }
+    
+    // MARK: - USER FUNCTIONS
     func saveAdmin() {
         guard newProfileName.isNotEmpty else { return }
         let name: String = newProfileName
@@ -163,13 +173,7 @@ class UserManager {
         }
     }
     
-    func removeTempCategory(_ category: CategoryEntity) {
-        guard let index = categories.firstIndex(of: category) else {
-            print("Error deleting category")
-            return
-        }
-        categories.remove(at: index)
-    }
+    
 }
 
 // MARK: - VIEW
@@ -180,8 +184,6 @@ struct OnboardingView2: View {
     @Binding var isOnboarding: Bool
     @ObservedResults(CategoryEntity.self) var categories
     @State var itemCategory: String = "-Select Category-"
-    
-    
     
     var body: some View {
         VStack {
@@ -249,7 +251,7 @@ struct OnboardingView2: View {
                 
                 Divider()
                 
-                if vm.categories.isEmpty {
+                if vm.tempCategories.isEmpty {
                     PlaceholderView(text: "Add A Category")
                 } else {
                     VStack(spacing: 25) {
@@ -257,7 +259,7 @@ struct OnboardingView2: View {
                             .modifier(TextMod(.title2, .bold))
                         
                         ScrollView(.vertical, showsIndicators: false) {
-                            ForEach(vm.categories, id: \.self) { category in
+                            ForEach(vm.tempCategories, id: \.self) { category in
                                 CategoryRow(category: category, parent: vm)
                                     .frame(height: 40)
                                 

@@ -84,13 +84,13 @@ struct AddInventoryView: View {
                                 ForEach(self.results, id: \.self) { item in
                                     Button(action: {
                                         self.selectedItemName       = item.name
-                                        self.selectedItemSubtype    = item.subtype
+//                                        self.selectedItemSubtype    = item.subtype
                                         self.activeSheet            = .restockItem
                                         self.isShowingDetailView    = true
                                     }) {
                                         HStack {
-                                            Text("\(item.name) \(item.subtype == "" ? "" : "- \(item.subtype)")")
-                                                .frame(maxWidth: .infinity, alignment: .leading)
+//                                            Text("\(item.name) \(item.subtype == "" ? "" : "- \(item.subtype)")")
+//                                                .frame(maxWidth: .infinity, alignment: .leading)
 
                                             Image(systemName: "chevron.right")
                                                 .resizable()

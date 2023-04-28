@@ -15,30 +15,9 @@ enum DisplayStates {
 
 // MARK: - MAIN VIEW MODEL
 @MainActor class MainViewModel: ObservableObject {
-    @Published var selectedCategoryId: ObjectId!
+    @Published var selectedCategory: CategoryEntity!
     @Published var isOnboarding: Bool = false
     @Published var currentDisplay: DisplayStates = .makeASale
-    
-    init() {
-        initializeRealm()
-    }
-    
-    func initializeRealm() {
-        let currentVersion: UInt64 = 4
-        let config = Realm.Configuration(schemaVersion: currentVersion, migrationBlock: { migration, oldSchemaVersion in
-            if (oldSchemaVersion < currentVersion) {
-                migration.enumerateObjects(ofType: InventoryItemEntity.className()) { (oldObject, newObject) in }
-                migration.enumerateObjects(ofType: SaleEntity.className()) { oldObject, newObject in }
-                migration.enumerateObjects(ofType: CategoryEntity.className()) { oldObject, newObject in }
-            }
-        })
-        
-        do {
-            _ = try Realm(configuration: config)
-        } catch {
-            print("Error initializing Realm --> \(error.localizedDescription)")
-        }
-    }
     
     func deleteAllFromRealm() {
         let realm = try! Realm()
@@ -47,64 +26,102 @@ enum DisplayStates {
         }
     }
     
-    func setup(categoryId: ObjectId) {
-        selectedCategoryId = categoryId
+    func setup(category: CategoryEntity) {
+        selectedCategory = category
     }
 }
 
+
+
+
 // MARK: - MAIN VIEW
+
 struct MainView: View {
     @StateObject var vm: MainViewModel = MainViewModel()
     @ObservedResults(CategoryEntity.self) var categories
-//    @ObservedResults(InventoryItemEntity.self) var items
-    @State var categoryIndex: Int = 0
-        
+    @StateObject var cart = Cart()
+    let cartWidthPercentage: CGFloat = 0.40
+    
     var body: some View {
-        mainView
+        checkerView
             .onAppear {
                 if let defaultCategory = categories.first {
-//                    currentCategory = defaultCategory
-                    vm.setup(categoryId: defaultCategory._id)
+                    vm.setup(category: defaultCategory)
                 } else {
                     vm.isOnboarding = true
                 }
             }
     } //: Body
     
-    @ViewBuilder private var mainView: some View {
+    @ViewBuilder private var checkerView: some View {
         if vm.isOnboarding {
             OnboardingView2(isOnboarding: $vm.isOnboarding)
-            
         } else {
-            NavigationSplitView(columnVisibility: .constant(.detailOnly)) {
-                menuView
-            } detail: {
-                
-                switch vm.currentDisplay {
-                case .makeASale:
-                    
-                                        
-                    categorySlider
-                case .addInventory:
-                    AddInventoryView()
-                case .inventoryList:
-                    InventoryListView()
-                case .salesHistory:
-                    SalesHistoryView()
-                case .inventoryStatus:
-                    InventoryStatusView()
-                }
-                
-            } //: Navigation Stack
-            .navigationSplitViewStyle(.prominentDetail)
-            
-            
+            mainView
         }
     }
     
-    @StateObject var cart = Cart()
+    private var mainView: some View {
+        NavigationSplitView(columnVisibility: .constant(.detailOnly)) {
+            menuView
+        } detail: {
+            switch vm.currentDisplay {
+            case .makeASale:
+                VStack(spacing: 0) {
+                    List(categories) { category in
+                        Text(category.name)
+                            .modifier(TextMod(.body, vm.selectedCategory == category ? .bold : .regular))
+                        ForEach(category.items) { item in
+                            Text(item.name)
+                        }
+                    }
+                    
+                    //Move onboarding logic to @main
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 2) {
+                            ForEach(categories) { category in
+                                Button {
+                                    vm.selectedCategory = category
+                                } label: {
+                                    Text(category.name)
+                                        .padding(10)
+                                        .opacity(vm.selectedCategory == category ? 1.0 : 0.65)
+                                }
+                                .frame(minWidth: 150)
+                                .background(vm.selectedCategory == category ? Color.white : Color(UIColor.systemGray4))
+                                .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+                                
+                                Divider()
+                                    .background(Color.black)
+                                    .padding(.vertical, 4)
+                            }
+                            
+                        } //: HStack
+                    } //: Scroll
+                    .frame(maxWidth: .infinity, maxHeight: 40)
+                    .background(Color(UIColor.systemGray4).frame(maxWidth: .infinity))
+                } //: VStack
+                
+            case .addInventory:
+                AddInventoryView()
+            case .inventoryList:
+                InventoryListView()
+            case .salesHistory:
+                SalesHistoryView()
+            case .inventoryStatus:
+                InventoryStatusView()
+            }
+            
+        } //: Navigation Stack
+        .navigationSplitViewStyle(.prominentDetail)
+        .onAppear {
+            guard let defaultCategory = categories.first else { return }
+            vm.setup(category: defaultCategory)
+        }
+    }
     
-    let cartWidthPercentage: CGFloat = 0.40
+    
 //    private var makeASaleView: some View {
 //        GeometryReader { geometry in
 //            HStack(spacing: 0) {
@@ -152,32 +169,30 @@ struct MainView: View {
 //        }
 //    } //: Make A Sale View
     
-    var categorySlider: some View {
-        ScrollView(.horizontal, showsIndicators: false, content: {
-            HStack(spacing: 2) {
-                ForEach(categories, id: \.self) { category in
-                    Button(action: {
-                        vm.selectedCategoryId = category._id
-                    }, label: {
-                        Text(category.name)
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 7)
-                            .foregroundColor(.black)
-                            .opacity(vm.selectedCategoryId == category._id ? 1.0 : 0.65)
-                    })
-                    .frame(minWidth: 150)
-                    .background(vm.selectedCategoryId == category._id ? Color.white : Color(UIColor.systemGray4))
-                    .cornerRadius(15, corners: .bottomLeft)
-                    .cornerRadius(15, corners: .bottomRight)
-                    
-                    Divider().background(Color.black).padding(.vertical, 4)
-                }
-                
-            }
-        })
-        .background(Color(UIColor.systemGray4).frame(maxWidth: .infinity))
-        .frame(maxWidth: .infinity, maxHeight: 40)
-    }
+//    var categorySlider: some View {
+//        ScrollView(.horizontal, showsIndicators: false) {
+//            HStack(spacing: 2) {
+//                ForEach(categories) { category in
+//                    Button {
+//                        vm.selectedCategory = category
+//                    } label: {
+//                        Text(category.name)
+//                            .padding(.vertical, 10)
+//                            .padding(.horizontal, 7)
+//                            .opacity(vm.selectedCategory == category ? 1.0 : 0.65)
+//                    }
+//                    .frame(minWidth: 150)
+//                    .background(vm.selectedCategory == category ? Color.white : Color(UIColor.systemGray4))
+//                    .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+//
+//                    Divider().background(Color.black).padding(.vertical, 4)
+//                }
+//
+//            } //: HStack
+//        }
+//        .background(Color(UIColor.systemGray4).frame(maxWidth: .infinity))
+//        .frame(maxWidth: .infinity, maxHeight: 40)
+//    }
     
     
     
@@ -238,27 +253,7 @@ struct MainView_Previews: PreviewProvider {
     }
 }
 
-class MockRealms {
-    static var config: Realm.Configuration {
-        MockRealms.previewRealm.configuration
-    }
-    
-    static var previewRealm: Realm = {
-        var realm: Realm
-        let identifier = "previewRealm"
-        let config = Realm.Configuration(inMemoryIdentifier: identifier)
-        do {
-            realm = try Realm(configuration: config)
-            try realm.write {
-                realm.add(CategoryEntity.categoryArray)
-                realm.add(InventoryItemEntity.itemArray)
-            }
-            return realm
-        } catch let error {
-            fatalError("Error: \(error.localizedDescription)")
-        }
-    }()
-}
+
 
 struct SaleButtonPanel: View {
     @ObservedRealmObject var currentCategory: CategoryEntity
@@ -266,15 +261,12 @@ struct SaleButtonPanel: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 8) {
-            List(currentCategory.items) { item in
-                Text(item.name)
-            }
-            addItemButton
-//                        Text("\(categories.first(where: ({ $0._id == currentCategoryId }))!.name)")
-//                            .font(.title)
-//                            .foregroundColor(primaryColor)
-//                            .padding(.bottom, 25)
+            Text("\(currentCategory.name)")
+                .font(.title)
+                .foregroundColor(primaryColor)
+                .padding(.bottom, 25)
             
+            addItemButton
 //                        ScrollView {
 //                            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
 //                                ForEach(items.filter({ $0.category == vm.selectedCategoryId })) { item in
@@ -307,8 +299,6 @@ struct SaleButtonPanel: View {
         Button {
             let item = InventoryItemEntity()
             item.name = "Item \(counter)"
-//            item.category = vm.selectedCategoryId
-            
             item.retailPrice = 1.00
             
             let realm = try! Realm()
@@ -318,6 +308,9 @@ struct SaleButtonPanel: View {
             }
             
             counter += 1
+            
+            print("Item Added:")
+            print(item)
         } label: {
             Text("Add Item")
         }

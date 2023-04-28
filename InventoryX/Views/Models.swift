@@ -40,7 +40,7 @@ struct CategoryModel {
 class InventoryItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted(originProperty: "items") var category: LinkingObjects<CategoryEntity>
-    @Persisted var subtypes: RealmSwift.List<InventoryItemEntity>
+    @Persisted var subtypes: RealmSwift.List<ChildInventoryItemEntity>
     
     @Persisted var name: String
     @Persisted var retailPrice: Double
@@ -68,7 +68,7 @@ class InventoryItemEntity: Object, ObjectKeyIdentifiable {
     
 }
 
-class ChildInventoryItem: Object, ObjectKeyIdentifiable {
+class ChildInventoryItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted(originProperty: "subtypes") var itemParent: LinkingObjects<InventoryItemEntity>
     @Persisted var name: String
@@ -119,15 +119,5 @@ class UserEntity: Object, ObjectKeyIdentifiable {
         self.profileName = profileName
         self.email = email
         self.role = role
-    }
-}
-
-public extension EnvironmentValues {
-    var isPreview: Bool {
-#if DEBUG
-        return ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
-#else
-        return false
-#endif
     }
 }
