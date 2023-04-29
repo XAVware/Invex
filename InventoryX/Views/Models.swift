@@ -64,7 +64,9 @@ class InventoryItemEntity: Object, ObjectKeyIdentifiable {
     static let item6 = InventoryItemEntity(name: "Energy Drink", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
     static let item7 = InventoryItemEntity(name: "Ice Pop", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
 
-    static let itemArray = [item1, item2, item3, item4, item5, item6, item7]
+    static let foodArray = [item1, item2, item3]
+    static let drinkArray = [item4, item5, item6]
+    static let frozenArray = [item7]
     
 }
 

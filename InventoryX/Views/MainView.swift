@@ -8,7 +8,9 @@
 import SwiftUI
 import RealmSwift
 
-
+// 11 Inch iPad (Landscape)
+// Width: 1194
+// Height: 790
 struct MainView: View {
     @EnvironmentObject var userManager: UserManager
     @ObservedResults(CategoryEntity.self) var categories
@@ -19,10 +21,72 @@ struct MainView: View {
     @State var selectedCategory: CategoryEntity?
     @State var currentDisplay: DisplayStates = .makeASale
     
-    
-    
-    
     var body: some View {
+        GeometryReader { geo in
+            VStack(spacing: 0) {
+                HStack(alignment: .center) {
+                    HStack(spacing: 0) {
+                        Text("Inventory")
+                            .modifier(TextMod(.title, .semibold, Color(XSS.S.color30)))
+                            .offset(y: -2)
+                        Text("X")
+                            .font(.largeTitle)
+                            .fontWeight(.semibold)
+                            .italic()
+                    } //: HStack
+                    .foregroundColor(Color(XSS.S.color30))
+                    .padding()
+                    .edgesIgnoringSafeArea(.top)
+                    
+                    Spacer()
+                    
+                    HStack(spacing: 16) {
+                        Text("Ryan")
+                            .modifier(TextMod(.title3, .medium, Color(XSS.S.color80)))
+                        
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 32, height: 32)
+                    } //: HStack
+                    .foregroundColor(Color(XSS.S.color80))
+                    .padding()
+                    .edgesIgnoringSafeArea(.top)
+                } //: HStack
+                .padding()
+                .frame(maxHeight: geo.size.height * 0.05)
+                .background(Color(XSS.S.color20))
+                
+                HStack(spacing: 0) {
+                    MenuView(currentDisplay: self.$currentDisplay)
+                        .frame(maxWidth: geo.size.width * 0.23)
+                    VStack(spacing: 0) {
+                        if let category = selectedCategory {
+                            MakeASaleView(selectedCategory: category)
+                                .padding()
+                                .background(Color(XSS.S.color80))
+                                .cornerRadius(20, corners: .topLeft)
+                            
+                            CategorySelector(selectedCategory: self.$selectedCategory)
+                        } else {
+                            ProgressView()
+                        }
+                    } //: VStack
+                } //: HStack
+                .background(Color(XSS.S.color20))
+            } //: VStack
+            .onAppear {
+                guard let defaultCategory = categories.first else { return }
+                selectedCategory = defaultCategory
+            }
+            .onChange(of: categories) { newCategories in
+                guard selectedCategory == nil, newCategories.count > 0 else { return }
+                selectedCategory = newCategories.first!
+            }
+        }
+    } //: Body
+    
+    private var navSplitViewStyle: some View {
         GeometryReader { geo in
             NavigationSplitView(columnVisibility: .constant(.doubleColumn)) {
                 MenuView(currentDisplay: self.$currentDisplay)
@@ -47,8 +111,7 @@ struct MainView: View {
                 selectedCategory = newCategories.first!
             }
         }
-
-    } //: Body
+    } //: Nav Split View Style
     
     @ViewBuilder private var navContent: some View {
         switch currentDisplay {
@@ -104,6 +167,7 @@ struct MakeASaleView: View {
                             .shadow(radius: 8)
                         } //: ForEach
                     } //: LazyVGrid
+                    Spacer()
                 } else {
                     VStack {
                         Text("No Items in this category yet.")
@@ -144,12 +208,12 @@ struct CategorySelector: View {
     @ObservedResults(CategoryEntity.self) var categories
     @Binding var selectedCategory: CategoryEntity?
     
-    enum Style { case scrolling }
-    let style: Style = .scrolling
+    enum Style { case scrollingTab, scrollingButton }
+    let style: Style = .scrollingButton
     
     var body: some View {
         switch style {
-        case .scrolling:
+        case .scrollingTab:
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 2) {
                     ForEach(categories) { category in
@@ -157,7 +221,8 @@ struct CategorySelector: View {
                             selectedCategory = category
                         } label: {
                             Text(category.name)
-                                .padding(10)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                
                                 .opacity(selectedCategory == category ? 1.0 : 0.65)
                         }
                         .frame(minWidth: 150)
@@ -173,6 +238,29 @@ struct CategorySelector: View {
             } //: Scroll
             .frame(maxWidth: .infinity, maxHeight: 40)
             .background(Color(UIColor.systemGray4).frame(maxWidth: .infinity))
+            
+        case .scrollingButton:
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 2) {
+                    ForEach(categories) { category in
+                        Button {
+                            selectedCategory = category
+                        } label: {
+                            Text(category.name)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .foregroundColor(selectedCategory == category ? Color(XSS.S.color10) : Color(XSS.S.color90))
+                                
+                        }
+                        .frame(minWidth: 150)
+                        .background(selectedCategory == category ? Color(XSS.S.color80) : Color(XSS.S.color40))
+                        .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
+                        
+                    }
+                    
+                } //: HStack
+            } //: Scroll
+            .frame(maxWidth: .infinity, maxHeight: 40)
+            .background(.clear)
         }
     }
 }
@@ -188,24 +276,33 @@ struct MenuView: View {
                 } label: {
                     Text("\(displayState.menuButtonText)")
                         .foregroundColor(Color(XSS.S.color80))
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(height: 40)
-                
-                Divider().padding(.horizontal).tint(Color(XSS.S.color80))
+                .frame(height: 50)
             }
             
             Button {
                 deleteAllFromRealm()
             } label: {
                 Text("Delete Everything")
+                    .foregroundColor(Color(XSS.S.color80))
             }
             .frame(height: 40)
             Spacer()
+            Button {
+                deleteAllFromRealm()
+            } label: {
+                Text("Sign Out")
+                    .foregroundColor(Color(XSS.S.color80))
+            }
+            .frame(height: 40)
         } //: VStack
+        .padding()
         .background(Color(XSS.S.color20))
-        .modifier(TextMod(.headline, .semibold))
-        .tint(Color(XSS.S.color80))
+        .modifier(TextMod(.title3, .semibold))
+        .edgesIgnoringSafeArea(.bottom)
     }
+    
     func deleteAllFromRealm() {
         let realm = try! Realm()
         try! realm.write {

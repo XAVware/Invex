@@ -19,9 +19,18 @@ class MockRealms {
         let config = Realm.Configuration(inMemoryIdentifier: identifier)
         do {
             realm = try Realm(configuration: config)
+            let category1 = CategoryEntity.foodCategory
+            let category2 = CategoryEntity.drinkCategory
+            let category3 = CategoryEntity.frozenCategory
+            
             try realm.write {
-                realm.add(CategoryEntity.categoryArray)
-                realm.add(InventoryItemEntity.itemArray)
+                realm.add(category1)
+                realm.add(category2)
+                realm.add(category3)
+                category1.items.append(objectsIn: InventoryItemEntity.foodArray)
+                category2.items.append(objectsIn: InventoryItemEntity.drinkArray)
+                category3.items.append(objectsIn: InventoryItemEntity.frozenArray)
+//                realm.add(InventoryItemEntity.itemArray)
             }
             return realm
         } catch let error {
