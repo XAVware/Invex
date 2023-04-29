@@ -40,6 +40,22 @@ struct MainView: View {
                     
                     Spacer()
                     
+                    ZStack {
+                        Capsule()
+                            .frame(height: 30)
+                            .foregroundColor(Color(XSS.S.color90))
+                            .frame(maxWidth: geo.size.width / 4)
+                        
+                        HStack(spacing: 16) {
+                            Image(systemName: "magnifyingglass")
+                            Text("Search...")                            
+                        }
+                        .modifier(TextMod(.footnote, .regular, .gray))
+                    }
+                    .padding()
+                    .edgesIgnoringSafeArea(.top)
+                    Spacer()
+                    
                     HStack(spacing: 16) {
                         Text("Ryan")
                             .modifier(TextMod(.title3, .medium, Color(XSS.S.color80)))
