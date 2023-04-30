@@ -9,6 +9,7 @@ import SwiftUI
 
 let primaryColor: Color = Color("ThemeColor")
 let secondaryColor: Color = .white
+let lightTextColor: Color = Color(XSS.S.color80)
 
 struct XSS {
     struct S {
@@ -23,6 +24,19 @@ struct XSS {
         static let color20 = UIColor(hexString: "#234341")
         static let color10 = UIColor(hexString: "#122322")
         //black is 0%
+    }
+    
+    struct ComplimentS {
+        static let color90 = UIColor(hexString: "#8ECAA7")
+        static let color80 = UIColor(hexString: "#F9B9AC")
+        static let color70 = UIColor(hexString: "#F7D488")
+        static let color60 = UIColor(hexString: "#BCE3E2")
+        static let color50 = UIColor(hexString: "#E7E7DE")
+        static let color40 = UIColor(hexString: "#F2A1A5")
+        static let color30 = UIColor(hexString: "#9BC4C4")
+        static let color20 = UIColor(hexString: "#FCE6A2")
+        static let color10 = UIColor(hexString: "#C3B299")
+        static let color100 = UIColor(hexString: "#F2D7D5")
     }
 }
 

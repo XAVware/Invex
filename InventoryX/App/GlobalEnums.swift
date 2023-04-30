@@ -12,16 +12,21 @@ enum DisplayStates: CaseIterable {
     
     var menuButtonText: String {
         switch self {
-        case .makeASale:
-            return "Make A Sale"
-        case .addInventory:
-            return "Add Inventory"
-        case .inventoryList:
-            return "Inventory List"
-        case .salesHistory:
-            return "Sales History"
-        case .inventoryStatus:
-            return "Inventory Status"
+        case .makeASale: return "Sale"
+        case .addInventory: return "Restock"
+        case .inventoryList: return "Inventory"
+        case .salesHistory: return "Sales"
+        case .inventoryStatus: return "Reorder"
+        }
+    }
+    
+    var iconName: String {
+        switch self {
+        case .makeASale: return "dollarsign.circle.fill"
+        case .addInventory: return "cart.fill.badge.plus"
+        case .inventoryList: return "list.bullet.clipboard.fill"
+        case .salesHistory: return "chart.xyaxis.line"
+        case .inventoryStatus: return "text.badge.checkmark"
         }
     }
 }

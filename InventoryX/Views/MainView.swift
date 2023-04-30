@@ -48,7 +48,7 @@ struct MainView: View {
                         
                         HStack(spacing: 16) {
                             Image(systemName: "magnifyingglass")
-                            Text("Search...")                            
+                            Text("Search...")
                         }
                         .modifier(TextMod(.footnote, .regular, .gray))
                     }
@@ -75,14 +75,11 @@ struct MainView: View {
                 
                 HStack(spacing: 0) {
                     MenuView(currentDisplay: self.$currentDisplay)
-                        .frame(maxWidth: geo.size.width * 0.23)
+                        .frame(maxWidth: geo.size.width * 0.15)
+                    
                     VStack(spacing: 0) {
                         if let category = selectedCategory {
                             MakeASaleView(selectedCategory: category)
-                                .padding()
-                                .background(Color(XSS.S.color80))
-                                .cornerRadius(20, corners: .topLeft)
-                            
                             CategorySelector(selectedCategory: self.$selectedCategory)
                         } else {
                             ProgressView()
@@ -107,18 +104,12 @@ struct MainView: View {
             NavigationSplitView(columnVisibility: .constant(.doubleColumn)) {
                 MenuView(currentDisplay: self.$currentDisplay)
                     .navigationSplitViewColumnWidth(ideal: geo.size.width / 6)
-                    .onTapGesture {
-                        print(geo.size.width)
-                    }
             } detail: {
                 navContent
-                    .onTapGesture {
-                        print(geo.size.width)
-                    }
             }
             .navigationSplitViewStyle(.prominentDetail)
             .onAppear {
-//                columnVisibility = .detailOnly
+                //                columnVisibility = .detailOnly
                 guard let defaultCategory = categories.first else { return }
                 selectedCategory = defaultCategory
             }
@@ -164,37 +155,78 @@ struct MakeASaleView: View {
     @State var counter: Int = 0
     
     var body: some View {
-        HStack {
-            VStack(spacing: 0) {
-                if selectedCategory.items.count > 0 {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 140))], spacing: 0) {
-                        ForEach(selectedCategory.items) { item in
-                            Button {
-                                //                                cart.addItem(item)
-                            } label: {
-                                Text(item.name)
-                                    .font(.system(size: 18, weight: .semibold, design:.rounded))
-                                    .foregroundColor(.black)
-                                    .frame(width: 140, height: 80)
-                                    .background(.blue)
-                            }
-                            .cornerRadius(9)
-                            .padding()
-                            .shadow(radius: 8)
-                        } //: ForEach
-                    } //: LazyVGrid
-                    Spacer()
-                } else {
-                    VStack {
-                        Text("No Items in this category yet.")
-                        addItemButton
-                            .modifier(RoundedButtonMod())
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } //: If-Else
-            } //: VStack
-        } //: HStack
+        mainView
     } //: Body
+    
+    @ViewBuilder private var mainView: some View {
+        GeometryReader { geo in
+            if selectedCategory.items.count > 0 {
+                HStack(spacing: 0) {
+                    buttonPanel
+                    
+                    VStack {
+                        Text("Cart")
+                            .foregroundColor(lightTextColor)
+                            .modifier(TextMod(.title3, .semibold))
+                            .frame(maxWidth: .infinity)
+                        Spacer()
+                        Button {
+                            //
+                        } label: {
+                            Text("Check Out")
+                                .foregroundColor(lightTextColor)
+                                .modifier(TextMod(.title3, .semibold))
+                                .frame(maxWidth: .infinity)
+                        }
+                        
+                    } //: VStack
+                    .edgesIgnoringSafeArea(.trailing)
+                    .frame(maxWidth: geo.size.width / 4)
+                    .background(.clear)
+                } //: HStack
+                
+            } else {
+                noItemsView
+            } //: If-Else
+        }
+    } //: Main View
+    
+    private var noItemsView: some View {
+        VStack {
+            Text("No Items in this category yet.")
+            addItemButton
+                .modifier(RoundedButtonMod())
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    } //: No Items View
+    
+    private var buttonPanel: some View {
+        GeometryReader { geo in
+            VStack(spacing: 0) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 130))], spacing: 0) {
+                    ForEach(selectedCategory.items) { item in
+                        Button {
+//                                cart.addItem(item)
+                        } label: {
+                            Text(item.name)
+                                .modifier(TextMod(.title3, .semibold, .black))
+                                .foregroundColor(.black)
+                                .frame(width: geo.size.width * 0.18, height: 80)
+                                .background(Color(XSS.ComplimentS.color70))
+                        }
+                        .cornerRadius(9)
+                        .padding()
+                        .shadow(radius: 8)
+                    } //: ForEach
+                } //: LazyVGrid
+                Spacer()
+            } //: VStack
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color(XSS.S.color80))
+            .cornerRadius(20, corners: [.topLeft, .topRight, .bottomRight])
+        }
+    } //: Button Panel
     
     private var addItemButton: some View {
         Button {
@@ -205,8 +237,8 @@ struct MakeASaleView: View {
             do {
                 let realm = try Realm()
                 try realm.write {
-                        $selectedCategory.items.append(item)
-                        print("Item Added: \n \(item)")
+                    $selectedCategory.items.append(item)
+                    print("Item Added: \n \(item)")
                     
                 }
             } catch {
@@ -238,7 +270,7 @@ struct CategorySelector: View {
                         } label: {
                             Text(category.name)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                
+                            
                                 .opacity(selectedCategory == category ? 1.0 : 0.65)
                         }
                         .frame(minWidth: 150)
@@ -265,7 +297,7 @@ struct CategorySelector: View {
                             Text(category.name)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 .foregroundColor(selectedCategory == category ? Color(XSS.S.color10) : Color(XSS.S.color90))
-                                
+                            
                         }
                         .frame(minWidth: 150)
                         .background(selectedCategory == category ? Color(XSS.S.color80) : Color(XSS.S.color40))
@@ -290,9 +322,12 @@ struct MenuView: View {
                 Button {
                     currentDisplay = displayState
                 } label: {
+                    Image(systemName: displayState.iconName)
+                        .imageScale(.medium)
+                        .bold()
+                    
                     Text("\(displayState.menuButtonText)")
-                        .foregroundColor(Color(XSS.S.color80))
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .frame(height: 50)
             }
@@ -300,22 +335,32 @@ struct MenuView: View {
             Button {
                 deleteAllFromRealm()
             } label: {
-                Text("Delete Everything")
-                    .foregroundColor(Color(XSS.S.color80))
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .imageScale(.medium)
+                    .bold()
+                
+                Text("Reset")
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(height: 40)
+            .frame(height: 50)
+            
             Spacer()
+            
             Button {
-                deleteAllFromRealm()
+                
             } label: {
+                Image(systemName: "rectangle.portrait.and.arrow.forward")
+                    .imageScale(.medium)
+                    .bold()
+                
                 Text("Sign Out")
-                    .foregroundColor(Color(XSS.S.color80))
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(height: 40)
+            .frame(height: 50)
         } //: VStack
         .padding()
         .background(Color(XSS.S.color20))
-        .modifier(TextMod(.title3, .semibold))
+        .modifier(TextMod(.title3, .semibold, lightTextColor))
         .edgesIgnoringSafeArea(.bottom)
     }
     
