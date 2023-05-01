@@ -23,7 +23,8 @@ struct ContentView: View {
                         CartView(cart: self.cart)
                     }
                 case .addInventory:
-                    AddInventoryView()
+                    RestockView()
+//                    AddInventoryView()
                 case .inventoryList:
                     InventoryListView()
                 case .salesHistory:

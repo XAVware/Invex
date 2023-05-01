@@ -19,25 +19,12 @@ struct MainView: View {
     @State var columnVisibility: NavigationSplitViewVisibility = .automatic
     
     @State var selectedCategory: CategoryEntity?
-    @State var currentDisplay: DisplayStates = .makeASale
+    @State var currentDisplay: DisplayStates = .addInventory
     
     var body: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
-                HStack(alignment: .center) {
-                    HStack(spacing: 0) {
-                        Text("Inventory")
-                            .modifier(TextMod(.title, .semibold, Color(XSS.S.color30)))
-                            .offset(y: -2)
-                        Text("X")
-                            .font(.largeTitle)
-                            .fontWeight(.semibold)
-                            .italic()
-                    } //: HStack
-                    .foregroundColor(Color(XSS.S.color30))
-                    .padding()
-                    .edgesIgnoringSafeArea(.top)
-                    
+                HStack {
                     Spacer()
                     
                     ZStack {
@@ -54,37 +41,19 @@ struct MainView: View {
                     }
                     .padding()
                     .edgesIgnoringSafeArea(.top)
-                    Spacer()
                     
-                    HStack(spacing: 16) {
-                        Text("Ryan")
-                            .modifier(TextMod(.title3, .medium, Color(XSS.S.color80)))
-                        
-                        Image(systemName: "person.circle.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 32, height: 32)
-                    } //: HStack
-                    .foregroundColor(Color(XSS.S.color80))
-                    .padding()
-                    .edgesIgnoringSafeArea(.top)
+                    Spacer()
                 } //: HStack
                 .padding()
                 .frame(maxHeight: geo.size.height * 0.05)
                 .background(Color(XSS.S.color20))
+                .overlay(logo, alignment: .topLeading)
                 
                 HStack(spacing: 0) {
                     MenuView(currentDisplay: self.$currentDisplay)
                         .frame(maxWidth: geo.size.width * 0.15)
                     
-                    VStack(spacing: 0) {
-                        if let category = selectedCategory {
-                            MakeASaleView(selectedCategory: category)
-                            CategorySelector(selectedCategory: self.$selectedCategory)
-                        } else {
-                            ProgressView()
-                        }
-                    } //: VStack
+                    navContent
                 } //: HStack
                 .background(Color(XSS.S.color20))
             } //: VStack
@@ -98,6 +67,21 @@ struct MainView: View {
             }
         }
     } //: Body
+    
+    private var logo: some View {
+        HStack(spacing: 0) {
+            Text("Inventory")
+                .modifier(TextMod(.title, .semibold, Color(XSS.S.color30)))
+                .offset(y: -2)
+            Text("X")
+                .font(.largeTitle)
+                .fontWeight(.semibold)
+                .italic()
+        } //: HStack
+        .foregroundColor(Color(XSS.S.color30))
+        .padding()
+        .edgesIgnoringSafeArea(.top)
+    } //: Logo
     
     private var navSplitViewStyle: some View {
         GeometryReader { geo in
@@ -123,15 +107,20 @@ struct MainView: View {
     @ViewBuilder private var navContent: some View {
         switch currentDisplay {
         case .makeASale:
-            if let category = selectedCategory {
-                MakeASaleView(selectedCategory: category)
-                CategorySelector(selectedCategory: self.$selectedCategory)
-            } else {
-                ProgressView()
-            }
+            VStack(spacing: 0) {
+                if let category = selectedCategory {
+                    MakeASaleView(selectedCategory: category)
+                    if category.items.count > 0 {
+                        CategorySelector(selectedCategory: self.$selectedCategory)
+                    }
+                } else {
+                    ProgressView()
+                }
+            } //: VStack
             
         case .addInventory:
-            AddInventoryView()
+            RestockView()
+//            AddInventoryView()
         case .inventoryList:
             InventoryListView()
         case .salesHistory:
@@ -150,107 +139,7 @@ struct MainView_Previews: PreviewProvider {
     }
 }
 
-struct MakeASaleView: View {
-    @ObservedRealmObject var selectedCategory: CategoryEntity
-    @State var counter: Int = 0
-    
-    var body: some View {
-        mainView
-    } //: Body
-    
-    @ViewBuilder private var mainView: some View {
-        GeometryReader { geo in
-            if selectedCategory.items.count > 0 {
-                HStack(spacing: 0) {
-                    buttonPanel
-                    
-                    VStack {
-                        Text("Cart")
-                            .foregroundColor(lightTextColor)
-                            .modifier(TextMod(.title3, .semibold))
-                            .frame(maxWidth: .infinity)
-                        Spacer()
-                        Button {
-                            //
-                        } label: {
-                            Text("Check Out")
-                                .foregroundColor(lightTextColor)
-                                .modifier(TextMod(.title3, .semibold))
-                                .frame(maxWidth: .infinity)
-                        }
-                        
-                    } //: VStack
-                    .edgesIgnoringSafeArea(.trailing)
-                    .frame(maxWidth: geo.size.width / 4)
-                    .background(.clear)
-                } //: HStack
-                
-            } else {
-                noItemsView
-            } //: If-Else
-        }
-    } //: Main View
-    
-    private var noItemsView: some View {
-        VStack {
-            Text("No Items in this category yet.")
-            addItemButton
-                .modifier(RoundedButtonMod())
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    } //: No Items View
-    
-    private var buttonPanel: some View {
-        GeometryReader { geo in
-            VStack(spacing: 0) {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 130))], spacing: 0) {
-                    ForEach(selectedCategory.items) { item in
-                        Button {
-//                                cart.addItem(item)
-                        } label: {
-                            Text(item.name)
-                                .modifier(TextMod(.title3, .semibold, .black))
-                                .foregroundColor(.black)
-                                .frame(width: geo.size.width * 0.18, height: 80)
-                                .background(Color(XSS.ComplimentS.color70))
-                        }
-                        .cornerRadius(9)
-                        .padding()
-                        .shadow(radius: 8)
-                    } //: ForEach
-                } //: LazyVGrid
-                Spacer()
-            } //: VStack
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color(XSS.S.color80))
-            .cornerRadius(20, corners: [.topLeft, .topRight, .bottomRight])
-        }
-    } //: Button Panel
-    
-    private var addItemButton: some View {
-        Button {
-            let item = InventoryItemEntity()
-            item.name = "Item \(counter)"
-            item.retailPrice = 1.00
-            
-            do {
-                let realm = try Realm()
-                try realm.write {
-                    $selectedCategory.items.append(item)
-                    print("Item Added: \n \(item)")
-                    
-                }
-            } catch {
-                print(error.localizedDescription)
-            }
-            counter += 1
-        } label: {
-            Text("Add Item")
-        }
-        .modifier(RoundedButtonMod())
-    } //: Add Item View
-}
+
 
 struct CategorySelector: View {
     @ObservedResults(CategoryEntity.self) var categories
@@ -313,61 +202,3 @@ struct CategorySelector: View {
     }
 }
 
-struct MenuView: View {
-    @Binding var currentDisplay: DisplayStates
-    
-    var body: some View {
-        VStack {
-            ForEach(DisplayStates.allCases, id: \.self) { displayState in
-                Button {
-                    currentDisplay = displayState
-                } label: {
-                    Image(systemName: displayState.iconName)
-                        .imageScale(.medium)
-                        .bold()
-                    
-                    Text("\(displayState.menuButtonText)")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .frame(height: 50)
-            }
-            
-            Button {
-                deleteAllFromRealm()
-            } label: {
-                Image(systemName: "arrow.triangle.2.circlepath")
-                    .imageScale(.medium)
-                    .bold()
-                
-                Text("Reset")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .frame(height: 50)
-            
-            Spacer()
-            
-            Button {
-                
-            } label: {
-                Image(systemName: "rectangle.portrait.and.arrow.forward")
-                    .imageScale(.medium)
-                    .bold()
-                
-                Text("Sign Out")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .frame(height: 50)
-        } //: VStack
-        .padding()
-        .background(Color(XSS.S.color20))
-        .modifier(TextMod(.title3, .semibold, lightTextColor))
-        .edgesIgnoringSafeArea(.bottom)
-    }
-    
-    func deleteAllFromRealm() {
-        let realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-        }
-    }
-}

@@ -10,6 +10,7 @@ import SwiftUI
 let primaryColor: Color = Color("ThemeColor")
 let secondaryColor: Color = .white
 let lightTextColor: Color = Color(XSS.S.color80)
+let darkTextColor: Color = Color(XSS.S.color10)
 
 struct XSS {
     struct S {
