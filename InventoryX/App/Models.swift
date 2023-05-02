@@ -57,12 +57,12 @@ class InventoryItemEntity: Object, ObjectKeyIdentifiable {
     
     //Sample Data For Previews
     static let item1 = InventoryItemEntity(name: "Lays", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
-    static let item2 = InventoryItemEntity(name: "Skittles", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
+    static let item2 = InventoryItemEntity(name: "Skittles", retailPrice: 1.50, avgCostPer: 0.50, onHandQty: 15)
     static let item3 = InventoryItemEntity(name: "Starburst", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
-    static let item4 = InventoryItemEntity(name: "Water", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
+    static let item4 = InventoryItemEntity(name: "Water", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 4)
     static let item5 = InventoryItemEntity(name: "Gatorade", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
-    static let item6 = InventoryItemEntity(name: "Energy Drink", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
-    static let item7 = InventoryItemEntity(name: "Ice Pop", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
+    static let item6 = InventoryItemEntity(name: "Energy Drink", retailPrice: 3.00, avgCostPer: 0.50, onHandQty: 7)
+    static let item7 = InventoryItemEntity(name: "Ice Pop", retailPrice: 0.50, avgCostPer: 0.50, onHandQty: 13)
 
     static let foodArray = [item1, item2, item3]
     static let drinkArray = [item4, item5, item6]

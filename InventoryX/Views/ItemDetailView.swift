@@ -1,0 +1,145 @@
+//
+//  ItemDetailView.swift
+//  InventoryX
+//
+//  Created by Smetana, Ryan on 5/2/23.
+//
+
+import SwiftUI
+
+struct ItemDetailView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Item Details")
+                .modifier(TextMod(.largeTitle, .semibold))
+            
+            HStack {
+                VStack(spacing: 8) {
+                    Text("Item Name")
+                        .modifier(TextMod(.title3, .regular))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("Lays")
+                        .modifier(TextMod(.title, .semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } //: VStack
+                
+                VStack(spacing: 8) {
+                    Text("Category")
+                        .modifier(TextMod(.title3, .regular))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("Food")
+                        .modifier(TextMod(.title, .semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } //: VStack
+            } //: HStack
+            
+            VStack {
+                Divider()
+                Divider()
+            } //: VStack
+            .padding(.vertical)
+            
+            HStack {
+                VStack(spacing: 8) {
+                    Text("Retail Price")
+                        .modifier(TextMod(.title3, .regular))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("$1.00")
+                        .modifier(TextMod(.title, .semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } //: VStack
+                
+                VStack(spacing: 8) {
+                    Text("Unit Cost")
+                        .modifier(TextMod(.title3, .regular))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("$0.50")
+                        .modifier(TextMod(.title, .semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } //: VStack
+            } //: HStack
+            
+            HStack {
+                VStack(spacing: 8) {
+                    Text("Markup (%)")
+                        .modifier(TextMod(.title3, .regular))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("100%")
+                        .modifier(TextMod(.title, .semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } //: VStack
+                
+                VStack(spacing: 8) {
+                    Text("Margin (%)")
+                        .modifier(TextMod(.title3, .regular))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("50%")
+                        .modifier(TextMod(.title, .semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } //: VStack
+            } //: HStack
+            
+            VStack {
+                Divider()
+                Divider()
+            } //: VStack
+            .padding(.vertical)
+            
+            HStack {
+                VStack(spacing: 8) {
+                    Text("On-Hand Qty.")
+                        .modifier(TextMod(.title3, .regular))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("42")
+                        .modifier(TextMod(.title, .semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } //: VStack
+                
+                VStack(spacing: 8) {
+                    Text("Sales Today")
+                        .modifier(TextMod(.title3, .regular))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("12")
+                        .modifier(TextMod(.title, .semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } //: VStack
+            } //: HStack
+            
+            HStack {
+                Spacer()
+                    .frame(maxWidth: .infinity)
+
+                VStack(spacing: 8) {
+                    Text("Total Sales")
+                        .modifier(TextMod(.title3, .regular))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    Text("478")
+                        .modifier(TextMod(.title, .semibold))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                } //: VStack
+            } //: HStack
+            
+            Spacer()
+        } //: VStack
+        .padding()
+        .frame(width: 500)
+        .background(Color(XSS.S.color90))
+    }
+}
+
+struct ItemDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        ItemDetailView()
+            .modifier(PreviewMod())
+            .previewLayout(.sizeThatFits)
+    }
+}

@@ -30,3 +30,8 @@ enum DisplayStates: CaseIterable {
         }
     }
 }
+
+
+enum SaveResult {
+    case success, failure
+}

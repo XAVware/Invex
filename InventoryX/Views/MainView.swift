@@ -19,7 +19,7 @@ struct MainView: View {
     @State var columnVisibility: NavigationSplitViewVisibility = .automatic
     
     @State var selectedCategory: CategoryEntity?
-    @State var currentDisplay: DisplayStates = .addInventory
+    @State var currentDisplay: DisplayStates = .inventoryList
     
     var body: some View {
         GeometryReader { geo in
@@ -122,7 +122,7 @@ struct MainView: View {
             RestockView()
 //            AddInventoryView()
         case .inventoryList:
-            InventoryListView()
+            InventoryView()
         case .salesHistory:
             SalesHistoryView()
         case .inventoryStatus:
