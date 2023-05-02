@@ -26,7 +26,7 @@ struct TextMod: ViewModifier {
 //        self.fgColor = .black
 //    }
     
-    init(_ font: Font = .body, _ weight: Font.Weight = .semibold, _ fgColor: Color = lightTextColor) {
+    init(_ font: Font = .body, _ weight: Font.Weight = .semibold, _ fgColor: Color = darkTextColor) {
         self.font = font
         self.weight = weight
         self.fgColor = fgColor
