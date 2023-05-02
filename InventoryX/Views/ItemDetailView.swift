@@ -12,6 +12,7 @@ struct ItemDetailView: View {
         VStack(spacing: 16) {
             Text("Item Details")
                 .modifier(TextMod(.largeTitle, .semibold))
+                .padding(.bottom)
             
             HStack {
                 VStack(spacing: 8) {
@@ -34,6 +35,7 @@ struct ItemDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } //: VStack
             } //: HStack
+            .padding(.horizontal)
             
             VStack {
                 Divider()
@@ -62,6 +64,7 @@ struct ItemDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } //: VStack
             } //: HStack
+            .padding(.horizontal)
             
             HStack {
                 VStack(spacing: 8) {
@@ -84,6 +87,7 @@ struct ItemDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } //: VStack
             } //: HStack
+            .padding(.horizontal)
             
             VStack {
                 Divider()
@@ -112,6 +116,7 @@ struct ItemDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } //: VStack
             } //: HStack
+            .padding(.horizontal)
             
             HStack {
                 Spacer()
@@ -127,11 +132,12 @@ struct ItemDetailView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } //: VStack
             } //: HStack
+            .padding(.horizontal)
             
             Spacer()
         } //: VStack
         .padding()
-        .frame(width: 500)
+        .frame(maxWidth: 600)
         .background(Color(XSS.S.color90))
     }
 }
