@@ -25,7 +25,6 @@
 		80B5EFBC29F0D0CA007D9842 /* CartItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFAA29F0D0CA007D9842 /* CartItemView.swift */; };
 		80B5EFBF29F0D0CA007D9842 /* SaleRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFAD29F0D0CA007D9842 /* SaleRowView.swift */; };
 		80B5EFCD29F0D0D3007D9842 /* PasscodePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */; };
-		80B5EFD029F0D0D3007D9842 /* AnimatedCheckmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFC229F0D0D2007D9842 /* AnimatedCheckmarkView.swift */; };
 		80B5EFD329F0D0F3007D9842 /* TypeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFD229F0D0F3007D9842 /* TypeData.swift */; };
 		80B5EFD729F0E186007D9842 /* Modifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5EFD529F0E186007D9842 /* Modifiers.swift */; };
 		80D5025A29F8CE2B0095A547 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D5025929F8CE2B0095A547 /* SectionHeader.swift */; };
@@ -73,7 +72,6 @@
 		80B5EFA829F0D0CA007D9842 /* ActiveReceiptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveReceiptView.swift; sourceTree = "<group>"; };
 		80B5EFAA29F0D0CA007D9842 /* CartItemView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartItemView.swift; sourceTree = "<group>"; };
 		80B5EFAD29F0D0CA007D9842 /* SaleRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaleRowView.swift; sourceTree = "<group>"; };
-		80B5EFC229F0D0D2007D9842 /* AnimatedCheckmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedCheckmarkView.swift; sourceTree = "<group>"; };
 		80B5EFC629F0D0D3007D9842 /* PasscodePad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodePad.swift; sourceTree = "<group>"; };
 		80B5EFD229F0D0F3007D9842 /* TypeData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeData.swift; sourceTree = "<group>"; };
 		80B5EFD529F0E186007D9842 /* Modifiers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Modifiers.swift; sourceTree = "<group>"; };
@@ -137,7 +135,6 @@
 			children = (
 				80B5EFA029F0D0C9007D9842 /* ConfirmationView.swift */,
 				80B5EFA829F0D0CA007D9842 /* ActiveReceiptView.swift */,
-				80B5EFC229F0D0D2007D9842 /* AnimatedCheckmarkView.swift */,
 			);
 			path = OldViews;
 			sourceTree = "<group>";
@@ -400,7 +397,6 @@
 				802EDC0A2A02166D0048A9A8 /* LogoView.swift in Sources */,
 				80B5EFB429F0D0CA007D9842 /* CartView.swift in Sources */,
 				80DBB98329F715BA00497695 /* RoundedButtonMod.swift in Sources */,
-				80B5EFD029F0D0D3007D9842 /* AnimatedCheckmarkView.swift in Sources */,
 				80B5EF7129F0C318007D9842 /* InventoryXApp.swift in Sources */,
 				80F6026829FFFFBD004C759D /* MenuView.swift in Sources */,
 				94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */,
