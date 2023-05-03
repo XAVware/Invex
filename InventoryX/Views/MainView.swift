@@ -88,7 +88,8 @@ struct MainView: View {
         case .salesHistory:
             SalesHistoryView()
         case .inventoryStatus:
-            InventoryStatusView()
+            Text("Status")
+//            InventoryStatusView()
         }
     } //: Nav Content
     

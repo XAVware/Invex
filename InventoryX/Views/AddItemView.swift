@@ -207,20 +207,20 @@ struct AddItemView: View {
                 .foregroundColor(.black)
             } //: GroupBox
             
-            SaveItemButton(action: {
-                self.typeExpanded = false
-                self.priceExpanded = false
-                self.quantityExpanded = false
-                
-                self.errorMessage = ""
-                
-                guard self.quantityPurchased >= 0 else {
-                    self.errorMessage = "Please enter a valid quantity"
-                    self.priceExpanded = false
-                    self.typeExpanded = false
-                    withAnimation { self.quantityExpanded = true }
-                    return
-                }
+//            SaveItemButton(action: {
+//                self.typeExpanded = false
+//                self.priceExpanded = false
+//                self.quantityExpanded = false
+//
+//                self.errorMessage = ""
+//
+//                guard self.quantityPurchased >= 0 else {
+//                    self.errorMessage = "Please enter a valid quantity"
+//                    self.priceExpanded = false
+//                    self.typeExpanded = false
+//                    withAnimation { self.quantityExpanded = true }
+//                    return
+//                }
                 
                 //            switch self.viewType {
                 //            case .newItem:
@@ -233,12 +233,12 @@ struct AddItemView: View {
                 //                }
                 //            }
                 
-                self.savedSuccessfully = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    dismiss()
-                }
-                
-            }) //: Save Button
+//                self.savedSuccessfully = true
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                    dismiss()
+//                }
+//                
+//            }) //: Save Button
             .buttonStyle(PlainButtonStyle())
             .padding()
             .overlay(
