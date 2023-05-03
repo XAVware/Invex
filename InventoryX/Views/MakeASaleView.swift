@@ -20,7 +20,32 @@ struct MakeASaleView: View {
         GeometryReader { geo in
             if selectedCategory.items.count > 0 {
                 HStack(spacing: 0) {
-                    buttonPanel
+                    VStack(spacing: 0) {
+                        HStack(spacing: 12) {
+                            Image(systemName: "magnifyingglass")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 16)
+                                .bold()
+                            
+                            Text("Search...")
+                                .modifier(TextMod(.title3, .semibold, .gray))
+                            
+                            Spacer()
+                        } //: HStack
+                        .padding(.horizontal)
+                        .frame(height: 40)
+                        .foregroundColor(.gray)
+                        
+                        Divider()
+                        
+                        buttonPanel
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
+                    .background(Color(XSS.S.color80))
+                    .cornerRadius(20, corners: [.topLeft, .topRight, .bottomRight])
                     
                     VStack {
                         Text("Cart")
@@ -75,13 +100,10 @@ struct MakeASaleView: View {
                         .shadow(radius: 8)
                     } //: ForEach
                 } //: LazyVGrid
+                .padding()
                 Spacer()
             } //: VStack
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color(XSS.S.color80))
-            .cornerRadius(20, corners: [.topLeft, .topRight, .bottomRight])
-        }
+        } //: Geometry Reader
     } //: Button Panel
     
     private var addItemButton: some View {
