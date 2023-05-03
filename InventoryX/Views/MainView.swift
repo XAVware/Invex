@@ -19,36 +19,11 @@ struct MainView: View {
     @State var columnVisibility: NavigationSplitViewVisibility = .automatic
     
     @State var selectedCategory: CategoryEntity?
-    @State var currentDisplay: DisplayStates = .inventoryList
+    @State var currentDisplay: DisplayStates = .makeASale
     
     var body: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
-                HStack {
-                    Spacer()
-                    
-                    ZStack {
-                        Capsule()
-                            .frame(height: 30)
-                            .foregroundColor(Color(XSS.S.color90))
-                            .frame(maxWidth: geo.size.width / 4)
-                        
-                        HStack(spacing: 16) {
-                            Image(systemName: "magnifyingglass")
-                            Text("Search...")
-                        }
-                        .modifier(TextMod(.footnote, .regular, .gray))
-                    }
-                    .padding()
-                    .edgesIgnoringSafeArea(.top)
-                    
-                    Spacer()
-                } //: HStack
-                .padding()
-                .frame(maxHeight: geo.size.height * 0.05)
-                .background(Color(XSS.S.color20))
-                .overlay(logo, alignment: .topLeading)
-                
                 HStack(spacing: 0) {
                     MenuView(currentDisplay: self.$currentDisplay)
                         .frame(maxWidth: geo.size.width * 0.15)
@@ -68,26 +43,13 @@ struct MainView: View {
         }
     } //: Body
     
-    private var logo: some View {
-        HStack(spacing: 0) {
-            Text("Inventory")
-                .modifier(TextMod(.title, .semibold, Color(XSS.S.color30)))
-                .offset(y: -2)
-            Text("X")
-                .font(.largeTitle)
-                .fontWeight(.semibold)
-                .italic()
-        } //: HStack
-        .foregroundColor(Color(XSS.S.color30))
-        .padding()
-        .edgesIgnoringSafeArea(.top)
-    } //: Logo
     
     private var navSplitViewStyle: some View {
         GeometryReader { geo in
             NavigationSplitView(columnVisibility: .constant(.doubleColumn)) {
                 MenuView(currentDisplay: self.$currentDisplay)
                     .navigationSplitViewColumnWidth(ideal: geo.size.width / 6)
+                    
             } detail: {
                 navContent
             }
@@ -198,7 +160,7 @@ struct CategorySelector: View {
             } //: Scroll
             .frame(maxWidth: .infinity, maxHeight: 40)
             .background(.clear)
-        }
-    }
+        } //: Switch
+    } //: Body
 }
 

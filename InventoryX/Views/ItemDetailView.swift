@@ -134,10 +134,22 @@ struct ItemDetailView: View {
             } //: HStack
             .padding(.horizontal)
             
+            Button {
+                //
+            } label: {
+                Text("Modify")
+                    .frame(maxWidth: .infinity)
+                    .modifier(TextMod(.title3, .semibold, .white))
+                
+                Image(systemName: "pencil")
+            }
+            .modifier(RoundedButtonMod())
+
+            
             Spacer()
         } //: VStack
         .padding()
-        .frame(maxWidth: 600)
+        .frame(maxWidth: 500)
         .background(Color(XSS.S.color90))
     }
 }

@@ -24,6 +24,7 @@ struct RestockView: View {
     @State var isShowingDetail: Bool = true
     @State var selectedItem: InventoryItemEntity?
     
+    
     func itemTapped(itemId: ObjectId) {
         let itemResult = items.where {
             $0._id == itemId

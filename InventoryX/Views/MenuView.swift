@@ -13,6 +13,11 @@ struct MenuView: View {
     
     var body: some View {
         VStack {
+            LogoView()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .scaleEffect(0.8)
+                .padding(.top, 8)
+            
             HStack(spacing: 16) {
                 Image(systemName: "person.circle.fill")
                     .resizable()
@@ -83,10 +88,10 @@ struct MenuView: View {
             .frame(height: 50)
             .frame(maxWidth: .infinity)
         } //: VStack
-        .padding(.vertical)
+//        .padding(.vertical)
         .background(Color(XSS.S.color20))
         .modifier(TextMod(.title3, .semibold, lightTextColor))
-        .edgesIgnoringSafeArea(.bottom)
+        .edgesIgnoringSafeArea(.vertical)
     }
     
     func deleteAllFromRealm() {
