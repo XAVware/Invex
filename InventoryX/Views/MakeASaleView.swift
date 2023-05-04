@@ -12,6 +12,22 @@ struct MakeASaleView: View {
     @ObservedRealmObject var selectedCategory: CategoryEntity
     @State var counter: Int = 0
     
+    
+    func getColumns(gridWidth: CGFloat) -> [GridItem] {
+        let itemSize = gridWidth * 0.20
+        let numberOfColums = 4
+        let itemSpacing = gridWidth * 0.05
+        
+        
+        let columns = [
+            GridItem(.fixed(itemSize), spacing: itemSpacing),
+            GridItem(.fixed(itemSize), spacing: itemSpacing),
+            GridItem(.fixed(itemSize), spacing: itemSpacing),
+            GridItem(.fixed(itemSize), spacing: itemSpacing)
+        ]
+        return columns
+    }
+    
     var body: some View {
         mainView
     } //: Body
@@ -85,18 +101,20 @@ struct MakeASaleView: View {
     private var buttonPanel: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 130))], spacing: 0) {
+                LazyVGrid(columns: getColumns(gridWidth: geo.size.width), spacing: 0) {
                     ForEach(selectedCategory.items) { item in
                         Button {
 //                                cart.addItem(item)
                         } label: {
                             Text(item.name)
                                 .modifier(TextMod(.title3, .semibold, .black))
-                                .frame(width: geo.size.width * 0.18, height: 80)
-                                .background(Color(XSS.ComplimentS.color70))
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
+                        .frame(height: 80)
+//                        .frame(width: geo.size.width * 0.18, height: 80)
+                        .background(Color(XSS.ComplimentS.color70))
                         .cornerRadius(9)
-                        .padding()
+//                        .padding()
                         .shadow(radius: 8)
                     } //: ForEach
                 } //: LazyVGrid
@@ -134,5 +152,6 @@ struct MakeASaleView_Previews: PreviewProvider {
     @State static var category: CategoryEntity = CategoryEntity.foodCategory
     static var previews: some View {
         MakeASaleView(selectedCategory: category)
+            .modifier(PreviewMod())
     }
 }
