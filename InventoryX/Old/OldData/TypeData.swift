@@ -14,11 +14,11 @@ import RealmSwift
 //    Type(type: "Frozen", restockNumber: 10)
 //]
 
-let categoryList: [Category] = {
-    var tempList: [Category] = []
-    let results = try! Realm().objects(Category.self)
-    for category in results {
-        tempList.append(category)
-    }
-    return tempList
-}()
+//let categoryList: [Category] = {
+//    var tempList: [Category] = []
+//    let results = try! Realm().objects(Category.self)
+//    for category in results {
+//        tempList.append(category)
+//    }
+//    return tempList
+//}()

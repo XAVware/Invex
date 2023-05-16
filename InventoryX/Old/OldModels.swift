@@ -69,9 +69,9 @@ class Cart: ObservableObject {
         
         
         //Save Sale
-        let config = Realm.Configuration(schemaVersion: 1)
+//        let config = Realm.Configuration(schemaVersion: 1)
         do {
-            let realm = try Realm(configuration: config)
+            let realm = try Realm()
             try realm.write ({
                 realm.add(sale)
             })
@@ -85,15 +85,16 @@ class Cart: ObservableObject {
         for cartItem in cartItems {
             let predicate = NSPredicate(format: "name == %@", cartItem.name)
             do {
-                let realm = try Realm(configuration: config)
-                let result = realm.objects(InventoryItem.self).filter(predicate)
+//                let realm = try Realm(configuration: config)
+                let realm = try Realm()
+                let result = realm.objects(InventoryItemEntity.self).filter(predicate)
                 for item in result {
-                    if item.subtype == cartItem.subtype {
+//                    if item.subtype == cartItem.subtype {
                         try realm.write ({
                             item.onHandQty -= cartItem.qtyToPurchase
                             realm.add(item)
                         })
-                    }
+//                    }
                 }
             } catch {
                 print(error.localizedDescription)
@@ -144,20 +145,20 @@ class Cart: ObservableObject {
     }
 }
 
-class Category: Object {
-    @objc dynamic var name: String          = ""
-    @objc dynamic var restockNumber         = 0
-}
-
-
-class InventoryItem: Object {
-    @objc dynamic var name: String          = ""
-    @objc dynamic var subtype: String       = ""
-    @objc dynamic var itemType: String      = ""
-    @objc dynamic var retailPrice: Double   = 0.00
-    @objc dynamic var avgCostPer: Double    = 0.00
-    @objc dynamic var onHandQty: Int        = 0
-}
+//class Category: Object {
+//    @objc dynamic var name: String          = ""
+//    @objc dynamic var restockNumber         = 0
+//}
+//
+//
+//class InventoryItem: Object {
+//    @objc dynamic var name: String          = ""
+//    @objc dynamic var subtype: String       = ""
+//    @objc dynamic var itemType: String      = ""
+//    @objc dynamic var retailPrice: Double   = 0.00
+//    @objc dynamic var avgCostPer: Double    = 0.00
+//    @objc dynamic var onHandQty: Int        = 0
+//}
 
 
 class SaleDateManager {
