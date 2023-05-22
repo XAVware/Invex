@@ -57,6 +57,7 @@ struct RestockView: View {
                     .padding()
                     .background(Color(XSS.S.color80))
                     .cornerRadius(20, corners: [.topLeft])
+                    
                     .fullScreenCover(isPresented: $isShowingDetailView, onDismiss: {
                         selectedItemName = ""
                     }) {

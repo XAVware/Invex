@@ -8,159 +8,6 @@
 import SwiftUI
 import RealmSwift
 
-class CartItem: ObservableObject {
-    var id = UUID()
-    @Published var name: String         = ""
-    @Published var qtyToPurchase: Int   = 1
-    @Published var subtype: String      = ""
-    @Published var price: Double        = 0.00
-    
-    var subtotal: Double {
-        return Double(self.qtyToPurchase) * self.price
-    }
-    
-    var subtotalString: String {
-        let tempSubtotalString: String = String(format: "%.2f", subtotal)
-        return "$ \(tempSubtotalString)"
-    }
-    
-    func increaseQtyInCart() {
-        if self.qtyToPurchase < 24 {
-            self.qtyToPurchase += 1
-        }
-    }
-    
-    func decreaseQtyInCart() {
-        if self.qtyToPurchase != 0 {
-            self.qtyToPurchase -= 1
-        }
-    }
-    
-}
-
-
-class Cart: ObservableObject {
-    @Published var cartItems: [CartItem]        = []
-    @Published var cartTotalString: String      = "$ 0.00"
-    @Published var isEditable: Bool             = true
-    @Published var isConfirmation: Bool         = false
-    
-    func finishSale() {
-        guard !cartItems.isEmpty else {
-            print("There are no items in the cart -- Returning")
-            return
-        }
-        
-        let sale = Sale()
-        sale.timestamp = Date()
-        var tempTotal: Double = 0.00
-        
-        for cartItem in cartItems {
-            let saleItem = SaleItem()
-            saleItem.name = cartItem.name
-            saleItem.subtype = cartItem.subtype
-            saleItem.price = cartItem.price
-            saleItem.qtyToPurchase = cartItem.qtyToPurchase
-            tempTotal += (saleItem.price * Double(saleItem.qtyToPurchase))
-            sale.items.append(saleItem)
-        }
-        
-        sale.total = tempTotal
-        
-        
-        //Save Sale
-//        let config = Realm.Configuration(schemaVersion: 1)
-        do {
-            let realm = try Realm()
-            try realm.write ({
-                realm.add(sale)
-            })
-        } catch {
-            print("Error saving sale: -- Returning")
-            print(error.localizedDescription)
-            return
-        }
-        
-        //Adjust Quantities
-        for cartItem in cartItems {
-            let predicate = NSPredicate(format: "name == %@", cartItem.name)
-            do {
-//                let realm = try Realm(configuration: config)
-                let realm = try Realm()
-                let result = realm.objects(InventoryItemEntity.self).filter(predicate)
-                for item in result {
-//                    if item.subtype == cartItem.subtype {
-                        try realm.write ({
-                            item.onHandQty -= cartItem.qtyToPurchase
-                            realm.add(item)
-                        })
-//                    }
-                }
-            } catch {
-                print(error.localizedDescription)
-                return
-            }
-        }
-        
-        self.resetCart()
-    }
-    
-    func resetCart() {
-        self.cartItems = []
-        self.cartTotalString = "$ 0.00"
-        withAnimation {
-            self.isEditable = true
-            self.isConfirmation = false
-        }
-    }
-    
-    func addItem(_ item: InventoryItemEntity) {
-//        for cartItem in cartItems {
-//            if cartItem.name == item.name && cartItem.subtype == item.subtype {
-//                cartItem.increaseQtyInCart()
-//                self.updateTotal()
-//                return
-//            }
-//        }
-        
-        let tempCartItem = CartItem()
-        tempCartItem.name = item.name
-//        tempCartItem.subtype = item.subtype
-        tempCartItem.price = item.retailPrice
-        self.cartItems.append(tempCartItem)
-        self.updateTotal()
-    }
-    
-    func removeItem(atOffsets offsets: IndexSet) {
-        self.cartItems.remove(atOffsets: offsets)
-        updateTotal()
-    }
-    
-    func updateTotal() {
-        var tempTotal: Double = 0
-        for cartItem in cartItems {
-            tempTotal += cartItem.subtotal
-        }
-        self.cartTotalString = "$ \(String(format: "%.2f", tempTotal))"
-    }
-}
-
-//class Category: Object {
-//    @objc dynamic var name: String          = ""
-//    @objc dynamic var restockNumber         = 0
-//}
-//
-//
-//class InventoryItem: Object {
-//    @objc dynamic var name: String          = ""
-//    @objc dynamic var subtype: String       = ""
-//    @objc dynamic var itemType: String      = ""
-//    @objc dynamic var retailPrice: Double   = 0.00
-//    @objc dynamic var avgCostPer: Double    = 0.00
-//    @objc dynamic var onHandQty: Int        = 0
-//}
-
-
 class SaleDateManager {
     var calendar: Calendar {
         var calendar = Calendar.current
@@ -250,12 +97,11 @@ class Sale: Object {
     @objc dynamic var timestamp: Date = Date()
     var items = RealmSwift.List<SaleItem>()
     @objc dynamic var total: Double = 0.00
-
 }
 
 
-struct Type: Identifiable {
-    var id = UUID()
-    var type: String
-    var restockNumber: Int
-}
+//struct Type: Identifiable {
+//    var id = UUID()
+//    var type: String
+//    var restockNumber: Int
+//}

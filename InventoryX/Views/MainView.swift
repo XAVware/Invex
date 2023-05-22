@@ -11,6 +11,11 @@ import RealmSwift
 // 11 Inch iPad (Landscape)
 // Width: 1194
 // Height: 790
+
+//@MainActor class MainViewModel: ObservedObject {
+//    
+//}
+
 struct MainView: View {
     @EnvironmentObject var userManager: UserManager
     @ObservedResults(CategoryEntity.self) var categories

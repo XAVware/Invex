@@ -10,6 +10,7 @@ import RealmSwift
 
 struct MakeASaleView: View {
     @ObservedRealmObject var selectedCategory: CategoryEntity
+    @ObservedObject var cart: Cart = Cart()
     @State var counter: Int = 0
     
     
@@ -26,6 +27,10 @@ struct MakeASaleView: View {
             GridItem(.fixed(itemSize), spacing: itemSpacing)
         ]
         return columns
+    }
+    
+    func itemTapped(item: InventoryItemEntity) {
+        cart.addItem(item)
     }
     
     var body: some View {
@@ -69,6 +74,7 @@ struct MakeASaleView: View {
                             .frame(maxWidth: .infinity)
                         
                         Spacer()
+                        
                         Button {
                             //
                         } label: {
@@ -89,22 +95,13 @@ struct MakeASaleView: View {
         }
     } //: Main View
     
-    private var noItemsView: some View {
-        VStack {
-            Text("No Items in this category yet.")
-            addItemButton
-                .modifier(RoundedButtonMod())
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    } //: No Items View
-    
     private var buttonPanel: some View {
         GeometryReader { geo in
             VStack(spacing: 0) {
                 LazyVGrid(columns: getColumns(gridWidth: geo.size.width), spacing: 0) {
                     ForEach(selectedCategory.items) { item in
                         Button {
-//                                cart.addItem(item)
+                            itemTapped(item: item)
                         } label: {
                             Text(item.name)
                                 .modifier(TextMod(.title3, .semibold, .black))
@@ -114,7 +111,6 @@ struct MakeASaleView: View {
 //                        .frame(width: geo.size.width * 0.18, height: 80)
                         .background(Color(XSS.ComplimentS.color70))
                         .cornerRadius(9)
-//                        .padding()
                         .shadow(radius: 8)
                     } //: ForEach
                 } //: LazyVGrid
@@ -124,28 +120,34 @@ struct MakeASaleView: View {
         } //: Geometry Reader
     } //: Button Panel
     
-    private var addItemButton: some View {
-        Button {
-            let item = InventoryItemEntity()
-            item.name = "Item \(counter)"
-            item.retailPrice = 1.00
+    private var noItemsView: some View {
+        VStack {
+            Text("No Items in this category yet.")
             
-            do {
-                let realm = try Realm()
-                try realm.write {
-                    $selectedCategory.items.append(item)
-                    print("Item Added: \n \(item)")
-                    
+            Button {
+                let item = InventoryItemEntity()
+                item.name = "Item \(counter)"
+                item.retailPrice = 1.00
+                
+                do {
+                    let realm = try Realm()
+                    try realm.write {
+                        $selectedCategory.items.append(item)
+                        print("Item Added: \n \(item)")
+                        
+                    }
+                } catch {
+                    print(error.localizedDescription)
                 }
-            } catch {
-                print(error.localizedDescription)
+                counter += 1
+            } label: {
+                Text("Add Item")
             }
-            counter += 1
-        } label: {
-            Text("Add Item")
+            .modifier(RoundedButtonMod())
+                .modifier(RoundedButtonMod())
         }
-        .modifier(RoundedButtonMod())
-    } //: Add Item View
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    } //: No Items View
 }
 
 struct MakeASaleView_Previews: PreviewProvider {

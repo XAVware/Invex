@@ -48,14 +48,14 @@ struct MenuButtonModifier: ViewModifier {
     }
 }
 
-struct SaveButtonModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.system(size: 24, weight: .semibold, design: .rounded))
-            .frame(maxWidth: 500, minHeight: 60)
-            .background(Color("GreenBackground"))
-    }
-}
+//struct SaveButtonModifier: ViewModifier {
+//    func body(content: Content) -> some View {
+//        content
+//            .font(.system(size: 24, weight: .semibold, design: .rounded))
+//            .frame(maxWidth: 500, minHeight: 60)
+//            .background(Color("GreenBackground"))
+//    }
+//}
 
 struct DetailTextModifier: ViewModifier {
     @State var textColor: Color = Color.white

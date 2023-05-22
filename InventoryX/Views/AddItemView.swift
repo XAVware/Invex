@@ -24,13 +24,23 @@ struct AddItemView: View {
     
     
     func saveItem() {
-        guard itemName.isNotEmpty, quantity.isNotEmpty, retailPrice.isNotEmpty else { return }
         
+        guard itemName.isNotEmpty, quantity.isNotEmpty, retailPrice.isNotEmpty else { return }
         let newItem = InventoryItemEntity(name: itemName, retailPrice: Double(retailPrice) ?? 1.0, avgCostPer: Double(unitCost) ?? 0.5, onHandQty: Int(quantity) ?? 10)
         
-        if let category = category {
-            category.items.append(newItem)
+        do {
+            let realm = try Realm()
+            try realm.write {
+                if let category = self.category {
+                    category.$items.append(newItem)
+                }
+                
+            }
+        } catch {
+            print(error.localizedDescription)
         }
+        
+    
     }
     
     var body: some View {
