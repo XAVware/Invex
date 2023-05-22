@@ -21,31 +21,50 @@ struct AddItemView: View {
     @State var retailPrice: String = ""
     @State var unitCost: String = ""
     @State var category: CategoryEntity!
-    
-    
-    func saveItem() {
-        
+            
+    func saveItem(completion: @escaping () -> Void) {
+        guard let category = category else {
+            print("Category is nil")
+            return
+        }
         guard itemName.isNotEmpty, quantity.isNotEmpty, retailPrice.isNotEmpty else { return }
         let newItem = InventoryItemEntity(name: itemName, retailPrice: Double(retailPrice) ?? 1.0, avgCostPer: Double(unitCost) ?? 0.5, onHandQty: Int(quantity) ?? 10)
         
         do {
             let realm = try Realm()
-            try realm.write {
-                if let category = self.category {
-                    category.$items.append(newItem)
-                }
-                
+            guard let selectedCategory = realm.objects(CategoryEntity.self).where({ tempCategory in
+                tempCategory._id == category._id
+            }).first else {
+                print("Error setting selected category.")
+                return
             }
+            
+            let originalItems = selectedCategory.items
+            
+            print("Original Items: \(originalItems)")
+            
+            try realm.write {
+                var newItemsList = originalItems
+                newItemsList.append(newItem)
+                
+                print("New Items: \(newItemsList)")
+                
+                selectedCategory.items = newItemsList
+                self.category = selectedCategory
+            }
+            
+            completion()
         } catch {
             print(error.localizedDescription)
         }
         
-    
-    }
+        
+    } //: Save Item
     
     var body: some View {
         ZStack {
             Color(XSS.S.color90)
+            
             VStack(spacing: 16) {
                 Text("New Item")
                     .modifier(TextMod(.largeTitle, .semibold))
@@ -60,7 +79,8 @@ struct AddItemView: View {
                         Spacer()
                         Picker(selection: $category) {
                             ForEach(categories) { category in
-                                Text(category.name).tag(category as CategoryEntity?) 
+//                                Text(category.name).tag(category as CategoryEntity?)
+                                Text(category.name).tag(category.name)
                             }
                         } label: {
                             Text("Category")
@@ -78,14 +98,16 @@ struct AddItemView: View {
                 Spacer()
                 
                 Button {
-                    saveItem()
+                    saveItem() { }
                 } label: {
                     Text("Save and Add Another")
                 }
                 .modifier(RoundedButtonMod())
                 
                 Button {
-                    //
+                    saveItem() {
+                        dismiss()
+                    }
                 } label: {
                     Text("Save and Finish")
                 }
@@ -101,8 +123,6 @@ struct AddItemView: View {
             category = categories.first
         }
     } //: Body
-    
-    
 }
 
 
