@@ -12,16 +12,10 @@ import RealmSwift
 // Width: 1194
 // Height: 790
 
-//@MainActor class MainViewModel: ObservedObject {
-//    
-//}
-
 struct MainView: View {
     @EnvironmentObject var userManager: UserManager
     @ObservedResults(CategoryEntity.self) var categories
     
-    @StateObject var cart = Cart()
-    @State var columnVisibility: NavigationSplitViewVisibility = .automatic
     
     @State var selectedCategory: CategoryEntity?
     @State var currentDisplay: DisplayStates = .makeASale
@@ -64,15 +58,7 @@ struct MainView: View {
     @ViewBuilder private var navContent: some View {
         switch currentDisplay {
         case .makeASale:
-            VStack(spacing: 0) {
-                if let category = selectedCategory {
-                    MakeASaleView(selectedCategory: category)
-                    CategorySelector(selectedCategory: self.$selectedCategory)
-                } else {
-                    ProgressView()
-                }
-            } //: VStack
-            
+            MakeASaleView()
         case .addInventory:
             RestockView()
         case .inventoryList:
