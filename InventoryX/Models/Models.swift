@@ -12,7 +12,7 @@ import Realm
 class InventoryItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted(originProperty: "items") var category: LinkingObjects<CategoryEntity>
-    @Persisted var subtypes: RealmSwift.List<ChildInventoryItemEntity>
+//    @Persisted var subtypes: RealmSwift.List<ChildInventoryItemEntity>
     
     @Persisted var name: String
     @Persisted var retailPrice: Double
@@ -42,38 +42,23 @@ class InventoryItemEntity: Object, ObjectKeyIdentifiable {
     
 }
 
-class ChildInventoryItemEntity: Object, ObjectKeyIdentifiable {
-    @Persisted(primaryKey: true) var _id: ObjectId
-    @Persisted(originProperty: "subtypes") var itemParent: LinkingObjects<InventoryItemEntity>
-    @Persisted var name: String
-    @Persisted var retailPrice: Double
-    @Persisted var avgCostPer: Double
-    @Persisted var onHandQty: Int
-    
-    convenience init(name: String, retailPrice: Double, avgCostPer: Double, onHandQty: Int) {
-        self.init()
-        self.name = name
-        self.retailPrice = retailPrice
-        self.avgCostPer = avgCostPer
-        self.onHandQty = onHandQty
-    }
-}
+//class ChildInventoryItemEntity: Object, ObjectKeyIdentifiable {
+//    @Persisted(primaryKey: true) var _id: ObjectId
+//    @Persisted(originProperty: "subtypes") var itemParent: LinkingObjects<InventoryItemEntity>
+//    @Persisted var name: String
+//    @Persisted var retailPrice: Double
+//    @Persisted var avgCostPer: Double
+//    @Persisted var onHandQty: Int
+//
+//    convenience init(name: String, retailPrice: Double, avgCostPer: Double, onHandQty: Int) {
+//        self.init()
+//        self.name = name
+//        self.retailPrice = retailPrice
+//        self.avgCostPer = avgCostPer
+//        self.onHandQty = onHandQty
+//    }
+//}
 
-class SaleEntity: Object, ObjectKeyIdentifiable {
-    @Persisted(primaryKey: true) var _id: ObjectId
-    @Persisted var timestamp: Date = Date()
-    @Persisted var total: Double = 0.00
-    @Persisted var items: RealmSwift.List<SaleItemEntity>
-    
-}
-
-class SaleItemEntity: Object, ObjectKeyIdentifiable {
-    @Persisted(primaryKey: true) var _id: ObjectId
-    @Persisted var name: String = ""
-    @Persisted var subtype: String = ""
-    @Persisted var qtyToPurchase: Int = 0
-    @Persisted var price: Double = 0.00
-}
 
 enum UserRole: String, PersistableEnum {
     case admin

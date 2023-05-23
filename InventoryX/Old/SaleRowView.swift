@@ -22,8 +22,8 @@ struct SaleRowView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 10, height: 10)
-                                
-                                Text("\(saleItem.name) \(saleItem.subtype == "" ? "x\(saleItem.qtyToPurchase)" : "- \(saleItem.subtype) x\(saleItem.qtyToPurchase)")")
+                                Text(saleItem.name)
+//                                Text("\(saleItem.name) \(saleItem.subtype == "" ? "x\(saleItem.qtyToPurchase)" : "- \(saleItem.subtype) x\(saleItem.qtyToPurchase)")")
                                     .font(.system(size: 16, weight: .bold, design: .rounded))
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }

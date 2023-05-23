@@ -59,6 +59,7 @@ struct MakeASaleView: View {
                 
                 
                 CartView()
+                    .environmentObject(cart)
                     .frame(width: geo.size.width * 0.25)
             } //: HStack
             

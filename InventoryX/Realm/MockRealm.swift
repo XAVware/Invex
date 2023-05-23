@@ -30,7 +30,6 @@ class MockRealms {
                 category1.items.append(objectsIn: InventoryItemEntity.foodArray)
                 category2.items.append(objectsIn: InventoryItemEntity.drinkArray)
                 category3.items.append(objectsIn: InventoryItemEntity.frozenArray)
-                //                realm.add(InventoryItemEntity.itemArray)
             }
             return realm
         } catch let error {

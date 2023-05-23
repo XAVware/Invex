@@ -18,7 +18,7 @@ class RealmMigrator {
             if (oldSchemaVersion < currentVersion) {
                 migration.enumerateObjects(ofType: CategoryEntity.className()) { oldObject, newObject in }
                 migration.enumerateObjects(ofType: InventoryItemEntity.className()) { (oldObject, newObject) in }
-                migration.enumerateObjects(ofType: ChildInventoryItemEntity.className()) { (oldObject, newObject) in }
+//                migration.enumerateObjects(ofType: ChildInventoryItemEntity.className()) { (oldObject, newObject) in }
                 migration.enumerateObjects(ofType: SaleEntity.className()) { oldObject, newObject in }
                 migration.enumerateObjects(ofType: SaleItemEntity.className()) { oldObject, newObject in }
                 migration.enumerateObjects(ofType: UserEntity.className()) { oldObject, newObject in }
