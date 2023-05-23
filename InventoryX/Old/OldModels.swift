@@ -84,24 +84,8 @@ class SaleDateManager {
     }
 }
 
-
-class SaleItem: Object {
-    @objc dynamic var name: String = ""
-    @objc dynamic var subtype: String = ""
-    @objc dynamic var qtyToPurchase: Int = 0
-    @objc dynamic var price: Double = 0.00
-}
-
-
 class Sale: Object {
     @objc dynamic var timestamp: Date = Date()
     var items = RealmSwift.List<SaleItem>()
     @objc dynamic var total: Double = 0.00
 }
-
-
-//struct Type: Identifiable {
-//    var id = UUID()
-//    var type: String
-//    var restockNumber: Int
-//}

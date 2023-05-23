@@ -40,11 +40,6 @@ struct InventoryView: View {
     }
     
     var body: some View {
-        inventoryList
-            .background(Color(XSS.S.color90))
-    } //: Body
-    
-    private var inventoryList: some View {
         VStack(spacing: 0) {
             columnHeaders
             
@@ -54,7 +49,8 @@ struct InventoryView: View {
             
             Spacer()
         } //: VStack
-    } //: Inventory List
+            .background(Color(XSS.S.color90))
+    } //: Body
     
     private var columnHeaders: some View {
         HStack(spacing: 0) {

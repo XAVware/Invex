@@ -11,7 +11,7 @@ import RealmSwift
 struct MakeASaleView: View {
     @ObservedResults(CategoryEntity.self) var categories
     @State var selectedCategory: CategoryEntity = .init()
-    @ObservedObject var cart: Cart = Cart()
+    @ObservedObject var cart: CartViewModel = CartViewModel()
     @State var counter: Int = 0
     
     private func setDefaultCategory() {
@@ -21,7 +21,7 @@ struct MakeASaleView: View {
     
     func getColumns(gridWidth: CGFloat) -> [GridItem] {
         let itemSize = gridWidth * 0.20
-//        let numberOfColums = 4
+        //        let numberOfColums = 4
         let itemSpacing = gridWidth * 0.05
         
         let columns = [
@@ -38,13 +38,6 @@ struct MakeASaleView: View {
     }
     
     var body: some View {
-        mainView
-            .onAppear {
-                setDefaultCategory()
-            }
-    } //: Body
-    
-    @ViewBuilder private var mainView: some View {
         GeometryReader { geo in
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
@@ -63,29 +56,17 @@ struct MakeASaleView: View {
                     
                     categorySelector
                 } //: VStack
-                VStack {
-                    Text("Cart")
-                        .modifier(TextMod(.title3, .semibold, lightTextColor))
-                        .frame(maxWidth: .infinity)
-                    
-                    Spacer()
-                    
-                    Button {
-                        //
-                    } label: {
-                        Text("Check Out")
-                            .modifier(TextMod(.title3, .semibold, lightTextColor))
-                            .frame(maxWidth: .infinity)
-                    }
-                    
-                } //: VStack
-                .edgesIgnoringSafeArea(.trailing)
-                .frame(maxWidth: geo.size.width / 4)
-                .background(.clear)
+                
+                
+                CartView()
+                    .frame(width: geo.size.width * 0.25)
             } //: HStack
             
+        } //: Geometry Reeader
+        .onAppear {
+            setDefaultCategory()
         }
-    } //: Main View
+    } //: Body
     
     private var searchBar: some View {
         HStack(spacing: 12) {
