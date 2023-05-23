@@ -8,10 +8,39 @@
 import SwiftUI
 import RealmSwift
 
+class CartViewModel: ObservableObject {
+    @Published var cartItems: [InventoryItemModel] = []
+    
+    var cartSubtotal: Double {
+        var tempTotal: Double = 0
+        for item in cartItems {
+            guard let retailPrice = item.retailPrice else { return -2 }
+            guard let qtyInCart = item.qtyInCart else { return -3 }
+            tempTotal += retailPrice * Double(qtyInCart)
+        }
+        return tempTotal
+    }
+    
+
+    func addItem(_ item: InventoryItemEntity) {
+        let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: 1)
+        cartItems.append(tempCartItem)
+    }
+    
+    func adjustQuantity(item: InventoryItemEntity, by amount: Int) {
+        guard let existingItem = cartItems.first(where: { $0.id == item._id }) else { return }
+        guard let index = cartItems.firstIndex(where: { $0.id == item._id }) else { return }
+        let newQty = (existingItem.qtyInCart ?? -2) + 1
+        let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: newQty)
+        cartItems[index] = tempCartItem
+    }
+    
+}
+
 struct MakeASaleView: View {
     @ObservedResults(CategoryEntity.self) var categories
     @State var selectedCategory: CategoryEntity = .init()
-    @StateObject var cart: CartViewModel = CartViewModel()
+    @StateObject var vm: CartViewModel = CartViewModel()
     @State var counter: Int = 0
     
     private func setDefaultCategory() {
@@ -34,7 +63,13 @@ struct MakeASaleView: View {
     }
     
     func itemTapped(item: InventoryItemEntity) {
-        cart.addItem(item)
+        if let existingItem = vm.cartItems.first(where: { $0.id == item._id }) {
+            // Item is already in cart, adjust quantity
+            vm.adjustQuantity(item: item, by: 1)
+        } else {
+            //Item is not already in cart, append
+            vm.addItem(item)
+        }
     }
     
     var body: some View {
@@ -57,9 +92,7 @@ struct MakeASaleView: View {
                     categorySelector
                 } //: VStack
                 
-                
-                CartView()
-                    .environmentObject(cart)
+                cartView
                     .frame(width: geo.size.width * 0.25)
             } //: HStack
             
@@ -120,6 +153,87 @@ struct MakeASaleView: View {
         } //: Geometry Reader
     } //: Button Panel
     
+    private var cartView: some View {
+        VStack {
+            HStack {
+                Spacer()
+                
+                Image(systemName: "cart")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30)
+                    .foregroundColor(lightTextColor)
+                    .fontWeight(.semibold)
+            }
+            
+            ScrollView {
+                VStack {
+                    ForEach(vm.cartItems, id: \.id) { item in
+                        VStack(alignment: .leading, spacing: 16) {
+                            HStack {
+                                Text(item.name ?? "Empty")
+                                    .modifier(TextMod(.title2, .semibold, .white))
+                                
+                                Spacer()
+                                
+                                Image(systemName: "trash")
+                                    .foregroundColor(.white)
+                            } //: HStack
+                            
+                            HStack {
+                                Text((item.retailPrice ?? -5).formatToCurrencyString())
+                                    .modifier(TextMod(.body, .semibold, .white))
+                                
+                                Text("x")
+                                    .modifier(TextMod(.callout, .regular, .white))
+                                
+                                Text("\(item.qtyInCart ?? -4)")
+                                    .modifier(TextMod(.body, .semibold, .white))
+                            } //: HStack
+                        } //: VStack
+                        .padding(.vertical, 8)
+                        .background(.clear)
+                        .frame(maxWidth: 350, alignment: .leading)
+                        
+                        Divider().background(.white)
+                    } //: For Each
+                } //: VStack
+                .frame(maxHeight: .infinity)
+            } //: ScrollView
+            
+            Divider().background(.white)
+            
+            HStack {
+                Text("Subtotal:")
+                    .modifier(TextMod(.title3, .semibold, lightTextColor))
+                
+                Spacer()
+                
+                Text(vm.cartSubtotal.formatToCurrencyString())
+                    .modifier(TextMod(.title2, .semibold, lightTextColor))
+            } //: HStack
+            .padding(.vertical, 8)
+            .frame(maxWidth: 350)
+            
+            Button {
+                //
+            } label: {
+                Text("Check Out")
+                    .frame(maxWidth: .infinity)
+            }
+            .modifier(RoundedButtonMod())
+            
+        } //: VStack
+        .padding(.horizontal)
+        .background(Color(XSS.S.color20))
+        .frame(maxWidth: 350)
+//        .onAppear {
+//            for item in CategoryEntity.foodCategory.items {
+//                vm.addItem(item)
+//            }
+//        }
+    } //: CartView
+    
     private var categorySelector: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 2) {
@@ -144,6 +258,8 @@ struct MakeASaleView: View {
             setDefaultCategory()
         }
     } //: Category Selector
+    
+    
 }
 
 struct MakeASaleView_Previews: PreviewProvider {
