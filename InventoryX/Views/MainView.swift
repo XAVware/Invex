@@ -16,7 +16,6 @@ struct MainView: View {
     @EnvironmentObject var userManager: UserManager
     @ObservedResults(CategoryEntity.self) var categories
     
-    
     @State var selectedCategory: CategoryEntity?
     @State var currentDisplay: DisplayStates = .makeASale
     
