@@ -11,7 +11,7 @@ import RealmSwift
 struct MakeASaleView: View {
     @ObservedResults(CategoryEntity.self) var categories
     @State var selectedCategory: CategoryEntity = .init()
-    @ObservedObject var cart: CartViewModel = CartViewModel()
+    @StateObject var cart: CartViewModel = CartViewModel()
     @State var counter: Int = 0
     
     private func setDefaultCategory() {
