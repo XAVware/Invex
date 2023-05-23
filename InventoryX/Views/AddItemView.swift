@@ -8,23 +8,22 @@
 import SwiftUI
 import RealmSwift
 
-struct AddItemView: View {
-    @State var errorMessage: String = ""
-    @State var savedSuccessfully: Bool = false
+@MainActor class AddItemViewModel: ObservableObject {
+    @Published var itemName: String = ""
+    @Published var quantity: String = ""
+    @Published var retailPrice: String = ""
+    @Published var unitCost: String = ""
+    @Published var selectedCategoryName: String = "Select Category"
+    @Published var categoryModels: [CategoryModel] = []
+    @Published var categoryNames: [String] = ["Select Category"]
+    @Published var errorMessage: String = ""
+    @Published var savedSuccessfully: Bool = false
     
-    //New
-    @Environment(\.dismiss) var dismiss
-    @State var itemName: String = ""
-    @State var quantity: String = ""
-    @State var retailPrice: String = ""
-    @State var unitCost: String = ""
+    func setup() {
+        setCategoryNames()
+    }
     
-    @State var selectedCategoryName: String = "Select Category"
-    @State var categoryModels: [CategoryModel] = []
-    
-    @State var categoryNames: [String] = ["Select Category"]
-    
-    func setCategoryNames() {
+    private func setCategoryNames() {
         do {
             let realm = try Realm()
             let results = realm.objects(CategoryEntity.self)
@@ -40,7 +39,6 @@ struct AddItemView: View {
             print(error.localizedDescription)
         }
     }
-    
     
     func saveItem(completion: @escaping () -> Void) {
         guard itemName.isNotEmpty, quantity.isNotEmpty, retailPrice.isNotEmpty else { return }
@@ -70,6 +68,12 @@ struct AddItemView: View {
             print(error.localizedDescription)
         }
     } //: Save Item
+}
+
+struct AddItemView: View {
+    @StateObject var vm: AddItemViewModel = AddItemViewModel()
+    
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
@@ -81,15 +85,15 @@ struct AddItemView: View {
                 
                 Spacer()
                 
-                AnimatedTextField(boundTo: $itemName, placeholder: "Item Name")
+                AnimatedTextField(boundTo: $vm.itemName, placeholder: "Item Name")
                 
                 HStack {
                     Text("Category:")
                     
                     Spacer()
                     
-                    Picker(selection: $selectedCategoryName) {
-                        ForEach(categoryNames, id: \.self) { name in
+                    Picker(selection: $vm.selectedCategoryName) {
+                        ForEach(vm.categoryNames, id: \.self) { name in
                             Text(name)
                         }
                     } label: {
@@ -98,23 +102,23 @@ struct AddItemView: View {
                     .tint(darkTextColor)
                 }
                 
-                AnimatedTextField(boundTo: $quantity, placeholder: "Qty. On-Hand")
+                AnimatedTextField(boundTo: $vm.quantity, placeholder: "Qty. On-Hand")
                 
-                AnimatedTextField(boundTo: $retailPrice, placeholder: "Retail Price")
+                AnimatedTextField(boundTo: $vm.retailPrice, placeholder: "Retail Price")
                 
-                AnimatedTextField(boundTo: $unitCost, placeholder: "Unit Cost")
+                AnimatedTextField(boundTo: $vm.unitCost, placeholder: "Unit Cost")
                 
                 Spacer()
                 
                 Button {
-                    saveItem() { }
+                    vm.saveItem() { }
                 } label: {
                     Text("Save and Add Another")
                 }
                 .modifier(RoundedButtonMod())
                 
                 Button {
-                    saveItem() {
+                    vm.saveItem() {
                         dismiss()
                     }
                 } label: {
@@ -129,7 +133,7 @@ struct AddItemView: View {
         } //: ZStack
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
-            setCategoryNames()
+            vm.setup()
         }
     } //: Body
 }
