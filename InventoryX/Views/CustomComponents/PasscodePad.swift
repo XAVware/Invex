@@ -39,7 +39,7 @@ struct PasscodePad: View {
             return "Enter Passcode"
         }
     }
-
+    
     func getRowFactor(for row: Int) -> Int {
         switch row {
         case 0: return 1

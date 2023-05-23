@@ -11,6 +11,13 @@ import RealmSwift
 struct MenuView: View {
     @Binding var currentDisplay: DisplayStates
     
+    func deleteAllFromRealm() {
+        let realm = try! Realm()
+        try! realm.write {
+            realm.deleteAll()
+        }
+    }
+    
     var body: some View {
         VStack {
             LogoView()
@@ -35,8 +42,6 @@ struct MenuView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading)
             
-            
-
             Divider()
                 .background(Color(XSS.S.color80))
                 .padding(.vertical)
@@ -88,20 +93,10 @@ struct MenuView: View {
             .frame(height: 50)
             .frame(maxWidth: .infinity)
         } //: VStack
-//        .padding(.vertical)
         .background(Color(XSS.S.color20))
         .modifier(TextMod(.title3, .semibold, lightTextColor))
         .edgesIgnoringSafeArea(.vertical)
-    }
-    
-    func deleteAllFromRealm() {
-        let realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-        }
-    }
-    
-    
+    } //: Body
 }
 
 

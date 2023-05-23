@@ -121,7 +121,7 @@ struct ItemDetailView: View {
             HStack {
                 Spacer()
                     .frame(maxWidth: .infinity)
-
+                
                 VStack(spacing: 8) {
                     Text("Total Sales")
                         .modifier(TextMod(.title3, .regular))
@@ -144,7 +144,7 @@ struct ItemDetailView: View {
                 Image(systemName: "pencil")
             }
             .modifier(RoundedButtonMod())
-
+            
             
             Spacer()
         } //: VStack

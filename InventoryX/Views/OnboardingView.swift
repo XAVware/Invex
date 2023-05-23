@@ -13,7 +13,7 @@ import RealmSwift
     private let lastPageInt: Int
     @Published var currentOnboardingState: OnboardingState = .start
     
-//    @Published var currentUser: UserEntity?
+    //    @Published var currentUser: UserEntity?
     
     //Categories
     @Published var tempCategories: [CategoryEntity] = []
@@ -43,11 +43,11 @@ import RealmSwift
             }
         }
         
-//        func next() {
-//            let currentIndex = self.rawValue
-//            let newDisplay = OnboardingState.init(rawValue: currentIndex + 1)
-//            self = newDisplay
-//        }
+        //        func next() {
+        //            let currentIndex = self.rawValue
+        //            let newDisplay = OnboardingState.init(rawValue: currentIndex + 1)
+        //            self = newDisplay
+        //        }
     }
     
     init() {
@@ -77,19 +77,14 @@ import RealmSwift
                 addTempCategory()
             }
             
-            
-            
         case .profileSetup:
             guard let user = getAdmin() else {
                 print("Saving user failed")
                 return
             }
-            
-//            saveUser(user)
+            //            saveUser(user)
         }
         
-        
-        print("Nav Counter: \(navCounter) -> \(navCounter + 1)")
         navCounter += 1
         
         guard let newState = OnboardingState(rawValue: navCounter) else {
@@ -99,11 +94,6 @@ import RealmSwift
         currentOnboardingState = newState
         print("New State set to \(newState)")
     }
-    
-    private func nextDisplay() {
-        
-    }
-
     
     // MARK: - CATEGORY FUNCTIONS
     func addTempCategory() {
@@ -121,12 +111,12 @@ import RealmSwift
     }
     
     func removeTempCategory(_ category: CategoryEntity) {
-            guard let index = tempCategories.firstIndex(of: category) else {
-                print("Error deleting category")
-                return
-            }
-            tempCategories.remove(at: index)
+        guard let index = tempCategories.firstIndex(of: category) else {
+            print("Error deleting category")
+            return
         }
+        tempCategories.remove(at: index)
+    }
     
     // MARK: - USER FUNCTIONS
     func getAdmin() -> UserEntity? {
@@ -172,9 +162,9 @@ import RealmSwift
             print("Error saving category to Realm: \(error.localizedDescription)")
         }
         
-//        tempCategories.forEach { category in
-//            saveCategory(category)
-//        }
+        //        tempCategories.forEach { category in
+        //            saveCategory(category)
+        //        }
     }
     
     
@@ -199,17 +189,12 @@ struct OnboardingView: View {
                 
             case .profileSetup:
                 profileSetup
-                
             } //: Switch
         } //: VStack
         .padding()
         .alert(isPresented: $alertManager.isShowing) {
             alertManager.alert
         }
-//        .onChange(of: vm.currentUser) { newUser in
-//            guard let newUser = newUser else { return }
-//            userManager.loginUser(newUser)
-//        }
     } //: Body
     
     // MARK: - WELCOME PAGE
@@ -405,7 +390,7 @@ struct OnboardingView: View {
 struct OnboardingView2_Previews: PreviewProvider {
     @State static var onboarding: Bool = true
     static var previews: some View {
-//        OnboardingView(isOnboarding: $onboarding)
+        //        OnboardingView(isOnboarding: $onboarding)
         OnboardingView()
             .modifier(PreviewMod())
     }

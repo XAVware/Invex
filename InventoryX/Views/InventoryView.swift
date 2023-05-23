@@ -38,7 +38,7 @@ struct InventoryView: View {
             isAscending = true
         }
     }
-
+    
     var body: some View {
         inventoryList
             .background(Color(XSS.S.color90))

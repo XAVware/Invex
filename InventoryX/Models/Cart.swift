@@ -24,8 +24,8 @@ class Cart: ObservableObject {
             return
         }
         
-//        saveSale()
-//        saveOnHandQuantities()
+        //        saveSale()
+        //        saveOnHandQuantities()
         resetCart()
     }
     
@@ -88,21 +88,21 @@ class Cart: ObservableObject {
     }
     
     func addItem(_ item: InventoryItemEntity) {
-//        for cartItem in cartItems {
-//            if cartItem.name == item.name {
-//                cartItem.increaseQtyInCart()
-//                self.updateTotal()
-//                cartItems.forEach { print($0.qtyToPurchase) }
-//                return
-//            }
-//        }
-//
-//        let tempCartItem = CartItem()
-//        tempCartItem.name = item.name
-//        tempCartItem.price = item.retailPrice
-//        cartItems.append(tempCartItem)
-//        updateTotal()
-//        cartItems.forEach { print($0.qtyToPurchase) }
+        //        for cartItem in cartItems {
+        //            if cartItem.name == item.name {
+        //                cartItem.increaseQtyInCart()
+        //                self.updateTotal()
+        //                cartItems.forEach { print($0.qtyToPurchase) }
+        //                return
+        //            }
+        //        }
+        //
+        //        let tempCartItem = CartItem()
+        //        tempCartItem.name = item.name
+        //        tempCartItem.price = item.retailPrice
+        //        cartItems.append(tempCartItem)
+        //        updateTotal()
+        //        cartItems.forEach { print($0.qtyToPurchase) }
         
         
         //New
@@ -124,7 +124,7 @@ class Cart: ObservableObject {
         cartTotalString = "$ \(String(format: "%.2f", tempTotal))"
         
         // New
-//        var total =
+        //        var total =
         
         
         

@@ -38,10 +38,10 @@ struct RestockView: View {
             isShowingDetail = true
         }
         
-//        selectedItemName       = category.items.sorted(byKeyPath: "name", ascending: true)[index].name
-//        selectedItemSubtype    = item.subtype
-//        activeSheet            = .restockItem
-//        isShowingDetailView    = true
+        //        selectedItemName       = category.items.sorted(byKeyPath: "name", ascending: true)[index].name
+        //        selectedItemSubtype    = item.subtype
+        //        activeSheet            = .restockItem
+        //        isShowingDetailView    = true
     }
     
     func addItemTapped() {
@@ -49,7 +49,7 @@ struct RestockView: View {
         self.isShowingDetailView = true
     }
     
-
+    
     var body: some View {
         GeometryReader { geo in
             HStack(spacing: 0) {
@@ -57,12 +57,12 @@ struct RestockView: View {
                     .padding()
                     .background(Color(XSS.S.color80))
                     .cornerRadius(20, corners: [.topLeft])
-                    
+                
                     .fullScreenCover(isPresented: $isShowingDetailView, onDismiss: {
                         selectedItemName = ""
                     }) {
                         Text("Detail")
-//                        ItemDetailView(viewType: activeSheet, itemName: selectedItemName)
+                        //                        ItemDetailView(viewType: activeSheet, itemName: selectedItemName)
                     }
                     .onChange(of: activeSheet) { (sheet) in
                         isShowingDetailView = true
@@ -70,7 +70,7 @@ struct RestockView: View {
                     .edgesIgnoringSafeArea(.bottom)
                 
                 if isShowingDetail {
-//                    if let selectedItem = selectedItem {
+                    //                    if let selectedItem = selectedItem {
                     if let selectedItem = items.first {
                         Divider().background(darkTextColor)
                         RestockItemDetailView(selectedItem: selectedItem, isShowing: $isShowingDetail)
@@ -78,10 +78,8 @@ struct RestockView: View {
                     }
                 }
             } //: HStack
-
         }
     } //: Body
-    
     
     private var listView: some View {
         VStack(spacing: 0) {
@@ -200,9 +198,6 @@ struct RestockItemDetailView: View {
             }
             Divider()
             
-            
-            
-            
             Spacer()
             
             Button {
@@ -211,7 +206,7 @@ struct RestockItemDetailView: View {
                 Text("Save")
             }
             .modifier(RoundedButtonMod())
-
+            
         } //: VStack
         .padding()
         .background(Color(XSS.S.color90))

@@ -37,10 +37,6 @@ struct MainView: View {
                 } //: HStack
                 .background(Color(XSS.S.color20))
             } //: VStack
-            .onAppear {
-                guard let defaultCategory = categories.first else { return }
-                selectedCategory = defaultCategory
-            }
             .onChange(of: categories) { newCategories in
                 guard selectedCategory == nil, newCategories.count > 0 else { return }
                 selectedCategory = newCategories.first!
@@ -48,22 +44,16 @@ struct MainView: View {
         }
     } //: Body
     
-    
     private var navSplitViewStyle: some View {
         GeometryReader { geo in
             NavigationSplitView(columnVisibility: .constant(.doubleColumn)) {
                 MenuView(currentDisplay: self.$currentDisplay)
                     .navigationSplitViewColumnWidth(ideal: geo.size.width / 6)
-                    
+                
             } detail: {
                 navContent
             }
             .navigationSplitViewStyle(.prominentDetail)
-            .onAppear {
-                //                columnVisibility = .detailOnly
-                guard let defaultCategory = categories.first else { return }
-                selectedCategory = defaultCategory
-            }
             .onChange(of: categories) { newCategories in
                 guard selectedCategory == nil, newCategories.count > 0 else { return }
                 selectedCategory = newCategories.first!
@@ -77,9 +67,7 @@ struct MainView: View {
             VStack(spacing: 0) {
                 if let category = selectedCategory {
                     MakeASaleView(selectedCategory: category)
-                    if category.items.count > 0 {
-                        CategorySelector(selectedCategory: self.$selectedCategory)
-                    }
+                    CategorySelector(selectedCategory: self.$selectedCategory)
                 } else {
                     ProgressView()
                 }
@@ -87,7 +75,6 @@ struct MainView: View {
             
         case .addInventory:
             RestockView()
-//            AddInventoryView()
         case .inventoryList:
             InventoryView()
         case .salesHistory:
@@ -106,67 +93,3 @@ struct MainView_Previews: PreviewProvider {
             .modifier(PreviewMod())
     }
 }
-
-
-
-struct CategorySelector: View {
-    @ObservedResults(CategoryEntity.self) var categories
-    @Binding var selectedCategory: CategoryEntity?
-    
-    enum Style { case scrollingTab, scrollingButton }
-    let style: Style = .scrollingButton
-    
-    var body: some View {
-        switch style {
-        case .scrollingTab:
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 2) {
-                    ForEach(categories) { category in
-                        Button {
-                            selectedCategory = category
-                        } label: {
-                            Text(category.name)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            
-                                .opacity(selectedCategory == category ? 1.0 : 0.65)
-                        }
-                        .frame(minWidth: 150)
-                        .background(selectedCategory == category ? Color.white : Color(UIColor.systemGray4))
-                        .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
-                        
-                        Divider()
-                            .background(Color.black)
-                            .padding(.vertical, 4)
-                    }
-                    
-                } //: HStack
-            } //: Scroll
-            .frame(maxWidth: .infinity, maxHeight: 40)
-            .background(Color(UIColor.systemGray4).frame(maxWidth: .infinity))
-            
-        case .scrollingButton:
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 2) {
-                    ForEach(categories) { category in
-                        Button {
-                            selectedCategory = category
-                        } label: {
-                            Text(category.name)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                .foregroundColor(selectedCategory == category ? Color(XSS.S.color10) : Color(XSS.S.color90))
-                            
-                        }
-                        .frame(minWidth: 150)
-                        .background(selectedCategory == category ? Color(XSS.S.color80) : Color(XSS.S.color40))
-                        .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
-                        
-                    }
-                    
-                } //: HStack
-            } //: Scroll
-            .frame(maxWidth: .infinity, maxHeight: 40)
-            .background(.clear)
-        } //: Switch
-    } //: Body
-}
-

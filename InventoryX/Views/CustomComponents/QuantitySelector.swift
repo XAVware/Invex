@@ -20,7 +20,7 @@ struct QuantitySelector: View {
     
     private let presetQuantityOptions: [Int] = [5, 10, 15, 30]
     private let customQuantityIncrements: [Int] = [1, 5, 10, 50]
-
+    
     func adjustQuantity(by val: Int) {
         var tempQty: Int = selectedQuantity + val
         guard tempQty >= 0 else {
