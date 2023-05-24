@@ -8,6 +8,8 @@
 import SwiftUI
 import RealmSwift
 
+
+/// Class allows Realm to work in SwiftUI previews by adding sample data to the local Realm.
 class MockRealms {
     static var config: Realm.Configuration {
         MockRealms.previewRealm.configuration

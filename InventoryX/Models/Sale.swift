@@ -25,9 +25,15 @@ class SaleItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted var price: Double = 0.00
 }
 
-
+// OLD
 class SaleItem: Object {
     @objc dynamic var name: String = ""
     @objc dynamic var qtyToPurchase: Int = 0
     @objc dynamic var price: Double = 0.00
+}
+
+class Sale: Object {
+    @objc dynamic var timestamp: Date = Date()
+    var items = RealmSwift.List<SaleItem>()
+    @objc dynamic var total: Double = 0.00
 }

@@ -36,7 +36,7 @@ struct SalesHistoryView: View {
     var body: some View {
         VStack(spacing: 0) {
             Text("Sales History")
-                .modifier(TitleModifier())
+                .modifier(TextMod(.title3, .semibold, primaryColor))
             
             Spacer().frame(height: 20)
             
@@ -74,7 +74,7 @@ struct SalesHistoryView: View {
                 
                 VStack {
                     Text("Income:  $\(String(format: "%.2f", self.rangeTotal))")
-                        .modifier(TitleModifier())
+                        .modifier(TextMod(.title3, .semibold, primaryColor))
                     
                     HStack {
                         Text("Timestamp")
@@ -83,7 +83,10 @@ struct SalesHistoryView: View {
                         Text("Subtotal")
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     } //HStack: Titles
-                    .modifier(DetailTextModifier(textColor: .black))
+                    .padding(.horizontal)
+                    .padding(.bottom, 5)
+                    .font(.system(size: 16))
+                    .foregroundColor(.black)
                     .padding(.trailing, 35)
                     
                     ScrollView(.vertical, showsIndicators: false) {

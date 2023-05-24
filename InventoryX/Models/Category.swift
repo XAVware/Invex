@@ -8,14 +8,12 @@
 import SwiftUI
 import RealmSwift
 
-// For Local Use
 struct CategoryModel {
     var _id: ObjectId?
     var name: String?
     var restockNumber: Int?
 }
 
-// For Realm Use
 class CategoryEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var name: String
