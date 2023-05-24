@@ -78,7 +78,7 @@ import RealmSwift
             }
             
         case .profileSetup:
-            guard let user = getAdmin() else {
+            guard let _ = getAdmin() else {
                 print("Saving user failed")
                 return
             }

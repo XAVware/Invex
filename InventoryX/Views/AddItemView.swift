@@ -31,7 +31,7 @@ import RealmSwift
             for index in 0 ..< results.count {
                 let tempId: ObjectId = results[index]._id
                 let tempName: String = results[index].name
-                var tempCategory: CategoryModel = CategoryModel(_id: tempId, name: tempName)
+                let tempCategory: CategoryModel = CategoryModel(_id: tempId, name: tempName)
                 categoryModels.append(tempCategory)
                 categoryNames.append(tempName)
             }
@@ -58,7 +58,7 @@ import RealmSwift
             let originalItems = selectedCategory.items
             
             try realm.write {
-                var newItemsList = originalItems
+                let newItemsList = originalItems
                 newItemsList.append(newItem)
                 selectedCategory.items = newItemsList
             }

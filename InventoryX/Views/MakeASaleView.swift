@@ -50,7 +50,7 @@ class MakeASaleViewModel: ObservableObject {
     }
     
     func itemTapped(item: InventoryItemEntity) {
-        if let existingItem = cartItems.first(where: { $0.id == item._id }) {
+        if let _ = cartItems.first(where: { $0.id == item._id }) {
             // Item is already in cart, adjust quantity
             adjustQuantity(item: item, by: 1)
         } else {
