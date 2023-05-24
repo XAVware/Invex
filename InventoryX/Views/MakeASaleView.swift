@@ -8,8 +8,8 @@
 import SwiftUI
 import RealmSwift
 
-class CartViewModel: ObservableObject {
-    @Published var cartItems: [InventoryItemModel] = []
+class MakeASaleViewModel: ObservableObject {
+    @Published var cartItems: [InventoryItemModel] = [InventoryItemModel(id: InventoryItemEntity.item1._id, name: InventoryItemEntity.item1.name)]
     
     var cartSubtotal: Double {
         var tempTotal: Double = 0
@@ -35,19 +35,6 @@ class CartViewModel: ObservableObject {
         cartItems[index] = tempCartItem
     }
     
-}
-
-struct MakeASaleView: View {
-    @ObservedResults(CategoryEntity.self) var categories
-    @State var selectedCategory: CategoryEntity = .init()
-    @StateObject var vm: CartViewModel = CartViewModel()
-    @State var counter: Int = 0
-    
-    private func setDefaultCategory() {
-        guard let defaultCategory = categories.first else { return }
-        selectedCategory = defaultCategory
-    }
-    
     func getColumns(gridWidth: CGFloat) -> [GridItem] {
         let itemSize = gridWidth * 0.20
         //        let numberOfColums = 4
@@ -63,13 +50,25 @@ struct MakeASaleView: View {
     }
     
     func itemTapped(item: InventoryItemEntity) {
-        if let existingItem = vm.cartItems.first(where: { $0.id == item._id }) {
+        if let existingItem = cartItems.first(where: { $0.id == item._id }) {
             // Item is already in cart, adjust quantity
-            vm.adjustQuantity(item: item, by: 1)
+            adjustQuantity(item: item, by: 1)
         } else {
             //Item is not already in cart, append
-            vm.addItem(item)
+            addItem(item)
         }
+    }
+    
+}
+
+struct MakeASaleView: View {
+    @ObservedResults(CategoryEntity.self) var categories
+    @StateObject var vm: MakeASaleViewModel = MakeASaleViewModel()
+    @State var selectedCategory: CategoryEntity = .init()
+    
+    private func setDefaultCategory() {
+        guard let defaultCategory = categories.first else { return }
+        selectedCategory = defaultCategory
     }
     
     var body: some View {
@@ -124,10 +123,10 @@ struct MakeASaleView: View {
         GeometryReader { geo in
             if selectedCategory.items.count > 0 {
                 VStack(spacing: geo.size.width * 0.05) {
-                    LazyVGrid(columns: getColumns(gridWidth: geo.size.width), spacing: 0) {
+                    LazyVGrid(columns: vm.getColumns(gridWidth: geo.size.width), spacing: 0) {
                         ForEach(selectedCategory.items) { item in
                             Button {
-                                itemTapped(item: item)
+                                vm.itemTapped(item: item)
                             } label: {
                                 Text(item.name)
                                     .modifier(TextMod(.title3, .semibold, .black))
@@ -140,12 +139,15 @@ struct MakeASaleView: View {
                         } //: ForEach
                     } //: LazyVGrid
                     .padding()
+                    
                     Spacer()
                 } //: VStack
             } else {
                 VStack {
                     Spacer()
+                    
                     Text("No Items Yet!")
+                    
                     Spacer()
                 }
                 .frame(maxWidth: .infinity)
@@ -263,9 +265,12 @@ struct MakeASaleView: View {
 }
 
 struct MakeASaleView_Previews: PreviewProvider {
+    @StateObject static var vm: MakeASaleViewModel = MakeASaleViewModel()
     @State static var category: CategoryEntity = CategoryEntity.foodCategory
+    
     static var previews: some View {
-        MakeASaleView(selectedCategory: category)
+        
+        MakeASaleView(vm: vm, selectedCategory: category)
             .modifier(PreviewMod())
     }
 }

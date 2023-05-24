@@ -158,6 +158,7 @@
 				80B5EF8329F0CC1C007D9842 /* App */,
 				80A9A8622A1B1A3800E0F96A /* Models */,
 				94AC8DBB29FB25C2006A166E /* Realm */,
+				94D3F1082A1DB0C400AF4393 /* Services */,
 				80DBB97729F6EF9200497695 /* Views */,
 				80DBB95D29F6D81500497695 /* XAV_Customs */,
 				80B5EF7429F0C319007D9842 /* Assets.xcassets */,
@@ -179,7 +180,6 @@
 			children = (
 				80B5EF7029F0C318007D9842 /* InventoryXApp.swift */,
 				80B5EFD529F0E186007D9842 /* Modifiers.swift */,
-				802EDC0429FB79A70048A9A8 /* UserManager.swift */,
 				802EDC0629FB79E40048A9A8 /* GlobalEnums.swift */,
 				94D3F1062A1C7E1600AF4393 /* Documentation.docc */,
 			);
@@ -273,6 +273,14 @@
 				94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */,
 			);
 			path = Realm;
+			sourceTree = "<group>";
+		};
+		94D3F1082A1DB0C400AF4393 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				802EDC0429FB79A70048A9A8 /* UserManager.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

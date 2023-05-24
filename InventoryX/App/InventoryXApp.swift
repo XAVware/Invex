@@ -10,7 +10,7 @@ import RealmSwift
 
 @main
 struct InventoryXApp: SwiftUI.App {
-    let migrator: RealmMigrator = RealmMigrator(currentSchemaVersion: 6)
+    let migrator: RealmMigrator = RealmMigrator(currentSchemaVersion: 46)
     @ObservedResults(CategoryEntity.self) var categories
     @ObservedResults(UserEntity.self) var users
     @StateObject var userManager: UserManager = UserManager()
