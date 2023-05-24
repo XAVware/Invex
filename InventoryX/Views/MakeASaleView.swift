@@ -27,7 +27,7 @@ class MakeASaleViewModel: ObservableObject {
         cartItems.append(tempCartItem)
     }
     
-    func adjustQuantity(item: InventoryItemEntity, by amount: Int) {
+    func adjustQuantityInCart(item: InventoryItemEntity, by amount: Int) {
         guard let existingItem = cartItems.first(where: { $0.id == item._id }) else { return }
         guard let index = cartItems.firstIndex(where: { $0.id == item._id }) else { return }
         let newQty = (existingItem.qtyInCart ?? -2) + 1
@@ -52,11 +52,19 @@ class MakeASaleViewModel: ObservableObject {
     func itemTapped(item: InventoryItemEntity) {
         if let _ = cartItems.first(where: { $0.id == item._id }) {
             // Item is already in cart, adjust quantity
-            adjustQuantity(item: item, by: 1)
+            adjustQuantityInCart(item: item, by: 1)
         } else {
             //Item is not already in cart, append
             addItem(item)
         }
+    }
+    
+    func checkoutTapped() {
+        //Display Confirmation Page
+        //Remove items from cart if the quantity is 0
+        //Subtract the number sold from the original on hand quantity and update the item in Realm
+        //Create and save sale in Realm
+        //Show success message, reset cart
     }
     
 }
@@ -95,7 +103,7 @@ struct MakeASaleView: View {
                     .frame(width: geo.size.width * 0.25)
             } //: HStack
             
-        } //: Geometry Reeader
+        } //: Geometry Reader
         .onAppear {
             setDefaultCategory()
         }
@@ -191,6 +199,7 @@ struct MakeASaleView: View {
                                 
                                 Text("\(item.qtyInCart ?? -4)")
                                     .modifier(TextMod(.body, .semibold, .white))
+                                
                             } //: HStack
                         } //: VStack
                         .padding(.vertical, 8)
