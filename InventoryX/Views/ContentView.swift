@@ -17,13 +17,15 @@ struct ContentView: View {
     
     @State var selectedCategory: CategoryEntity?
     @State var currentDisplay: DisplayStates = .makeASale
+    @State var menuIsHidden: Bool = false
     
     var body: some View {
         GeometryReader { geo in
             HStack(spacing: 0) {
-                MenuView(currentDisplay: self.$currentDisplay)
-                    .frame(maxWidth: geo.size.width * 0.15)
-                
+                if !menuIsHidden {
+                    MenuView(currentDisplay: self.$currentDisplay)
+                        .frame(maxWidth: geo.size.width * 0.15)
+                }
                 navContent
             } //: HStack
             .background(Color(XSS.S.color20))
@@ -37,7 +39,7 @@ struct ContentView: View {
     @ViewBuilder private var navContent: some View {
         switch currentDisplay {
         case .makeASale:
-            MakeASaleView()
+            MakeASaleView(menuIsHidden: $menuIsHidden)
         case .addInventory:
             RestockView()
         case .inventoryList:
@@ -51,7 +53,7 @@ struct ContentView: View {
     
 }
 
-struct MainView_Previews: PreviewProvider {
+struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .modifier(PreviewMod())

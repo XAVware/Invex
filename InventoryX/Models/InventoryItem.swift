@@ -49,6 +49,11 @@ class InventoryItemModel {
     
     var qtyInCart: Int?
     
+    var cartItemSubtotal: Double {
+        guard let price = retailPrice, let qty = qtyInCart else { return -1.0 }
+        return price * Double(qty)
+    }
+    
     
     init(id: ObjectId, name: String?, retailPrice: Double? = nil, avgCostPer: Double? = nil, onHandQty: Int? = nil, qtyInCart: Int? = nil) {
         self.id = id

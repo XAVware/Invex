@@ -10,7 +10,8 @@ import RealmSwift
 
 class MakeASaleViewModel: ObservableObject {
     @Published var cartItems: [InventoryItemModel] = []
-//    @Published var cartItems: [InventoryItemModel] = [InventoryItemModel(id: InventoryItemEntity.item1._id, name: InventoryItemEntity.item1.name)]
+//    @Published var cartItems: [InventoryItemModel] = [InventoryItemModel(id: InventoryItemEntity.item1._id, name: InventoryItemEntity.item1.name, retailPrice: 1.00, qtyInCart: 2)]
+    @Published var isConfirmingSale: Bool = false
     
     var cartSubtotal: Double {
         var tempTotal: Double = 0
@@ -22,19 +23,32 @@ class MakeASaleViewModel: ObservableObject {
         return tempTotal
     }
     
-    
-    func addItem(_ item: InventoryItemEntity) {
-        let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: 1)
-        cartItems.append(tempCartItem)
+    func itemTapped(item: InventoryItemEntity) {
+        if let _ = cartItems.first(where: { $0.id == item._id }) {
+            // Item is already in cart, adjust quantity
+            adjustQuantityInCart(item: item, by: 1)
+        } else {
+            //Item is not already in cart, append
+            addItem(item)
+        }
     }
     
-    func adjustQuantityInCart(item: InventoryItemEntity, by amount: Int) {
-        guard let existingItem = cartItems.first(where: { $0.id == item._id }) else { return }
-        guard let index = cartItems.firstIndex(where: { $0.id == item._id }) else { return }
-        let newQty = (existingItem.qtyInCart ?? -2) + 1
-        //FOR TESTING
-        let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: newQty)
-        cartItems[index] = tempCartItem
+    func checkoutTapped() {
+        //Remove items from cart if the quantity is 0 and check that there are still items in cart.
+        cartItems.removeAll (where: { $0.qtyInCart == 0 })
+        guard !cartItems.isEmpty else { return }
+        
+        //Display Confirmation Page in View
+        //View listens for change of isConfirming and hides/shows the menu.
+        isConfirmingSale.toggle()
+    }
+    
+    func finalizeTapped() {
+        finalizeSale()
+    }
+    
+    func cancelTapped() {
+        returnToMakeASale()
     }
     
     func getColumns(gridWidth: CGFloat) -> [GridItem] {
@@ -51,28 +65,28 @@ class MakeASaleViewModel: ObservableObject {
         return columns
     }
     
-    func itemTapped(item: InventoryItemEntity) {
-        if let _ = cartItems.first(where: { $0.id == item._id }) {
-            // Item is already in cart, adjust quantity
-            adjustQuantityInCart(item: item, by: 1)
-        } else {
-            //Item is not already in cart, append
-            addItem(item)
-        }
+    // MARK: - PRIVATE FUNCTIONS
+    
+    private func addItem(_ item: InventoryItemEntity) {
+        let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: 1)
+        cartItems.append(tempCartItem)
     }
     
-    func checkoutTapped() {
-        guard !cartItems.isEmpty else { return }
-        //Display Confirmation Page
-        //Remove items from cart if the quantity is 0
-        cartItems.removeAll (where: { $0.qtyInCart == 0 })
-        
+    private func adjustQuantityInCart(item: InventoryItemEntity, by amount: Int) {
+        guard let existingItem = cartItems.first(where: { $0.id == item._id }) else { return }
+        guard let index = cartItems.firstIndex(where: { $0.id == item._id }) else { return }
+        let newQty = (existingItem.qtyInCart ?? -2) + 1
+        //FOR TESTING
+        let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: newQty)
+        cartItems[index] = tempCartItem
+    }
+    
+    private func finalizeSale() {
         //Subtract the number sold from the original on hand quantity and update the item in Realm
         cartItems.forEach({ item in
-            guard let qtySold = item.qtyInCart else {
-                print("error")
-                return
-            }
+            
+            // When Checkout is first tapped, all items that have a nil or 0 qtyInCart are removed from cartItems array. This line should not be necessary. Maybe use closure to pass $0 to funtion.
+            guard let qtySold = item.qtyInCart else { return }
             
             do {
                 let realm = try! Realm()
@@ -113,6 +127,11 @@ class MakeASaleViewModel: ObservableObject {
         
         //Show success message, reset cart
         cartItems.removeAll()
+        returnToMakeASale()
+    }
+    
+    private func returnToMakeASale() {
+        isConfirmingSale.toggle()
     }
     
 }
@@ -121,6 +140,7 @@ struct MakeASaleView: View {
     @ObservedResults(CategoryEntity.self) var categories
     @StateObject var vm: MakeASaleViewModel = MakeASaleViewModel()
     @State var selectedCategory: CategoryEntity = .init()
+    @Binding var menuIsHidden: Bool
     
     private func setDefaultCategory() {
         guard let defaultCategory = categories.first else { return }
@@ -128,6 +148,24 @@ struct MakeASaleView: View {
     }
     
     var body: some View {
+        VStack {
+            switch vm.isConfirmingSale {
+            case true:
+                confirmSaleView
+                    .background(Color(XSS.S.color20))
+            case false:
+                makeASaleView
+                    .background(Color(XSS.S.color20))
+            }
+        } //: VStack
+        .onChange(of: vm.isConfirmingSale, perform: { _ in
+            withAnimation(.easeOut, {
+                menuIsHidden.toggle()
+            })
+        })
+    } //: Body
+    
+    private var makeASaleView: some View {
         GeometryReader { geo in
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
@@ -151,11 +189,91 @@ struct MakeASaleView: View {
                     .frame(width: geo.size.width * 0.25)
             } //: HStack
             
+            
         } //: Geometry Reader
         .onAppear {
             setDefaultCategory()
         }
-    } //: Body
+    } //: Make A Sale View
+    
+    private var confirmSaleView: some View {
+        GeometryReader { geo in
+            VStack(spacing: 32) {
+                VStack(spacing: 8) {
+                    Text("Amount Due:")
+                        .modifier(TextMod(.largeTitle, .semibold, lightTextColor))
+                    
+                    Text(vm.cartSubtotal.formatToCurrencyString())
+                        .modifier(TextMod(.system(size: 48), .semibold, lightTextColor))
+                } //: VStack
+                
+                VStack {
+                    HStack {
+                        Text("Item")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Text("Quantity")
+                            .frame(maxWidth: .infinity)
+                        
+                        Text("Price")
+                            .frame(maxWidth: .infinity)
+                        
+                        Text("Subtotal")
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    } //: HStack
+                    .modifier(TextMod(.callout, .regular, lightTextColor))
+                    
+                    Divider().background(lightTextColor)
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
+                        VStack {
+                            ForEach(vm.cartItems, id: \.id) { item in
+                                HStack {
+                                    Text(item.name ?? "Error")
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    
+                                    Text("\(item.qtyInCart ?? -1)")
+                                        .frame(maxWidth: .infinity)
+                                    
+                                    Text(item.retailPrice?.formatToCurrencyString() ?? "Error")
+                                        .frame(maxWidth: .infinity)
+                                    
+                                    Text(item.cartItemSubtotal.formatToCurrencyString())
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                } //: HStack
+                                .modifier(TextMod(.callout, .semibold, lightTextColor))
+                                .frame(height: 30)
+                                
+                                Divider().background(Color(XSS.S.color80)).opacity(0.3)
+                            } //: ForEach
+                        } //: VStack
+                    } //: ScrollView
+                } //: VStack
+                .frame(width: 0.4 * geo.size.width)
+                
+                VStack {
+                    Button {
+                        vm.finalizeTapped()
+                    } label: {
+                        Text("Finalize Sale")
+                    }
+                    .modifier(RoundedButtonMod())
+                    
+                    Button {
+                        vm.cancelTapped()
+                    } label: {
+                        Text("Cancel Sale")
+                            .underline()
+                            .modifier(TextMod(.body, .regular, lightTextColor))
+                            .padding()
+                    }
+                } //: VStack
+
+            } //: VStack
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.vertical)
+        } //: Geometry Reader
+    } //: Confirm Sale View
     
     private var searchBar: some View {
         HStack(spacing: 12) {
@@ -303,7 +421,6 @@ struct MakeASaleView: View {
                         Text(category.name)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                             .foregroundColor(selectedCategory == category ? Color(XSS.S.color10) : Color(XSS.S.color90))
-                        
                     }
                     .frame(minWidth: 150)
                     .background(selectedCategory == category ? Color(XSS.S.color80) : Color(XSS.S.color40))
@@ -324,10 +441,10 @@ struct MakeASaleView: View {
 struct MakeASaleView_Previews: PreviewProvider {
     @StateObject static var vm: MakeASaleViewModel = MakeASaleViewModel()
     @State static var category: CategoryEntity = CategoryEntity.foodCategory
-    
+    @State static var hidden: Bool = false
     static var previews: some View {
         
-        MakeASaleView(vm: vm, selectedCategory: category)
+        MakeASaleView(vm: vm, selectedCategory: category, menuIsHidden: $hidden)
             .modifier(PreviewMod())
     }
 }
