@@ -9,7 +9,8 @@ import SwiftUI
 import RealmSwift
 
 class MakeASaleViewModel: ObservableObject {
-    @Published var cartItems: [InventoryItemModel] = [InventoryItemModel(id: InventoryItemEntity.item1._id, name: InventoryItemEntity.item1.name)]
+    @Published var cartItems: [InventoryItemModel] = []
+//    @Published var cartItems: [InventoryItemModel] = [InventoryItemModel(id: InventoryItemEntity.item1._id, name: InventoryItemEntity.item1.name)]
     
     var cartSubtotal: Double {
         var tempTotal: Double = 0
@@ -21,7 +22,7 @@ class MakeASaleViewModel: ObservableObject {
         return tempTotal
     }
     
-
+    
     func addItem(_ item: InventoryItemEntity) {
         let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: 1)
         cartItems.append(tempCartItem)
@@ -31,6 +32,7 @@ class MakeASaleViewModel: ObservableObject {
         guard let existingItem = cartItems.first(where: { $0.id == item._id }) else { return }
         guard let index = cartItems.firstIndex(where: { $0.id == item._id }) else { return }
         let newQty = (existingItem.qtyInCart ?? -2) + 1
+        //FOR TESTING
         let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: newQty)
         cartItems[index] = tempCartItem
     }
@@ -60,11 +62,57 @@ class MakeASaleViewModel: ObservableObject {
     }
     
     func checkoutTapped() {
+        guard !cartItems.isEmpty else { return }
         //Display Confirmation Page
         //Remove items from cart if the quantity is 0
+        cartItems.removeAll (where: { $0.qtyInCart == 0 })
+        
         //Subtract the number sold from the original on hand quantity and update the item in Realm
+        cartItems.forEach({ item in
+            guard let qtySold = item.qtyInCart else {
+                print("error")
+                return
+            }
+            
+            do {
+                let realm = try! Realm()
+                guard let result = realm.object(ofType: InventoryItemEntity.self, forPrimaryKey: item.id) else {
+                    print("Error getting result")
+                    return
+                }
+                
+                try realm.write {
+                    result.onHandQty = result.onHandQty - qtySold
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        })
+        
         //Create and save sale in Realm
+        let saleTotal = cartItems
+            .map({ Double($0.retailPrice! * Double($0.qtyInCart!)) })
+            .reduce(into: 0.0, { $0 += $1 })
+        
+        let newSale = SaleEntity(timestamp: Date(), total: saleTotal)
+        cartItems.forEach({ item in
+            guard let name = item.name, let qtySold = item.qtyInCart, let price = item.retailPrice else { return }
+            let saleItem = SaleItemEntity(name: name, qtyToPurchase: qtySold, price: price)
+            newSale.items.append(saleItem)
+        })
+        
+        do {
+            let realm = try Realm()
+            
+            try realm.write {
+                realm.add(newSale)
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+        
         //Show success message, reset cart
+        cartItems.removeAll()
     }
     
 }
@@ -227,7 +275,7 @@ struct MakeASaleView: View {
             .frame(maxWidth: 350)
             
             Button {
-                //
+                vm.checkoutTapped()
             } label: {
                 Text("Check Out")
                     .frame(maxWidth: .infinity)

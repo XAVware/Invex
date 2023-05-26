@@ -10,26 +10,26 @@ struct SalesHistoryView: View {
     @State var selectedFilter: String   = "Today"
     
     
-    var rangeSales: Results<Sale> {
+    var rangeSales: Results<SaleEntity> {
         switch selectedFilter {
         case "Today":
-            return try! Realm().objects(Sale.self).filter(NSPredicate(format: "timestamp BETWEEN {%@, %@}", self.saleDateManager.startOfToday as NSDate, self.saleDateManager.endOfToday as NSDate))
+            return try! Realm().objects(SaleEntity.self).filter(NSPredicate(format: "timestamp BETWEEN {%@, %@}", self.saleDateManager.startOfToday as NSDate, self.saleDateManager.endOfToday as NSDate))
         case "Yesterday":
-            return try! Realm().objects(Sale.self).filter(NSPredicate(format: "timestamp BETWEEN {%@, %@}", self.saleDateManager.startOfYesterday as NSDate, self.saleDateManager.endOfYesterday as NSDate))
+            return try! Realm().objects(SaleEntity.self).filter(NSPredicate(format: "timestamp BETWEEN {%@, %@}", self.saleDateManager.startOfYesterday as NSDate, self.saleDateManager.endOfYesterday as NSDate))
         case "This Week":
-            return try! Realm().objects(Sale.self).filter(NSPredicate(format: "timestamp BETWEEN {%@, %@}", self.saleDateManager.startOfThisWeek as NSDate, self.saleDateManager.endOfThisWeek as NSDate))
+            return try! Realm().objects(SaleEntity.self).filter(NSPredicate(format: "timestamp BETWEEN {%@, %@}", self.saleDateManager.startOfThisWeek as NSDate, self.saleDateManager.endOfThisWeek as NSDate))
         case "Last Week":
-            return try! Realm().objects(Sale.self).filter(NSPredicate(format: "timestamp BETWEEN {%@, %@}", self.saleDateManager.startOfLastWeek as NSDate, self.saleDateManager.endOfLastWeek as NSDate))
+            return try! Realm().objects(SaleEntity.self).filter(NSPredicate(format: "timestamp BETWEEN {%@, %@}", self.saleDateManager.startOfLastWeek as NSDate, self.saleDateManager.endOfLastWeek as NSDate))
         default:
-            return try! Realm().objects(Sale.self)
+            return try! Realm().objects(SaleEntity.self)
         }
     }
     
     var rangeTotal: Double {
         var tempTotal: Double = 0
-        for sale in self.rangeSales {
-            tempTotal += sale.total
-        }
+//        for sale in self.rangeSales {
+//            tempTotal += sale.total
+//        }
         return tempTotal
     }
     

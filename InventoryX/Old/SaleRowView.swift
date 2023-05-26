@@ -4,7 +4,7 @@ import SwiftUI
 
 struct SaleRowView: View {
     @State var isExpanded: Bool     = false
-    @State var sale: Sale
+    @State var sale: SaleEntity
     
     var body: some View {
         GroupBox {
