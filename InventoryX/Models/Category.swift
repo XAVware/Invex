@@ -8,12 +8,6 @@
 import SwiftUI
 import RealmSwift
 
-struct CategoryModel {
-    var _id: ObjectId?
-    var name: String?
-    var restockNumber: Int?
-}
-
 class CategoryEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var name: String
@@ -32,4 +26,10 @@ class CategoryEntity: Object, ObjectKeyIdentifiable {
     static let frozenCategory: CategoryEntity = CategoryEntity(name: "Frozen")
     static let categoryArray = [foodCategory, drinkCategory, frozenCategory]
     
+}
+
+struct CategoryModel {
+    var _id: ObjectId?
+    var name: String?
+    var restockNumber: Int?
 }

@@ -11,7 +11,7 @@ import RealmSwift
 
 class SaleEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
-    @Persisted var timestamp: Date = Date()
+    @Persisted var timestamp: Date
     @Persisted var total: Double = 0.00
     @Persisted var items: RealmSwift.List<SaleItemEntity>
     
@@ -21,6 +21,21 @@ class SaleEntity: Object, ObjectKeyIdentifiable {
         self.timestamp = timestamp
         self.total = total
     }
+    
+    private func getDate(from dateString: String) -> Date {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        guard let someDateTime = formatter.date(from: "2016/10/08 22:31") else {
+            print("Error getting date for preview")
+            return Date()
+        }
+        return someDateTime
+    }
+    
+    //Sample Data For Previews, use yyyy-MM-dd HH:mm
+    static let todaySale1: SaleEntity = SaleEntity(timestamp: Date(timeIntervalSinceNow: -86400), total: 32.50)
+    static let yesterdaySale1: SaleEntity = SaleEntity(timestamp: Date(timeIntervalSinceNow: -86400), total: 32.50)
+    
 }
 
 class SaleItemEntity: Object, ObjectKeyIdentifiable {
@@ -36,4 +51,7 @@ class SaleItemEntity: Object, ObjectKeyIdentifiable {
         self.qtyToPurchase = qtyToPurchase
         self.price = price
     }
+    
+    static let saleItem1: SaleItemEntity = SaleItemEntity(name: "Cheetos", qtyToPurchase: 2, price: 1.5)
+    static let saleItem2: SaleItemEntity = SaleItemEntity(name: "Milk", qtyToPurchase: 1, price: 1.0)
 }

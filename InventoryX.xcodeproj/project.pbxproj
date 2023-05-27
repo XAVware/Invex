@@ -50,6 +50,8 @@
 		94D3F1072A1C7E1600AF4393 /* Documentation.docc in Sources */ = {isa = PBXBuildFile; fileRef = 94D3F1062A1C7E1600AF4393 /* Documentation.docc */; };
 		94D3F10A2A1DBE4300AF4393 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3F1092A1DBE4300AF4393 /* ContentView.swift */; };
 		94EF40D829F728EF0049DDC5 /* Tips in Resources */ = {isa = PBXBuildFile; fileRef = 94EF40D729F728EF0049DDC5 /* Tips */; };
+		94F569232A21452300E9DE98 /* PerformanceComparisons in Resources */ = {isa = PBXBuildFile; fileRef = 94F569222A21452300E9DE98 /* PerformanceComparisons */; };
+		94F569252A21B6C800E9DE98 /* RealmMinion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F569242A21B6C800E9DE98 /* RealmMinion.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +98,8 @@
 		94D3F1062A1C7E1600AF4393 /* Documentation.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Documentation.docc; sourceTree = "<group>"; };
 		94D3F1092A1DBE4300AF4393 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		94EF40D729F728EF0049DDC5 /* Tips */ = {isa = PBXFileReference; lastKnownFileType = text; path = Tips; sourceTree = "<group>"; };
+		94F569222A21452300E9DE98 /* PerformanceComparisons */ = {isa = PBXFileReference; lastKnownFileType = text; path = PerformanceComparisons; sourceTree = "<group>"; };
+		94F569242A21B6C800E9DE98 /* RealmMinion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMinion.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +187,7 @@
 				80DBB96929F6D81500497695 /* PhotoPicker.swift */,
 				80DBB98029F7115200497695 /* ColorConstants.swift */,
 				94EF40D729F728EF0049DDC5 /* Tips */,
+				94F569222A21452300E9DE98 /* PerformanceComparisons */,
 			);
 			path = XAV_Customs;
 			sourceTree = "<group>";
@@ -259,6 +264,7 @@
 			children = (
 				94AC8DB729FB2187006A166E /* MockRealm.swift */,
 				94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */,
+				94F569242A21B6C800E9DE98 /* RealmMinion.swift */,
 			);
 			path = Realm;
 			sourceTree = "<group>";
@@ -339,6 +345,7 @@
 			files = (
 				94EF40D829F728EF0049DDC5 /* Tips in Resources */,
 				80B5EF7829F0C319007D9842 /* Preview Assets.xcassets in Resources */,
+				94F569232A21452300E9DE98 /* PerformanceComparisons in Resources */,
 				80B5EF7529F0C319007D9842 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -388,6 +395,7 @@
 				80F734172A01A4BC0072C62B /* AddItemView.swift in Sources */,
 				80DBB96F29F6D81500497695 /* UserManager_Firebase.swift in Sources */,
 				80DBB96A29F6D81500497695 /* TextMod.swift in Sources */,
+				94F569252A21B6C800E9DE98 /* RealmMinion.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

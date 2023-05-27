@@ -1,0 +1,7 @@
+
+////This will be a running list of questions that come up. The goal is to decide which option is the better choice for each question.
+
+1) Is it better to cast data types in the ViewModel as needed or should the Model class contain a calculated variable for each data type needed?
+    - For example, to calculate a total sale you need a price (Double) and a quantity (Integer). Should you, A. make the quantity a Double even though it will only ever be whole numbers, B. add a calculated variable called 'quantityAsDouble' to the model that returns the quantity casted as an Integer, or C. cast the quantity as an Integer as needed in the View Model?
+    
+2) For Realm, can I add all realm functions as static functions in a separate class and call as needed or will it slow performance?

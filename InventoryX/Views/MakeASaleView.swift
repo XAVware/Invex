@@ -163,6 +163,9 @@ struct MakeASaleView: View {
                 menuIsHidden.toggle()
             })
         })
+        .onAppear {
+            setDefaultCategory()
+        }
     } //: Body
     
     private var makeASaleView: some View {
@@ -188,12 +191,7 @@ struct MakeASaleView: View {
                 cartView
                     .frame(width: geo.size.width * 0.25)
             } //: HStack
-            
-            
         } //: Geometry Reader
-        .onAppear {
-            setDefaultCategory()
-        }
     } //: Make A Sale View
     
     private var confirmSaleView: some View {
@@ -430,11 +428,7 @@ struct MakeASaleView: View {
         } //: Scroll
         .frame(maxWidth: .infinity, maxHeight: 40)
         .background(.clear)
-        .onAppear {
-            setDefaultCategory()
-        }
     } //: Category Selector
-    
     
 }
 

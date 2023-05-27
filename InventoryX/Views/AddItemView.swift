@@ -46,26 +46,8 @@ import RealmSwift
         
         let newItem = InventoryItemEntity(name: itemName, retailPrice: Double(retailPrice) ?? 1.0, avgCostPer: Double(unitCost) ?? 0.5, onHandQty: Int(quantity) ?? 10)
         
-        do {
-            let realm = try Realm()
-            guard let selectedCategory = realm.objects(CategoryEntity.self).where({ tempCategory in
-                tempCategory.name == selectedCategoryName
-            }).first else {
-                print("Error setting selected category.")
-                return
-            }
-            
-            let originalItems = selectedCategory.items
-            
-            try realm.write {
-                let newItemsList = originalItems
-                newItemsList.append(newItem)
-                selectedCategory.items = newItemsList
-            }
-            
+        RealmMinion.addNewItem(newItem: newItem, categoryName: selectedCategoryName) {
             completion()
-        } catch {
-            print(error.localizedDescription)
         }
     } //: Save Item
 }
