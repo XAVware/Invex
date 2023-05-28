@@ -35,7 +35,17 @@ class RealmMinion {
         } catch {
             print(error.localizedDescription)
         }
-    }
+    } //: Add New Item
     
+    static func deleteAllFromRealm() {
+        do {
+            let realm = try Realm()
+            try realm.write {
+                realm.deleteAll()
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    } //: Delete All From Realm
     
 }

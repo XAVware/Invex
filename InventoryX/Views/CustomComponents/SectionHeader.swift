@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SectionHeader: View {
-    enum Section { case addCategory, restockThreshold, adminSetup, email, itemName, itemPrice, itemCategory }
+    enum Section { case  itemName, itemPrice, itemCategory }
     let section: Section
     let alignment: TextAlignment
     let horizontalAlignment: HorizontalAlignment
@@ -32,16 +32,7 @@ struct SectionHeader: View {
     }
     
     var header: String {
-        switch section {
-        case .addCategory:
-            return "Add A Category"
-        case .restockThreshold:
-            return "Restock Threshold"
-        case .adminSetup:
-            return "Create Admin Profile"
-        case .email:
-            return "Add An Email"
-        case .itemName:
+        switch section {        case .itemName:
             return "Add An Item"
         case .itemPrice:
             return "Price"
@@ -52,14 +43,6 @@ struct SectionHeader: View {
     
     var detail: String {
         switch section {
-        case .addCategory:
-            return "Your inventory will be displayed based on their category."
-        case .restockThreshold:
-            return "If an item reaches its category's restock threshold, InventoryX will alert you."
-        case .adminSetup:
-            return "Your admin profile will give you full access to the app. You can create other accounts later."
-        case .email:
-            return "If you add an email you can receive email notifications when item inventory is low."
         case .itemName:
             return "Add An Item"
         case .itemPrice:
@@ -73,12 +56,12 @@ struct SectionHeader: View {
         VStack(alignment: horizontalAlignment, spacing: 8) {
             if showsHeader {
                 Text(header)
-                    .modifier(TextMod(.title, .bold, .black))
+                    .modifier(TextMod(.title3, .bold, .black))
             }
             
             if showsDetail {
                 Text(detail)
-                    .modifier(TextMod(.footnote, .semibold, .gray))
+                    .modifier(TextMod(.footnote, .thin, .black))
                     .multilineTextAlignment(alignment)
             }
         } //: VStack
@@ -87,6 +70,6 @@ struct SectionHeader: View {
 
 struct SectionHeader_Previews: PreviewProvider {
     static var previews: some View {
-        SectionHeader(section: .addCategory)
+        SectionHeader(section: .itemName)
     }
 }

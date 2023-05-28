@@ -43,12 +43,12 @@ struct SalesHistoryView: View {
             VStack {
                 HStack {
                     Text("Income \(selectedFilter): \(rangeTotal.formatToCurrencyString())")
-                        .modifier(TextMod(.title3, .semibold, primaryColor))
+                        .modifier(TextMod(.title3, .semibold, lightFgColor))
                     
                     Spacer()
                     
                     Text("Sales History")
-                        .modifier(TextMod(.title3, .semibold, primaryColor))
+                        .modifier(TextMod(.title3, .semibold, lightFgColor))
                     
                     Spacer()
                     
@@ -82,12 +82,12 @@ struct SalesHistoryView: View {
                 }
                 .scrollContentBackground(.hidden)
                 .frame(maxWidth: 0.6 * geo.size.width)
-                .background(Color(XSS.S.color90))
+                .background(lightFgColor)
                 .cornerRadius(15)
                 
             } //: VStack
             .padding()
-            .background(Color(XSS.S.color80))
+            .background(secondaryBackground)
             .sheet(isPresented: $isShowingDetail) {
                 SaleDetailView()
             }

@@ -55,7 +55,7 @@ struct RestockView: View {
             HStack(spacing: 0) {
                 listView
                     .padding()
-                    .background(Color(XSS.S.color80))
+                    .background(secondaryBackground)
                     .cornerRadius(20, corners: [.topLeft])
                 
                     .fullScreenCover(isPresented: $isShowingDetailView, onDismiss: {
@@ -72,7 +72,7 @@ struct RestockView: View {
                 if isShowingDetail {
                     //                    if let selectedItem = selectedItem {
                     if let selectedItem = items.first {
-                        Divider().background(darkTextColor)
+                        Divider().background(darkFgColor)
                         RestockItemDetailView(selectedItem: selectedItem, isShowing: $isShowingDetail)
                             .frame(width: geo.size.width / 3)
                     }
@@ -85,13 +85,13 @@ struct RestockView: View {
         VStack(spacing: 0) {
             HStack {
                 Text("Select an item below to restock.")
-                    .modifier(TextMod(.footnote, .semibold, darkTextColor))
+                    .modifier(TextMod(.footnote, .semibold, darkFgColor))
                 
                 Spacer()
                 
                 AddItemButton()
             } //: HStack
-            .foregroundColor(Color(XSS.S.color20))
+            .foregroundColor(primaryBackground)
             
             Divider()
                 .padding(.vertical, 14)
@@ -100,7 +100,7 @@ struct RestockView: View {
                 VStack {
                     Text(category.name)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .modifier(TextMod(.title2, .semibold, darkTextColor))
+                        .modifier(TextMod(.title2, .semibold, darkFgColor))
                         .padding(.bottom, 8)
                     
                     VStack(spacing: 0) {
@@ -136,7 +136,7 @@ struct RestockView: View {
                             } //: HStack
                             .frame(height: 30)
                             .padding(.horizontal)
-                            .background(index % 2 == 0 ? Color(XSS.S.color90) : Color(XSS.S.color80))
+                            .background(index % 2 == 0 ? lightFgColor : secondaryBackground)
                             .modifier(TextMod(.body, .regular, .black))
                             .onTapGesture {
                                 itemTapped(itemId: category.items.sorted(byKeyPath: "name", ascending: true)[index]._id)
@@ -146,7 +146,7 @@ struct RestockView: View {
                     .padding(.horizontal)
                 } //: VStack
                 .padding()
-                .background(Color(XSS.S.color90))
+                .background(lightFgColor)
                 .cornerRadius(20, corners: [.allCorners])
                 
                 Spacer().frame(height: 16)
@@ -209,6 +209,6 @@ struct RestockItemDetailView: View {
             
         } //: VStack
         .padding()
-        .background(Color(XSS.S.color90))
+        .background(lightFgColor)
     }
 }

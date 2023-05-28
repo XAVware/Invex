@@ -10,11 +10,11 @@ import SwiftUI
 struct RoundedButtonMod: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .foregroundColor(lightTextColor)
+            .foregroundColor(lightFgColor)
             .modifier(TextMod(.title2, .semibold))
             .padding()
             .frame(maxWidth: 350, maxHeight: 50)
-            .background(primaryColor)
+            .background(primaryBackground)
             .cornerRadius(25)
             .shadow(radius: 3)
     }

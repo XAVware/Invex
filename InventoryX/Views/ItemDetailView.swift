@@ -150,7 +150,7 @@ struct ItemDetailView: View {
         } //: VStack
         .padding()
         .frame(maxWidth: 500)
-        .background(Color(XSS.S.color90))
+        .background(lightFgColor)
     }
 }
 

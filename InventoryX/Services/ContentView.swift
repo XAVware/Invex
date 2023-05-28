@@ -28,7 +28,7 @@ struct ContentView: View {
                 }
                 navContent
             } //: HStack
-            .background(Color(XSS.S.color20))
+            .background(primaryBackground)
             .onChange(of: categories) { newCategories in
                 guard selectedCategory == nil, newCategories.count > 0 else { return }
                 selectedCategory = newCategories.first!

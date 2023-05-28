@@ -13,7 +13,7 @@ struct InventoryView: View {
     @State var sortBy: String = "name"
     @State var isAscending: Bool = true
     @State var selectedItem: InventoryItemEntity?
-    @State var isShowingDetailView: Bool = true
+    @State var isShowingDetailView: Bool = false
     
     func itemTapped(itemId: ObjectId) {
         let itemResult = items.where {
@@ -110,7 +110,7 @@ struct InventoryView: View {
         } //: HStack
         .frame(height: 50)
         .padding(.horizontal)
-        .background(Color(XSS.S.color80))
+        .background(secondaryBackground)
         .modifier(TextMod(.body, .regular, .black))
     } //: Column Headers
     
@@ -138,7 +138,7 @@ struct InventoryView: View {
             } //: HStack
             .frame(height: 50)
             .padding(.horizontal)
-            .background(index % 2 == 0 ? Color(XSS.S.color90) : Color(XSS.S.color80))
+            .background(index % 2 == 0 ? Color(XSS.S.color90) : secondaryBackground)
             .modifier(TextMod(.body, .regular, .black))
             .onTapGesture {
                 itemTapped(itemId: getItems()[index]._id)

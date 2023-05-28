@@ -21,53 +21,53 @@ struct UnderlinedTextField: View {
     
     // MARK: - Initializers
     //Default
-    init(text: Binding<String>, placeholder: String, icon: String) {
-        self._text = text
-        self.placeholder = placeholder
-        self.icon = icon
-        self.fontType = .title3
-        self.fgColor = secondaryColor
-        self.showsIcon = true
-        self.isSecure = false
-    }
-    
-    
-    //Include Font Type
-    init(text: Binding<String>, placeholder: String, icon: String, fontType: Font) {
-        self._text = text
-        self.placeholder = placeholder
-        self.icon = icon
-        self.fontType = fontType
-        self.fgColor = secondaryColor
-        self.showsIcon = true
-        self.isSecure = false
-    }
-    
-    //Include isSecure
-    init(text: Binding<String>, placeholder: String, icon: String, isSecure: Bool) {
-        self._text = text
-        self.placeholder = placeholder
-        self.icon = icon
-        self.fontType = .title3
-        self.fgColor = secondaryColor
-        self.showsIcon = true
-        self.isSecure = isSecure
-    }
-    
-    //Include showsIcon
-    init(text: Binding<String>, placeholder: String, icon: String, showsIcon: Bool) {
-        self._text = text
-        self.placeholder = placeholder
-        self.icon = icon
-        self.fontType = .title3
-        self.fgColor = secondaryColor
-        self.showsIcon = showsIcon
-        self.isSecure = false
-    }
+//    init(text: Binding<String>, placeholder: String, icon: String) {
+//        self._text = text
+//        self.placeholder = placeholder
+//        self.icon = icon
+//        self.fontType = .title3
+//        self.fgColor = lightFgColor
+//        self.showsIcon = true
+//        self.isSecure = false
+//    }
+//
+//
+//    //Include Font Type
+//    init(text: Binding<String>, placeholder: String, icon: String, fontType: Font) {
+//        self._text = text
+//        self.placeholder = placeholder
+//        self.icon = icon
+//        self.fontType = fontType
+//        self.fgColor = lightFgColor
+//        self.showsIcon = true
+//        self.isSecure = false
+//    }
+//
+//    //Include isSecure
+//    init(text: Binding<String>, placeholder: String, icon: String, isSecure: Bool) {
+//        self._text = text
+//        self.placeholder = placeholder
+//        self.icon = icon
+//        self.fontType = .title3
+//        self.fgColor = lightFgColor
+//        self.showsIcon = true
+//        self.isSecure = isSecure
+//    }
+//
+//    //Include showsIcon
+//    init(text: Binding<String>, placeholder: String, icon: String, showsIcon: Bool) {
+//        self._text = text
+//        self.placeholder = placeholder
+//        self.icon = icon
+//        self.fontType = .title3
+//        self.fgColor = lightFgColor
+//        self.showsIcon = showsIcon
+//        self.isSecure = false
+//    }
     
     
     //Include all
-    init(text: Binding<String>, placeholder: String, icon: String, fontType: Font, fgColor: Color, showsIcon: Bool, isSecure: Bool) {
+    init(text: Binding<String>, placeholder: String, icon: String = "", fontType: Font = .title3, fgColor: Color = lightFgColor, showsIcon: Bool = true, isSecure: Bool = false) {
         self._text = text
         self.placeholder = placeholder
         self.icon = icon
@@ -77,38 +77,38 @@ struct UnderlinedTextField: View {
         self.isSecure = isSecure
     }
     
-    //Include foregroundColor & showsIcon
-    init(text: Binding<String>, placeholder: String, icon: String, fgColor: Color, showsIcon: Bool) {
-        self._text = text
-        self.placeholder = placeholder
-        self.icon = icon
-        self.fontType = .title3
-        self.fgColor = fgColor
-        self.showsIcon = showsIcon
-        self.isSecure = false
-    }
-    
-    //Includes foregroundColor & showsIcon without icon name
-    init(text: Binding<String>, placeholder: String, fgColor: Color) {
-        self._text = text
-        self.placeholder = placeholder
-        self.icon = "person.fill"
-        self.fontType = .title3
-        self.fgColor = fgColor
-        self.showsIcon = false
-        self.isSecure = false
-    }
-    
-    //Includes foregroundColor, showsIcon & secureField
-    init(text: Binding<String>, placeholder: String, fgColor: Color, isSecure: Bool) {
-        self._text = text
-        self.placeholder = placeholder
-        self.icon = "person.fill"
-        self.fontType = .title3
-        self.fgColor = fgColor
-        self.showsIcon = false
-        self.isSecure = isSecure
-    }
+//    //Include foregroundColor & showsIcon
+//    init(text: Binding<String>, placeholder: String, icon: String, fgColor: Color, showsIcon: Bool) {
+//        self._text = text
+//        self.placeholder = placeholder
+//        self.icon = icon
+//        self.fontType = .title3
+//        self.fgColor = fgColor
+//        self.showsIcon = showsIcon
+//        self.isSecure = false
+//    }
+//
+//    //Includes foregroundColor & showsIcon without icon name
+//    init(text: Binding<String>, placeholder: String, fgColor: Color) {
+//        self._text = text
+//        self.placeholder = placeholder
+//        self.icon = "person.fill"
+//        self.fontType = .title3
+//        self.fgColor = fgColor
+//        self.showsIcon = false
+//        self.isSecure = false
+//    }
+//
+//    //Includes foregroundColor, showsIcon & secureField
+//    init(text: Binding<String>, placeholder: String, fgColor: Color, isSecure: Bool) {
+//        self._text = text
+//        self.placeholder = placeholder
+//        self.icon = "person.fill"
+//        self.fontType = .title3
+//        self.fgColor = fgColor
+//        self.showsIcon = false
+//        self.isSecure = isSecure
+//    }
     
     // MARK: - BODY
     var body: some View {
@@ -150,6 +150,6 @@ struct UnderlinedTextField_Previews: PreviewProvider {
     static var previews: some View {
         UnderlinedTextField(text: $username, placeholder: "Username", icon: "person.fill")
             .previewLayout(.sizeThatFits)
-            .background(primaryColor)
+            .background(lightFgColor)
     }
 }

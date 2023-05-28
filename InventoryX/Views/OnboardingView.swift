@@ -1,5 +1,5 @@
 //
-//  OnboardingView2.swift
+//  OnboardingView.swift
 //  InventoryX
 //
 //  Created by Smetana, Ryan on 4/24/23.
@@ -9,9 +9,9 @@ import SwiftUI
 import RealmSwift
 
 @MainActor class OnboardingViewModel: ObservableObject {
-    var navCounter: Int = 0
+    var navCounter: Int = 20
     private let lastPageInt: Int
-    @Published var currentOnboardingState: OnboardingState = .start
+    @Published var currentOnboardingState: OnboardingState = .categoryNames
     
     //    @Published var currentUser: UserEntity?
     
@@ -51,6 +51,7 @@ import RealmSwift
     }
     
     init() {
+        // Iterate through OnboardingState enum to figure out how many pages there are. This allows the overall workflow (welcome page, categories, admin) to be reorganized or edited via integer value in enum.
         var pageInt: Int = 0
         for navState in OnboardingState.allCases {
             let pageNum = navState.rawValue
@@ -92,16 +93,12 @@ import RealmSwift
             return
         }
         currentOnboardingState = newState
-        print("New State set to \(newState)")
     }
     
     // MARK: - CATEGORY FUNCTIONS
     func addTempCategory() {
         for category in tempCategories {
-            if category.name == newCategoryName {
-                print("Category already exists")
-                return
-            }
+            if category.name == newCategoryName { return }
         }
         
         let newCategory = CategoryEntity(name: newCategoryName, restockNum: newCategoryThreshold)
@@ -111,10 +108,7 @@ import RealmSwift
     }
     
     func removeTempCategory(_ category: CategoryEntity) {
-        guard let index = tempCategories.firstIndex(of: category) else {
-            print("Error deleting category")
-            return
-        }
+        guard let index = tempCategories.firstIndex(of: category) else { return }
         tempCategories.remove(at: index)
     }
     
@@ -158,7 +152,7 @@ import RealmSwift
             })
             debugPrint("Categories and user saved")
         } catch {
-            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
+//            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
             print("Error saving category to Realm: \(error.localizedDescription)")
         }
         
@@ -179,21 +173,32 @@ struct OnboardingView: View {
     @ObservedResults(CategoryEntity.self) var categories
     
     var body: some View {
-        VStack {
-            switch(vm.currentOnboardingState) {
-            case .start:
-                welcomePage
+        GeometryReader { geo in
+            ZStack {
+                primaryBackground
+                    .edgesIgnoringSafeArea(.all)
                 
-            case .categoryNames:
-                categoriesView
-                
-            case .profileSetup:
-                profileSetup
-            } //: Switch
-        } //: VStack
-        .padding()
-        .alert(isPresented: $alertManager.isShowing) {
-            alertManager.alert
+                VStack {
+                    switch(vm.currentOnboardingState) {
+                    case .start:
+                        welcomePage
+                        
+                    case .categoryNames:
+                        categoriesView
+                        
+                    case .profileSetup:
+                        profileSetup
+                    } //: Switch
+                } //: VStack
+                .padding()
+                .frame(maxWidth: 0.75 * geo.size.width)
+                .background(secondaryBackground)
+                .cornerRadius(20)
+                .padding()
+                .alert(isPresented: $alertManager.isShowing) {
+                    alertManager.alert
+                }
+            } //: ZStack
         }
     } //: Body
     
@@ -212,45 +217,68 @@ struct OnboardingView: View {
     // MARK: - ADD CATEGORIES
     private var categoriesView: some View {
         GeometryReader { geo in
-            HStack {
-                VStack(spacing: 16) {
-                    categoryNameSection
-                    
-                    categoryRestockSection
-                        .padding(.vertical)
-                    
-                    Button {
-                        vm.addTempCategory()
-                    } label: {
-                        Text("Add Category")
-                            .modifier(TextMod(.title3, .semibold, .black))
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        
+            VStack(spacing: 16) {
+                Text("Add Your Category")
+                    .modifier(TextMod(.largeTitle, .bold, darkFgColor))
+                
+                Text("Your inventory will be displayed based on their category.")
+                    .modifier(TextMod(.footnote, .thin, .black))
+                    .multilineTextAlignment(.leading)
+                
+                AnimatedTextField(boundTo: $vm.newCategoryName, placeholder: "Category Name")
+                    .autocapitalization(UITextAutocapitalizationType.words)
+                    .frame(maxWidth: 0.4 * geo.size.width)
+                
+                //            HStack(spacing: 8) {
+                //                VStack(alignment: .leading, spacing: 8) {
+                //                    Text("Restock Threshold")
+                //                        .modifier(TextMod(.title3, .bold, .black))
+                //
+                //                    Text("If an item reaches its category's restock threshold, InventoryX will alert you.")
+                //                        .modifier(TextMod(.footnote, .thin, .black))
+                //                        .multilineTextAlignment(.leading)
+                //                } //: VStack
+                //
+                //                QuantitySelector(selectedQuantity: $vm.newCategoryThreshold)
+                //                    .frame(maxWidth: .infinity)
+                //                    .padding(.vertical)
+                //            } //: VStack
+                //            .padding(.vertical)
+                                
+                Button {
+                    vm.addTempCategory()
+                } label: {
+                    HStack(spacing: 24) {
+                        Text("Save and Add Another")
                         Image(systemName: "plus")
-                            .modifier(TextMod(.title3, .bold))
-                    }
-                    .frame(maxWidth: 180, maxHeight: 10)
-                    .padding()
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(primaryColor, lineWidth: 4))
-                    
-                    Spacer()
-                } //: VStack
-                .frame(width: geo.size.width / 3)
-                .padding(.vertical)
+                    } //: HStack
+                    .modifier(TextMod(.body, .regular, darkFgColor))
+                    .frame(maxWidth: 0.35 * geo.size.width, maxHeight: 32)
+                }
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(primaryBackground, lineWidth: 1))
                 
-                Divider()
+                Spacer()
                 
-                if vm.tempCategories.isEmpty {
-                    PlaceholderView(text: "Add A Category")
-                } else {
+                if !vm.tempCategories.isEmpty {
                     VStack(spacing: 25) {
                         Text("Current Categories:")
                             .modifier(TextMod(.title2, .bold))
                         
                         ScrollView(.vertical, showsIndicators: false) {
                             ForEach(vm.tempCategories, id: \.self) { category in
-                                CategoryRow(category: category, parent: vm)
-                                    .frame(height: 40)
+                                HStack {
+                                    Text(category.name)
+                                    
+                                    Spacer()
+                                    
+                                    Button {
+                                        vm.removeTempCategory(category)
+                                    } label: {
+                                        Image(systemName: "trash")
+                                            .foregroundColor(.red)
+                                    }
+                                }//: HStack
+                                .frame(height: 40)
                                 
                                 Divider().opacity(0.5)
                             }//: ForEach
@@ -258,66 +286,75 @@ struct OnboardingView: View {
                         .frame(maxWidth: .infinity)
                         continueButton
                     } //: VStack
-                } //: If-Else
-            } //: HStack
+                }
+            } //: VStack
+            .padding()
+            .frame(maxWidth: .infinity)
         } //: Geometry Reader
     } //: Categories View
     
-    private var categoryNameSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            SectionHeader(section: .addCategory)
-            
-            AnimatedTextField(boundTo: $vm.newCategoryName, placeholder: "Category Name")
-                .autocapitalization(UITextAutocapitalizationType.words)
-                .padding(.vertical)
-        } //: VStack
-    } //: Category Name Section
-    
-    private var categoryRestockSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            SectionHeader(section: .restockThreshold)
-            
-            QuantitySelector(selectedQuantity: $vm.newCategoryThreshold)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical)
-        } //: VStack
-    } //: Category Restock Section
     
     // MARK: - PROFILE
     private var profileSetup: some View {
         GeometryReader { geo in
             VStack {
-                VStack(spacing: 32) {
-                    VStack(spacing: 24) {
-                        SectionHeader(section: .adminSetup)
+                Text("Profile Setup")
+                    .modifier(TextMod(.largeTitle, .bold, darkFgColor))
+                
+                VStack(spacing: 24) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Create Admin Profile")
+                                .modifier(TextMod(.title3, .bold, .black))
+                            
+                            Text("Your admin profile will give you full access to the app. You can create other accounts later.")
+                                .modifier(TextMod(.footnote, .thin, .black))
+                                .multilineTextAlignment(.leading)
+                        } //: VStack
+                        .frame(maxWidth: 0.4 * geo.size.width)
+                        
+                        Spacer()
                         
                         AnimatedTextField(boundTo: $vm.newProfileName, placeholder: "Profile Name")
                             .autocapitalization(UITextAutocapitalizationType.words)
-                    }
+                            .frame(maxWidth: 0.4 * geo.size.width)
+                    } //: HStack
                     
-                    VStack {
-                        SectionHeader(section: .email)
+                    Divider().background(secondaryBackground)
+                                        
+                    HStack(spacing: 32) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Add An Email")
+                                .modifier(TextMod(.title3, .bold, .black))
+                                                        
+                            Text("If you add an email you can receive email notifications when item inventory is low.")
+                                .modifier(TextMod(.footnote, .thin, .black))
+                                .multilineTextAlignment(.leading)
+                        } //: VStack
+                        .frame(maxWidth: 0.4 * geo.size.width)
+                        
+                        Spacer()
                         
                         AnimatedTextField(boundTo: $vm.newProfileEmail, placeholder: "Email")
-                            .autocapitalization(UITextAutocapitalizationType.words)
-                            .padding(.vertical)
-                    }
+                            .autocapitalization(UITextAutocapitalizationType.none)
+                            .frame(maxWidth: 0.4 * geo.size.width)
+                    } //: HStack
+                    
+                    Spacer()
                     
                     Toggle(isOn: $vm.isPasscodeProtected) {
                         Text("Password Protected")
-                    }
+                    } //: Toggle
                     .onChange(of: vm.isPasscodeProtected) { isProtected in
-                        if isProtected {
-                            vm.isShowingPasscodePad.toggle()
-                        }
+                        vm.isShowingPasscodePad.toggle()
                     }
+                    Spacer()
                 } //: VStack
                 
-                Spacer()
                 
                 continueButton
             } //: VStack
-            .frame(width: geo.size.width / 3)
+            .frame(width: 0.9 * geo.size.width)
             .padding(.vertical)
             .frame(maxWidth: .infinity)
             .sheet(isPresented: $vm.isShowingPasscodePad) {
@@ -340,54 +377,28 @@ struct OnboardingView: View {
         .padding(.bottom)
     } //: Continue Button
     
-    struct PlaceholderView: View {
-        let text: String
-        
-        var body: some View {
-            VStack(spacing: 16) {
-                Image(systemName: "arrowshape.turn.up.left.2.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: 150, alignment: .leading)
-                    .padding()
-                
-                Spacer()
-                    .frame(height: 30)
-                
-                Text(text)
-                    .modifier(TextMod(.largeTitle, .bold))
-                
-                Spacer()
-            } //: VStack
-            .frame(maxWidth: 600, maxHeight: .infinity)
-            .padding()
-            .foregroundColor(primaryColor)
-            .opacity(0.5)
-        }
-    }
-    
-    struct CategoryRow: View {
-        let category: CategoryEntity
-        let parent: OnboardingViewModel
-        
-        var body: some View {
-            HStack {
-                Text(category.name)
-                
-                Spacer()
-                
-                Button {
-                    parent.removeTempCategory(category)
-                } label: {
-                    Image(systemName: "trash")
-                        .foregroundColor(.red)
-                }
-            }//: HStack
-        }
-    }
+//    struct CategoryRow: View {
+//        let category: CategoryEntity
+//        let parent: OnboardingViewModel
+//
+//        var body: some View {
+//            HStack {
+//                Text(category.name)
+//
+//                Spacer()
+//
+//                Button {
+//                    parent.removeTempCategory(category)
+//                } label: {
+//                    Image(systemName: "trash")
+//                        .foregroundColor(.red)
+//                }
+//            }//: HStack
+//        }
+//    }
 }
 
-struct OnboardingView2_Previews: PreviewProvider {
+struct OnboardingView_Previews: PreviewProvider {
     @State static var onboarding: Bool = true
     static var previews: some View {
         //        OnboardingView(isOnboarding: $onboarding)

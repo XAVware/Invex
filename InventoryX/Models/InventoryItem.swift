@@ -12,10 +12,10 @@ class InventoryItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted(originProperty: "items") var category: LinkingObjects<CategoryEntity>
     
-    @Persisted var name: String
-    @Persisted var retailPrice: Double
-    @Persisted var avgCostPer: Double
-    @Persisted var onHandQty: Int
+    @Persisted var name: String!
+    @Persisted var retailPrice: Double!
+    @Persisted var avgCostPer: Double!
+    @Persisted var onHandQty: Int!
     
     convenience init(name: String, retailPrice: Double, avgCostPer: Double, onHandQty: Int) {
         self.init()

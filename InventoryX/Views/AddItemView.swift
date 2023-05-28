@@ -59,7 +59,7 @@ struct AddItemView: View {
     
     var body: some View {
         ZStack {
-            Color(XSS.S.color90)
+            secondaryBackground
             
             VStack(spacing: 16) {
                 Text("New Item")
@@ -81,7 +81,7 @@ struct AddItemView: View {
                     } label: {
                         Text("Category")
                     }
-                    .tint(darkTextColor)
+                    .tint(darkFgColor)
                 }
                 
                 AnimatedTextField(boundTo: $vm.quantity, placeholder: "Qty. On-Hand")

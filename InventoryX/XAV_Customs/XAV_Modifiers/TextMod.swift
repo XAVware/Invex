@@ -14,7 +14,7 @@ struct TextMod: ViewModifier {
     let weight: Font.Weight
     let fgColor: Color
     
-    init(_ font: Font = .body, _ weight: Font.Weight = .semibold, _ fgColor: Color = darkTextColor) {
+    init(_ font: Font = .body, _ weight: Font.Weight = .semibold, _ fgColor: Color = darkFgColor) {
         self.font = font
         self.weight = weight
         self.fgColor = fgColor

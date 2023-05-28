@@ -113,7 +113,7 @@ struct PasscodePad: View {
                 }
             }
             .frame(height: 20)
-            .foregroundColor(primaryColor)
+            .foregroundColor(lightFgColor)
             .padding(.vertical)
             .padding(.bottom, 16)
             
@@ -154,11 +154,11 @@ struct PasscodePad: View {
                             .frame(height: 30)
                     }
                     .frame(width: 60, height: 60)
-                    .foregroundColor(primaryColor)
+                    .foregroundColor(lightFgColor)
                 } //: HStack - Numbers 0 and backspace
                 
             } //: VStack
-            .foregroundColor(primaryColor)
+            .foregroundColor(lightFgColor)
         } //: VStack
     }
 }
@@ -169,8 +169,8 @@ struct PasscodeButtonMod: ViewModifier {
             .modifier(TextMod(.title, .bold, .white))
             .multilineTextAlignment(.center)
             .frame(width: 60, height: 60)
-            .background(primaryColor.cornerRadius(25))
-            .overlay(Capsule().stroke(primaryColor, lineWidth: 3))
+            .background(lightFgColor.cornerRadius(25))
+            .overlay(Capsule().stroke(lightFgColor, lineWidth: 3))
     }
 }
 

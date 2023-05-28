@@ -11,13 +11,6 @@ import RealmSwift
 struct MenuView: View {
     @Binding var currentDisplay: DisplayStates
     
-    func deleteAllFromRealm() {
-        let realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-        }
-    }
-    
     var body: some View {
         VStack {
             LogoView()
@@ -32,18 +25,18 @@ struct MenuView: View {
                     .frame(width: 24, height: 24)
                 VStack {
                     Text("Ryan")
-                        .modifier(TextMod(.title3, .medium, Color(XSS.S.color80)))
+                        .modifier(TextMod(.title3, .medium, secondaryBackground))
                     Text("Admin")
-                        .modifier(TextMod(.footnote, .regular, lightTextColor))
+                        .modifier(TextMod(.footnote, .regular, lightFgColor))
                 }
                 
             } //: HStack
-            .foregroundColor(Color(XSS.S.color80))
+            .foregroundColor(secondaryBackground)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading)
             
             Divider()
-                .background(Color(XSS.S.color80))
+                .background(secondaryBackground)
                 .padding(.vertical)
             
             ForEach(DisplayStates.allCases, id: \.self) { displayState in
@@ -60,11 +53,11 @@ struct MenuView: View {
                 .padding()
                 .frame(height: 50)
                 .frame(maxWidth: .infinity)
-                .overlay(currentDisplay == displayState ? Color(XSS.S.color60).opacity(0.3) : nil)
+                .overlay(currentDisplay == displayState ? itemButtonColor.opacity(0.3) : nil)
             }
             
             Button {
-                deleteAllFromRealm()
+                RealmMinion.deleteAllFromRealm()
             } label: {
                 Image(systemName: "arrow.triangle.2.circlepath")
                     .imageScale(.medium)
@@ -93,8 +86,8 @@ struct MenuView: View {
             .frame(height: 50)
             .frame(maxWidth: .infinity)
         } //: VStack
-        .background(Color(XSS.S.color20))
-        .modifier(TextMod(.title3, .semibold, lightTextColor))
+        .background(primaryBackground)
+        .modifier(TextMod(.title3, .semibold, lightFgColor))
         .edgesIgnoringSafeArea(.vertical)
     } //: Body
 }

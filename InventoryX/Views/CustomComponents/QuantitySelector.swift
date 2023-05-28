@@ -115,7 +115,7 @@ struct QuantitySelector: View {
             }
             .frame(width: 45, height: 45)
             .shadow(radius: 2)
-            .tint(primaryColor)
+            .tint(lightFgColor)
             
             Text("\(selectedQuantity)")
                 .modifier(TextMod(.title2, .bold, .black))
@@ -130,7 +130,7 @@ struct QuantitySelector: View {
             }
             .frame(width: 45, height: 45)
             .shadow(radius: 2)
-            .tint(primaryColor)
+            .tint(lightFgColor)
         }//: HStack
     } //: Custom Picker
 }

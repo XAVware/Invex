@@ -152,10 +152,10 @@ struct MakeASaleView: View {
             switch vm.isConfirmingSale {
             case true:
                 confirmSaleView
-                    .background(Color(XSS.S.color20))
+                    .background(primaryBackground)
             case false:
                 makeASaleView
-                    .background(Color(XSS.S.color20))
+                    .background(primaryBackground)
             }
         } //: VStack
         .onChange(of: vm.isConfirmingSale, perform: { _ in
@@ -182,7 +182,7 @@ struct MakeASaleView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal)
                     .padding(.vertical, 8)
-                    .background(Color(XSS.S.color80))
+                    .background(secondaryBackground)
                     .cornerRadius(20, corners: [.topLeft, .topRight, .bottomRight])
                     
                     categorySelector
@@ -199,10 +199,10 @@ struct MakeASaleView: View {
             VStack(spacing: 32) {
                 VStack(spacing: 8) {
                     Text("Amount Due:")
-                        .modifier(TextMod(.largeTitle, .semibold, lightTextColor))
+                        .modifier(TextMod(.largeTitle, .semibold, lightFgColor))
                     
                     Text(vm.cartSubtotal.formatToCurrencyString())
-                        .modifier(TextMod(.system(size: 48), .semibold, lightTextColor))
+                        .modifier(TextMod(.system(size: 48), .semibold, lightFgColor))
                 } //: VStack
                 
                 VStack {
@@ -219,9 +219,9 @@ struct MakeASaleView: View {
                         Text("Subtotal")
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     } //: HStack
-                    .modifier(TextMod(.callout, .regular, lightTextColor))
+                    .modifier(TextMod(.callout, .regular, lightFgColor))
                     
-                    Divider().background(lightTextColor)
+                    Divider().background(lightFgColor)
                     
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack {
@@ -239,10 +239,10 @@ struct MakeASaleView: View {
                                     Text(item.cartItemSubtotal.formatToCurrencyString())
                                         .frame(maxWidth: .infinity, alignment: .trailing)
                                 } //: HStack
-                                .modifier(TextMod(.callout, .semibold, lightTextColor))
+                                .modifier(TextMod(.callout, .semibold, lightFgColor))
                                 .frame(height: 30)
                                 
-                                Divider().background(Color(XSS.S.color80)).opacity(0.3)
+                                Divider().background(secondaryBackground).opacity(0.3)
                             } //: ForEach
                         } //: VStack
                     } //: ScrollView
@@ -262,7 +262,7 @@ struct MakeASaleView: View {
                     } label: {
                         Text("Cancel Sale")
                             .underline()
-                            .modifier(TextMod(.body, .regular, lightTextColor))
+                            .modifier(TextMod(.body, .regular, lightFgColor))
                             .padding()
                     }
                 } //: VStack
@@ -305,7 +305,7 @@ struct MakeASaleView: View {
                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                             }
                             .frame(height: 80)
-                            .background(Color(XSS.ComplimentS.color70))
+                            .background(itemButtonColor)
                             .cornerRadius(9)
                             .shadow(radius: 8)
                         } //: ForEach
@@ -336,7 +336,7 @@ struct MakeASaleView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 30)
-                    .foregroundColor(lightTextColor)
+                    .foregroundColor(lightFgColor)
                     .fontWeight(.semibold)
             }
             
@@ -380,12 +380,12 @@ struct MakeASaleView: View {
             
             HStack {
                 Text("Subtotal:")
-                    .modifier(TextMod(.title3, .semibold, lightTextColor))
+                    .modifier(TextMod(.title3, .semibold, lightFgColor))
                 
                 Spacer()
                 
                 Text(vm.cartSubtotal.formatToCurrencyString())
-                    .modifier(TextMod(.title2, .semibold, lightTextColor))
+                    .modifier(TextMod(.title2, .semibold, lightFgColor))
             } //: HStack
             .padding(.vertical, 8)
             .frame(maxWidth: 350)
@@ -400,7 +400,7 @@ struct MakeASaleView: View {
             
         } //: VStack
         .padding(.horizontal)
-        .background(Color(XSS.S.color20))
+        .background(primaryBackground)
         .frame(maxWidth: 350)
 //        .onAppear {
 //            for item in CategoryEntity.foodCategory.items {
@@ -418,10 +418,10 @@ struct MakeASaleView: View {
                     } label: {
                         Text(category.name)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .foregroundColor(selectedCategory == category ? Color(XSS.S.color10) : Color(XSS.S.color90))
+                            .foregroundColor(selectedCategory == category ? darkFgColor : lightFgColor)
                     }
                     .frame(minWidth: 150)
-                    .background(selectedCategory == category ? Color(XSS.S.color80) : Color(XSS.S.color40))
+                    .background(selectedCategory == category ? secondaryBackground : selectedButtonColor)
                     .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
                 }
             } //: HStack

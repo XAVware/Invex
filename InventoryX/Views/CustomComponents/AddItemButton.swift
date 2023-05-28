@@ -19,15 +19,15 @@ struct AddItemButton: View {
             addItemTapped()
         } label: {
             Text("New Item")
-                .modifier(TextMod(.footnote, .semibold, darkTextColor))
+                .modifier(TextMod(.footnote, .semibold, darkFgColor))
             
             Image(systemName: "plus")
                 .scaledToFit()
-                .foregroundColor(darkTextColor)
+                .foregroundColor(darkFgColor)
                 .bold()
         }
         .padding(8)
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(darkTextColor, lineWidth: 3))
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(darkFgColor, lineWidth: 3))
         .fullScreenCover(isPresented: $isShowingAddItem) {
             AddItemView()
         }

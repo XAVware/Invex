@@ -55,3 +55,12 @@ class SaleItemEntity: Object, ObjectKeyIdentifiable {
     static let saleItem1: SaleItemEntity = SaleItemEntity(name: "Cheetos", qtyToPurchase: 2, price: 1.5)
     static let saleItem2: SaleItemEntity = SaleItemEntity(name: "Milk", qtyToPurchase: 1, price: 1.0)
 }
+
+struct SaleModel {
+    let timeStamp: Date
+    let total: Double
+    
+//    init(from: SaleEntity) {
+//        
+//    }
+}
