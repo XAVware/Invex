@@ -9,9 +9,9 @@ import SwiftUI
 import RealmSwift
 
 @MainActor class OnboardingViewModel: ObservableObject {
-    var navCounter: Int = 20
+    var navCounter: Int = 0
     private let lastPageInt: Int
-    @Published var currentOnboardingState: OnboardingState = .categoryNames
+    @Published var currentOnboardingState: OnboardingState = .start
     
     //    @Published var currentUser: UserEntity?
     
@@ -19,6 +19,7 @@ import RealmSwift
     @Published var tempCategories: [CategoryEntity] = []
     @Published var newCategoryName: String = ""
     @Published var newCategoryThreshold: Int = 10
+    @Published var thresholdString: String = "0"
     
     //Profile
     @Published var newProfileName: String = ""
@@ -97,6 +98,7 @@ import RealmSwift
     
     // MARK: - CATEGORY FUNCTIONS
     func addTempCategory() {
+        guard let threshold = Int(thresholdString) else { return }
         for category in tempCategories {
             if category.name == newCategoryName { return }
         }
@@ -104,7 +106,7 @@ import RealmSwift
         let newCategory = CategoryEntity(name: newCategoryName, restockNum: newCategoryThreshold)
         tempCategories.append(newCategory)
         newCategoryName = ""
-        newCategoryThreshold = 10
+        newCategoryThreshold = threshold
     }
     
     func removeTempCategory(_ category: CategoryEntity) {
@@ -218,32 +220,46 @@ struct OnboardingView: View {
     private var categoriesView: some View {
         GeometryReader { geo in
             VStack(spacing: 16) {
-                Text("Add Your Category")
+                Text("Setup Categories")
                     .modifier(TextMod(.largeTitle, .bold, darkFgColor))
                 
-                Text("Your inventory will be displayed based on their category.")
-                    .modifier(TextMod(.footnote, .thin, .black))
-                    .multilineTextAlignment(.leading)
-                
-                AnimatedTextField(boundTo: $vm.newCategoryName, placeholder: "Category Name")
-                    .autocapitalization(UITextAutocapitalizationType.words)
+                HStack(spacing: 8) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Category Name")
+                            .modifier(TextMod(.title3, .bold, .black))
+    
+                        Text("Your inventory will be displayed based on their category. This should be a broad term that represents some of your items. I.e Food, Books, etc.")
+                            .modifier(TextMod(.footnote, .thin, .black))
+                            .multilineTextAlignment(.leading)
+                    } //: VStack
                     .frame(maxWidth: 0.4 * geo.size.width)
-                
-                //            HStack(spacing: 8) {
-                //                VStack(alignment: .leading, spacing: 8) {
-                //                    Text("Restock Threshold")
-                //                        .modifier(TextMod(.title3, .bold, .black))
-                //
-                //                    Text("If an item reaches its category's restock threshold, InventoryX will alert you.")
-                //                        .modifier(TextMod(.footnote, .thin, .black))
-                //                        .multilineTextAlignment(.leading)
-                //                } //: VStack
-                //
-                //                QuantitySelector(selectedQuantity: $vm.newCategoryThreshold)
-                //                    .frame(maxWidth: .infinity)
-                //                    .padding(.vertical)
-                //            } //: VStack
-                //            .padding(.vertical)
+                    
+                    Spacer()
+                    
+                    AnimatedTextField(boundTo: $vm.newCategoryName, placeholder: "Category Name")
+                        .autocapitalization(UITextAutocapitalizationType.words)
+                        .frame(maxWidth: 0.4 * geo.size.width)
+                } //: VStack
+                .padding(.vertical)
+    
+                HStack(spacing: 8) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Restock Threshold")
+                            .modifier(TextMod(.title3, .bold, .black))
+    
+                        Text("If an item reaches its category's restock threshold, InventoryX will alert you.")
+                            .modifier(TextMod(.footnote, .thin, .black))
+                            .multilineTextAlignment(.leading)
+                    } //: VStack
+                    .frame(maxWidth: 0.4 * geo.size.width)
+                    
+                    Spacer()
+                    
+                    AnimatedTextField(boundTo: $vm.thresholdString, placeholder: "Threshold")
+                        .autocapitalization(UITextAutocapitalizationType.words)
+                        .frame(maxWidth: 0.4 * geo.size.width)
+                } //: VStack
+                .padding(.vertical)
                                 
                 Button {
                     vm.addTempCategory()
