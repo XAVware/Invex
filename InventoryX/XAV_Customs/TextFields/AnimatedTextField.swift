@@ -10,6 +10,9 @@
 import SwiftUI
 
 struct AnimatedTextField: View {
+    enum FocusedField { case field }
+    @FocusState var isFocused: FocusedField?
+    
     @Binding var boundTo: String
     @State var placeholder: String
     
@@ -17,60 +20,72 @@ struct AnimatedTextField: View {
     @State var textFieldOffset: CGFloat = 0
     @State var placeholderScale: CGFloat = 1
     
-    @State var isSecure: Bool
-    @State var foregroundColor: Color
-    @State var tintColor: Color
+    let isSecure: Bool
+    let fgColor: Color
+    let bgColor: Color
+    let tintColor: Color
+    let fieldHeight: CGFloat
     
-    
-    func setPlacholderSize() {
-        if boundTo.isEmpty {
-            placeholderOffset = 0
-            placeholderScale = 1
-            textFieldOffset = 0
+    private var isPlaceholderSmall: Bool {
+        if isFocused == .field || !boundTo.isEmpty {
+            return true
         } else {
-            placeholderOffset = -19
-            placeholderScale = 0.65
-            textFieldOffset = 7
+            return false
         }
     }
     
-    init(boundTo: Binding<String>, placeholder: String, isSecure: Bool = false, foregroundColor: Color = .black, tintColor: Color = .gray) {
+    func setPlacholderSize() {
+        withAnimation(.easeOut(duration: 0.15)) {
+            placeholderOffset = isPlaceholderSmall ? -30 : 0
+            placeholderScale = isPlaceholderSmall ? 0.65 : 1
+        }
+    }
+    
+    init(boundTo: Binding<String>, placeholder: String, isSecure: Bool = false, fgColor: Color = .black, bgColor: Color = secondaryBackground, tintColor: Color = .gray, fieldHeight: CGFloat = 36) {
         self._boundTo = boundTo
         self.placeholder = placeholder
         self.isSecure = isSecure
-        self.foregroundColor = foregroundColor
+        self.fgColor = fgColor
+        self.bgColor = bgColor
         self.tintColor = tintColor
+        self.fieldHeight = fieldHeight
     }
     
     var body: some View {
-        ZStack(alignment: .leading) {
-            Color.clear
-            
-            Text(placeholder)
-                .foregroundColor(tintColor)
-                .offset(y: placeholderOffset)
-                .scaleEffect(placeholderScale, anchor: .leading)
-            
-            field
-                .foregroundColor(foregroundColor)
-                .frame(height: 36)
-                .offset(y: textFieldOffset)
-        } //: ZStack
-        .onChange(of: boundTo.isEmpty, perform: { _ in
-            withAnimation(.easeOut(duration: 0.3)) {
+        field
+            .padding(.horizontal)
+            .foregroundColor(fgColor)
+            .frame(height: 36)
+            .background(bgColor)
+            .focused($isFocused, equals: .field)
+            .overlay(border)
+            .overlay(placeholderLabel, alignment: .leading)
+            .onTapGesture {
+                isFocused = .field
+            }
+            .onAppear {
                 setPlacholderSize()
             }
-        })
-        .frame(height: 48)
-        .padding(.horizontal)
-        .overlay(
-            RoundedRectangle(cornerRadius: 5)
-                .stroke(tintColor, lineWidth: 1)
-        )
-        .onAppear {
-            setPlacholderSize()
-        }
+            .onChange(of: isPlaceholderSmall, perform: { _ in
+                setPlacholderSize()
+            })
     } //: Body
+    
+    private var border: some View {
+        RoundedRectangle(cornerRadius: 5)
+            .stroke(tintColor, lineWidth: 1)
+    } //: Border
+    
+    private var placeholderLabel: some View {
+        Text(placeholder)
+            .foregroundColor(tintColor)
+            .padding(.horizontal, isPlaceholderSmall ? 4 : 0)
+            .background(bgColor)
+            .padding(.leading, 18)
+            .offset(y: placeholderOffset)
+            .scaleEffect(placeholderScale, anchor: .leading)
+        
+    } //: Placeholder Label
     
     @ViewBuilder var field: some View {
         if isSecure {
@@ -86,5 +101,6 @@ struct AnimatedTextField_Previews: PreviewProvider {
     @State static var username: String = ""
     static var previews: some View {
         AnimatedTextField(boundTo: $username, placeholder: "Username")
+            .frame(maxWidth: 300)
     }
 }
