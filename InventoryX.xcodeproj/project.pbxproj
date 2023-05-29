@@ -53,6 +53,7 @@
 		94F569232A21452300E9DE98 /* PerformanceComparisons in Resources */ = {isa = PBXBuildFile; fileRef = 94F569222A21452300E9DE98 /* PerformanceComparisons */; };
 		94F569252A21B6C800E9DE98 /* RealmMinion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F569242A21B6C800E9DE98 /* RealmMinion.swift */; };
 		94F569272A21D41500E9DE98 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F569262A21D41500E9DE98 /* Theme.swift */; };
+		94F569292A2473E000E9DE98 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F569282A2473E000E9DE98 /* Date+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +103,7 @@
 		94F569222A21452300E9DE98 /* PerformanceComparisons */ = {isa = PBXFileReference; lastKnownFileType = text; path = PerformanceComparisons; sourceTree = "<group>"; };
 		94F569242A21B6C800E9DE98 /* RealmMinion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMinion.swift; sourceTree = "<group>"; };
 		94F569262A21D41500E9DE98 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		94F569282A2473E000E9DE98 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,6 +222,7 @@
 				80DBB96429F6D81500497695 /* Extensions.swift */,
 				80DBB97C29F70BC200497695 /* UIColor+Ext.swift */,
 				80FFBD0B2A1D309E00992440 /* Double+Ext.swift */,
+				94F569282A2473E000E9DE98 /* Date+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -239,9 +242,9 @@
 				94AC8DBA29FB21C3006A166E /* CustomComponents */,
 				80F734162A01A4BC0072C62B /* AddItemView.swift */,
 				80F734122A017CF10072C62B /* InventoryView.swift */,
+				80F6026729FFFFBD004C759D /* MenuView.swift */,
 				80F734182A01A58C0072C62B /* ItemDetailView.swift */,
 				80F6026529FFFD8A004C759D /* MakeASaleView.swift */,
-				80F6026729FFFFBD004C759D /* MenuView.swift */,
 				80DBB97E29F70EE000497695 /* OnboardingView.swift */,
 				80F602692A00054E004C759D /* RestockView.swift */,
 				80B5EFA329F0D0C9007D9842 /* SalesHistoryView.swift */,
@@ -372,6 +375,7 @@
 				80FFBD0A2A1D2F2700992440 /* InventoryItem.swift in Sources */,
 				80DBB96B29F6D81500497695 /* UnderlinedTextField.swift in Sources */,
 				94D3F1072A1C7E1600AF4393 /* Documentation.docc in Sources */,
+				94F569292A2473E000E9DE98 /* Date+Ext.swift in Sources */,
 				80DBB97029F6D81500497695 /* AlertManager.swift in Sources */,
 				80FFBD082A1D013A00992440 /* Sale.swift in Sources */,
 				80DBB96C29F6D81500497695 /* AnimatedTextField.swift in Sources */,

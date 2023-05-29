@@ -48,4 +48,22 @@ class RealmMinion {
         }
     } //: Delete All From Realm
     
+    static func createRandomSales(qty: Int) {
+        var sales: [SaleEntity] = []
+        for _ in 0 ..< qty {
+            let randomSeconds = Int.random(in: 0 ... 2628288)
+            let newSale = SaleEntity(timestamp: Date(timeIntervalSinceNow: -Double(randomSeconds)), total: Double(randomSeconds / 1000))
+            sales.append(newSale)
+        }
+        
+        do {
+            let realm = try Realm()
+            try realm.write {
+                realm.add(sales)
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
 }

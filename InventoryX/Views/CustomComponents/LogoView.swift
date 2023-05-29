@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LogoView: View {
+    
     var body: some View {
         HStack(spacing: 0) {
             Text("Inventory")
@@ -15,8 +16,7 @@ struct LogoView: View {
                 .offset(y: -2)
             
             Text("X")
-                .font(.largeTitle)
-                .fontWeight(.semibold)
+                .modifier(TextMod(.largeTitle, .semibold, Color(XSS.S.color30)))
                 .italic()
                 .offset(x: -2)
         } //: HStack

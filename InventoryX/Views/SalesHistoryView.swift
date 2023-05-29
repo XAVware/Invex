@@ -6,14 +6,41 @@ import RealmSwift
 struct SalesHistoryView: View {
     let saleDateManager: SaleDateManager = SaleDateManager()
     var columnTitles: [String] = ["Timestamp", "No. Items", "Subtotal"]
-    var filters: [String] = ["Today", "Yesterday", "This Week", "Last Week"]
-    @State var selectedFilter: String = "Today"
+//    var filters: [String] = ["Today", "Yesterday", "This Week", "Last Week"]
+    
+    enum DateRanges: String, CaseIterable, Identifiable {
+        var id: UUID {
+            return UUID()
+        }
+        
+        case today = "Today"
+        case yesterday = "Yesterday"
+        case thisWeek = "This Week"
+        case lastWeek = "Last Week"
+        
+        var startDate: Date {
+            return Date().startOfDay()
+        }
+        
+        var endDate: Date {
+            let start: Date = startDate
+            let startOfNextDay = Calendar.current.date(byAdding: .day, value: 1, to: start)
+            let endOfDay = Calendar.current.date(byAdding: .second, value: -1, to: startOfNextDay ?? Date())
+            return endOfDay ?? Date()
+        }
+        
+        var realmPredicateForRange: NSPredicate {
+            return NSPredicate(format: "timestamp BETWEEN {%@, %@}", startDate as NSDate, endDate as NSDate)
+        }
+    }
+    
+    @State var selectedDateRange: DateRanges = DateRanges.today
     @State var isShowingDetail: Bool = false
     
-//    @ObservedResults(SaleEntity.self) var sales
-    
+//    @ObservedResults(SaleEntity.self) var salesInRange
+    @State var salesInRange: [SaleEntity] = []
     //For Testing
-    var sales: [SaleEntity] = [SaleEntity.todaySale1, SaleEntity.yesterdaySale1]
+//    var salesInRange: [SaleEntity] = [SaleEntity.todaySale1, SaleEntity.yesterdaySale1]
     
 //    var rangeSales: Results<SaleEntity> {
 //        switch selectedFilter {
@@ -32,41 +59,69 @@ struct SalesHistoryView: View {
     
     var rangeTotal: Double {
         var tempTotal: Double = 0
-        //        for sale in self.rangeSales {
-        //            tempTotal += sale.total
-        //        }
+        for sale in salesInRange {
+            tempTotal += sale.total
+        }
         return tempTotal
+    }
+    
+    func updateSales(newRange: DateRanges) {
+        print("Range Changed To : \(newRange), new values:")
+        print("Start - \(newRange.startDate)")
+        print("End - \(newRange.endDate)")
+        print("Predicate - \(newRange.realmPredicateForRange)")
+        do {
+            let realm = try Realm()
+            let rangeSales = realm.objects(SaleEntity.self).filter(newRange.realmPredicateForRange)
+            for sale in rangeSales {
+                let tempSale = SaleEntity(timestamp: sale.timestamp, total: sale.total)
+                salesInRange.append(tempSale)
+            }
+            print("Finished: \(salesInRange)")
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     var body: some View {
         GeometryReader { geo in
             VStack {
+                Button {
+                    RealmMinion.createRandomSales(qty: 100)
+                } label: {
+                    Text("Create 100 Random Sales")
+                }
+
                 HStack {
-                    Text("Income \(selectedFilter): \(rangeTotal.formatToCurrencyString())")
-                        .modifier(TextMod(.title3, .semibold, lightFgColor))
+                    Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatToCurrencyString())")
+                        .modifier(TextMod(.title3, .semibold, darkFgColor))
                     
                     Spacer()
                     
                     Text("Sales History")
-                        .modifier(TextMod(.title3, .semibold, lightFgColor))
+                        .modifier(TextMod(.title3, .semibold, darkFgColor))
                     
                     Spacer()
                     
-                    Picker(selection: $selectedFilter) {
-                        ForEach(filters, id: \.self) { filter in
-                            Text(filter)
+                    Picker(selection: $selectedDateRange) {
+                        ForEach(DateRanges.allCases) { dateRange in
+                            Text(dateRange.rawValue)
+                                .tag(dateRange)
                         }
                     } label: {
                         Text("Range")
                     }
+                    .tint(darkFgColor)
                     
                 } //: HStack
                                 
                 List {
                     Section {
-                        ForEach(sales, id: \.self) { sale in
+                        ForEach(salesInRange, id: \.self) { sale in
                             HStack {
-                                Text("\(sale.timestamp)")
+                                Text("\(sale.timestamp.formatted(date: .numeric, time: .shortened))")
+                                Spacer()
+                                Text(sale.total.formatToCurrencyString())
                             } //: HStack
                             .onTapGesture {
                                 isShowingDetail.toggle()
@@ -88,10 +143,17 @@ struct SalesHistoryView: View {
             } //: VStack
             .padding()
             .background(secondaryBackground)
+            .onAppear {
+                updateSales(newRange: selectedDateRange)
+            }
             .sheet(isPresented: $isShowingDetail) {
                 SaleDetailView()
             }
+            .onChange(of: selectedDateRange) { newValue in
+                updateSales(newRange: newValue)
+            }
         } //: GeometryReader
+        
     } //: Body
     
 }

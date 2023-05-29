@@ -18,15 +18,11 @@ import RealmSwift
     //Categories
     @Published var tempCategories: [CategoryEntity] = []
     @Published var newCategoryName: String = ""
-    @Published var newCategoryThreshold: Int = 10
-    @Published var thresholdString: String = "0"
+    @Published var thresholdString: String = "10"
     
     //Profile
     @Published var newProfileName: String = ""
     @Published var newProfileEmail: String = ""
-    @Published var adminPasscode: String = ""
-    @Published var isPasscodeProtected: Bool = false
-    @Published var isShowingPasscodePad: Bool = false
     
     enum OnboardingState: Int, CaseIterable {
         case start = 0
@@ -103,10 +99,10 @@ import RealmSwift
             if category.name == newCategoryName { return }
         }
         
-        let newCategory = CategoryEntity(name: newCategoryName, restockNum: newCategoryThreshold)
+        let newCategory = CategoryEntity(name: newCategoryName, restockNum: threshold)
         tempCategories.append(newCategory)
         newCategoryName = ""
-        newCategoryThreshold = threshold
+        thresholdString = "10"
     }
     
     func removeTempCategory(_ category: CategoryEntity) {
@@ -119,23 +115,14 @@ import RealmSwift
         guard newProfileName.isNotEmpty else { return nil }
         let name: String = newProfileName
         var email: String?
-        var passcode: String?
         
         if newProfileEmail.isNotEmpty {
             email = newProfileEmail
         }
         
-        if isPasscodeProtected && adminPasscode.isNotEmpty {
-            passcode = adminPasscode
-        }
-        
         let newUser = UserEntity()
         newUser.profileName = name
         newUser.email = email
-        
-        if let passcode = passcode {
-            newUser.passcode = passcode
-        }
         
         newUser.role = .admin
         
@@ -157,10 +144,6 @@ import RealmSwift
 //            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
             print("Error saving category to Realm: \(error.localizedDescription)")
         }
-        
-        //        tempCategories.forEach { category in
-        //            saveCategory(category)
-        //        }
     }
     
     
@@ -207,8 +190,9 @@ struct OnboardingView: View {
     // MARK: - WELCOME PAGE
     private var welcomePage: some View {
         VStack {
-            Text("Inventory X")
-                .modifier(TextMod(.largeTitle, .bold))
+            LogoView()
+                .scaleEffect(2.0)
+                .padding(.top)
             
             Spacer()
             
@@ -231,15 +215,17 @@ struct OnboardingView: View {
                         Text("Your inventory will be displayed based on their category. This should be a broad term that represents some of your items. I.e Food, Books, etc.")
                             .modifier(TextMod(.footnote, .thin, .black))
                             .multilineTextAlignment(.leading)
+                            .frame(width: 0.4 * geo.size.width, alignment: .leading)
                     } //: VStack
-                    .frame(maxWidth: 0.4 * geo.size.width)
+                    .frame(width: 0.4 * geo.size.width)
                     
                     Spacer()
                     
                     AnimatedTextField(boundTo: $vm.newCategoryName, placeholder: "Category Name")
                         .autocapitalization(UITextAutocapitalizationType.words)
-                        .frame(maxWidth: 0.4 * geo.size.width)
-                } //: VStack
+                        .frame(width: 0.4 * geo.size.width)
+                } //: HStack
+                .frame(maxWidth: .infinity)
                 .padding(.vertical)
     
                 HStack(spacing: 8) {
@@ -250,15 +236,17 @@ struct OnboardingView: View {
                         Text("If an item reaches its category's restock threshold, InventoryX will alert you.")
                             .modifier(TextMod(.footnote, .thin, .black))
                             .multilineTextAlignment(.leading)
+                            .frame(width: 0.4 * geo.size.width, alignment: .leading)
                     } //: VStack
-                    .frame(maxWidth: 0.4 * geo.size.width)
+                    .frame(width: 0.4 * geo.size.width)
                     
                     Spacer()
                     
                     AnimatedTextField(boundTo: $vm.thresholdString, placeholder: "Threshold")
                         .autocapitalization(UITextAutocapitalizationType.words)
-                        .frame(maxWidth: 0.4 * geo.size.width)
-                } //: VStack
+                        .frame(width: 0.4 * geo.size.width)
+                } //: HStack
+                .frame(maxWidth: .infinity)
                 .padding(.vertical)
                                 
                 Button {
@@ -276,32 +264,46 @@ struct OnboardingView: View {
                 Spacer()
                 
                 if !vm.tempCategories.isEmpty {
-                    VStack(spacing: 25) {
-                        Text("Current Categories:")
-                            .modifier(TextMod(.title2, .bold))
-                        
+                    VStack(spacing: 16) {
+                        HStack {
+                            Text("Category")
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                                        
+                            Text("Threshold")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            
+                            Spacer()
+                                .frame(maxWidth: .infinity)   .opacity(0.6)
+                        } //: HStack
+                        .modifier(TextMod(.callout, .semibold))
+                            
                         ScrollView(.vertical, showsIndicators: false) {
                             ForEach(vm.tempCategories, id: \.self) { category in
                                 HStack {
                                     Text(category.name)
-                                    
-                                    Spacer()
-                                    
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                                                        
+                                    Text("\(category.restockNumber)")
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                                                        
                                     Button {
                                         vm.removeTempCategory(category)
                                     } label: {
                                         Image(systemName: "trash")
                                             .foregroundColor(.red)
+                                            .opacity(0.6)
                                     }
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
                                 }//: HStack
-                                .frame(height: 40)
+                                .modifier(TextMod(.footnote, .thin, .black))
                                 
                                 Divider().opacity(0.5)
                             }//: ForEach
                         }//: Scroll
-                        .frame(maxWidth: .infinity)
+                        
                         continueButton
                     } //: VStack
+                    .frame(maxWidth: 0.5 * geo.size.width)
                 }
             } //: VStack
             .padding()
@@ -327,13 +329,13 @@ struct OnboardingView: View {
                                 .modifier(TextMod(.footnote, .thin, .black))
                                 .multilineTextAlignment(.leading)
                         } //: VStack
-                        .frame(maxWidth: 0.4 * geo.size.width)
+                        .frame(width: 0.4 * geo.size.width)
                         
                         Spacer()
                         
                         AnimatedTextField(boundTo: $vm.newProfileName, placeholder: "Profile Name")
                             .autocapitalization(UITextAutocapitalizationType.words)
-                            .frame(maxWidth: 0.4 * geo.size.width)
+                            .frame(width: 0.4 * geo.size.width)
                     } //: HStack
                     
                     Divider().background(secondaryBackground)
@@ -347,38 +349,23 @@ struct OnboardingView: View {
                                 .modifier(TextMod(.footnote, .thin, .black))
                                 .multilineTextAlignment(.leading)
                         } //: VStack
-                        .frame(maxWidth: 0.4 * geo.size.width)
+                        .frame(width: 0.4 * geo.size.width)
                         
                         Spacer()
                         
                         AnimatedTextField(boundTo: $vm.newProfileEmail, placeholder: "Email")
                             .autocapitalization(UITextAutocapitalizationType.none)
-                            .frame(maxWidth: 0.4 * geo.size.width)
+                            .frame(width: 0.4 * geo.size.width)
                     } //: HStack
                     
                     Spacer()
-                    
-                    Toggle(isOn: $vm.isPasscodeProtected) {
-                        Text("Password Protected")
-                    } //: Toggle
-                    .onChange(of: vm.isPasscodeProtected) { isProtected in
-                        vm.isShowingPasscodePad.toggle()
-                    }
-                    Spacer()
                 } //: VStack
-                
                 
                 continueButton
             } //: VStack
             .frame(width: 0.9 * geo.size.width)
             .padding(.vertical)
             .frame(maxWidth: .infinity)
-            .sheet(isPresented: $vm.isShowingPasscodePad) {
-                PasscodePad(padState: .createPasscode, completion: { confirmedPasscode in
-                    vm.adminPasscode = confirmedPasscode
-                    vm.isShowingPasscodePad.toggle()
-                })
-            }
         } //: Geometry Reader
     } //: Profile Setup
     
@@ -392,32 +379,11 @@ struct OnboardingView: View {
         .modifier(RoundedButtonMod())
         .padding(.bottom)
     } //: Continue Button
-    
-//    struct CategoryRow: View {
-//        let category: CategoryEntity
-//        let parent: OnboardingViewModel
-//
-//        var body: some View {
-//            HStack {
-//                Text(category.name)
-//
-//                Spacer()
-//
-//                Button {
-//                    parent.removeTempCategory(category)
-//                } label: {
-//                    Image(systemName: "trash")
-//                        .foregroundColor(.red)
-//                }
-//            }//: HStack
-//        }
-//    }
 }
 
 struct OnboardingView_Previews: PreviewProvider {
     @State static var onboarding: Bool = true
     static var previews: some View {
-        //        OnboardingView(isOnboarding: $onboarding)
         OnboardingView()
             .modifier(PreviewMod())
     }

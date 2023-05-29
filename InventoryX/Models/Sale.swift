@@ -32,11 +32,14 @@ class SaleEntity: Object, ObjectKeyIdentifiable {
         return someDateTime
     }
     
+    
     //Sample Data For Previews, use yyyy-MM-dd HH:mm
-    static let todaySale1: SaleEntity = SaleEntity(timestamp: Date(timeIntervalSinceNow: -86400), total: 32.50)
-    static let yesterdaySale1: SaleEntity = SaleEntity(timestamp: Date(timeIntervalSinceNow: -86400), total: 32.50)
+    static let todaySale1: SaleEntity = SaleEntity(timestamp: Date(timeIntervalSinceNow: 0), total: 32.50)
+    static let yesterdaySale1: SaleEntity = SaleEntity(timestamp: Date(timeIntervalSinceNow: -dayTimeInterval), total: 32.50)
     
 }
+
+let dayTimeInterval: Double = 86400
 
 class SaleItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId

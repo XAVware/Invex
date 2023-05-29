@@ -36,7 +36,7 @@ struct AnimatedTextField: View {
     
     func setPlacholderSize() {
         withAnimation(.easeOut(duration: 0.15)) {
-            placeholderOffset = isPlaceholderSmall ? -30 : 0
+            placeholderOffset = isPlaceholderSmall ? -32 : 0
             placeholderScale = isPlaceholderSmall ? 0.65 : 1
         }
     }
