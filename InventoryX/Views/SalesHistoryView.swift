@@ -108,8 +108,6 @@ struct SalesHistoryView: View {
     @ObservedResults(SaleEntity.self) var allSales
 
     @State var rangeSales: [SaleEntity] = [SaleEntity.todaySale1, SaleEntity.yesterdaySale1]
-//    @State var rangeSales: [SaleEntity] = []
-    @State var hourlyChartData: [HourlyChartBarModel] = []
     
     var rangeTotal: Double {
         var tempTotal: Double = 0
@@ -118,24 +116,35 @@ struct SalesHistoryView: View {
         }
         return tempTotal
     }
-    
-//    func updateChartData() -> [[SaleEntity]] {
-//      guard !rangeSales.isEmpty else { return [] }
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "h:mm a"
-//        let dictionaryByHour = Dictionary(grouping: rangeSales, by: {
-//            $0.timestamp
-//        })
-//        let hours: [String] = Array(0...23) // rotate this array if you want to go from October to September
-//      return hours.compactMap({ dictionaryByHour[$0] })
-//    }
-    
-//    func getBarData() {
-//        var sales: [SaleEntity] = []
-//        for sale in allSales {
-//
-//        }
-//    }
+ 
+    func getGroupedSales() -> [ChartData] {
+        
+        let chartData: [ChartData] = [
+            ChartData(label: "4 AM", total: 0.0, hoursIncluded: [0, 1, 2, 3]),
+            ChartData(label: "8 AM", total: 0.0, hoursIncluded: [4, 5, 6, 7]),
+            ChartData(label: "12 PM", total: 0.0, hoursIncluded: [8, 9, 10, 11]),
+            ChartData(label: "4 PM", total: 0.0, hoursIncluded: [12, 13, 14, 15]),
+            ChartData(label: "8 PM", total: 0.0, hoursIncluded: [16, 17, 18, 19]),
+            ChartData(label: "12 AM", total: 0.0, hoursIncluded: [20, 21, 22, 23])
+        ]
+        
+        let groupedSales = groupSalesByHour(sales: rangeSales)
+        
+        for range in chartData {
+            for hour in range.hoursIncluded {
+                if let hourSales = groupedSales[hour] {
+                    print("Sales Found for Hour \(hour)")
+                    print(hourSales)
+                    
+                    for sale in hourSales {
+                        range.total += sale.total
+                    }
+                }
+            }
+        }
+        
+        return chartData
+    }
     
     func groupSalesByHour(sales: [SaleEntity]) -> [Int: [SaleEntity]] {
         var groupedSales: [Int: [SaleEntity]] = [:]
@@ -176,7 +185,8 @@ struct SalesHistoryView: View {
         GeometryReader { geo in
             VStack {
                 Button {
-                    RealmMinion.createRandomSales(qty: 100)
+//                    RealmMinion.createRandomSales(qty: 100)
+                    RealmMinion.createRandomSalesToday(qty: 20)
                 } label: {
                     Text("Create 100 Random Sales")
                 }
@@ -203,55 +213,35 @@ struct SalesHistoryView: View {
                     .tint(darkFgColor)
                     
                 } //: HStack
-                .onTapGesture {
-                    guard !rangeSales.isEmpty else { return }
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "h a"
-//                    let dictionaryByHour = Dictionary(grouping: rangeSales, by: {
-//                        dateFormatter.date(from: $0.timestamp)
-//                    })
-//                    let hours = Array(0...23) // rotate this array if you want to go from October to September
-//                  return hours.compactMap({ dictionaryByHour[$0] })
-                    
-                    for (hour, salesInHour) in groupSalesByHour(sales: rangeSales) {
-                        for i in 1 ..< 6 {
-                            
-                            print("Hour \(hour):")
-                            var tempTotal: Double = 0.0
-                            for sale in salesInHour {
-                                tempTotal += sale.total
-                                HourlyChartBarModel(timeString: <#T##String#>, total: <#T##Double#>)
-                                print("- \(sale.timestamp): \(sale.total)")
-                            }
-                            print()
-                        }
-                    }
-                }
+                
                 
                 Chart {
-                    ForEach(rangeSales) { sale in
-                        BarMark(x: .value("Hour", sale.timestamp),
-                                y: .value("Value", sale.total))
+                    ForEach(getGroupedSales()) { group in
+                        BarMark(x: .value("Hour", group.label),
+                                y: .value("Value", group.total))
                         .foregroundStyle(.blue)
                     }
 
                 }
-                .chartXAxis {
-                    AxisMarks(values: .stride(by: .hour, count: 4)) { _ in
-                        AxisValueLabel(format: .dateTime.hour(.twoDigits(amPM: .abbreviated)))
-                    }
-                }
-                .chartYAxis {
-                    let costs = rangeSales.map { $0.total }
-                    let min = costs.min()!
-                    let max = costs.max()!
-                    let costsStride = Array(stride(from: min, through: max, by: 6))
-                    AxisMarks(position: .leading, values: costsStride) { axis in
-                        let value = costsStride[axis.index]
-                        AxisValueLabel(value.formatAsCurrencyString(), centered: false)
-                    }
-                }
+//                .chartXAxis {
+//                    AxisMarks(values: .stride(by: .hour, count: 4)) { _ in
+//                        AxisValueLabel(format: .dateTime.hour(.twoDigits(amPM: .abbreviated)))
+//                    }
+//                }
+//                .chartYAxis {
+//                    let costs = rangeSales.map { $0.total }
+//                    let min = costs.min()!
+//                    let max = costs.max()!
+//                    let costsStride = Array(stride(from: min, through: max, by: 6))
+//                    AxisMarks(position: .leading, values: costsStride) { axis in
+//                        let value = costsStride[axis.index]
+//                        AxisValueLabel(value.formatAsCurrencyString(), centered: false)
+//                    }
+//                }
                 .frame(maxWidth: 0.4 * geo.size.width)
+                .onTapGesture {
+                    print(getGroupedSales())
+                }
                                 
                 List {
                     Section {
@@ -295,27 +285,19 @@ struct SalesHistoryView: View {
         
     } //: Body
     
-    struct HourlyChartBarModel {
-        let timeString: String
-        let date: Date = Date()
+    class ChartData: Identifiable {
+        let id: UUID = UUID()
+        let label: String
+        var total: Double
+        let hoursIncluded: [Int]
         
-//        var startTime: Date {
-//            let dateFormatter = DateFormatter()
-//            dateFormatter.dateFormat = "h a"
-//            return dateFormatter.string(from: date)
-//        }
-        @State var total: Double
-
-//        var timeString: String {
-//            let dateFormatter = DateFormatter()
-//            dateFormatter.dateFormat = "h a"
-////                    let dictionaryByHour = Dictionary(grouping: rangeSales, by: {
-////                        dateFormatter.date(from: $0.timestamp)
-////                    })
-////                    let hours = Array(0...23) // rotate this array if you want to go from October to September
-////                  return hours.compactMap({ dictionaryByHour[$0] })
-//            return dateFormatter.string(from: self.date)
-//        }
+        
+        init(label: String, total: Double, hoursIncluded: [Int]) {
+            self.label = label
+            self.total = total
+            self.hoursIncluded = hoursIncluded
+        }
+        
     }
     
 }
