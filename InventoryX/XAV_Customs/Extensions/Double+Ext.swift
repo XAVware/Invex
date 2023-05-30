@@ -8,7 +8,7 @@
 import Foundation
 
 extension Double {
-    func formatToCurrencyString() -> String {
+    func formatAsCurrencyString() -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.minimumFractionDigits = 2

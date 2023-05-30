@@ -1,10 +1,10 @@
 
 
+import Charts
 import SwiftUI
 import RealmSwift
 
 struct SalesHistoryView: View {
-//    let saleDateManager: SaleDateManager = SaleDateManager()
     var columnTitles: [String] = ["Timestamp", "No. Items", "Subtotal"]
     
     enum DateRanges: String, CaseIterable, Identifiable {
@@ -107,17 +107,28 @@ struct SalesHistoryView: View {
     
     @ObservedResults(SaleEntity.self) var allSales
 
-    @State var rangeSales: [SaleEntity] = []
+    @State var rangeSales: [SaleEntity] = [SaleEntity.todaySale1, SaleEntity.yesterdaySale1]
+//    @State var rangeSales: [SaleEntity] = []
+    
     
     var rangeTotal: Double {
         var tempTotal: Double = 0
-//        if let rangeSales = rangeSales {
-            for sale in rangeSales {
-                tempTotal += sale.total
-            }
-//        }
+        for sale in rangeSales {
+            tempTotal += sale.total
+        }
         return tempTotal
     }
+    
+//    func updateChartData() -> [[SaleEntity]] {
+//      guard !rangeSales.isEmpty else { return [] }
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "h:mm a"
+//        let dictionaryByHour = Dictionary(grouping: rangeSales, by: {
+//            $0.timestamp
+//        })
+//        let hours: [String] = Array(0...23) // rotate this array if you want to go from October to September
+//      return hours.compactMap({ dictionaryByHour[$0] })
+//    }
     
     func updateSales(newRange: DateRanges) {
         var sales: [SaleEntity] = []
@@ -128,7 +139,7 @@ struct SalesHistoryView: View {
         })
         rangeSales = sales
     }
-    
+    let strideBy: Double = 6
     var body: some View {
         GeometryReader { geo in
             VStack {
@@ -139,7 +150,7 @@ struct SalesHistoryView: View {
                 }
 
                 HStack {
-                    Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatToCurrencyString())")
+                    Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatAsCurrencyString())")
                         .modifier(TextMod(.title3, .semibold, darkFgColor))
                     
                     Spacer()
@@ -160,23 +171,43 @@ struct SalesHistoryView: View {
                     .tint(darkFgColor)
                     
                 } //: HStack
+                
+                Chart {
+                    ForEach(rangeSales) { sale in
+                        BarMark(x: .value("Hour", sale.timestamp),
+                                y: .value("Value", sale.total))
+                        .foregroundStyle(.blue)
+                    }
+                }
+                .chartXAxis {
+                    AxisMarks(values: .stride(by: .hour, count: 4)) { _ in
+                        AxisValueLabel(format: .dateTime.hour(.twoDigits(amPM: .abbreviated)))
+                    }
+                }
+                .chartYAxis {
+                    let costs = rangeSales.map { $0.total }
+                    let min = costs.min()!
+                    let max = costs.max()!
+                    let costsStride = Array(stride(from: min, through: max, by: 6))
+                    AxisMarks(position: .leading, values: costsStride) { axis in
+                        let value = costsStride[axis.index]
+                        AxisValueLabel(value.formatAsCurrencyString(), centered: false)
+                    }
+                }
+                .frame(maxWidth: 0.4 * geo.size.width)
                                 
                 List {
                     Section {
-//                        if let rangeSales = salesInRange {
-                            ForEach(rangeSales, id: \.self) { sale in
-                                HStack {
-                                    Text("\(sale.timestamp.formatted(date: .numeric, time: .shortened))")
-                                    Spacer()
-                                    Text(sale.total.formatToCurrencyString())
-                                } //: HStack
-                                .onTapGesture {
-                                    isShowingDetail.toggle()
-                                }
+                        ForEach(rangeSales, id: \.self) { sale in
+                            HStack {
+                                Text("\(sale.timestamp.formatted(date: .numeric, time: .shortened))")
+                                Spacer()
+                                Text(sale.total.formatAsCurrencyString())
+                            } //: HStack
+                            .onTapGesture {
+                                isShowingDetail.toggle()
                             }
-//                        } else {
-//                            Text("No Sales")
-//                        }
+                        }
                     } header: {
                         Text("Sales")
                             .modifier(TextMod(.largeTitle, .semibold, .black))
@@ -194,7 +225,7 @@ struct SalesHistoryView: View {
             .padding()
             .background(secondaryBackground)
             .onAppear {
-                updateSales(newRange: selectedDateRange)
+//                updateSales(newRange: selectedDateRange)
                 print(allSales)
             }
             .sheet(isPresented: $isShowingDetail) {
@@ -216,68 +247,6 @@ struct SalesHistoryView_Previews: PreviewProvider {
     }
 }
 
-
-struct SaleRowView: View {
-    @State var isExpanded: Bool = false
-    @State var sale: SaleEntity
-    
-    var body: some View {
-        GroupBox {
-            DisclosureGroup(isExpanded: $isExpanded) {
-                VStack {
-                    Divider().padding(.vertical, 8)
-                    
-                    Text("Items: ")
-                        .modifier(TextMod(.body, .semibold, .black))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    VStack {
-                        ForEach(sale.items, id: \.self) { saleItem in
-                            HStack {
-                                Image(systemName: "circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 10, height: 10)
-                                
-                                Text(saleItem.name)
-                                    .modifier(TextMod(.body, .semibold, .black))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            } //: HStack
-                            .padding(.horizontal)
-                        } //: For Each
-                    } //: VStack
-                } //: VStack
-                .foregroundColor(.black)
-                
-            } label: {
-                Button {
-                    withAnimation {
-                        isExpanded.toggle()
-                    }
-                } label: {
-                    HStack {
-                        Text("\(formatDate(date: sale.timestamp))")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Text(sale.total.formatToCurrencyString())
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                    } //: HStack
-                    .modifier(TextMod(.body, .semibold, .black))
-                    .foregroundColor(.black)
-                } //: Button
-            } //: DisclosureGroup
-        } //: GroupBox
-    }
-    
-    
-    func formatDate(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "E, MMM. d y 'at' h:mm a"
-        dateFormatter.amSymbol = "AM"
-        dateFormatter.pmSymbol = "PM"
-        return dateFormatter.string(from: date)
-    }
-}
 
 struct SaleDetailView: View {
     @Environment(\.dismiss) var dismiss

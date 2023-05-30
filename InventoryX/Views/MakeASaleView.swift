@@ -201,7 +201,7 @@ struct MakeASaleView: View {
                     Text("Amount Due:")
                         .modifier(TextMod(.largeTitle, .semibold, lightFgColor))
                     
-                    Text(vm.cartSubtotal.formatToCurrencyString())
+                    Text(vm.cartSubtotal.formatAsCurrencyString())
                         .modifier(TextMod(.system(size: 48), .semibold, lightFgColor))
                 } //: VStack
                 
@@ -233,10 +233,10 @@ struct MakeASaleView: View {
                                     Text("\(item.qtyInCart ?? -1)")
                                         .frame(maxWidth: .infinity)
                                     
-                                    Text(item.retailPrice?.formatToCurrencyString() ?? "Error")
+                                    Text(item.retailPrice?.formatAsCurrencyString() ?? "Error")
                                         .frame(maxWidth: .infinity)
                                     
-                                    Text(item.cartItemSubtotal.formatToCurrencyString())
+                                    Text(item.cartItemSubtotal.formatAsCurrencyString())
                                         .frame(maxWidth: .infinity, alignment: .trailing)
                                 } //: HStack
                                 .modifier(TextMod(.callout, .semibold, lightFgColor))
@@ -355,7 +355,7 @@ struct MakeASaleView: View {
                             } //: HStack
                             
                             HStack {
-                                Text((item.retailPrice ?? -5).formatToCurrencyString())
+                                Text((item.retailPrice ?? -5).formatAsCurrencyString())
                                     .modifier(TextMod(.body, .semibold, .white))
                                 
                                 Text("x")
@@ -384,7 +384,7 @@ struct MakeASaleView: View {
                 
                 Spacer()
                 
-                Text(vm.cartSubtotal.formatToCurrencyString())
+                Text(vm.cartSubtotal.formatAsCurrencyString())
                     .modifier(TextMod(.title2, .semibold, lightFgColor))
             } //: HStack
             .padding(.vertical, 8)
