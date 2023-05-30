@@ -109,7 +109,7 @@ struct SalesHistoryView: View {
 
     @State var rangeSales: [SaleEntity] = [SaleEntity.todaySale1, SaleEntity.yesterdaySale1]
 //    @State var rangeSales: [SaleEntity] = []
-    
+    @State var hourlyChartData: [HourlyChartBarModel] = []
     
     var rangeTotal: Double {
         var tempTotal: Double = 0
@@ -130,6 +130,35 @@ struct SalesHistoryView: View {
 //      return hours.compactMap({ dictionaryByHour[$0] })
 //    }
     
+//    func getBarData() {
+//        var sales: [SaleEntity] = []
+//        for sale in allSales {
+//
+//        }
+//    }
+    
+    func groupSalesByHour(sales: [SaleEntity]) -> [Int: [SaleEntity]] {
+        var groupedSales: [Int: [SaleEntity]] = [:]
+
+        let calendar = Calendar.current
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH"
+
+        for sale in sales {
+            let hour = calendar.component(.hour, from: sale.timestamp)
+
+            if var salesInHour = groupedSales[hour] {
+                salesInHour.append(sale)
+                groupedSales[hour] = salesInHour
+            } else {
+                groupedSales[hour] = [sale]
+            }
+        }
+
+        return groupedSales
+    }
+
+    
     func updateSales(newRange: DateRanges) {
         var sales: [SaleEntity] = []
         let salesInRange = allSales.filter(selectedDateRange.realmPredicateForRange)
@@ -138,8 +167,11 @@ struct SalesHistoryView: View {
             sales.append(tempSale)
         })
         rangeSales = sales
+        
     }
+    
     let strideBy: Double = 6
+    
     var body: some View {
         GeometryReader { geo in
             VStack {
@@ -171,6 +203,30 @@ struct SalesHistoryView: View {
                     .tint(darkFgColor)
                     
                 } //: HStack
+                .onTapGesture {
+                    guard !rangeSales.isEmpty else { return }
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "h a"
+//                    let dictionaryByHour = Dictionary(grouping: rangeSales, by: {
+//                        dateFormatter.date(from: $0.timestamp)
+//                    })
+//                    let hours = Array(0...23) // rotate this array if you want to go from October to September
+//                  return hours.compactMap({ dictionaryByHour[$0] })
+                    
+                    for (hour, salesInHour) in groupSalesByHour(sales: rangeSales) {
+                        for i in 1 ..< 6 {
+                            
+                            print("Hour \(hour):")
+                            var tempTotal: Double = 0.0
+                            for sale in salesInHour {
+                                tempTotal += sale.total
+                                HourlyChartBarModel(timeString: <#T##String#>, total: <#T##Double#>)
+                                print("- \(sale.timestamp): \(sale.total)")
+                            }
+                            print()
+                        }
+                    }
+                }
                 
                 Chart {
                     ForEach(rangeSales) { sale in
@@ -178,6 +234,7 @@ struct SalesHistoryView: View {
                                 y: .value("Value", sale.total))
                         .foregroundStyle(.blue)
                     }
+
                 }
                 .chartXAxis {
                     AxisMarks(values: .stride(by: .hour, count: 4)) { _ in
@@ -237,6 +294,29 @@ struct SalesHistoryView: View {
         } //: GeometryReader
         
     } //: Body
+    
+    struct HourlyChartBarModel {
+        let timeString: String
+        let date: Date = Date()
+        
+//        var startTime: Date {
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "h a"
+//            return dateFormatter.string(from: date)
+//        }
+        @State var total: Double
+
+//        var timeString: String {
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "h a"
+////                    let dictionaryByHour = Dictionary(grouping: rangeSales, by: {
+////                        dateFormatter.date(from: $0.timestamp)
+////                    })
+////                    let hours = Array(0...23) // rotate this array if you want to go from October to September
+////                  return hours.compactMap({ dictionaryByHour[$0] })
+//            return dateFormatter.string(from: self.date)
+//        }
+    }
     
 }
 
