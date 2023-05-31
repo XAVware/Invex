@@ -53,7 +53,7 @@ struct MenuView: View {
                 .padding()
                 .frame(height: 50)
                 .frame(maxWidth: .infinity)
-                .overlay(currentDisplay == displayState ? itemButtonColor.opacity(0.3) : nil)
+                .overlay(currentDisplay == displayState ? lightFgColor.opacity(0.3) : nil)
             }
             
             Button {

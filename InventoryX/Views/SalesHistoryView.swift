@@ -19,7 +19,7 @@ struct SalesHistoryView: View {
         
         var calendar: Calendar {
             var calendar = Calendar.current
-            calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+            calendar.timeZone = TimeZone(abbreviation: "EDT")!
             calendar.firstWeekday = 1
             return calendar
         }
@@ -87,7 +87,6 @@ struct SalesHistoryView: View {
             return self.calendar.date(bySettingHour: 23, minute: 59, second: 59, of: lastDay)!
         }
     
-        
         var realmPredicateForRange: NSPredicate {
             switch self {
             case .today:
@@ -179,8 +178,6 @@ struct SalesHistoryView: View {
         
     }
     
-    let strideBy: Double = 6
-    
     var body: some View {
         GeometryReader { geo in
             VStack {
@@ -214,34 +211,40 @@ struct SalesHistoryView: View {
                     
                 } //: HStack
                 
-                
-                Chart {
-                    ForEach(getGroupedSales()) { group in
-                        BarMark(x: .value("Hour", group.label),
-                                y: .value("Value", group.total))
-                        .foregroundStyle(.blue)
-                    }
-
+                Chart(rangeSales) {
+                    LineMark(
+                        x: .value("Hour", $0.timestamp),
+                        y: .value("Total", $0.total)
+                    )
                 }
-//                .chartXAxis {
-//                    AxisMarks(values: .stride(by: .hour, count: 4)) { _ in
-//                        AxisValueLabel(format: .dateTime.hour(.twoDigits(amPM: .abbreviated)))
+                .frame(maxWidth: 0.4 * geo.size.width, maxHeight: 0.3 * geo.size.height)
+                
+//                Chart {
+//                    ForEach(getGroupedSales()) { group in
+//                        BarMark(x: .value("Hour", group.label),
+//                                y: .value("Value", group.total))
+//                        .foregroundStyle(primaryBackground)
+//                        .cornerRadius(8)
 //                    }
+//
 //                }
+////                .chartXAxis {
+////                    AxisMarks(values: .stride(by: .hour, count: 4)) { _ in
+////                        AxisValueLabel(format: .dateTime.hour(.twoDigits(amPM: .abbreviated)))
+////                    }
+////                }
 //                .chartYAxis {
-//                    let costs = rangeSales.map { $0.total }
-//                    let min = costs.min()!
-//                    let max = costs.max()!
-//                    let costsStride = Array(stride(from: min, through: max, by: 6))
+//                    let totals = getGroupedSales().map { $0.total }
+//                    let min = totals.min() ?? 0.0
+//                    let maxTotal = totals.max() ?? 0.0
+//                    let maxMark = 20 * ceil(maxTotal / 20)
+//                    let costsStride = Array(stride(from: min, through: maxMark, by: 20))
 //                    AxisMarks(position: .leading, values: costsStride) { axis in
 //                        let value = costsStride[axis.index]
 //                        AxisValueLabel(value.formatAsCurrencyString(), centered: false)
 //                    }
 //                }
-                .frame(maxWidth: 0.4 * geo.size.width)
-                .onTapGesture {
-                    print(getGroupedSales())
-                }
+//                .frame(maxWidth: 0.4 * geo.size.width, maxHeight: 0.3 * geo.size.height)
                                 
                 List {
                     Section {
@@ -273,7 +276,6 @@ struct SalesHistoryView: View {
             .background(secondaryBackground)
             .onAppear {
 //                updateSales(newRange: selectedDateRange)
-                print(allSales)
             }
             .sheet(isPresented: $isShowingDetail) {
                 SaleDetailView()
