@@ -46,17 +46,17 @@ class SaleItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(originProperty: "items") var sale: LinkingObjects<SaleEntity>
     @Persisted var name: String = ""
     @Persisted var qtyToPurchase: Int = 0
-    @Persisted var price: Double = 0.00
+    @Persisted var unitPrice: Double = 0.00
     
-    convenience init(name: String, qtyToPurchase: Int, price: Double) {
+    convenience init(name: String, qtyToPurchase: Int, unitPrice: Double) {
         self.init()
         self.name = name
         self.qtyToPurchase = qtyToPurchase
-        self.price = price
+        self.unitPrice = unitPrice
     }
     
-    static let saleItem1: SaleItemEntity = SaleItemEntity(name: "Cheetos", qtyToPurchase: 2, price: 1.5)
-    static let saleItem2: SaleItemEntity = SaleItemEntity(name: "Milk", qtyToPurchase: 1, price: 1.0)
+    static let saleItem1: SaleItemEntity = SaleItemEntity(name: "Cheetos", qtyToPurchase: 2, unitPrice: 1.5)
+    static let saleItem2: SaleItemEntity = SaleItemEntity(name: "Milk", qtyToPurchase: 1, unitPrice: 1.0)
 }
 
 struct SaleModel {

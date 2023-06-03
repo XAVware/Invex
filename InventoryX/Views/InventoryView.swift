@@ -127,7 +127,7 @@ struct InventoryView: View {
                 
                 Divider()
                 
-                Text(String(format: "$ %.02f", getItems()[index].retailPrice))
+                Text(getItems()[index].retailPrice.formatAsCurrencyString())
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.trailing)
                 

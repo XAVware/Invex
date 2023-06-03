@@ -8,32 +8,37 @@
 import SwiftUI
 import RealmSwift
 
-class SaleDateManager {
+enum DateRanges: String, CaseIterable, Identifiable {
+    var id: UUID {
+        return UUID()
+    }
+    
+    case today = "Today"
+    case yesterday = "Yesterday"
+    case thisWeek = "This Week"
+    case lastWeek = "Last Week"
+    
     var calendar: Calendar {
         var calendar = Calendar.current
-        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        calendar.timeZone = TimeZone(abbreviation: "EDT")!
         calendar.firstWeekday = 1
         return calendar
     }
-        
-    var today: Date {
-        return Date()
-    }
-    
+
     var startOfToday: Date {
-        return self.calendar.startOfDay(for: self.today)
+        return calendar.startOfDay(for: Date())
     }
     
     var endOfToday: Date {
-        return self.calendar.date(bySettingHour: 23, minute: 59, second: 59, of: self.today)!
+        return calendar.date(bySettingHour: 23, minute: 59, second: 59, of: Date())!
     }
     
     var yesterday: Date {
-        return self.calendar.date(byAdding: .day, value: -1 , to: self.today)!
+        return calendar.date(byAdding: .day, value: -1 , to: Date())!
     }
     
     var startOfYesterday: Date {
-        return self.calendar.startOfDay(for: self.yesterday)
+        return calendar.startOfDay(for: yesterday)
     }
     
     var endOfYesterday: Date {
@@ -42,7 +47,7 @@ class SaleDateManager {
     
     var thisWeek: [Date] {
         var week: [Date] = []
-        if let weekInterval = self.calendar.dateInterval(of: .weekOfYear, for: self.today) {
+        if let weekInterval = self.calendar.dateInterval(of: .weekOfYear, for: Date()) {
             for i in 0...6 {
                 if let day = self.calendar.date(byAdding: .day, value: i, to: weekInterval.start) {
                     week.append(day)
@@ -62,7 +67,7 @@ class SaleDateManager {
     }
     
     var lastWeek: [Date] {
-        let oneWeekAgo: Date = calendar.date(byAdding: .weekOfYear, value: -1, to: self.today)!
+        let oneWeekAgo: Date = calendar.date(byAdding: .weekOfYear, value: -1, to: Date())!
         var week: [Date] = []
         if let weekInterval = self.calendar.dateInterval(of: .weekOfYear, for: oneWeekAgo) {
             for i in 0...6 {
@@ -82,6 +87,17 @@ class SaleDateManager {
         let lastDay = self.lastWeek[self.lastWeek.count - 1]
         return self.calendar.date(bySettingHour: 23, minute: 59, second: 59, of: lastDay)!
     }
+
+    var realmPredicateForRange: NSPredicate {
+        switch self {
+        case .today:
+            return NSPredicate(format: "timestamp BETWEEN {%@, %@}", startOfToday as NSDate, endOfToday as NSDate)
+        case .yesterday:
+            return NSPredicate(format: "timestamp BETWEEN {%@, %@}", startOfYesterday as NSDate, endOfYesterday as NSDate)
+        case .lastWeek:
+            return NSPredicate(format: "timestamp BETWEEN {%@, %@}", startOfLastWeek as NSDate, endOfLastWeek as NSDate)
+        case .thisWeek:
+            return NSPredicate(format: "timestamp BETWEEN {%@, %@}", startOfThisWeek as NSDate, endOfThisWeek as NSDate)
+        }
+    }
 }
-
-

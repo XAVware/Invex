@@ -24,14 +24,17 @@ class MockRealms {
             let category1 = CategoryEntity.foodCategory
             let category2 = CategoryEntity.drinkCategory
             let category3 = CategoryEntity.frozenCategory
+            let sale1 = SaleEntity.todaySale1
             
             try realm.write {
                 realm.add(category1)
                 realm.add(category2)
                 realm.add(category3)
+                realm.add(sale1)
                 category1.items.append(objectsIn: InventoryItemEntity.foodArray)
                 category2.items.append(objectsIn: InventoryItemEntity.drinkArray)
                 category3.items.append(objectsIn: InventoryItemEntity.frozenArray)
+                sale1.items.append(objectsIn: [SaleItemEntity.saleItem1, SaleItemEntity.saleItem2])
             }
             return realm
         } catch let error {

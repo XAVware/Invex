@@ -111,7 +111,7 @@ class MakeASaleViewModel: ObservableObject {
         let newSale = SaleEntity(timestamp: Date(), total: saleTotal)
         cartItems.forEach({ item in
             guard let name = item.name, let qtySold = item.qtyInCart, let price = item.retailPrice else { return }
-            let saleItem = SaleItemEntity(name: name, qtyToPurchase: qtySold, price: price)
+            let saleItem = SaleItemEntity(name: name, qtyToPurchase: qtySold, unitPrice: price)
             newSale.items.append(saleItem)
         })
         
@@ -121,6 +121,7 @@ class MakeASaleViewModel: ObservableObject {
             try realm.write {
                 realm.add(newSale)
             }
+            print("New Sale Item Count: \(newSale.items.count)")
         } catch {
             print(error.localizedDescription)
         }
