@@ -56,20 +56,6 @@ struct MenuView: View {
                 .overlay(currentDisplay == displayState ? lightFgColor.opacity(0.3) : nil)
             }
             
-            Button {
-                RealmMinion.deleteAllFromRealm()
-            } label: {
-                Image(systemName: "arrow.triangle.2.circlepath")
-                    .imageScale(.medium)
-                    .bold()
-                
-                Text("Reset")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding()
-            .frame(height: 50)
-            .frame(maxWidth: .infinity)
-            
             Spacer()
             
             Button {

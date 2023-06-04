@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum DisplayStates: CaseIterable {
-    case makeASale, addInventory, inventoryList, salesHistory, inventoryStatus
+    case makeASale, addInventory, inventoryList, salesHistory, inventoryStatus, settings
     
     var menuButtonText: String {
         switch self {
@@ -17,6 +17,7 @@ enum DisplayStates: CaseIterable {
         case .inventoryList: return "Inventory"
         case .salesHistory: return "Sales"
         case .inventoryStatus: return "Reorder"
+        case .settings: return "Settings"
         }
     }
     
@@ -27,6 +28,7 @@ enum DisplayStates: CaseIterable {
         case .inventoryList: return "list.bullet.clipboard.fill"
         case .salesHistory: return "chart.xyaxis.line"
         case .inventoryStatus: return "text.badge.checkmark"
+        case .settings: return "gearshape"
         }
     }
 }

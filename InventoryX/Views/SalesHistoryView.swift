@@ -87,18 +87,6 @@ struct SalesHistoryView: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
-                Button {
-                    RealmMinion.createRandomSales(qty: 100)
-                } label: {
-                    Text("Create 100 Random Sales")
-                }
-                
-                Button {
-                    RealmMinion.createRandomSalesToday(qty: 20)
-                } label: {
-                    Text("Create 20 Random Sales Today")
-                }
-
                 HStack {
                     Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatAsCurrencyString())")
                         .modifier(TextMod(.title3, .semibold, darkFgColor))

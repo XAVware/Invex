@@ -47,7 +47,9 @@ struct ContentView: View {
         case .salesHistory:
             SalesHistoryView()
         case .inventoryStatus:
-            Text("Status")
+            InventoryStatusView()
+        case .settings:
+            SettingsView()
         }
     } //: Nav Content
     

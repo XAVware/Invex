@@ -46,6 +46,8 @@
 		80FFBD0C2A1D309E00992440 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FFBD0B2A1D309E00992440 /* Double+Ext.swift */; };
 		944F8CE72A2AA94E007AD864 /* SaleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */; };
 		944F8CE92A2AB6B3007AD864 /* BackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F8CE82A2AB6B3007AD864 /* BackButton.swift */; };
+		944F8CEB2A2C4AE4007AD864 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */; };
+		944F8CED2A2C54E2007AD864 /* InventoryStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F8CEC2A2C54E2007AD864 /* InventoryStatusView.swift */; };
 		94AC8DB829FB2187006A166E /* MockRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DB729FB2187006A166E /* MockRealm.swift */; };
 		94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */; };
 		94D3F1052A1C6A1C00AF4393 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3F1042A1C6A1C00AF4393 /* Category.swift */; };
@@ -98,6 +100,8 @@
 		80FFBD0B2A1D309E00992440 /* Double+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
 		944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleDetailView.swift; sourceTree = "<group>"; };
 		944F8CE82A2AB6B3007AD864 /* BackButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButton.swift; sourceTree = "<group>"; };
+		944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		944F8CEC2A2C54E2007AD864 /* InventoryStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryStatusView.swift; sourceTree = "<group>"; };
 		94AC8DB729FB2187006A166E /* MockRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRealm.swift; sourceTree = "<group>"; };
 		94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		94D3F1042A1C6A1C00AF4393 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -248,12 +252,14 @@
 				80F734162A01A4BC0072C62B /* AddItemView.swift */,
 				94D3F1092A1DBE4300AF4393 /* ContentView.swift */,
 				80F734122A017CF10072C62B /* InventoryView.swift */,
-				80F6026729FFFFBD004C759D /* MenuView.swift */,
 				80F734182A01A58C0072C62B /* ItemDetailView.swift */,
+				80F6026729FFFFBD004C759D /* MenuView.swift */,
 				80F6026529FFFD8A004C759D /* MakeASaleView.swift */,
 				80DBB97E29F70EE000497695 /* OnboardingView.swift */,
 				80F602692A00054E004C759D /* RestockView.swift */,
 				80B5EFA329F0D0C9007D9842 /* SalesHistoryView.swift */,
+				944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */,
+				944F8CEC2A2C54E2007AD864 /* InventoryStatusView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -398,6 +404,7 @@
 				944F8CE92A2AB6B3007AD864 /* BackButton.swift in Sources */,
 				94F569272A21D41500E9DE98 /* Theme.swift in Sources */,
 				80DBB97B29F6EFBF00497695 /* User.swift in Sources */,
+				944F8CEB2A2C4AE4007AD864 /* SettingsView.swift in Sources */,
 				94AC8DB829FB2187006A166E /* MockRealm.swift in Sources */,
 				80F734132A017CF10072C62B /* InventoryView.swift in Sources */,
 				80DBB96E29F6D81500497695 /* CameraView.swift in Sources */,
@@ -415,6 +422,7 @@
 				94D3F1052A1C6A1C00AF4393 /* Category.swift in Sources */,
 				80F6026829FFFFBD004C759D /* MenuView.swift in Sources */,
 				94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */,
+				944F8CED2A2C54E2007AD864 /* InventoryStatusView.swift in Sources */,
 				80FFBD0C2A1D309E00992440 /* Double+Ext.swift in Sources */,
 				80F734172A01A4BC0072C62B /* AddItemView.swift in Sources */,
 				80DBB96F29F6D81500497695 /* UserManager_Firebase.swift in Sources */,
