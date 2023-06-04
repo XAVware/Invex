@@ -38,9 +38,6 @@ struct SalesHistoryView: View {
         for range in chartData {
             for hour in range.hoursIncluded {
                 if let hourSales = groupedSales[hour] {
-                    print("Sales Found for Hour \(hour)")
-                    print(hourSales)
-                    
                     for sale in hourSales {
                         range.total += sale.total
                     }
@@ -91,10 +88,15 @@ struct SalesHistoryView: View {
         GeometryReader { geo in
             VStack {
                 Button {
-//                    RealmMinion.createRandomSales(qty: 100)
-                    RealmMinion.createRandomSalesToday(qty: 20)
+                    RealmMinion.createRandomSales(qty: 100)
                 } label: {
                     Text("Create 100 Random Sales")
+                }
+                
+                Button {
+                    RealmMinion.createRandomSalesToday(qty: 20)
+                } label: {
+                    Text("Create 20 Random Sales Today")
                 }
 
                 HStack {
@@ -119,7 +121,6 @@ struct SalesHistoryView: View {
                     .tint(darkFgColor)
                     
                 } //: HStack
-                
                 
                 Chart {
                     ForEach(getGroupedSales()) { group in
@@ -179,6 +180,7 @@ struct SalesHistoryView: View {
             .background(secondaryBackground)
             .onAppear {
                 updateSales(newRange: selectedDateRange)
+                print(UserManager.shared.getLoggedInUserName())
             }
             .sheet(item: $selectedSale, onDismiss: {
                 selectedSale = nil

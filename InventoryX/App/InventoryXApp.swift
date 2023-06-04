@@ -13,13 +13,13 @@ struct InventoryXApp: SwiftUI.App {
     let migrator: RealmMigrator = RealmMigrator()
     @ObservedResults(CategoryEntity.self) var categories
     @ObservedResults(UserEntity.self) var users
-    @StateObject var userManager: UserManager = UserManager()
+//    @StateObject var userManager: UserManager = UserManager()
     
     var body: some Scene {
         WindowGroup {
             if categories.count == 0 && users.count == 0 {
                 OnboardingView()
-                    .environmentObject(userManager)
+//                    .environmentObject(userManager)
             } else {
                 ContentView()
                     .onAppear {

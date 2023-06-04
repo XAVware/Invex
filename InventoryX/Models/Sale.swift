@@ -13,6 +13,7 @@ class SaleEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var timestamp: Date
     @Persisted var total: Double = 0.00
+    @Persisted var cashierName: String
     @Persisted var items: RealmSwift.List<SaleItemEntity>
     
     convenience init(timestamp: Date, total: Double) {
@@ -20,6 +21,7 @@ class SaleEntity: Object, ObjectKeyIdentifiable {
         self._id = _id
         self.timestamp = timestamp
         self.total = total
+        self.cashierName = UserManager.shared.getLoggedInUserName()
     }
     
     private func getDate(from dateString: String) -> Date {
@@ -39,8 +41,6 @@ class SaleEntity: Object, ObjectKeyIdentifiable {
     
 }
 
-let dayTimeInterval: Double = 86400
-
 class SaleItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted(originProperty: "items") var sale: LinkingObjects<SaleEntity>
@@ -59,11 +59,3 @@ class SaleItemEntity: Object, ObjectKeyIdentifiable {
     static let saleItem2: SaleItemEntity = SaleItemEntity(name: "Milk", qtyToPurchase: 1, unitPrice: 1.0)
 }
 
-struct SaleModel {
-    let timeStamp: Date
-    let total: Double
-    
-//    init(from: SaleEntity) {
-//        
-//    }
-}

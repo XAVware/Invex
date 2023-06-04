@@ -31,7 +31,7 @@ struct SaleDetailView: View {
                     Text("Cashier:")
                         .modifier(TextMod(.title2, .semibold, .gray))
                     
-                    Text("Ryan")
+                    Text(sale.cashierName)
                         .modifier(TextMod(.title2, .regular, .black))
                 } //: VStack
                 Spacer()

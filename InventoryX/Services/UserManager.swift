@@ -8,18 +8,31 @@
 import SwiftUI
 import RealmSwift
 
-class UserManager: ObservableObject {
-    @Published var isLoggedIn: Bool = false
-    @Published var currentUser: UserEntity?
+class UserManager {
+//    @Published var isLoggedIn: Bool = false
+    var currentUser: UserEntity?
+//
+//    var currentUserName: String = ""
+    
+    static let shared: UserManager = UserManager()
+    
+    private init() { }
     
     func loginUser(_ user: UserEntity) {
-        print("Logging in User: \(user)")
         currentUser = user
-        isLoggedIn = true
+//        isLoggedIn = true
+    }
+    
+    func getLoggedInUserName() -> String {
+        guard let user = currentUser else {
+            print("No User")
+            return "Err"
+        }
+        return user.profileName
     }
     
     func signOut() {
-        currentUser = nil
-        isLoggedIn = false
+//        currentUser = nil
+//        isLoggedIn = false
     }
 }

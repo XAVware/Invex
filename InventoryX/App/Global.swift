@@ -35,3 +35,5 @@ enum DisplayStates: CaseIterable {
 enum SaveResult {
     case success, failure
 }
+
+let dayTimeInterval: Double = 86400

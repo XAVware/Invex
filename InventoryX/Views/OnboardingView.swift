@@ -139,6 +139,7 @@ import RealmSwift
                 realm.add(tempCategories)
                 realm.add(newUser)
             })
+            UserManager.shared.loginUser(newUser)
             debugPrint("Categories and user saved")
         } catch {
 //            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
@@ -152,7 +153,7 @@ import RealmSwift
 // MARK: - VIEW
 
 struct OnboardingView: View {
-    @EnvironmentObject var userManager: UserManager
+//    @EnvironmentObject var userManager: UserManager
     @StateObject var vm: OnboardingViewModel = OnboardingViewModel()
     @StateObject var alertManager: AlertManager = AlertManager.shared
     @ObservedResults(CategoryEntity.self) var categories
