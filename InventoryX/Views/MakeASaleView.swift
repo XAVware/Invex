@@ -89,7 +89,7 @@ class MakeASaleViewModel: ObservableObject {
             guard let qtySold = item.qtyInCart else { return }
             
             do {
-                let realm = try! Realm()
+                let realm = try Realm()
                 guard let result = realm.object(ofType: InventoryItemEntity.self, forPrimaryKey: item.id) else {
                     print("Error getting result")
                     return
@@ -98,6 +98,7 @@ class MakeASaleViewModel: ObservableObject {
                 try realm.write {
                     result.onHandQty = result.onHandQty - qtySold
                 }
+                print("Finished saving sale. New Qty should be \(result.onHandQty - qtySold)")
             } catch {
                 print(error.localizedDescription)
             }
