@@ -11,43 +11,78 @@ struct DashboardView: View {
     @State var currentDisplay: DisplayStates = .makeASale
     @State private var columnVisibility = NavigationSplitViewVisibility.automatic
     
-    
+    var dateString: String {
+        let date = Date.now
+        var string: String = ""
+        let weekday = date.formatted(.dateTime.weekday(.wide))
+        string.append("\(weekday), ")
+        let monthAndDay = "\(Date.now.formatted(.dateTime.month(.wide).day(.defaultDigits)))"
+        string.append(monthAndDay)
+        return string
+    }
     var body: some View {
         GeometryReader { geo in
             
-            VStack {
-                HStack(spacing: 0.02 * geo.size.width) {
+            HStack(spacing: 0.03 * geo.size.width) {
+                VStack(alignment: .leading, spacing: 0.03 * geo.size.width) {
+                    HStack(spacing: 0) {
+                        Text("Inventory")
+                            .modifier(TextMod(.title, .semibold, Color(XSS.S.color30)))
+                            .offset(y: -2)
+                        
+                        Text("X")
+                            .modifier(TextMod(.largeTitle, .semibold, Color(XSS.S.color30)))
+                            .italic()
+                            .offset(x: -2)
+                    } //: HStack
+                    .foregroundColor(Color(XSS.S.color30))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .scaleEffect(1.5, anchor: .leading)
+//                    .padding(.top, 8)
                     
                     Spacer()
-                    
-                    signOutButton
-                        .frame(maxWidth: 0.15 * geo.size.width, maxHeight: 0.1 * geo.size.height)
+                    settingsButton
+                        .frame(maxWidth: 0.24 * geo.size.width, maxHeight: 0.15 * geo.size.height)
                         .padding()
                         .background(Color(XSS.S.color90))
                         .cornerRadius(16)
                         .shadow(radius: 8)
-                } //: HStack
+                    
+                    salesButton
+                        .frame(maxWidth: 0.24 * geo.size.width, maxHeight: 0.15 * geo.size.height)
+                        .padding()
+                        .background(Color(XSS.S.color90))
+                        .cornerRadius(16)
+                        .shadow(radius: 8)
+                    
+                    inventoryButton
+                        .frame(maxWidth: 0.24 * geo.size.width, maxHeight: 0.15 * geo.size.height)
+                        .padding()
+                        .background(Color(XSS.S.color90))
+                        .cornerRadius(16)
+                        .shadow(radius: 8)
+                } //: VStack
                 .frame(maxWidth: .infinity)
                 
-                
-                
-                Spacer()
-                
-                HStack {
-                    inventoryButton
-                        .frame(maxWidth: 0.25 * geo.size.width, maxHeight: 0.15 * geo.size.height)
-                        .padding()
-                        .background(Color(XSS.S.color90))
-                        .cornerRadius(16)
-                        .shadow(radius: 8)
+                VStack(alignment: .trailing, spacing: 0.03 * geo.size.width) {
+                    HStack(spacing: 0.02 * geo.size.width) {
+                        Spacer()
+                        dateTimeLabel
+                    } //: HStack
                     Spacer()
+                    
                     makeASaleButton
-                        .frame(width: 0.50 * geo.size.width, height: 0.15 * geo.size.height)
+                        .frame(maxWidth: 0.40 * geo.size.width, maxHeight: 0.15 * geo.size.height)
                         .padding()
                         .background(primaryBackground)
                         .cornerRadius(16)
                         .shadow(radius: 8)
-                }
+                } //: VStack
+                .frame(maxWidth: 0.40 * geo.size.width)
+                
+                
+                
+                
             } //: VStack
             .frame(maxWidth: .infinity)
             .padding()
@@ -55,6 +90,16 @@ struct DashboardView: View {
             
         } //: Geometry Reader
     } //: Body
+    
+    private var dateTimeLabel: some View {
+        VStack(alignment: .trailing) {
+            Text("\(Date.now.formatted(date: .omitted, time: .shortened))")
+                .modifier(TextMod(.system(size: 84), .bold))
+            
+            Text(dateString)
+                .modifier(TextMod(.largeTitle, .semibold))
+        }
+    } //: Date Time Label
     
     private var makeASaleButton: some View {
         Button {

@@ -8,10 +8,11 @@
 import SwiftUI
 
 enum DisplayStates: CaseIterable {
-    case makeASale, addInventory, inventoryList, salesHistory, inventoryStatus, settings
+    case dashboard, makeASale, addInventory, inventoryList, salesHistory, inventoryStatus, settings
     
     var menuButtonText: String {
         switch self {
+        case .dashboard: return "Dashboard"
         case .makeASale: return "Sale"
         case .addInventory: return "Restock"
         case .inventoryList: return "Inventory"
@@ -23,6 +24,7 @@ enum DisplayStates: CaseIterable {
     
     var iconName: String {
         switch self {
+        case .dashboard: return "square.grid.2x2.fill"
         case .makeASale: return "dollarsign.circle.fill"
         case .addInventory: return "cart.fill.badge.plus"
         case .inventoryList: return "list.bullet.clipboard.fill"
