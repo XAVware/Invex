@@ -22,24 +22,25 @@ struct ContentView: View {
     
     var body: some View {
         GeometryReader { geo in
-            NavigationSplitView(columnVisibility: $menuVisibility) {
-                menu
-                    .navigationSplitViewColumnWidth(0.2 * geo.size.width)
-            } detail: {
-                NavigationStack {
+            ZStack {
+                detailView
+                
+                NavigationSplitView(columnVisibility: $menuVisibility) {
+                    menu
+                        .navigationSplitViewColumnWidth(0.2 * geo.size.width)
+                } detail: {
                     navContent
                 }
+                .tint(menuVisibility == .all ? secondaryBackground : primaryBackground)
+                .navigationSplitViewStyle(.prominentDetail)
+                .onChange(of: categories) { newCategories in
+                    guard selectedCategory == nil, newCategories.count > 0 else { return }
+                    selectedCategory = newCategories.first!
+                }
+                .onChange(of: menuVisibility) { newValue in
+                    print(newValue)
+                }
             }
-            .tint(menuVisibility == .all ? secondaryBackground : primaryBackground)
-//            .navigationSplitViewStyle(.prominentDetail)
-            .onChange(of: categories) { newCategories in
-                guard selectedCategory == nil, newCategories.count > 0 else { return }
-                selectedCategory = newCategories.first!
-            }
-            .onChange(of: menuVisibility) { newValue in
-                print(newValue)
-            }
-            
             
 //            HStack(spacing: 0) {
 //                if !menuIsHidden {
@@ -76,7 +77,7 @@ struct ContentView: View {
     } //: Nav Content
     
     
-    @ViewBuilder private var navDetail: some View {
+    @ViewBuilder private var detailView: some View {
         Text("Detail")
     } //: Nav Detail
     
