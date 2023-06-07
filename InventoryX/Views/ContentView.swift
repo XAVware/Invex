@@ -13,12 +13,12 @@ struct ContentView: View {
     @EnvironmentObject var navMan: NavigationManager
     @StateObject var makeASaleViewModel: MakeASaleViewModel = MakeASaleViewModel()
     
-//    @ObservedResults(CategoryEntity.self) var categories
+    //    @ObservedResults(CategoryEntity.self) var categories
     
     @State var selectedCategory: CategoryEntity?
-//    @State var currentDisplay: DisplayStates = .makeASale
-//    @State var menuIsHidden: Bool = false
-//    @State var menuVisibility: NavigationSplitViewVisibility = .detailOnly
+    //    @State var currentDisplay: DisplayStates = .makeASale
+    //    @State var menuIsHidden: Bool = false
+    //    @State var menuVisibility: NavigationSplitViewVisibility = .detailOnly
     
     var body: some View {
 //        ZStack {
@@ -42,22 +42,19 @@ struct ContentView: View {
                 NavigationSplitView(columnVisibility: $navMan.menuVisibility) {
                     menu
                         .navigationSplitViewColumnWidth(navMan.menuWidth)
-//
                 } detail: {
                     ZStack {
-                        CartView()
-                            .environmentObject(makeASaleViewModel)
-//                            .frame(width: navMan.detailWidth)
-                            .frame(maxHeight: .infinity)
-                            .padding()
-                            .background(primaryBackground)
-//                            .frame(width: navMan.contentWidth)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .edgesIgnoringSafeArea(.all)
-                        
+                        HStack {
+                            Spacer()
+                            CartView()
+                                .environmentObject(makeASaleViewModel)
+                                .padding(.vertical)
+                                .background(primaryBackground)
+                                .frame(maxWidth: navMan.detailWidth, maxHeight: .infinity)
+                                .edgesIgnoringSafeArea(.vertical)
+                        } //: HStack
                         HStack {
                             content
-                            //                        MakeASaleView()
                                 .environmentObject(makeASaleViewModel)
                                 .background(secondaryBackground)
                                 .frame(width: navMan.contentWidth)
@@ -65,7 +62,6 @@ struct ContentView: View {
                             Spacer()
                         } //: HStack
                     }
-                    
                     .onAppear {
                         navMan.expandDetail(size: .quarter, animation: nil)
                     }
@@ -186,5 +182,6 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
             .environmentObject(NavigationManager())
             .modifier(PreviewMod())
+        
     }
 }

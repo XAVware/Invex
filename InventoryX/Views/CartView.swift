@@ -11,11 +11,12 @@ struct CartView: View {
     @EnvironmentObject var vm: MakeASaleViewModel
     
     var body: some View {
-        HStack {
-            Spacer(minLength: 0) 
+//        HStack {
+//            Spacer(minLength: 0) 
             cartView
                 .background(primaryBackground)
-        }
+            
+//        }
 //        HStack {
 //            Spacer(minLength: 0)
 //            switch vm.isConfirmingSale {
@@ -90,7 +91,7 @@ struct CartView: View {
                     .modifier(TextMod(.title2, .semibold, lightFgColor))
             } //: HStack
             .padding(.vertical, 8)
-            .frame(maxWidth: 350)
+//            .frame(maxWidth: 350)
             
             Button {
                 vm.checkoutTapped()
@@ -103,7 +104,7 @@ struct CartView: View {
         } //: VStack
         .padding(.horizontal)
         .background(primaryBackground)
-        .frame(maxWidth: 350)
+//        .frame(maxWidth: 350)
 //        .onAppear {
 //            for item in CategoryEntity.foodCategory.items {
 //                vm.addItem(item)

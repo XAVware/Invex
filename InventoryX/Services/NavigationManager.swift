@@ -14,16 +14,21 @@ import SwiftUI
 @MainActor class NavigationManager: ObservableObject {
 //    @Published var isShowingMenu: Bool = false
 //    @Published var isShowingDetail: Bool = false
-    @Published var contentWidth: CGFloat!
+    @Published var contentWidth: CGFloat
 //    @Published var detailWidth: CGFloat = 0
     @Published var currentDisplay: DisplayStates = .makeASale
     @Published var menuVisibility: NavigationSplitViewVisibility = .detailOnly
     
-    @Published var fullWidth: CGFloat = 1100
+    @Published var fullWidth: CGFloat
     
-//    var detailWidth: CGFloat {
-//        return fullWidth - contentWidth
-//    }
+    init() {
+        contentWidth = UIScreen.main.bounds.width
+        fullWidth = UIScreen.main.bounds.width
+    }
+    
+    var detailWidth: CGFloat {
+        return fullWidth - contentWidth
+    }
     
     var menuWidth: CGFloat {
         return fullWidth == 0 ? 0 : fullWidth

@@ -29,7 +29,7 @@ struct InventoryXApp: SwiftUI.App {
                         .onAppear {
                             print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.path)
                             UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
-                            navMan.setup(screenWidth: geo.size.width)
+//                            navMan.setup(screenWidth: geo.size.width)
                         }
                 } //: Geometry Reader
             }
