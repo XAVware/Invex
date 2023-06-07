@@ -10,10 +10,12 @@ import RealmSwift
 
 @main
 struct InventoryXApp: SwiftUI.App {
-    let migrator: RealmMigrator = RealmMigrator()
+    //    @StateObject var userManager: UserManager = UserManager()
+    @StateObject var navMan: NavigationManager = NavigationManager()
+    
+    let migrator: RealmMigrator = RealmMigrator() // Storing like this is bad for memory. This only needs to run once.
     @ObservedResults(CategoryEntity.self) var categories
     @ObservedResults(UserEntity.self) var users
-//    @StateObject var userManager: UserManager = UserManager()
     
     var body: some Scene {
         WindowGroup {
@@ -21,11 +23,15 @@ struct InventoryXApp: SwiftUI.App {
                 OnboardingView()
 //                    .environmentObject(userManager)
             } else {
-                ContentView()
-                    .onAppear {
-                        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.path)
-                        UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
-                    }
+                GeometryReader { geo in
+                    ContentView()
+                        .environmentObject(navMan)
+                        .onAppear {
+                            print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.path)
+                            UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+                            navMan.setup(screenWidth: geo.size.width)
+                        }
+                } //: Geometry Reader
             }
         }
     } //: Body

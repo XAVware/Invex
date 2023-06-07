@@ -12,6 +12,7 @@ class MakeASaleViewModel: ObservableObject {
     @Published var cartItems: [InventoryItemModel] = []
 //    @Published var cartItems: [InventoryItemModel] = [InventoryItemModel(id: InventoryItemEntity.item1._id, name: InventoryItemEntity.item1.name, retailPrice: 1.00, qtyInCart: 2)]
     @Published var isConfirmingSale: Bool = false
+    @Published var isShowingCartPreview: Bool = true
     
     var cartSubtotal: Double {
         var tempTotal: Double = 0
@@ -138,11 +139,19 @@ class MakeASaleViewModel: ObservableObject {
     
 }
 
+
+
+
 struct MakeASaleView: View {
+//    @EnvironmentObject var navMan: NavigationManager
+//    @StateObject var vm: MakeASaleViewModel = MakeASaleViewModel()
+    
+    @EnvironmentObject var vm: MakeASaleViewModel
+    
+    
     @ObservedResults(CategoryEntity.self) var categories
-    @StateObject var vm: MakeASaleViewModel = MakeASaleViewModel()
     @State var selectedCategory: CategoryEntity = .init()
-    @Binding var menuIsHidden: Bool
+//    @Binding var menuIsHidden: Bool
     
     private func setDefaultCategory() {
         guard let defaultCategory = categories.first else { return }
@@ -161,15 +170,23 @@ struct MakeASaleView: View {
 //            }
 //        } //: VStack
         makeASaleView
-            .background(primaryBackground)
-        .onChange(of: vm.isConfirmingSale, perform: { _ in
-            withAnimation(.easeOut, {
-                menuIsHidden.toggle()
-            })
-        })
+//            .background(primaryBackground)
+            .onChange(of: categories) { newCategories in
+                print("Called")
+                guard selectedCategory == nil, newCategories.count > 0 else { return }
+                selectedCategory = newCategories.first!
+            }
+//        .onChange(of: vm.isConfirmingSale, perform: { _ in
+//            withAnimation(.easeOut, {
+//                menuIsHidden.toggle()
+//            })
+//        })
         .onAppear {
             setDefaultCategory()
         }
+        .background(.clear)
+        
+        
     } //: Body
     
     private var makeASaleView: some View {
@@ -186,7 +203,7 @@ struct MakeASaleView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal)
                     .padding(.vertical, 8)
-                    .background(secondaryBackground)
+//                    .background(secondaryBackground)
                     .cornerRadius(20, corners: [.topLeft, .topRight, .bottomRight])
                     
                     categorySelector
@@ -437,12 +454,14 @@ struct MakeASaleView: View {
 }
 
 struct MakeASaleView_Previews: PreviewProvider {
-    @StateObject static var vm: MakeASaleViewModel = MakeASaleViewModel()
+//    @StateObject static var vm: MakeASaleViewModel = MakeASaleViewModel()
     @State static var category: CategoryEntity = CategoryEntity.foodCategory
-    @State static var hidden: Bool = false
+//    @State static var hidden: Bool = false
     static var previews: some View {
         
-        MakeASaleView(vm: vm, selectedCategory: category, menuIsHidden: $hidden)
+//        MakeASaleView(vm: vm, selectedCategory: category, menuIsHidden: $hidden)
+//        MakeASaleView(vm: vm, selectedCategory: category)
+        MakeASaleView(selectedCategory: category)
             .modifier(PreviewMod())
     }
 }

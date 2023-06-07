@@ -12,17 +12,21 @@ struct CartView: View {
     
     var body: some View {
         HStack {
-            Spacer()
-            
-            switch vm.isConfirmingSale {
-            case true:
-                confirmSaleView
-                    .background(primaryBackground)
-            case false:
-                cartView
-                    .background(primaryBackground)
-            } //: Switch
-        } //: VStack
+            Spacer(minLength: 0) 
+            cartView
+                .background(primaryBackground)
+        }
+//        HStack {
+//            Spacer(minLength: 0)
+//            switch vm.isConfirmingSale {
+//            case true:
+//                confirmSaleView
+//                    .background(primaryBackground)
+//            case false:
+//                cartView
+//                    .background(primaryBackground)
+//            } //: Switch
+//        } //: VStack
     } //: Body
     
     private var cartView: some View {
@@ -98,7 +102,7 @@ struct CartView: View {
             
         } //: VStack
         .padding(.horizontal)
-//        .background(primaryBackground)
+        .background(primaryBackground)
         .frame(maxWidth: 350)
 //        .onAppear {
 //            for item in CategoryEntity.foodCategory.items {
@@ -188,8 +192,10 @@ struct CartView: View {
 }
 
 struct CartView_Previews: PreviewProvider {
+    @State static var navMan: NavigationManager = NavigationManager()
     static var previews: some View {
         CartView()
+            .environmentObject(MakeASaleViewModel())
             .modifier(PreviewMod())
     }
 }

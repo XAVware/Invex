@@ -33,11 +33,39 @@ enum DisplayStates: CaseIterable {
         case .settings: return "gearshape"
         }
     }
+    
+    var detailWidthPercentage: CGFloat {
+        switch self {
+        case .dashboard: return 1.0
+        case .makeASale: return 0.66
+        case .addInventory: return 1.0
+        case .inventoryList: return 1.0
+        case .salesHistory: return 1.0
+        case .inventoryStatus: return 1.0
+        case .settings: return 1.0
+        }
+    }
 }
 
+enum RealmResult {
+    case success, error
+}
 
-enum SaveResult {
-    case success, failure
+enum DetailSize {
+    case quarter, third, half, full
+    
+    var percentVal: CGFloat {
+        switch self {
+        case .quarter:
+            return 0.75
+        case .third:
+            return 0.66
+        case .half:
+            return 0.5
+        case .full:
+            return 0.0
+        }
+    }
 }
 
 let dayTimeInterval: Double = 86400

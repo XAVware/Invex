@@ -8,39 +8,80 @@
 import SwiftUI
 import RealmSwift
 
-// 11 Inch iPad (Landscape)
-// Width: 1194
-// Height: 790
 
 struct ContentView: View {
-    @ObservedResults(CategoryEntity.self) var categories
+    @EnvironmentObject var navMan: NavigationManager
+    @StateObject var makeASaleViewModel: MakeASaleViewModel = MakeASaleViewModel()
+    
+//    @ObservedResults(CategoryEntity.self) var categories
     
     @State var selectedCategory: CategoryEntity?
-    @State var currentDisplay: DisplayStates = .dashboard
-    @State var menuIsHidden: Bool = false
-    @State var menuVisibility: NavigationSplitViewVisibility = .detailOnly
+//    @State var currentDisplay: DisplayStates = .makeASale
+//    @State var menuIsHidden: Bool = false
+//    @State var menuVisibility: NavigationSplitViewVisibility = .detailOnly
     
     var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                detailView
+//        ZStack {
+//                primaryBackground
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                    .edgesIgnoringSafeArea(.all)
+//                HStack {
+//                    Spacer(minLength: 0)
+//
+////                    CartView()
+////                        .environmentObject(makeASaleViewModel)
+////                        .frame(width: navMan.detailWidth)
+////                        .frame(maxHeight: .infinity)
+////                        .padding()
+////                        .background(primaryBackground)
+////                        .frame(width: navMan.contentWidth)
+//
+//                } //: HStack
                 
-                NavigationSplitView(columnVisibility: $menuVisibility) {
+//            GeometryReader { geo in
+                NavigationSplitView(columnVisibility: $navMan.menuVisibility) {
                     menu
-                        .navigationSplitViewColumnWidth(0.2 * geo.size.width)
+                        .navigationSplitViewColumnWidth(navMan.menuWidth)
+//
                 } detail: {
-                    navContent
+                    ZStack {
+                        CartView()
+                            .environmentObject(makeASaleViewModel)
+//                            .frame(width: navMan.detailWidth)
+                            .frame(maxHeight: .infinity)
+                            .padding()
+                            .background(primaryBackground)
+//                            .frame(width: navMan.contentWidth)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .edgesIgnoringSafeArea(.all)
+                        
+                        HStack {
+                            content
+                            //                        MakeASaleView()
+                                .environmentObject(makeASaleViewModel)
+                                .background(secondaryBackground)
+                                .frame(width: navMan.contentWidth)
+                            
+                            Spacer()
+                        } //: HStack
+                    }
+                    
+                    .onAppear {
+                        navMan.expandDetail(size: .quarter, animation: nil)
+                    }
                 }
-                .tint(menuVisibility == .all ? secondaryBackground : primaryBackground)
-                .navigationSplitViewStyle(.prominentDetail)
-                .onChange(of: categories) { newCategories in
-                    guard selectedCategory == nil, newCategories.count > 0 else { return }
-                    selectedCategory = newCategories.first!
-                }
-                .onChange(of: menuVisibility) { newValue in
-                    print(newValue)
-                }
-            }
+                
+//                .tint(navMan.menuVisibility == .all ? secondaryBackground : primaryBackground)
+//
+////                .onChange(of: categories) { newCategories in
+////                    print("Called")
+////                    guard selectedCategory == nil, newCategories.count > 0 else { return }
+////                    selectedCategory = newCategories.first!
+////                }
+//                .onChange(of: makeASaleViewModel.isConfirmingSale) { isConfirming in
+//                    navMan.expandDetail(size: .full)
+//                }
+//            }  //: Geometry Reader
             
 //            HStack(spacing: 0) {
 //                if !menuIsHidden {
@@ -49,20 +90,23 @@ struct ContentView: View {
 //                }
 //                navContent
 //            } //: HStack
-//            .background(primaryBackground)
 //            .onChange(of: categories) { newCategories in
 //                guard selectedCategory == nil, newCategories.count > 0 else { return }
 //                selectedCategory = newCategories.first!
 //            }
-        } //: Geometry Reader
+//        }
+//        .edgesIgnoringSafeArea(.all)
+        
     } //: Body
     
-    @ViewBuilder private var navContent: some View {
-        switch currentDisplay {
+    @ViewBuilder private var content: some View {
+        switch navMan.currentDisplay {
         case .dashboard:
             DashboardView()
+                .environmentObject(navMan)
         case .makeASale:
-            MakeASaleView(menuIsHidden: $menuIsHidden)
+            MakeASaleView()
+                .environmentObject(makeASaleViewModel)
         case .addInventory:
             RestockView()
         case .inventoryList:
@@ -76,10 +120,6 @@ struct ContentView: View {
         }
     } //: Nav Content
     
-    
-    @ViewBuilder private var detailView: some View {
-        Text("Detail")
-    } //: Nav Detail
     
     @ViewBuilder private var menu: some View {
         VStack {
@@ -106,7 +146,8 @@ struct ContentView: View {
             
             ForEach(DisplayStates.allCases, id: \.self) { displayState in
                 Button {
-                    currentDisplay = displayState
+                    navMan.changeDisplay(to: displayState)
+//                    navMan.currentDisplay = displayState
                 } label: {
                     Image(systemName: displayState.iconName)
                         .imageScale(.medium)
@@ -117,7 +158,7 @@ struct ContentView: View {
                 }
                 .padding()
                 .frame(height: 50)
-                .overlay(currentDisplay == displayState ? lightFgColor.opacity(0.3).cornerRadius(5).padding(.horizontal, 4) : nil)
+                .overlay(navMan.currentDisplay == displayState ? lightFgColor.opacity(0.3).cornerRadius(5).padding(.horizontal, 4) : nil)
             }
             
             Spacer()
@@ -143,6 +184,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(NavigationManager())
             .modifier(PreviewMod())
     }
 }

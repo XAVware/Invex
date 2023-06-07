@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct DashboardView: View {
+    @EnvironmentObject var navMan: NavigationManager
     @State var currentDisplay: DisplayStates = .makeASale
-    @State private var columnVisibility = NavigationSplitViewVisibility.automatic
+//    @State private var columnVisibility = NavigationSplitViewVisibility.automatic
     
     var dateString: String {
         let date = Date.now
@@ -20,6 +21,7 @@ struct DashboardView: View {
         string.append(monthAndDay)
         return string
     }
+    
     var body: some View {
         GeometryReader { geo in
             
@@ -86,7 +88,7 @@ struct DashboardView: View {
             } //: VStack
             .frame(maxWidth: .infinity)
             .padding()
-            .background(secondaryBackground)
+//            .background(secondaryBackground)
             
         } //: Geometry Reader
     } //: Body
@@ -103,7 +105,7 @@ struct DashboardView: View {
     
     private var makeASaleButton: some View {
         Button {
-            
+            navMan.changeDisplay(to: .makeASale)
         } label: {
             VStack(alignment: .leading) {
                 Image(systemName: "dollarsign")
