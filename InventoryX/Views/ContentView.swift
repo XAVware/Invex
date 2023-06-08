@@ -13,87 +13,81 @@ struct ContentView: View {
     @EnvironmentObject var navMan: NavigationManager
     @StateObject var makeASaleViewModel: MakeASaleViewModel = MakeASaleViewModel()
     
-    //    @ObservedResults(CategoryEntity.self) var categories
+    @ObservedResults(CategoryEntity.self) var categories
     
     @State var selectedCategory: CategoryEntity?
-    //    @State var currentDisplay: DisplayStates = .makeASale
-    //    @State var menuIsHidden: Bool = false
-    //    @State var menuVisibility: NavigationSplitViewVisibility = .detailOnly
     
     var body: some View {
-//        ZStack {
-//                primaryBackground
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                    .edgesIgnoringSafeArea(.all)
-//                HStack {
-//                    Spacer(minLength: 0)
-//
-////                    CartView()
-////                        .environmentObject(makeASaleViewModel)
-////                        .frame(width: navMan.detailWidth)
-////                        .frame(maxHeight: .infinity)
-////                        .padding()
-////                        .background(primaryBackground)
-////                        .frame(width: navMan.contentWidth)
-//
-//                } //: HStack
-                
-//            GeometryReader { geo in
-                NavigationSplitView(columnVisibility: $navMan.menuVisibility) {
-                    menu
-                        .navigationSplitViewColumnWidth(navMan.menuWidth)
-                } detail: {
-                    ZStack {
-                        HStack {
-                            Spacer()
-                            CartView()
-                                .environmentObject(makeASaleViewModel)
-                                .padding(.vertical)
-                                .background(primaryBackground)
-                                .frame(maxWidth: navMan.detailWidth, maxHeight: .infinity)
-                                .edgesIgnoringSafeArea(.vertical)
-                        } //: HStack
-                        HStack {
-                            content
-                                .environmentObject(makeASaleViewModel)
-                                .background(secondaryBackground)
-                                .frame(width: navMan.contentWidth)
-                            
-                            Spacer()
-                        } //: HStack
-                    }
-                    .onAppear {
-                        navMan.expandDetail(size: .quarter, animation: nil)
-                    }
-                }
-                
-//                .tint(navMan.menuVisibility == .all ? secondaryBackground : primaryBackground)
-//
-////                .onChange(of: categories) { newCategories in
-////                    print("Called")
-////                    guard selectedCategory == nil, newCategories.count > 0 else { return }
-////                    selectedCategory = newCategories.first!
-////                }
-//                .onChange(of: makeASaleViewModel.isConfirmingSale) { isConfirming in
-//                    navMan.expandDetail(size: .full)
-//                }
-//            }  //: Geometry Reader
-            
-//            HStack(spacing: 0) {
-//                if !menuIsHidden {
-//                    MenuView(currentDisplay: self.$currentDisplay)
-//                        .frame(maxWidth: geo.size.width * 0.15)
-//                }
-//                navContent
-//            } //: HStack
-//            .onChange(of: categories) { newCategories in
-//                guard selectedCategory == nil, newCategories.count > 0 else { return }
-//                selectedCategory = newCategories.first!
-//            }
-//        }
-//        .edgesIgnoringSafeArea(.all)
+        NavigationSplitView(columnVisibility: $navMan.menuVisibility) {
+            menu
+                .navigationSplitViewColumnWidth(navMan.menuWidth)
+        } detail: {
+            ZStack {
+                primaryBackground
+                    .edgesIgnoringSafeArea(.all)
+
+                HStack {
+                    Spacer()
+                    CartView()
+                        .environmentObject(makeASaleViewModel)
+                        .padding(.vertical)
+                        .background(primaryBackground)
+                        .frame(maxWidth: navMan.detailWidth, maxHeight: .infinity)
+                        .edgesIgnoringSafeArea(.vertical)
+                } //: HStack
+
+                HStack {
+                    content
+                        .environmentObject(makeASaleViewModel)
+                        .padding(.top, 88)
+                        .background(secondaryBackground)
+                        .frame(maxWidth: navMan.contentWidth, maxHeight: .infinity)
+                        .cornerRadius(10, corners: .allCorners)
+                    Spacer()
+                } //: HStack
+            } //: ZStack
+            .edgesIgnoringSafeArea(.vertical)
+            .toolbar(.hidden, for: .navigationBar)
+        } //: Navigation Split
+        .overlay(headerToolbar, alignment: .top)
+        .onChange(of: categories) { newCategories in
+            guard selectedCategory == nil, newCategories.count > 0 else { return }
+            selectedCategory = newCategories.first!
+        }
+        .onChange(of: makeASaleViewModel.isConfirmingSale) { isConfirming in
+            navMan.expandDetail(size: isConfirming ? .full : .quarter)
+        }
         
     } //: Body
+    
+    private var headerToolbar: some View {
+        HStack {
+            Button {
+                navMan.toggleMenu()
+            } label: {
+                Image(systemName: "sidebar.squares.leading")
+                    .resizable()
+                    .scaledToFit()
+            }
+            Spacer()
+            Button {
+                navMan.toggleCartPreview()
+            } label: {
+                Image(systemName: navMan.detailSize == .bar ? "cart" : "chevron.forward.2")
+                    .resizable()
+                    .scaledToFit()
+//                    .frame(width: 30)
+                    .foregroundColor(primaryBackground)
+//                    .fontWeight(.semibold)
+            }
+            Spacer().frame(width: navMan.detailWidth)
+            
+        } //: HStack
+        .modifier(TextMod(.body, .light, primaryBackground))
+        .frame(height: 24)
+        .padding(.vertical, 8)
+        .padding(.horizontal)
+    } //: Header Toolbar
     
     @ViewBuilder private var content: some View {
         switch navMan.currentDisplay {
@@ -103,6 +97,9 @@ struct ContentView: View {
         case .makeASale:
             MakeASaleView()
                 .environmentObject(makeASaleViewModel)
+                .onAppear {
+                    navMan.expandDetail(size: .quarter, animation: nil)
+                }
         case .addInventory:
             RestockView()
         case .inventoryList:
@@ -115,7 +112,6 @@ struct ContentView: View {
             SettingsView()
         }
     } //: Nav Content
-    
     
     @ViewBuilder private var menu: some View {
         VStack {

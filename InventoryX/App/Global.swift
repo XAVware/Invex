@@ -34,7 +34,7 @@ enum DisplayStates: CaseIterable {
         }
     }
     
-    var detailWidthPercentage: CGFloat {
+    var contentWidthMultiplier: CGFloat {
         switch self {
         case .dashboard: return 1.0
         case .makeASale: return 0.66
@@ -52,18 +52,16 @@ enum RealmResult {
 }
 
 enum DetailSize {
-    case quarter, third, half, full
+    case hidden, bar, quarter, third, half, full
     
     var percentVal: CGFloat {
         switch self {
-        case .quarter:
-            return 0.75
-        case .third:
-            return 0.66
-        case .half:
-            return 0.5
-        case .full:
-            return 0.0
+        case .hidden:   return 1.0
+        case .bar:      return 0.95
+        case .quarter:  return 0.75
+        case .third:    return 0.66
+        case .half:     return 0.5
+        case .full:     return 0.0
         }
     }
 }

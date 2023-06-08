@@ -20,6 +20,7 @@ import SwiftUI
     @Published var menuVisibility: NavigationSplitViewVisibility = .detailOnly
     
     @Published var fullWidth: CGFloat
+    @Published var detailSize: DetailSize = .hidden
     
     init() {
         contentWidth = UIScreen.main.bounds.width
@@ -31,27 +32,43 @@ import SwiftUI
     }
     
     var menuWidth: CGFloat {
-        return fullWidth == 0 ? 0 : fullWidth
+        return fullWidth == 0 ? 0 : 0.2 * fullWidth
     }
     
-    var isMenuHidden: Bool {
-        return contentWidth == fullWidth ? true : false
+//    var isMenuHidden: Bool {
+//        return contentWidth == fullWidth ? true : false
+//    }
+    
+//    func setup(screenWidth: CGFloat) {
+//        fullWidth = screenWidth
+//        contentWidth = screenWidth * currentDisplay.contentWidthMultiplier
+//    }
+    
+    func toggleCartPreview() {
+        if detailSize == .hidden {
+            expandDetail(size: .quarter)
+        } else {
+            expandDetail(size: .hidden)
+        }
     }
     
-    
-    func setup(screenWidth: CGFloat) {
-        fullWidth = screenWidth
-        contentWidth = screenWidth * currentDisplay.detailWidthPercentage
+    func toggleMenu() {
+        if menuVisibility == .detailOnly {
+            menuVisibility = .all
+        } else {
+            menuVisibility = .detailOnly
+        }
     }
-    
     
     func expandDetail(size: DetailSize, animation: Animation? = .easeOut) {
+        detailSize = size
         withAnimation(animation) {
             contentWidth = size.percentVal * fullWidth
         }
     }
     
     func hideDetail(animation: Animation? = .easeOut) {
+        detailSize = .hidden
         withAnimation(animation) {
             contentWidth = 1 * fullWidth
         }
@@ -60,6 +77,8 @@ import SwiftUI
     func changeDisplay(to newDisplay: DisplayStates) {
         if newDisplay == .makeASale {
             expandDetail(size: .quarter, animation: nil)
+        } else {
+            hideDetail(animation: nil)
         }
         currentDisplay = newDisplay
         menuVisibility = .detailOnly

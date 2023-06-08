@@ -11,38 +11,12 @@ struct CartView: View {
     @EnvironmentObject var vm: MakeASaleViewModel
     
     var body: some View {
-//        HStack {
-//            Spacer(minLength: 0) 
-            cartView
-                .background(primaryBackground)
-            
-//        }
-//        HStack {
-//            Spacer(minLength: 0)
-//            switch vm.isConfirmingSale {
-//            case true:
-//                confirmSaleView
-//                    .background(primaryBackground)
-//            case false:
-//                cartView
-//                    .background(primaryBackground)
-//            } //: Switch
-//        } //: VStack
+        cartView
+            .background(primaryBackground)
     } //: Body
     
     private var cartView: some View {
         VStack {
-            HStack {
-                Spacer()
-                
-                Image(systemName: "cart")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30)
-                    .foregroundColor(lightFgColor)
-                    .fontWeight(.semibold)
-            } //: HStack
-            
             ScrollView {
                 VStack {
                     ForEach(vm.cartItems, id: \.id) { item in

@@ -40,7 +40,6 @@ struct DashboardView: View {
                     .foregroundColor(Color(XSS.S.color30))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .scaleEffect(1.5, anchor: .leading)
-//                    .padding(.top, 8)
                     
                     Spacer()
                     settingsButton
@@ -88,7 +87,6 @@ struct DashboardView: View {
             } //: VStack
             .frame(maxWidth: .infinity)
             .padding()
-//            .background(secondaryBackground)
             
         } //: Geometry Reader
     } //: Body
