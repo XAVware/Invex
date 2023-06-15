@@ -12,7 +12,7 @@ class MakeASaleViewModel: ObservableObject {
     @Published var cartItems: [InventoryItemModel] = []
     //    @Published var cartItems: [InventoryItemModel] = [InventoryItemModel(id: InventoryItemEntity.item1._id, name: InventoryItemEntity.item1.name, retailPrice: 1.00, qtyInCart: 2)]
     @Published var isConfirmingSale: Bool = false
-    @Published var isShowingCartPreview: Bool = true
+//    @Published var isShowingCartPreview: Bool = true
     
     var cartSubtotal: Double {
         var tempTotal: Double = 0
@@ -41,7 +41,7 @@ class MakeASaleViewModel: ObservableObject {
         
         //Display Confirmation Page in View
         //View listens for change of isConfirming and hides/shows the menu.
-        isConfirmingSale.toggle()
+        isConfirmingSale = true
     }
     
     func finalizeTapped() {
@@ -143,9 +143,6 @@ class MakeASaleViewModel: ObservableObject {
 
 
 struct MakeASaleView: View {
-    //    @EnvironmentObject var navMan: NavigationManager
-    //    @StateObject var vm: MakeASaleViewModel = MakeASaleViewModel()
-    
     @EnvironmentObject var vm: MakeASaleViewModel
     
     
@@ -158,18 +155,6 @@ struct MakeASaleView: View {
     }
     
     var body: some View {
-        makeASaleView
-            .onChange(of: categories) { newCategories in
-                print("Called")
-                guard selectedCategory == nil, newCategories.count > 0 else { return }
-                selectedCategory = newCategories.first!
-            }
-            .onAppear {
-                setDefaultCategory()
-            }
-    } //: Body
-    
-    private var makeASaleView: some View {
         VStack(spacing: 0) {
             buttonPanel
                 .background(secondaryBackground.edgesIgnoringSafeArea(.all))
@@ -177,8 +162,15 @@ struct MakeASaleView: View {
             categorySelector
         } //: VStack
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        
-    } //: Make A Sale View
+//        .onChange(of: categories) { newCategories in
+//            guard selectedCategory == nil, newCategories.count > 0 else { return }
+//            selectedCategory = newCategories.first!
+//        }
+        .onAppear {
+            setDefaultCategory()
+        }
+    } //: Body
+    
     
     private var buttonPanel: some View {
         GeometryReader { geo in

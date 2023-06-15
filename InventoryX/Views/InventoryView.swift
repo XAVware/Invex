@@ -9,11 +9,12 @@ import SwiftUI
 import RealmSwift
 
 struct InventoryView: View {
+    @EnvironmentObject var navMan: NavigationManager
     @ObservedResults(InventoryItemEntity.self) var items
     @State var sortBy: String = "name"
     @State var isAscending: Bool = true
-    @State var selectedItem: InventoryItemEntity?
-    @State var isShowingDetailView: Bool = false
+//    @State var selectedItem: InventoryItemEntity?
+//    @State var isShowingDetailView: Bool = false
     
     func itemTapped(itemId: ObjectId) {
         let itemResult = items.where {
@@ -22,7 +23,8 @@ struct InventoryView: View {
         
         guard let item = itemResult.first else { return }
         
-        selectedItem = item
+//        selectedItem = item
+        navMan.inventoryListItemSelected(item: item)
     }
     
     func getItems() -> Results<InventoryItemEntity> {
@@ -41,6 +43,20 @@ struct InventoryView: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            Button {
+                navMan.inventoryListItemSelected(item: nil)
+            } label: {
+                Text("New Item")
+                    .modifier(TextMod(.footnote, .semibold, darkFgColor))
+                
+                Image(systemName: "plus")
+                    .scaledToFit()
+                    .foregroundColor(darkFgColor)
+                    .bold()
+            }
+            .padding(8)
+            .overlay(RoundedRectangle(cornerRadius: 10).stroke(darkFgColor, lineWidth: 3))
+            
             columnHeaders
             
             Divider()

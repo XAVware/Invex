@@ -9,6 +9,7 @@ import SwiftUI
 import RealmSwift
 
 struct InventoryStatusView: View {
+    @EnvironmentObject var navMan: NavigationManager
     @ObservedResults(CategoryEntity.self) var categories
     @ObservedResults(InventoryItemEntity.self) var items
     

@@ -1,42 +1,42 @@
+////
+////  AddItemButton.swift
+////  InventoryX
+////
+////  Created by Smetana, Ryan on 5/2/23.
+////
 //
-//  AddItemButton.swift
-//  InventoryX
+//import SwiftUI
 //
-//  Created by Smetana, Ryan on 5/2/23.
+//struct AddItemButton: View {
+////    @State var isShowingAddItem: Bool = false
+//    
+////    func addItemTapped() {
+////        isShowingAddItem = true
+////    }
+//    
+//    var body: some View {
+//        Button {
+//            addItemTapped()
+//        } label: {
+//            Text("New Item")
+//                .modifier(TextMod(.footnote, .semibold, darkFgColor))
+//            
+//            Image(systemName: "plus")
+//                .scaledToFit()
+//                .foregroundColor(darkFgColor)
+//                .bold()
+//        }
+//        .padding(8)
+//        .overlay(RoundedRectangle(cornerRadius: 10).stroke(darkFgColor, lineWidth: 3))
+////        .fullScreenCover(isPresented: $isShowingAddItem) {
+////            AddItemView()
+////        }
+//    }
+//}
 //
-
-import SwiftUI
-
-struct AddItemButton: View {
-    @State var isShowingAddItem: Bool = false
-    
-    func addItemTapped() {
-        isShowingAddItem = true
-    }
-    
-    var body: some View {
-        Button {
-            addItemTapped()
-        } label: {
-            Text("New Item")
-                .modifier(TextMod(.footnote, .semibold, darkFgColor))
-            
-            Image(systemName: "plus")
-                .scaledToFit()
-                .foregroundColor(darkFgColor)
-                .bold()
-        }
-        .padding(8)
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(darkFgColor, lineWidth: 3))
-        .fullScreenCover(isPresented: $isShowingAddItem) {
-            AddItemView()
-        }
-    }
-}
-
-struct AddItemButton_Previews: PreviewProvider {
-    static var previews: some View {
-        AddItemButton()
-    }
-}
-
+//struct AddItemButton_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddItemButton()
+//    }
+//}
+//

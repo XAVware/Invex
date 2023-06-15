@@ -5,6 +5,7 @@ import SwiftUI
 import RealmSwift
 
 struct SalesHistoryView: View {
+    @EnvironmentObject var navMan: NavigationManager
     var columnTitles: [String] = ["Timestamp", "No. Items", "Subtotal"]
     
     @State var selectedDateRange: DateRanges = DateRanges.today

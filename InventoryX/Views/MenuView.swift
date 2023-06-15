@@ -76,6 +76,8 @@ struct MenuView: View {
         .modifier(TextMod(.title3, .semibold, lightFgColor))
         .edgesIgnoringSafeArea(.vertical)
     } //: Body
+    
+    
 }
 
 

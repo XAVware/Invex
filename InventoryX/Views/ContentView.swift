@@ -28,7 +28,7 @@ struct ContentView: View {
 
                 HStack {
                     Spacer()
-                    CartView()
+                    detail
                         .environmentObject(makeASaleViewModel)
                         .padding(.vertical)
                         .background(primaryBackground)
@@ -38,16 +38,18 @@ struct ContentView: View {
 
                 HStack {
                     content
-                        .environmentObject(makeASaleViewModel)
+//                        .environmentObject(makeASaleViewModel)
                         .padding(.top, 88)
                         .background(secondaryBackground)
                         .frame(maxWidth: navMan.contentWidth, maxHeight: .infinity)
                         .cornerRadius(10, corners: .allCorners)
+                    
                     Spacer()
                 } //: HStack
             } //: ZStack
             .edgesIgnoringSafeArea(.vertical)
             .toolbar(.hidden, for: .navigationBar)
+            
         } //: Navigation Split
         .overlay(headerToolbar, alignment: .top)
         .onChange(of: categories) { newCategories in
@@ -102,18 +104,45 @@ struct ContentView: View {
                 }
         case .addInventory:
             RestockView()
+                .environmentObject(navMan)
         case .inventoryList:
             InventoryView()
+                .environmentObject(navMan)
         case .salesHistory:
             SalesHistoryView()
+                .environmentObject(navMan)
         case .inventoryStatus:
             InventoryStatusView()
+                .environmentObject(navMan)
         case .settings:
             SettingsView()
+                .environmentObject(navMan)
         }
     } //: Nav Content
     
+    @ViewBuilder private var detail: some View {
+        switch navMan.currentDisplay {
+        case .dashboard:
+            Text("Dashboard Detail")
+        case .makeASale:
+            CartView()
+        case .addInventory:
+            ItemDetailView(selectedItem: $navMan.selectedItem)
+        case .inventoryList:
+            ItemDetailView(selectedItem: $navMan.selectedItem)
+        case .salesHistory:
+            Text("Sales Detail")
+        case .inventoryStatus:
+            Text("Status Detail")
+        case .settings:
+            Text("Settings Detail")
+        }
+        
+    } //: Detail
+    
     @ViewBuilder private var menu: some View {
+        //Decide whether or not to make this its own struct. It only needs navigationManager
+        
         VStack {
             HStack(spacing: 16) {
                 Image(systemName: "person.circle.fill")
@@ -139,7 +168,6 @@ struct ContentView: View {
             ForEach(DisplayStates.allCases, id: \.self) { displayState in
                 Button {
                     navMan.changeDisplay(to: displayState)
-//                    navMan.currentDisplay = displayState
                 } label: {
                     Image(systemName: displayState.iconName)
                         .imageScale(.medium)

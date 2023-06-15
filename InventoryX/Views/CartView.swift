@@ -11,8 +11,12 @@ struct CartView: View {
     @EnvironmentObject var vm: MakeASaleViewModel
     
     var body: some View {
-        cartView
-            .background(primaryBackground)
+        if vm.isConfirmingSale {
+            confirmSaleView
+        } else {
+            cartView
+                .background(primaryBackground)            
+        }
     } //: Body
     
     private var cartView: some View {

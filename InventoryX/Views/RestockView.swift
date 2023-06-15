@@ -13,10 +13,11 @@ enum DetailViewType {
 }
 
 struct RestockView: View {
+    @EnvironmentObject var navMan: NavigationManager
     @State var activeSheet: DetailViewType      = .newItem
-    @State var isShowingDetailView: Bool        = false
+//    @State var isShowingDetailView: Bool        = false
     @State var selectedItemName: String         = ""
-    @State var selectedConcessionType: String = ""
+    @State var selectedConcessionType: String   = ""
     
     @ObservedResults(CategoryEntity.self) var categories
     @ObservedResults(InventoryItemEntity.self) var items
@@ -38,16 +39,16 @@ struct RestockView: View {
             isShowingDetail = true
         }
         
-        //        selectedItemName       = category.items.sorted(byKeyPath: "name", ascending: true)[index].name
-        //        selectedItemSubtype    = item.subtype
-        //        activeSheet            = .restockItem
-        //        isShowingDetailView    = true
+//        selectedItemName       = category.items.sorted(byKeyPath: "name", ascending: true)[index].name
+//        selectedItemSubtype    = item.subtype
+//        activeSheet            = .restockItem
+//        isShowingDetailView    = true
     }
     
-    func addItemTapped() {
-        self.activeSheet = .newItem
-        self.isShowingDetailView = true
-    }
+//    func addItemTapped() {
+//        self.activeSheet = .newItem
+//        self.isShowingDetailView = true
+//    }
     
     
     var body: some View {
@@ -58,25 +59,16 @@ struct RestockView: View {
                     .background(secondaryBackground)
                     .cornerRadius(20, corners: [.topLeft])
                 
-                    .fullScreenCover(isPresented: $isShowingDetailView, onDismiss: {
-                        selectedItemName = ""
-                    }) {
-                        Text("Detail")
-                        //                        ItemDetailView(viewType: activeSheet, itemName: selectedItemName)
-                    }
-                    .onChange(of: activeSheet) { (sheet) in
-                        isShowingDetailView = true
-                    }
+//                    .fullScreenCover(isPresented: $isShowingDetailView, onDismiss: {
+//                        selectedItemName = ""
+//                    }) {
+//                        Text("Detail")
+//        //                        ItemDetailView(viewType: activeSheet, itemName: selectedItemName)
+//                    }
+//                    .onChange(of: activeSheet) { (sheet) in
+//                        isShowingDetailView = true
+//                    }
                     .edgesIgnoringSafeArea(.bottom)
-                
-                if isShowingDetail {
-                    //                    if let selectedItem = selectedItem {
-                    if let selectedItem = items.first {
-                        Divider().background(darkFgColor)
-                        RestockItemDetailView(selectedItem: selectedItem, isShowing: $isShowingDetail)
-                            .frame(width: geo.size.width / 3)
-                    }
-                }
             } //: HStack
         }
     } //: Body
@@ -89,7 +81,7 @@ struct RestockView: View {
                 
                 Spacer()
                 
-                AddItemButton()
+//                AddItemButton()
             } //: HStack
             .foregroundColor(primaryBackground)
             
@@ -161,54 +153,5 @@ struct RestockView_Previews: PreviewProvider {
     static var previews: some View {
         RestockView()
             .modifier(PreviewMod())
-    }
-}
-
-struct RestockItemDetailView: View {
-    @ObservedRealmObject var selectedItem: InventoryItemEntity
-    @Binding var isShowing: Bool
-    
-    @State var restockQuantity: Int = 10
-    
-    func saveTapped() {
-        
-        isShowing.toggle()
-    }
-    
-    var body: some View {
-        VStack(spacing: 16) {
-            Text("Restock Item")
-                .modifier(TextMod(.title, .bold))
-            
-            HStack {
-                Text("Item:")
-                    .modifier(TextMod(.title3, .semibold))
-                
-                Text(selectedItem.name)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-            }
-            Divider()
-            
-            HStack {
-                Text("On-Hand:")
-                    .modifier(TextMod(.title3, .semibold))
-                
-                Text("\(selectedItem.onHandQty)")
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-            }
-            Divider()
-            
-            Spacer()
-            
-            Button {
-                saveTapped()
-            } label: {
-                Text("Save")
-            }
-            .modifier(RoundedButtonMod())
-            
-        } //: VStack
-        .padding()
-        .background(lightFgColor)
     }
 }

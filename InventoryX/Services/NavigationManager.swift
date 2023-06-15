@@ -22,6 +22,8 @@ import SwiftUI
     @Published var fullWidth: CGFloat
     @Published var detailSize: DetailSize = .hidden
     
+    @Published var selectedItem: InventoryItemEntity?
+    
     init() {
         contentWidth = UIScreen.main.bounds.width
         fullWidth = UIScreen.main.bounds.width
@@ -34,15 +36,6 @@ import SwiftUI
     var menuWidth: CGFloat {
         return fullWidth == 0 ? 0 : 0.2 * fullWidth
     }
-    
-//    var isMenuHidden: Bool {
-//        return contentWidth == fullWidth ? true : false
-//    }
-    
-//    func setup(screenWidth: CGFloat) {
-//        fullWidth = screenWidth
-//        contentWidth = screenWidth * currentDisplay.contentWidthMultiplier
-//    }
     
     func toggleCartPreview() {
         if detailSize == .hidden {
@@ -82,6 +75,11 @@ import SwiftUI
         }
         currentDisplay = newDisplay
         menuVisibility = .detailOnly
+    }
+    
+    func inventoryListItemSelected(item: InventoryItemEntity?) {
+        selectedItem = item
+        expandDetail(size: .third)
     }
     
 }
