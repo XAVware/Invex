@@ -8,7 +8,6 @@
 import SwiftUI
 import RealmSwift
 
-
 struct ContentView: View {
     @EnvironmentObject var navMan: NavigationManager
     @StateObject var makeASaleViewModel: MakeASaleViewModel = MakeASaleViewModel()
@@ -21,37 +20,33 @@ struct ContentView: View {
         NavigationSplitView(columnVisibility: $navMan.menuVisibility) {
             menu
                 .navigationSplitViewColumnWidth(navMan.menuWidth)
+                .toolbar(.hidden, for: .navigationBar)
         } detail: {
             ZStack {
                 primaryBackground
                     .edgesIgnoringSafeArea(.all)
-
-                HStack {
-                    Spacer()
-                    detail
-                        .environmentObject(makeASaleViewModel)
-                        .padding(.vertical)
-                        .background(primaryBackground)
-                        .frame(maxWidth: navMan.detailWidth, maxHeight: .infinity)
-                        .edgesIgnoringSafeArea(.vertical)
-                } //: HStack
-
+                
+                if navMan.detailSize != .hidden {
+                    HStack {
+                        Spacer()
+                        detail
+                            .environmentObject(makeASaleViewModel)
+                            .frame(maxWidth: navMan.detailWidth, maxHeight: .infinity)
+                            .edgesIgnoringSafeArea(.vertical)
+                    } //: HStack
+                }
+                
                 HStack {
                     content
-//                        .environmentObject(makeASaleViewModel)
-                        .padding(.top, 88)
                         .background(secondaryBackground)
                         .frame(maxWidth: navMan.contentWidth, maxHeight: .infinity)
-                        .cornerRadius(10, corners: .allCorners)
-                    
+
                     Spacer()
                 } //: HStack
             } //: ZStack
-            .edgesIgnoringSafeArea(.vertical)
             .toolbar(.hidden, for: .navigationBar)
             
         } //: Navigation Split
-        .overlay(headerToolbar, alignment: .top)
         .onChange(of: categories) { newCategories in
             guard selectedCategory == nil, newCategories.count > 0 else { return }
             selectedCategory = newCategories.first!
@@ -61,35 +56,6 @@ struct ContentView: View {
         }
         
     } //: Body
-    
-    private var headerToolbar: some View {
-        HStack {
-            Button {
-                navMan.toggleMenu()
-            } label: {
-                Image(systemName: "sidebar.squares.leading")
-                    .resizable()
-                    .scaledToFit()
-            }
-            Spacer()
-            Button {
-                navMan.toggleCartPreview()
-            } label: {
-                Image(systemName: navMan.detailSize == .bar ? "cart" : "chevron.forward.2")
-                    .resizable()
-                    .scaledToFit()
-//                    .frame(width: 30)
-                    .foregroundColor(primaryBackground)
-//                    .fontWeight(.semibold)
-            }
-            Spacer().frame(width: navMan.detailWidth)
-            
-        } //: HStack
-        .modifier(TextMod(.body, .light, primaryBackground))
-        .frame(height: 24)
-        .padding(.vertical, 8)
-        .padding(.horizontal)
-    } //: Header Toolbar
     
     @ViewBuilder private var content: some View {
         switch navMan.currentDisplay {
@@ -102,9 +68,6 @@ struct ContentView: View {
                 .onAppear {
                     navMan.expandDetail(size: .quarter, animation: nil)
                 }
-        case .addInventory:
-            RestockView()
-                .environmentObject(navMan)
         case .inventoryList:
             InventoryView()
                 .environmentObject(navMan)
@@ -126,8 +89,6 @@ struct ContentView: View {
             Text("Dashboard Detail")
         case .makeASale:
             CartView()
-        case .addInventory:
-            ItemDetailView(selectedItem: $navMan.selectedItem)
         case .inventoryList:
             ItemDetailView(selectedItem: $navMan.selectedItem)
         case .salesHistory:
@@ -144,6 +105,7 @@ struct ContentView: View {
         //Decide whether or not to make this its own struct. It only needs navigationManager
         
         VStack {
+            Spacer().frame(height: 24)
             HStack(spacing: 16) {
                 Image(systemName: "person.circle.fill")
                     .resizable()

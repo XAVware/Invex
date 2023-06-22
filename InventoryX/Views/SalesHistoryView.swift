@@ -88,6 +88,10 @@ struct SalesHistoryView: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
+                headerToolbar
+                    .frame(height: toolbarHeight)
+                    .padding(.bottom)
+                
                 HStack {
                     Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatAsCurrencyString())")
                         .modifier(TextMod(.title3, .semibold, darkFgColor))
@@ -197,6 +201,43 @@ struct SalesHistoryView: View {
         }
         
     }
+    
+    private var headerToolbar: some View {
+        HStack(spacing: 24) {
+            Button {
+                navMan.toggleMenu()
+            } label: {
+                Image(systemName: "sidebar.squares.leading")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+            }
+            Spacer()
+            
+            Button {
+                // Restock
+            } label: {
+                Image(systemName: "tray.and.arrow.down")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+                //                    .fontWeight(.semibold)
+            } //: Button
+            
+            Button {
+                navMan.inventoryListItemSelected(item: nil)
+            } label: {
+                Image(systemName: "plus")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+                //                    .fontWeight(.semibold)
+            } //: Button
+        } //: HStack
+        .modifier(TextMod(.body, .light, primaryBackground))
+        .frame(height: toolbarHeight)
+        .padding(.horizontal)
+    } //: Header Toolbar
     
 }
 

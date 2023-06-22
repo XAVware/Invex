@@ -16,7 +16,7 @@ import SwiftUI
 //    @Published var isShowingDetail: Bool = false
     @Published var contentWidth: CGFloat
 //    @Published var detailWidth: CGFloat = 0
-    @Published var currentDisplay: DisplayStates = .makeASale
+    @Published var currentDisplay: DisplayStates = .inventoryList
     @Published var menuVisibility: NavigationSplitViewVisibility = .detailOnly
     
     @Published var fullWidth: CGFloat
@@ -48,6 +48,9 @@ import SwiftUI
     func toggleMenu() {
         if menuVisibility == .detailOnly {
             menuVisibility = .all
+            if detailSize != .hidden {
+                hideDetail(animation: .easeOut)
+            }
         } else {
             menuVisibility = .detailOnly
         }
@@ -70,6 +73,8 @@ import SwiftUI
     func changeDisplay(to newDisplay: DisplayStates) {
         if newDisplay == .makeASale {
             expandDetail(size: .quarter, animation: nil)
+        } else if newDisplay == .inventoryList {
+            hideDetail(animation: nil)
         } else {
             hideDetail(animation: nil)
         }

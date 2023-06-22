@@ -13,8 +13,8 @@ struct InventoryView: View {
     @ObservedResults(InventoryItemEntity.self) var items
     @State var sortBy: String = "name"
     @State var isAscending: Bool = true
-//    @State var selectedItem: InventoryItemEntity?
-//    @State var isShowingDetailView: Bool = false
+    //    @State var selectedItem: InventoryItemEntity?
+    //    @State var isShowingDetailView: Bool = false
     
     func itemTapped(itemId: ObjectId) {
         let itemResult = items.where {
@@ -23,7 +23,7 @@ struct InventoryView: View {
         
         guard let item = itemResult.first else { return }
         
-//        selectedItem = item
+        //        selectedItem = item
         navMan.inventoryListItemSelected(item: item)
     }
     
@@ -43,19 +43,9 @@ struct InventoryView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Button {
-                navMan.inventoryListItemSelected(item: nil)
-            } label: {
-                Text("New Item")
-                    .modifier(TextMod(.footnote, .semibold, darkFgColor))
-                
-                Image(systemName: "plus")
-                    .scaledToFit()
-                    .foregroundColor(darkFgColor)
-                    .bold()
-            }
-            .padding(8)
-            .overlay(RoundedRectangle(cornerRadius: 10).stroke(darkFgColor, lineWidth: 3))
+            headerToolbar
+                .frame(height: toolbarHeight)
+                .padding(.bottom)
             
             columnHeaders
             
@@ -65,8 +55,46 @@ struct InventoryView: View {
             
             Spacer()
         } //: VStack
-            .background(Color(XSS.S.color90))
+        .background(Color(XSS.S.color90))
+        
     } //: Body
+    
+    private var headerToolbar: some View {
+        HStack(spacing: 24) {
+            Button {
+                navMan.toggleMenu()
+            } label: {
+                Image(systemName: "sidebar.squares.leading")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+            }
+            Spacer()
+            
+            Button {
+                // Restock
+            } label: {
+                Image(systemName: "tray.and.arrow.down")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+                //                    .fontWeight(.semibold)
+            } //: Button
+            
+            Button {
+                navMan.inventoryListItemSelected(item: nil)
+            } label: {
+                Image(systemName: "plus")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+                //                    .fontWeight(.semibold)
+            } //: Button
+        } //: HStack
+        .modifier(TextMod(.body, .light, primaryBackground))
+        .frame(height: toolbarHeight)
+        .padding(.horizontal)
+    } //: Header Toolbar
     
     private var columnHeaders: some View {
         HStack(spacing: 0) {
@@ -167,5 +195,6 @@ struct InventoryView_Previews: PreviewProvider {
     static var previews: some View {
         InventoryView()
             .modifier(PreviewMod())
+            .environmentObject(NavigationManager())
     }
 }

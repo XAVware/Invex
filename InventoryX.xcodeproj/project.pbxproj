@@ -36,7 +36,6 @@
 		80DBB98329F715BA00497695 /* RoundedButtonMod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DBB98229F715BA00497695 /* RoundedButtonMod.swift */; };
 		80F6026629FFFD8A004C759D /* MakeASaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6026529FFFD8A004C759D /* MakeASaleView.swift */; };
 		80F6026829FFFFBD004C759D /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6026729FFFFBD004C759D /* MenuView.swift */; };
-		80F6026A2A00054E004C759D /* RestockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F602692A00054E004C759D /* RestockView.swift */; };
 		80F734132A017CF10072C62B /* InventoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F734122A017CF10072C62B /* InventoryView.swift */; };
 		80F734152A017D100072C62B /* AddItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F734142A017D100072C62B /* AddItemButton.swift */; };
 		80F734192A01A58C0072C62B /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F734182A01A58C0072C62B /* ItemDetailView.swift */; };
@@ -92,7 +91,6 @@
 		80DBB98229F715BA00497695 /* RoundedButtonMod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedButtonMod.swift; sourceTree = "<group>"; };
 		80F6026529FFFD8A004C759D /* MakeASaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeASaleView.swift; sourceTree = "<group>"; };
 		80F6026729FFFFBD004C759D /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
-		80F602692A00054E004C759D /* RestockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestockView.swift; sourceTree = "<group>"; };
 		80F734122A017CF10072C62B /* InventoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryView.swift; sourceTree = "<group>"; };
 		80F734142A017D100072C62B /* AddItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemButton.swift; sourceTree = "<group>"; };
 		80F734182A01A58C0072C62B /* ItemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
@@ -261,7 +259,6 @@
 				80F6026729FFFFBD004C759D /* MenuView.swift */,
 				80F6026529FFFD8A004C759D /* MakeASaleView.swift */,
 				80DBB97E29F70EE000497695 /* OnboardingView.swift */,
-				80F602692A00054E004C759D /* RestockView.swift */,
 				80B5EFA329F0D0C9007D9842 /* SalesHistoryView.swift */,
 				944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */,
 				944F8CEC2A2C54E2007AD864 /* InventoryStatusView.swift */,
@@ -420,7 +417,6 @@
 				944F8CE72A2AA94E007AD864 /* SaleDetailView.swift in Sources */,
 				944DCEFC2A30565400885730 /* NavigationManager.swift in Sources */,
 				80F6026629FFFD8A004C759D /* MakeASaleView.swift in Sources */,
-				80F6026A2A00054E004C759D /* RestockView.swift in Sources */,
 				802EDC0529FB79A70048A9A8 /* UserManager.swift in Sources */,
 				80DBB97D29F70BC200497695 /* UIColor+Ext.swift in Sources */,
 				80B5EFCD29F0D0D3007D9842 /* PasscodePad.swift in Sources */,

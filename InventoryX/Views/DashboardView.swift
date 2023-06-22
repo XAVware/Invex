@@ -24,72 +24,110 @@ struct DashboardView: View {
     
     var body: some View {
         GeometryReader { geo in
-            
-            HStack(spacing: 0.03 * geo.size.width) {
-                VStack(alignment: .leading, spacing: 0.03 * geo.size.width) {
-                    HStack(spacing: 0) {
-                        Text("Inventory")
-                            .modifier(TextMod(.title, .semibold, Color(XSS.S.color30)))
-                            .offset(y: -2)
+            VStack {
+                headerToolbar
+                    .frame(height: toolbarHeight)
+                    .padding(.bottom)
+                
+                HStack(spacing: 0.03 * geo.size.width) {
+                    VStack(alignment: .leading, spacing: 0.03 * geo.size.width) {
+                        HStack(spacing: 0) {
+                            Text("Inventory")
+                                .modifier(TextMod(.title, .semibold, Color(XSS.S.color30)))
+                                .offset(y: -2)
+                            
+                            Text("X")
+                                .modifier(TextMod(.largeTitle, .semibold, Color(XSS.S.color30)))
+                                .italic()
+                                .offset(x: -2)
+                        } //: HStack
+                        .foregroundColor(Color(XSS.S.color30))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .scaleEffect(1.5, anchor: .leading)
                         
-                        Text("X")
-                            .modifier(TextMod(.largeTitle, .semibold, Color(XSS.S.color30)))
-                            .italic()
-                            .offset(x: -2)
-                    } //: HStack
-                    .foregroundColor(Color(XSS.S.color30))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .scaleEffect(1.5, anchor: .leading)
-                    
-                    Spacer()
-                    settingsButton
-                        .frame(maxWidth: 0.24 * geo.size.width, maxHeight: 0.15 * geo.size.height)
-                        .padding()
-                        .background(Color(XSS.S.color90))
-                        .cornerRadius(16)
-                        .shadow(radius: 8)
-                    
-                    salesButton
-                        .frame(maxWidth: 0.24 * geo.size.width, maxHeight: 0.15 * geo.size.height)
-                        .padding()
-                        .background(Color(XSS.S.color90))
-                        .cornerRadius(16)
-                        .shadow(radius: 8)
-                    
-                    inventoryButton
-                        .frame(maxWidth: 0.24 * geo.size.width, maxHeight: 0.15 * geo.size.height)
-                        .padding()
-                        .background(Color(XSS.S.color90))
-                        .cornerRadius(16)
-                        .shadow(radius: 8)
-                } //: VStack
-                .frame(maxWidth: .infinity)
-                
-                VStack(alignment: .trailing, spacing: 0.03 * geo.size.width) {
-                    HStack(spacing: 0.02 * geo.size.width) {
                         Spacer()
-                        dateTimeLabel
-                    } //: HStack
-                    Spacer()
+                        settingsButton
+                            .frame(maxWidth: 0.24 * geo.size.width, maxHeight: 0.15 * geo.size.height)
+                            .padding()
+                            .background(Color(XSS.S.color90))
+                            .cornerRadius(16)
+                            .shadow(radius: 8)
+                        
+                        salesButton
+                            .frame(maxWidth: 0.24 * geo.size.width, maxHeight: 0.15 * geo.size.height)
+                            .padding()
+                            .background(Color(XSS.S.color90))
+                            .cornerRadius(16)
+                            .shadow(radius: 8)
+                        
+                        inventoryButton
+                            .frame(maxWidth: 0.24 * geo.size.width, maxHeight: 0.15 * geo.size.height)
+                            .padding()
+                            .background(Color(XSS.S.color90))
+                            .cornerRadius(16)
+                            .shadow(radius: 8)
+                    } //: VStack
+                    .frame(maxWidth: .infinity)
                     
-                    makeASaleButton
-                        .frame(maxWidth: 0.40 * geo.size.width, maxHeight: 0.15 * geo.size.height)
-                        .padding()
-                        .background(primaryBackground)
-                        .cornerRadius(16)
-                        .shadow(radius: 8)
-                } //: VStack
-                .frame(maxWidth: 0.40 * geo.size.width)
-                
-                
-                
-                
-            } //: VStack
-            .frame(maxWidth: .infinity)
-            .padding()
-            
+                    VStack(alignment: .trailing, spacing: 0.03 * geo.size.width) {
+                        HStack(spacing: 0.02 * geo.size.width) {
+                            Spacer()
+                            dateTimeLabel
+                        } //: HStack
+                        Spacer()
+                        
+                        makeASaleButton
+                            .frame(maxWidth: 0.40 * geo.size.width, maxHeight: 0.15 * geo.size.height)
+                            .padding()
+                            .background(primaryBackground)
+                            .cornerRadius(16)
+                            .shadow(radius: 8)
+                    } //: VStack
+                    .frame(maxWidth: 0.40 * geo.size.width)
+                    
+                } //: HStack
+                .frame(maxWidth: .infinity)
+                .padding()
+            }
         } //: Geometry Reader
     } //: Body
+    
+    private var headerToolbar: some View {
+        HStack(spacing: 24) {
+            Button {
+                navMan.toggleMenu()
+            } label: {
+                Image(systemName: "sidebar.squares.leading")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+            }
+            Spacer()
+            
+            Button {
+                // Restock
+            } label: {
+                Image(systemName: "tray.and.arrow.down")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+                //                    .fontWeight(.semibold)
+            } //: Button
+            
+            Button {
+                navMan.inventoryListItemSelected(item: nil)
+            } label: {
+                Image(systemName: "plus")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+                //                    .fontWeight(.semibold)
+            } //: Button
+        } //: HStack
+        .modifier(TextMod(.body, .light, primaryBackground))
+        .frame(height: toolbarHeight)
+        .padding(.horizontal)
+    } //: Header Toolbar
     
     private var dateTimeLabel: some View {
         VStack(alignment: .trailing) {

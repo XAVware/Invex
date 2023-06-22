@@ -231,6 +231,7 @@ struct MakeASaleView_Previews: PreviewProvider {
     @State static var category: CategoryEntity = CategoryEntity.foodCategory
     static var previews: some View {
         MakeASaleView(selectedCategory: category)
+            .environmentObject(MakeASaleViewModel())
             .modifier(PreviewMod())
     }
 }

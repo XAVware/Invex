@@ -69,7 +69,6 @@ struct CartView: View {
                     .modifier(TextMod(.title2, .semibold, lightFgColor))
             } //: HStack
             .padding(.vertical, 8)
-//            .frame(maxWidth: 350)
             
             Button {
                 vm.checkoutTapped()
@@ -77,17 +76,18 @@ struct CartView: View {
                 Text("Check Out")
                     .frame(maxWidth: .infinity)
             }
-            .modifier(RoundedButtonMod())
+            .modifier(TextMod(.title3, .semibold, lightFgColor))
+            .padding(12)
+            .foregroundColor(darkFgColor)
+            .background(selectedButtonColor)
+            .cornerRadius(25)
+            
+            
+            Spacer().frame(height: 24)
             
         } //: VStack
         .padding(.horizontal)
         .background(primaryBackground)
-//        .frame(maxWidth: 350)
-//        .onAppear {
-//            for item in CategoryEntity.foodCategory.items {
-//                vm.addItem(item)
-//            }
-//        }
     } //: CartView
     
     private var confirmSaleView: some View {
