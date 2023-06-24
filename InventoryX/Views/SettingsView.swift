@@ -34,6 +34,7 @@ struct SettingsView: View {
     
     var body: some View {
         VStack {
+            headerToolbar
             Text("Settings")
                 .modifier(TextMod(.largeTitle, .semibold, .black))
             
@@ -50,6 +51,7 @@ struct SettingsView: View {
                 .padding()
                 .frame(height: 50)
                 .frame(maxWidth: .infinity)
+                .modifier(TextMod(.title3, .semibold, darkFgColor))
             } //: For Each
             
 //            Button {
@@ -87,6 +89,34 @@ struct SettingsView: View {
         .background(secondaryBackground)
     }
     
+    private var headerToolbar: some View {
+        HStack(spacing: 24) {
+            Button {
+                navMan.toggleMenu()
+            } label: {
+                Image(systemName: "sidebar.squares.leading")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+            }
+            Spacer()
+            
+            
+            Button {
+                navMan.toggleCartPreview()
+            } label: {
+                Image(systemName: navMan.detailSize == .hidden ? "cart" : "chevron.forward.2")
+                    .resizable()
+                    .scaledToFit()
+//                    .frame(width: 30)
+                    .foregroundColor(primaryBackground)
+            } //: Button
+            
+        } //: HStack
+        .modifier(TextMod(.body, .light, primaryBackground))
+        .frame(height: toolbarHeight)
+        .padding(.horizontal)
+    } //: Header Toolbar
     
 //    struct SettingsButton: View {
 //        // This may not be the best way to accomplish. Find best way to make a list of buttons that appear the same but take up full width of container.

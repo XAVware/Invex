@@ -78,7 +78,6 @@ struct InventoryView: View {
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(primaryBackground)
-                //                    .fontWeight(.semibold)
             } //: Button
             
             Button {
@@ -88,7 +87,6 @@ struct InventoryView: View {
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(primaryBackground)
-                //                    .fontWeight(.semibold)
             } //: Button
         } //: HStack
         .modifier(TextMod(.body, .light, primaryBackground))

@@ -92,28 +92,9 @@ struct SalesHistoryView: View {
                     .frame(height: toolbarHeight)
                     .padding(.bottom)
                 
-                HStack {
-                    Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatAsCurrencyString())")
-                        .modifier(TextMod(.title3, .semibold, darkFgColor))
-                    
-                    Spacer()
-                    
-                    Text("Sales History")
-                        .modifier(TextMod(.title3, .semibold, darkFgColor))
-                    
-                    Spacer()
-                    
-                    Picker(selection: $selectedDateRange) {
-                        ForEach(DateRanges.allCases) { dateRange in
-                            Text(dateRange.rawValue)
-                                .tag(dateRange)
-                        }
-                    } label: {
-                        Text("Range")
-                    }
-                    .tint(darkFgColor)
-                    
-                } //: HStack
+                Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatAsCurrencyString())")
+                    .modifier(TextMod(.title3, .semibold, darkFgColor))
+                
                 
                 Chart {
                     ForEach(getGroupedSales()) { group in
@@ -187,6 +168,39 @@ struct SalesHistoryView: View {
         
     } //: Body
     
+    private var headerToolbar: some View {
+        HStack(spacing: 24) {
+            Button {
+                navMan.toggleMenu()
+            } label: {
+                Image(systemName: "sidebar.squares.leading")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+            }
+            
+            Spacer()
+            
+            Text("Sales History")
+                .modifier(TextMod(.title3, .semibold, darkFgColor))
+            
+            Spacer()
+            
+            Picker(selection: $selectedDateRange) {
+                ForEach(DateRanges.allCases) { dateRange in
+                    Text(dateRange.rawValue)
+                        .tag(dateRange)
+                }
+            } label: {
+                Text("Range")
+            }
+            .tint(darkFgColor)
+        } //: HStack
+        .modifier(TextMod(.body, .light, primaryBackground))
+        .frame(height: toolbarHeight)
+        .padding(.horizontal)
+    } //: Header Toolbar
+    
     class ChartData: Identifiable {
         let id: UUID = UUID()
         let label: String
@@ -201,43 +215,6 @@ struct SalesHistoryView: View {
         }
         
     }
-    
-    private var headerToolbar: some View {
-        HStack(spacing: 24) {
-            Button {
-                navMan.toggleMenu()
-            } label: {
-                Image(systemName: "sidebar.squares.leading")
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(primaryBackground)
-            }
-            Spacer()
-            
-            Button {
-                // Restock
-            } label: {
-                Image(systemName: "tray.and.arrow.down")
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(primaryBackground)
-                //                    .fontWeight(.semibold)
-            } //: Button
-            
-            Button {
-                navMan.inventoryListItemSelected(item: nil)
-            } label: {
-                Image(systemName: "plus")
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(primaryBackground)
-                //                    .fontWeight(.semibold)
-            } //: Button
-        } //: HStack
-        .modifier(TextMod(.body, .light, primaryBackground))
-        .frame(height: toolbarHeight)
-        .padding(.horizontal)
-    } //: Header Toolbar
     
 }
 

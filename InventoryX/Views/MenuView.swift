@@ -43,7 +43,7 @@ struct MenuView: View {
                 Button {
                     currentDisplay = displayState
                 } label: {
-                    Image(systemName: displayState.iconName)
+                    Image(systemName: displayState.menuIconName)
                         .imageScale(.medium)
                         .bold()
                     

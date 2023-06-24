@@ -32,7 +32,7 @@ struct ContentView: View {
                         detail
                             .environmentObject(makeASaleViewModel)
                             .frame(maxWidth: navMan.detailWidth, maxHeight: .infinity)
-                            .edgesIgnoringSafeArea(.vertical)
+//                            .edgesIgnoringSafeArea(.vertical)
                     } //: HStack
                 }
                 
@@ -63,11 +63,14 @@ struct ContentView: View {
             DashboardView()
                 .environmentObject(navMan)
         case .makeASale:
-            MakeASaleView()
-                .environmentObject(makeASaleViewModel)
-                .onAppear {
-                    navMan.expandDetail(size: .quarter, animation: nil)
-                }
+            VStack(spacing: 0) {
+                makeASaleToolbar
+                MakeASaleView()
+                    .environmentObject(makeASaleViewModel)
+                    .onAppear {
+                        navMan.expandDetail(size: .quarter, animation: nil)
+                    }
+            }
         case .inventoryList:
             InventoryView()
                 .environmentObject(navMan)
@@ -83,6 +86,35 @@ struct ContentView: View {
         }
     } //: Nav Content
     
+    private var makeASaleToolbar: some View {
+        HStack(spacing: 24) {
+            Button {
+                navMan.toggleMenu()
+            } label: {
+                Image(systemName: "sidebar.squares.leading")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(primaryBackground)
+            }
+            Spacer()
+            
+            
+            Button {
+                navMan.toggleCartPreview()
+            } label: {
+                Image(systemName: navMan.detailSize == .hidden ? "cart" : "chevron.forward.2")
+                    .resizable()
+                    .scaledToFit()
+//                    .frame(width: 30)
+                    .foregroundColor(primaryBackground)
+            } //: Button
+            
+        } //: HStack
+        .modifier(TextMod(.body, .light, primaryBackground))
+        .frame(height: toolbarHeight)
+        .padding(.horizontal)
+    } //: Header Toolbar
+    
     @ViewBuilder private var detail: some View {
         switch navMan.currentDisplay {
         case .dashboard:
@@ -91,6 +123,7 @@ struct ContentView: View {
             CartView()
         case .inventoryList:
             ItemDetailView(selectedItem: $navMan.selectedItem)
+                .environmentObject(navMan)
         case .salesHistory:
             Text("Sales Detail")
         case .inventoryStatus:
@@ -131,7 +164,7 @@ struct ContentView: View {
                 Button {
                     navMan.changeDisplay(to: displayState)
                 } label: {
-                    Image(systemName: displayState.iconName)
+                    Image(systemName: displayState.menuIconName)
                         .imageScale(.medium)
                         .bold()
                     

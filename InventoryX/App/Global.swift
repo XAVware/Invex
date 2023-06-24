@@ -16,12 +16,12 @@ enum DisplayStates: CaseIterable {
         case .makeASale: return "Sale"
         case .inventoryList: return "Inventory"
         case .salesHistory: return "Sales"
-        case .inventoryStatus: return "Reorder"
+        case .inventoryStatus: return "Status"
         case .settings: return "Settings"
         }
     }
     
-    var iconName: String {
+    var menuIconName: String {
         switch self {
         case .dashboard: return "square.grid.2x2.fill"
         case .makeASale: return "dollarsign.circle.fill"

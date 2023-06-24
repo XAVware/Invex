@@ -16,7 +16,7 @@ import SwiftUI
 //    @Published var isShowingDetail: Bool = false
     @Published var contentWidth: CGFloat
 //    @Published var detailWidth: CGFloat = 0
-    @Published var currentDisplay: DisplayStates = .inventoryList
+    @Published var currentDisplay: DisplayStates = .dashboard
     @Published var menuVisibility: NavigationSplitViewVisibility = .detailOnly
     
     @Published var fullWidth: CGFloat
@@ -41,16 +41,17 @@ import SwiftUI
         if detailSize == .hidden {
             expandDetail(size: .quarter)
         } else {
-            expandDetail(size: .hidden)
+            hideDetail()
         }
     }
     
     func toggleMenu() {
         if menuVisibility == .detailOnly {
-            menuVisibility = .all
+            
             if detailSize != .hidden {
                 hideDetail(animation: .easeOut)
             }
+            menuVisibility = .all
         } else {
             menuVisibility = .detailOnly
         }
@@ -84,7 +85,8 @@ import SwiftUI
     
     func inventoryListItemSelected(item: InventoryItemEntity?) {
         selectedItem = item
-        expandDetail(size: .third)
+        expandDetail(size: .full)
     }
+    
     
 }

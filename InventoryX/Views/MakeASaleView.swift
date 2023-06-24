@@ -157,6 +157,7 @@ struct MakeASaleView: View {
     var body: some View {
         VStack(spacing: 0) {
             buttonPanel
+                .padding(.top)
                 .background(secondaryBackground.edgesIgnoringSafeArea(.all))
             
             categorySelector
@@ -170,6 +171,8 @@ struct MakeASaleView: View {
             setDefaultCategory()
         }
     } //: Body
+    
+    
     
     
     private var buttonPanel: some View {

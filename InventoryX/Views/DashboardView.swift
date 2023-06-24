@@ -102,27 +102,8 @@ struct DashboardView: View {
                     .scaledToFit()
                     .foregroundColor(primaryBackground)
             }
+            
             Spacer()
-            
-            Button {
-                // Restock
-            } label: {
-                Image(systemName: "tray.and.arrow.down")
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(primaryBackground)
-                //                    .fontWeight(.semibold)
-            } //: Button
-            
-            Button {
-                navMan.inventoryListItemSelected(item: nil)
-            } label: {
-                Image(systemName: "plus")
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(primaryBackground)
-                //                    .fontWeight(.semibold)
-            } //: Button
         } //: HStack
         .modifier(TextMod(.body, .light, primaryBackground))
         .frame(height: toolbarHeight)
@@ -166,7 +147,7 @@ struct DashboardView: View {
             
         } label: {
             VStack(alignment: .leading) {
-                Image(systemName: DisplayStates.inventoryList.iconName)
+                Image(systemName: DisplayStates.inventoryList.menuIconName)
                     .resizable()
                     .scaledToFit()
                 //                            .modifier(TextMod(.title, .bold, lightFgColor))
@@ -190,7 +171,7 @@ struct DashboardView: View {
             
         } label: {
             VStack(alignment: .leading) {
-                Image(systemName: DisplayStates.settings.iconName)
+                Image(systemName: DisplayStates.settings.menuIconName)
                     .resizable()
                     .scaledToFit()
                 //                            .modifier(TextMod(.title, .bold, lightFgColor))
@@ -214,7 +195,7 @@ struct DashboardView: View {
             
         } label: {
             VStack(alignment: .leading) {
-                Image(systemName: DisplayStates.salesHistory.iconName)
+                Image(systemName: DisplayStates.salesHistory.menuIconName)
                     .resizable()
                     .scaledToFit()
                 //                            .modifier(TextMod(.title, .bold, lightFgColor))

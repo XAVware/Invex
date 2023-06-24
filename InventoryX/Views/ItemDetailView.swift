@@ -23,6 +23,14 @@ import RealmSwift
         setCategoryNames()
     }
     
+    func reset() {
+        itemName = ""
+        quantity = ""
+        retailPrice = ""
+        unitCost = ""
+        selectedCategoryName = "Select Category"
+    }
+    
     private func setCategoryNames() {
         do {
             let realm = try Realm()
@@ -54,12 +62,13 @@ import RealmSwift
 
 struct AddItemView: View {
     @StateObject var vm: AddItemViewModel = AddItemViewModel()
-    
+    @EnvironmentObject var navMan: NavigationManager
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
             secondaryBackground
+                .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 16) {
                 Text("New Item")
@@ -93,7 +102,9 @@ struct AddItemView: View {
                 Spacer()
                 
                 Button {
-                    vm.saveItem() { }
+                    vm.saveItem() {
+                        vm.reset()
+                    }
                 } label: {
                     Text("Save and Add Another")
                 }
@@ -101,7 +112,7 @@ struct AddItemView: View {
                 
                 Button {
                     vm.saveItem() {
-                        dismiss()
+                        navMan.hideDetail(animation: .easeOut)
                     }
                 } label: {
                     Text("Save and Finish")

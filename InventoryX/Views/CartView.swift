@@ -19,75 +19,93 @@ struct CartView: View {
         }
     } //: Body
     
-    private var cartView: some View {
-        VStack {
-            ScrollView {
-                VStack {
-                    ForEach(vm.cartItems, id: \.id) { item in
-                        VStack(alignment: .leading, spacing: 16) {
-                            HStack {
-                                Text(item.name ?? "Empty")
-                                    .modifier(TextMod(.title2, .semibold, .white))
-                                
-                                Spacer()
-                                
-                                Image(systemName: "trash")
-                                    .foregroundColor(.white)
-                            } //: HStack
-                            
-                            HStack {
-                                Text((item.retailPrice ?? -5).formatAsCurrencyString())
-                                    .modifier(TextMod(.body, .semibold, .white))
-                                
-                                Text("x")
-                                    .modifier(TextMod(.callout, .regular, .white))
-                                
-                                Text("\(item.qtyInCart ?? -4)")
-                                    .modifier(TextMod(.body, .semibold, .white))
-                                
-                            } //: HStack
-                        } //: VStack
-                        .padding(.vertical, 8)
-                        .background(.clear)
-                        .frame(maxWidth: 350, alignment: .leading)
-                        
-                        Divider().background(.white)
-                    } //: For Each
-                } //: VStack
-                .frame(maxHeight: .infinity)
-            } //: ScrollView
+    private var headerToolbar: some View {
+        HStack(spacing: 24) {
+            Spacer()
+            Text("Sale")
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .modifier(TextMod(.title3, .semibold, .white))
             
-            Divider().background(.white)
-            
-            HStack {
-                Text("Subtotal:")
-                    .modifier(TextMod(.title3, .semibold, lightFgColor))
-                
-                Spacer()
-                
-                Text(vm.cartSubtotal.formatAsCurrencyString())
-                    .modifier(TextMod(.title2, .semibold, lightFgColor))
-            } //: HStack
-            .padding(.vertical, 8)
-            
-            Button {
-                vm.checkoutTapped()
-            } label: {
-                Text("Check Out")
-                    .frame(maxWidth: .infinity)
-            }
-            .modifier(TextMod(.title3, .semibold, lightFgColor))
-            .padding(12)
-            .foregroundColor(darkFgColor)
-            .background(selectedButtonColor)
-            .cornerRadius(25)
-            
-            
-            Spacer().frame(height: 24)
-            
-        } //: VStack
+        } //: HStack
+        .modifier(TextMod(.body, .light, primaryBackground))
+        .frame(height: toolbarHeight)
         .padding(.horizontal)
-        .background(primaryBackground)
+    } //: Header Toolbar
+    
+    private var cartView: some View {
+        GeometryReader { geo in
+            VStack {
+                headerToolbar
+                ScrollView {
+                    VStack {
+                        ForEach(vm.cartItems, id: \.id) { item in
+                            VStack(alignment: .leading, spacing: 16) {
+                                HStack {
+                                    Text(item.name ?? "Empty")
+                                        .modifier(TextMod(.title2, .semibold, .white))
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemName: "trash")
+                                        .foregroundColor(.white)
+                                } //: HStack
+                                
+                                HStack {
+                                    Text((item.retailPrice ?? -5).formatAsCurrencyString())
+                                        .modifier(TextMod(.body, .semibold, .white))
+                                    
+                                    Text("x")
+                                        .modifier(TextMod(.callout, .regular, .white))
+                                    
+                                    Text("\(item.qtyInCart ?? -4)")
+                                        .modifier(TextMod(.body, .semibold, .white))
+                                    
+                                } //: HStack
+                            } //: VStack
+                            .padding(.vertical, 8)
+                            .background(.clear)
+                            .frame(maxWidth: 350, alignment: .leading)
+                            
+                            Divider().background(.white)
+                        } //: For Each
+                    } //: VStack
+                    .frame(maxHeight: .infinity)
+                } //: ScrollView
+                
+                Divider().background(.white)
+                
+                HStack {
+                    Text("Subtotal:")
+                        .modifier(TextMod(.body, .semibold, lightFgColor))
+                    
+                    Spacer()
+                    
+                    Text(vm.cartSubtotal.formatAsCurrencyString())
+                        .modifier(TextMod(.title3, .semibold, lightFgColor))
+                } //: HStack
+                .padding(.vertical, 8)
+                
+                Button {
+                    vm.checkoutTapped()
+                } label: {
+                    Text("Check Out")
+                        .frame(maxWidth: .infinity)
+                }
+                .modifier(TextMod(.title3, .semibold, lightFgColor))
+                .padding(12)
+                .foregroundColor(darkFgColor)
+                .background(selectedButtonColor)
+                .cornerRadius(25)
+                
+                Spacer().frame(height: 24)
+                
+            } //: VStack
+            .padding(.horizontal)
+            .background(primaryBackground)
+//            .onChange(of: geo.size.width) { newValue in
+//                print(newValue)
+//            }
+        } //: GeometryReader
     } //: CartView
     
     private var confirmSaleView: some View {
