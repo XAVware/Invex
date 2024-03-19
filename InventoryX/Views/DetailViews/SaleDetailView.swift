@@ -71,7 +71,7 @@ struct SaleDetailView: View {
                 .frame(height: 50)
                 .padding(.horizontal)
                 .modifier(TextMod(.body, .regular, .black))
-                .background(secondaryBackground)
+                .background(Theme.secondaryBackground)
                 
                 ScrollView(.vertical, showsIndicators: false) {
                     ForEach(sale.items.indices, id: \.self) { index in
@@ -96,7 +96,7 @@ struct SaleDetailView: View {
                         } //: HStack
                         .frame(height: 50)
                         .padding(.horizontal)
-                        .background(index % 2 == 0 ? Color(XSS.S.color90) : secondaryBackground)
+                        .background(index % 2 == 0 ? Theme.lightFgColor : Theme.secondaryBackground)
                         .modifier(TextMod(.body, .regular, .black))
                     } //: ForEach
                 } //: ScrollView
@@ -106,7 +106,7 @@ struct SaleDetailView: View {
             Spacer()
         } //: VStack
         .overlay(BackButton(), alignment: .topLeading)
-        .background(Color(XSS.S.color90))
+        .background(Theme.lightFgColor)
     } //: Body
     
 }
@@ -116,6 +116,7 @@ struct SaleDetailView_Previews: PreviewProvider {
     @State static var sale: SaleEntity = SaleEntity.todaySale1
     static var previews: some View {
         SaleDetailView(sale: sale)
-            .modifier(PreviewMod())
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

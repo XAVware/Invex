@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ItemDetailView: View {
-    @Binding var selectedItem: InventoryItemEntity?
+    @Binding var selectedItem: ItemEntity?
     
     var body: some View {
         if selectedItem == nil {
@@ -155,16 +155,17 @@ struct ItemDetailView: View {
             } //: VStack
             .padding()
             .frame(maxWidth: 500)
-            .background(lightFgColor)
+            .background(Theme.lightFgColor)
         } //: If - Else
     } //: Body
 }
 
 struct ItemDetailView_Previews: PreviewProvider {
-    @State static var selectedItem: InventoryItemEntity?
+    @State static var selectedItem: ItemEntity?
     static var previews: some View {
         ItemDetailView(selectedItem: $selectedItem)
-            .modifier(PreviewMod())
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewInterfaceOrientation(.landscapeLeft)
             .previewLayout(.sizeThatFits)
     }
 }

@@ -42,7 +42,7 @@ struct QuantitySelector: View {
             presetQuantities
                 .padding(.bottom, 8)
         } //: VStack
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(XSS.S.color10), lineWidth: 0.5))
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Theme.darkFgColor, lineWidth: 0.5))
     } //: Body
     
     private var topRow: some View {
@@ -80,7 +80,7 @@ struct QuantitySelector: View {
                         .frame(width: 40)
                 }
                 .padding(8)
-                .background(Color(XSS.S.color30))
+                .background(Theme.logoColor)
                 .clipShape(Capsule())
                 .shadow(radius: 4)
                 
@@ -115,7 +115,7 @@ struct QuantitySelector: View {
             }
             .frame(width: 45, height: 45)
             .shadow(radius: 2)
-            .tint(lightFgColor)
+            .tint(Theme.lightFgColor)
             
             Text("\(selectedQuantity)")
                 .modifier(TextMod(.title2, .bold, .black))
@@ -130,7 +130,7 @@ struct QuantitySelector: View {
             }
             .frame(width: 45, height: 45)
             .shadow(radius: 2)
-            .tint(lightFgColor)
+            .tint(Theme.lightFgColor)
         }//: HStack
     } //: Custom Picker
 }

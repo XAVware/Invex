@@ -23,20 +23,22 @@ struct MenuView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
+                
                 VStack {
                     Text("Ryan")
-                        .modifier(TextMod(.title3, .medium, secondaryBackground))
+                        .modifier(TextMod(.title3, .medium, Theme.secondaryBackground))
+                    
                     Text("Admin")
-                        .modifier(TextMod(.footnote, .regular, lightFgColor))
+                        .modifier(TextMod(.footnote, .regular, Theme.lightFgColor))
                 }
                 
             } //: HStack
-            .foregroundColor(secondaryBackground)
+            .foregroundColor(Theme.secondaryBackground)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading)
             
             Divider()
-                .background(secondaryBackground)
+                .background(Theme.secondaryBackground)
                 .padding(.vertical)
             
             ForEach(DisplayStates.allCases, id: \.self) { displayState in
@@ -53,7 +55,7 @@ struct MenuView: View {
                 .padding()
                 .frame(height: 50)
                 .frame(maxWidth: .infinity)
-                .overlay(currentDisplay == displayState ? lightFgColor.opacity(0.3) : nil)
+                .overlay(currentDisplay == displayState ? Theme.lightFgColor.opacity(0.3) : nil)
             }
             
             Spacer()
@@ -72,8 +74,8 @@ struct MenuView: View {
             .frame(height: 50)
             .frame(maxWidth: .infinity)
         } //: VStack
-        .background(primaryBackground)
-        .modifier(TextMod(.title3, .semibold, lightFgColor))
+        .background(Theme.primaryBackground)
+        .modifier(TextMod(.title3, .semibold, Theme.lightFgColor))
         .edgesIgnoringSafeArea(.vertical)
     } //: Body
     

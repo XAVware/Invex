@@ -12,21 +12,22 @@ struct LogoView: View {
     var body: some View {
         HStack(spacing: 0) {
             Text("Inventory")
-                .modifier(TextMod(.title, .semibold, Color(XSS.S.color30)))
+                .modifier(TextMod(.title, .semibold, Theme.logoColor))
                 .offset(y: -2)
             
             Text("X")
-                .modifier(TextMod(.largeTitle, .semibold, Color(XSS.S.color30)))
+                .modifier(TextMod(.largeTitle, .semibold, Theme.logoColor))
                 .italic()
                 .offset(x: -2)
         } //: HStack
-        .foregroundColor(Color(XSS.S.color30))
+        .foregroundColor(Theme.logoColor)
     } //: Body
 }
 
 struct LogoView_Previews: PreviewProvider {
     static var previews: some View {
         LogoView()
-            .modifier(PreviewMod())
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

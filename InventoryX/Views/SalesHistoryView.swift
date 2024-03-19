@@ -93,14 +93,14 @@ struct SalesHistoryView: View {
                     .padding(.bottom)
                 
                 Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatAsCurrencyString())")
-                    .modifier(TextMod(.title3, .semibold, darkFgColor))
+                    .modifier(TextMod(.title3, .semibold, Theme.darkFgColor))
                 
                 
                 Chart {
                     ForEach(getGroupedSales()) { group in
                         BarMark(x: .value("Hour", group.label),
                                 y: .value("Value", group.total))
-                        .foregroundStyle(primaryBackground)
+                        .foregroundStyle(Theme.primaryBackground)
                         .cornerRadius(8)
                     }
                 }
@@ -146,15 +146,15 @@ struct SalesHistoryView: View {
                 } //: List
                 .scrollContentBackground(.hidden)
                 .frame(maxWidth: 0.6 * geo.size.width)
-                .background(lightFgColor)
+                .background(Theme.lightFgColor)
                 .cornerRadius(15)
                 
             } //: VStack
             .padding()
-            .background(secondaryBackground)
+            .background(Theme.secondaryBackground)
             .onAppear {
                 updateSales(newRange: selectedDateRange)
-                print(UserManager.shared.getLoggedInUserName())
+//                print(UserManager.shared.getLoggedInUserName())
             }
             .sheet(item: $selectedSale, onDismiss: {
                 selectedSale = nil
@@ -176,13 +176,13 @@ struct SalesHistoryView: View {
                 Image(systemName: "sidebar.squares.leading")
                     .resizable()
                     .scaledToFit()
-                    .foregroundColor(primaryBackground)
+                    .foregroundColor(Theme.primaryBackground)
             }
             
             Spacer()
             
             Text("Sales History")
-                .modifier(TextMod(.title3, .semibold, darkFgColor))
+                .modifier(TextMod(.title3, .semibold, Theme.darkFgColor))
             
             Spacer()
             
@@ -194,9 +194,9 @@ struct SalesHistoryView: View {
             } label: {
                 Text("Range")
             }
-            .tint(darkFgColor)
+            .tint(Theme.darkFgColor)
         } //: HStack
-        .modifier(TextMod(.body, .light, primaryBackground))
+        .modifier(TextMod(.body, .light, Theme.primaryBackground))
         .frame(height: toolbarHeight)
         .padding(.horizontal)
     } //: Header Toolbar
@@ -221,7 +221,8 @@ struct SalesHistoryView: View {
 struct SalesHistoryView_Previews: PreviewProvider {
     static var previews: some View {
         SalesHistoryView()
-            .modifier(PreviewMod())
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }
 

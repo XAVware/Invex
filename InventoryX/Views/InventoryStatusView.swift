@@ -10,10 +10,10 @@ import RealmSwift
 
 struct InventoryStatusView: View {
     @EnvironmentObject var navMan: NavigationManager
-    @ObservedResults(CategoryEntity.self) var categories
-    @ObservedResults(InventoryItemEntity.self) var items
+    @ObservedResults(DepartmentEntity.self) var categories
+    @ObservedResults(ItemEntity.self) var items
     
-    func getRestockStatus(for item: InventoryItemEntity) -> Bool {
+    func getRestockStatus(for item: ItemEntity) -> Bool {
         guard let category = item.category.first?.thaw() else { return true }
         let restockNum = category.restockNumber
         return item.onHandQty > restockNum ? false : true
@@ -34,6 +34,7 @@ struct InventoryStatusView: View {
 struct InventoryStatusView_Previews: PreviewProvider {
     static var previews: some View {
         InventoryStatusView()
-            .modifier(PreviewMod())
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

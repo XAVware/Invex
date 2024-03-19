@@ -10,7 +10,7 @@ import RealmSwift
 
 struct InventoryView: View {
     @EnvironmentObject var navMan: NavigationManager
-    @ObservedResults(InventoryItemEntity.self) var items
+    @ObservedResults(ItemEntity.self) var items
     @State var sortBy: String = "name"
     @State var isAscending: Bool = true
     //    @State var selectedItem: InventoryItemEntity?
@@ -27,7 +27,7 @@ struct InventoryView: View {
         navMan.inventoryListItemSelected(item: item)
     }
     
-    func getItems() -> Results<InventoryItemEntity> {
+    func getItems() -> Results<ItemEntity> {
         let observedItems = items.sorted(byKeyPath: sortBy, ascending: isAscending)
         return observedItems
     }
@@ -55,7 +55,7 @@ struct InventoryView: View {
             
             Spacer()
         } //: VStack
-        .background(Color(XSS.S.color90))
+        .background(Theme.lightFgColor)
         
     } //: Body
     
@@ -67,7 +67,7 @@ struct InventoryView: View {
                 Image(systemName: "sidebar.squares.leading")
                     .resizable()
                     .scaledToFit()
-                    .foregroundColor(primaryBackground)
+                    .foregroundColor(Theme.primaryBackground)
             }
             Spacer()
             
@@ -77,7 +77,7 @@ struct InventoryView: View {
                 Image(systemName: "tray.and.arrow.down")
                     .resizable()
                     .scaledToFit()
-                    .foregroundColor(primaryBackground)
+                    .foregroundColor(Theme.primaryBackground)
             } //: Button
             
             Button {
@@ -86,10 +86,10 @@ struct InventoryView: View {
                 Image(systemName: "plus")
                     .resizable()
                     .scaledToFit()
-                    .foregroundColor(primaryBackground)
+                    .foregroundColor(Theme.primaryBackground)
             } //: Button
         } //: HStack
-        .modifier(TextMod(.body, .light, primaryBackground))
+        .modifier(TextMod(.body, .light, Theme.primaryBackground))
         .frame(height: toolbarHeight)
         .padding(.horizontal)
     } //: Header Toolbar
@@ -152,7 +152,7 @@ struct InventoryView: View {
         } //: HStack
         .frame(height: 50)
         .padding(.horizontal)
-        .background(secondaryBackground)
+        .background(Theme.secondaryBackground)
         .modifier(TextMod(.body, .regular, .black))
     } //: Column Headers
     
@@ -180,7 +180,7 @@ struct InventoryView: View {
             } //: HStack
             .frame(height: 50)
             .padding(.horizontal)
-            .background(index % 2 == 0 ? Color(XSS.S.color90) : secondaryBackground)
+            .background(index % 2 == 0 ? Theme.lightFgColor : Theme.secondaryBackground)
             .modifier(TextMod(.body, .regular, .black))
             .onTapGesture {
                 itemTapped(itemId: getItems()[index]._id)
@@ -192,7 +192,8 @@ struct InventoryView: View {
 struct InventoryView_Previews: PreviewProvider {
     static var previews: some View {
         InventoryView()
-            .modifier(PreviewMod())
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewInterfaceOrientation(.landscapeLeft)
             .environmentObject(NavigationManager())
     }
 }

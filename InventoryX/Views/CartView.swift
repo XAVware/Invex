@@ -15,7 +15,7 @@ struct CartView: View {
             confirmSaleView
         } else {
             cartView
-                .background(primaryBackground)            
+                .background(Theme.primaryBackground)            
         }
     } //: Body
     
@@ -27,7 +27,7 @@ struct CartView: View {
                 .modifier(TextMod(.title3, .semibold, .white))
             
         } //: HStack
-        .modifier(TextMod(.body, .light, primaryBackground))
+        .modifier(TextMod(.body, .light, Theme.primaryBackground))
         .frame(height: toolbarHeight)
         .padding(.horizontal)
     } //: Header Toolbar
@@ -76,12 +76,12 @@ struct CartView: View {
                 
                 HStack {
                     Text("Subtotal:")
-                        .modifier(TextMod(.body, .semibold, lightFgColor))
+                        .modifier(TextMod(.body, .semibold, Theme.lightFgColor))
                     
                     Spacer()
                     
                     Text(vm.cartSubtotal.formatAsCurrencyString())
-                        .modifier(TextMod(.title3, .semibold, lightFgColor))
+                        .modifier(TextMod(.title3, .semibold, Theme.lightFgColor))
                 } //: HStack
                 .padding(.vertical, 8)
                 
@@ -91,17 +91,17 @@ struct CartView: View {
                     Text("Check Out")
                         .frame(maxWidth: .infinity)
                 }
-                .modifier(TextMod(.title3, .semibold, lightFgColor))
+                .modifier(TextMod(.title3, .semibold, Theme.lightFgColor))
                 .padding(12)
-                .foregroundColor(darkFgColor)
-                .background(selectedButtonColor)
+                .foregroundColor(Theme.darkFgColor)
+                .background(Theme.selectedButtonColor)
                 .cornerRadius(25)
                 
                 Spacer().frame(height: 24)
                 
             } //: VStack
             .padding(.horizontal)
-            .background(primaryBackground)
+            .background(Theme.primaryBackground)
 //            .onChange(of: geo.size.width) { newValue in
 //                print(newValue)
 //            }
@@ -113,10 +113,10 @@ struct CartView: View {
             VStack(spacing: 32) {
                 VStack(spacing: 8) {
                     Text("Amount Due:")
-                        .modifier(TextMod(.largeTitle, .semibold, lightFgColor))
+                        .modifier(TextMod(.largeTitle, .semibold, Theme.lightFgColor))
                     
                     Text(vm.cartSubtotal.formatAsCurrencyString())
-                        .modifier(TextMod(.system(size: 48), .semibold, lightFgColor))
+                        .modifier(TextMod(.system(size: 48), .semibold, Theme.lightFgColor))
                 } //: VStack
                 
                 VStack {
@@ -133,9 +133,9 @@ struct CartView: View {
                         Text("Subtotal")
                             .frame(maxWidth: .infinity, alignment: .trailing)
                     } //: HStack
-                    .modifier(TextMod(.callout, .regular, lightFgColor))
+                    .modifier(TextMod(.callout, .regular, Theme.lightFgColor))
                     
-                    Divider().background(lightFgColor)
+                    Divider().background(Theme.lightFgColor)
                     
                     ScrollView(.vertical, showsIndicators: false) {
                         VStack {
@@ -153,10 +153,10 @@ struct CartView: View {
                                     Text(item.cartItemSubtotal.formatAsCurrencyString())
                                         .frame(maxWidth: .infinity, alignment: .trailing)
                                 } //: HStack
-                                .modifier(TextMod(.callout, .semibold, lightFgColor))
+                                .modifier(TextMod(.callout, .semibold, Theme.lightFgColor))
                                 .frame(height: 30)
                                 
-                                Divider().background(secondaryBackground).opacity(0.3)
+                                Divider().background(Theme.secondaryBackground).opacity(0.3)
                             } //: ForEach
                         } //: VStack
                     } //: ScrollView
@@ -176,7 +176,7 @@ struct CartView: View {
                     } label: {
                         Text("Cancel Sale")
                             .underline()
-                            .modifier(TextMod(.body, .regular, lightFgColor))
+                            .modifier(TextMod(.body, .regular, Theme.lightFgColor))
                             .padding()
                     }
                 } //: VStack
@@ -192,7 +192,8 @@ struct CartView_Previews: PreviewProvider {
     @State static var navMan: NavigationManager = NavigationManager()
     static var previews: some View {
         CartView()
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewInterfaceOrientation(.landscapeLeft)
             .environmentObject(MakeASaleViewModel())
-            .modifier(PreviewMod())
     }
 }

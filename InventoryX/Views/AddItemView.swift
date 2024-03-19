@@ -34,7 +34,7 @@ import RealmSwift
     private func setCategoryNames() {
         do {
             let realm = try Realm()
-            let results = realm.objects(CategoryEntity.self)
+            let results = realm.objects(DepartmentEntity.self)
             
             for index in 0 ..< results.count {
                 let tempId: ObjectId = results[index]._id
@@ -44,7 +44,7 @@ import RealmSwift
                 categoryNames.append(tempName)
             }
         } catch {
-            print(error.localizedDescription)
+            LogService(self).error("Error setting category names: \(error.localizedDescription)")
         }
     }
     
@@ -52,10 +52,18 @@ import RealmSwift
         guard itemName.isNotEmpty, quantity.isNotEmpty, retailPrice.isNotEmpty else { return }
         guard selectedCategoryName != categoryNames[0] else { return }
         
-        let newItem = InventoryItemEntity(name: itemName, retailPrice: Double(retailPrice) ?? 1.0, avgCostPer: Double(unitCost) ?? 0.5, onHandQty: Int(quantity) ?? 10)
+        let newItem = ItemEntity(name: itemName, retailPrice: Double(retailPrice) ?? 1.0, avgCostPer: Double(unitCost) ?? 0.5, onHandQty: Int(quantity) ?? 10)
         
-        RealmMinion.addNewItem(newItem: newItem, categoryName: selectedCategoryName) {
-            completion()
+        Task {
+            do {
+                guard let departmentResult = try await DataService.fetchDepartment(named: selectedCategoryName) else { return }
+                
+                try await DataService.add(newItem, to: departmentResult)
+                completion()
+                
+            } catch {
+                LogService(self).error("Error saving item to Realm: \(error.localizedDescription)")
+            }
         }
     } //: Save Item
 }
@@ -67,7 +75,7 @@ struct AddItemView: View {
     
     var body: some View {
         ZStack {
-            secondaryBackground
+            Theme.secondaryBackground
                 .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 32) {
@@ -82,64 +90,64 @@ struct AddItemView: View {
                     }
                 } label: { }
                 .padding(.horizontal)
-                .tint(darkFgColor)
+                .tint(Theme.darkFgColor)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 10).stroke(darkFgColor, lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 10).stroke(Theme.darkFgColor, lineWidth: 1)
                 )
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Item Name")
-                        .modifier(TextMod(.body, .regular, darkFgColor))
+                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
                     
-                    TextField("", text: $vm.quantity)
+                    TextField("", text: $vm.itemName)
                         .frame(height: 40)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 6).stroke(darkFgColor, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 6).stroke(Theme.darkFgColor, lineWidth: 1)
                         )
                 } //: VStack
                 
                 HStack {
                     Text("On-Hand Qty.")
-                        .modifier(TextMod(.body, .regular, darkFgColor))
+                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
                     
                     Spacer()
                     
                     TextField("", text: $vm.quantity)
                         .frame(width: 120, height: 40)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 8).stroke(darkFgColor, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 8).stroke(Theme.darkFgColor, lineWidth: 1)
                         )
                 } //: HStack
 
                 HStack {
                     Text("Retail Price")
-                        .modifier(TextMod(.body, .regular, darkFgColor))
+                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
                     
                     Spacer()
                     
                     Text("$")
-                        .modifier(TextMod(.body, .regular, darkFgColor))
+                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
                     
                     TextField("", text: $vm.retailPrice)
                         .frame(width: 120, height: 40)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 8).stroke(darkFgColor, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 8).stroke(Theme.darkFgColor, lineWidth: 1)
                         )
                 } //: HStack
                 
                 HStack {
                     Text("Unit Cost")
-                        .modifier(TextMod(.body, .regular, darkFgColor))
+                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
                     
                     Spacer()
                     
                     Text("$")
-                        .modifier(TextMod(.body, .regular, darkFgColor))
+                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
                     
                     TextField("", text: $vm.unitCost)
                         .frame(width: 120, height: 40)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 8).stroke(darkFgColor, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 8).stroke(Theme.darkFgColor, lineWidth: 1)
                         )
                 } //: HStack
                 

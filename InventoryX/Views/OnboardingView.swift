@@ -16,18 +16,18 @@ import RealmSwift
     //    @Published var currentUser: UserEntity?
     
     //Categories
-    @Published var tempCategories: [CategoryEntity] = []
+    @Published var tempCategories: [DepartmentEntity] = []
     @Published var newCategoryName: String = ""
     @Published var thresholdString: String = "10"
     
     //Profile
-    @Published var newProfileName: String = ""
-    @Published var newProfileEmail: String = ""
+//    @Published var newProfileName: String = ""
+//    @Published var newProfileEmail: String = ""
     
     enum OnboardingState: Int, CaseIterable {
         case start = 0
         case categoryNames = 1
-        case profileSetup = 2
+//        case profileSetup = 2
         
         var buttonText: String {
             switch self {
@@ -35,8 +35,8 @@ import RealmSwift
                 return "Get Started"
             case .categoryNames:
                 return "Save & Continue"
-            case .profileSetup:
-                return "Finish"
+//            case .profileSetup:
+//                return "Finish"
             }
         }
         
@@ -75,11 +75,11 @@ import RealmSwift
                 addTempCategory()
             }
             
-        case .profileSetup:
-            guard let _ = getAdmin() else {
-                print("Saving user failed")
-                return
-            }
+//        case .profileSetup:
+//            guard let _ = getAdmin() else {
+//                print("Saving user failed")
+//                return
+//            }
             //            saveUser(user)
         }
         
@@ -99,47 +99,47 @@ import RealmSwift
             if category.name == newCategoryName { return }
         }
         
-        let newCategory = CategoryEntity(name: newCategoryName, restockNum: threshold)
+        let newCategory = DepartmentEntity(name: newCategoryName, restockNum: threshold)
         tempCategories.append(newCategory)
         newCategoryName = ""
         thresholdString = "10"
     }
     
-    func removeTempCategory(_ category: CategoryEntity) {
+    func removeTempCategory(_ category: DepartmentEntity) {
         guard let index = tempCategories.firstIndex(of: category) else { return }
         tempCategories.remove(at: index)
     }
     
     // MARK: - USER FUNCTIONS
-    func getAdmin() -> UserEntity? {
-        guard newProfileName.isNotEmpty else { return nil }
-        let name: String = newProfileName
-        var email: String?
-        
-        if newProfileEmail.isNotEmpty {
-            email = newProfileEmail
-        }
-        
-        let newUser = UserEntity()
-        newUser.profileName = name
-        newUser.email = email
-        
-        newUser.role = .admin
-        
-        return newUser
-    }
+//    func getAdmin() -> UserEntity? {
+//        guard newProfileName.isNotEmpty else { return nil }
+//        let name: String = newProfileName
+//        var email: String?
+//        
+//        if newProfileEmail.isNotEmpty {
+//            email = newProfileEmail
+//        }
+//        
+//        let newUser = UserEntity()
+//        newUser.profileName = name
+//        newUser.email = email
+//        
+//        newUser.role = .admin
+//        
+//        return newUser
+//    }
     
     func finishOnboarding() {
         debugPrint("Finishing onboarding process...")
-        guard let newUser = getAdmin() else { return }
+//        guard let newUser = getAdmin() else { return }
         
         do {
             let realm = try Realm()
             try realm.write ({
                 realm.add(tempCategories)
-                realm.add(newUser)
+//                realm.add(newUser)
             })
-            UserManager.shared.loginUser(newUser)
+//            UserManager.shared.loginUser(newUser)
             debugPrint("Categories and user saved")
         } catch {
 //            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
@@ -155,13 +155,13 @@ import RealmSwift
 struct OnboardingView: View {
 //    @EnvironmentObject var userManager: UserManager
     @StateObject var vm: OnboardingViewModel = OnboardingViewModel()
-    @StateObject var alertManager: AlertManager = AlertManager.shared
-    @ObservedResults(CategoryEntity.self) var categories
+//    @StateObject var alertManager: AlertManager = AlertManager.shared
+    @ObservedResults(DepartmentEntity.self) var categories
     
     var body: some View {
         GeometryReader { geo in
             ZStack {
-                primaryBackground
+                Theme.primaryBackground
                     .edgesIgnoringSafeArea(.all)
                 
                 VStack {
@@ -172,18 +172,18 @@ struct OnboardingView: View {
                     case .categoryNames:
                         categoriesView
                         
-                    case .profileSetup:
-                        profileSetup
+//                    case .profileSetup:
+//                        profileSetup
                     } //: Switch
                 } //: VStack
                 .padding()
                 .frame(maxWidth: 0.75 * geo.size.width)
-                .background(secondaryBackground)
+                .background(Theme.secondaryBackground)
                 .cornerRadius(20)
                 .padding()
-                .alert(isPresented: $alertManager.isShowing) {
-                    alertManager.alert
-                }
+//                .alert(isPresented: $alertManager.isShowing) {
+//                    alertManager.alert
+//                }
             } //: ZStack
         }
     } //: Body
@@ -206,7 +206,7 @@ struct OnboardingView: View {
         GeometryReader { geo in
             VStack(spacing: 16) {
                 Text("Setup Categories")
-                    .modifier(TextMod(.largeTitle, .bold, darkFgColor))
+                    .modifier(TextMod(.largeTitle, .bold, Theme.darkFgColor))
                 
                 HStack(spacing: 8) {
                     VStack(alignment: .leading, spacing: 8) {
@@ -257,10 +257,10 @@ struct OnboardingView: View {
                         Text("Save and Add Another")
                         Image(systemName: "plus")
                     } //: HStack
-                    .modifier(TextMod(.body, .regular, darkFgColor))
+                    .modifier(TextMod(.body, .regular, Theme.darkFgColor))
                     .frame(maxWidth: 0.35 * geo.size.width, maxHeight: 32)
                 }
-                .overlay(RoundedRectangle(cornerRadius: 10).stroke(primaryBackground, lineWidth: 1))
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Theme.primaryBackground, lineWidth: 1))
                 
                 Spacer()
                 
@@ -314,61 +314,61 @@ struct OnboardingView: View {
     
     
     // MARK: - PROFILE
-    private var profileSetup: some View {
-        GeometryReader { geo in
-            VStack {
-                Text("Profile Setup")
-                    .modifier(TextMod(.largeTitle, .bold, darkFgColor))
-                
-                VStack(spacing: 24) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Create Admin Profile")
-                                .modifier(TextMod(.title3, .bold, .black))
-                            
-                            Text("Your admin profile will give you full access to the app. You can create other accounts later.")
-                                .modifier(TextMod(.footnote, .thin, .black))
-                                .multilineTextAlignment(.leading)
-                        } //: VStack
-                        .frame(width: 0.4 * geo.size.width)
-                        
-                        Spacer()
-                        
-                        AnimatedTextField(boundTo: $vm.newProfileName, placeholder: "Profile Name")
-                            .autocapitalization(UITextAutocapitalizationType.words)
-                            .frame(width: 0.4 * geo.size.width)
-                    } //: HStack
-                    
-                    Divider().background(secondaryBackground)
-                                        
-                    HStack(spacing: 32) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Add An Email")
-                                .modifier(TextMod(.title3, .bold, .black))
-                                                        
-                            Text("If you add an email you can receive email notifications when item inventory is low.")
-                                .modifier(TextMod(.footnote, .thin, .black))
-                                .multilineTextAlignment(.leading)
-                        } //: VStack
-                        .frame(width: 0.4 * geo.size.width)
-                        
-                        Spacer()
-                        
-                        AnimatedTextField(boundTo: $vm.newProfileEmail, placeholder: "Email")
-                            .autocapitalization(UITextAutocapitalizationType.none)
-                            .frame(width: 0.4 * geo.size.width)
-                    } //: HStack
-                    
-                    Spacer()
-                } //: VStack
-                
-                continueButton
-            } //: VStack
-            .frame(width: 0.9 * geo.size.width)
-            .padding(.vertical)
-            .frame(maxWidth: .infinity)
-        } //: Geometry Reader
-    } //: Profile Setup
+//    private var profileSetup: some View {
+//        GeometryReader { geo in
+//            VStack {
+//                Text("Profile Setup")
+//                    .modifier(TextMod(.largeTitle, .bold, Theme.darkFgColor))
+//                
+//                VStack(spacing: 24) {
+//                    HStack {
+//                        VStack(alignment: .leading, spacing: 8) {
+//                            Text("Create Admin Profile")
+//                                .modifier(TextMod(.title3, .bold, .black))
+//                            
+//                            Text("Your admin profile will give you full access to the app. You can create other accounts later.")
+//                                .modifier(TextMod(.footnote, .thin, .black))
+//                                .multilineTextAlignment(.leading)
+//                        } //: VStack
+//                        .frame(width: 0.4 * geo.size.width)
+//                        
+//                        Spacer()
+//                        
+////                        AnimatedTextField(boundTo: $vm.newProfileName, placeholder: "Profile Name")
+////                            .autocapitalization(UITextAutocapitalizationType.words)
+////                            .frame(width: 0.4 * geo.size.width)
+//                    } //: HStack
+//                    
+//                    Divider().background(Theme.secondaryBackground)
+//                                        
+//                    HStack(spacing: 32) {
+//                        VStack(alignment: .leading, spacing: 8) {
+//                            Text("Add An Email")
+//                                .modifier(TextMod(.title3, .bold, .black))
+//                                                        
+//                            Text("If you add an email you can receive email notifications when item inventory is low.")
+//                                .modifier(TextMod(.footnote, .thin, .black))
+//                                .multilineTextAlignment(.leading)
+//                        } //: VStack
+//                        .frame(width: 0.4 * geo.size.width)
+//                        
+//                        Spacer()
+//                        
+////                        AnimatedTextField(boundTo: $vm.newProfileEmail, placeholder: "Email")
+////                            .autocapitalization(UITextAutocapitalizationType.none)
+////                            .frame(width: 0.4 * geo.size.width)
+//                    } //: HStack
+//                    
+//                    Spacer()
+//                } //: VStack
+//                
+//                continueButton
+//            } //: VStack
+//            .frame(width: 0.9 * geo.size.width)
+//            .padding(.vertical)
+//            .frame(maxWidth: .infinity)
+//        } //: Geometry Reader
+//    } //: Profile Setup
     
     
     private var continueButton: some View {
@@ -386,6 +386,7 @@ struct OnboardingView_Previews: PreviewProvider {
     @State static var onboarding: Bool = true
     static var previews: some View {
         OnboardingView()
-            .modifier(PreviewMod())
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }

@@ -15,13 +15,13 @@ struct SettingsView: View {
         case createDaySales
         case createSampleSales
         
-        var action: () {
-            switch self {
-            case .resetAll:             return RealmMinion.deleteAllFromRealm()
-            case .createDaySales:       return RealmMinion.createRandomSales(qty: 100)
-            case .createSampleSales:    return RealmMinion.createRandomSalesToday(qty: 20)
-            }
-        }
+//        var action: () {
+//            switch self {
+//            case .resetAll:             return DataService.resetRealm()
+//            case .createDaySales:       return DataService.createRandomSales(qty: 100)
+//            case .createSampleSales:    return DataService.createRandomSalesToday(qty: 20)
+//            }
+//        }
         
         var buttonText: String {
             switch self {
@@ -40,9 +40,9 @@ struct SettingsView: View {
             
             ForEach(Settings.allCases, id: \.self) { setting in
                 Button {
-                    setting.action
+//                    setting.action
                     if setting == .resetAll {
-                        navMan.changeDisplay(to: .dashboard)
+                        navMan.changeDisplay(to: .makeASale)
                     }
                 } label: {
                     Text(setting.buttonText)
@@ -51,7 +51,7 @@ struct SettingsView: View {
                 .padding()
                 .frame(height: 50)
                 .frame(maxWidth: .infinity)
-                .modifier(TextMod(.title3, .semibold, darkFgColor))
+                .modifier(TextMod(.title3, .semibold, Theme.darkFgColor))
             } //: For Each
             
 //            Button {
@@ -86,7 +86,7 @@ struct SettingsView: View {
             
             Spacer()
         } //: VStack
-        .background(secondaryBackground)
+        .background(Theme.secondaryBackground)
     }
     
     private var headerToolbar: some View {
@@ -97,7 +97,7 @@ struct SettingsView: View {
                 Image(systemName: "sidebar.squares.leading")
                     .resizable()
                     .scaledToFit()
-                    .foregroundColor(primaryBackground)
+                    .foregroundColor(Theme.primaryBackground)
             }
             Spacer()
             
@@ -109,11 +109,11 @@ struct SettingsView: View {
                     .resizable()
                     .scaledToFit()
 //                    .frame(width: 30)
-                    .foregroundColor(primaryBackground)
+                    .foregroundColor(Theme.primaryBackground)
             } //: Button
             
         } //: HStack
-        .modifier(TextMod(.body, .light, primaryBackground))
+        .modifier(TextMod(.body, .light, Theme.primaryBackground))
         .frame(height: toolbarHeight)
         .padding(.horizontal)
     } //: Header Toolbar

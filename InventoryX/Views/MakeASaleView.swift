@@ -8,233 +8,159 @@
 import SwiftUI
 import RealmSwift
 
-class MakeASaleViewModel: ObservableObject {
-    @Published var cartItems: [InventoryItemModel] = []
-    //    @Published var cartItems: [InventoryItemModel] = [InventoryItemModel(id: InventoryItemEntity.item1._id, name: InventoryItemEntity.item1.name, retailPrice: 1.00, qtyInCart: 2)]
-    @Published var isConfirmingSale: Bool = false
-//    @Published var isShowingCartPreview: Bool = true
-    
-    var cartSubtotal: Double {
-        var tempTotal: Double = 0
-        for item in cartItems {
-            guard let retailPrice = item.retailPrice else { return -2 }
-            guard let qtyInCart = item.qtyInCart else { return -3 }
-            tempTotal += retailPrice * Double(qtyInCart)
-        }
-        return tempTotal
-    }
-    
-    func itemTapped(item: InventoryItemEntity) {
-        if let _ = cartItems.first(where: { $0.id == item._id }) {
-            // Item is already in cart, adjust quantity
-            adjustQuantityInCart(item: item, by: 1)
-        } else {
-            //Item is not already in cart, append
-            addItem(item)
-        }
-    }
-    
-    func checkoutTapped() {
-        //Remove items from cart if the quantity is 0 and check that there are still items in cart.
-        cartItems.removeAll (where: { $0.qtyInCart == 0 })
-        guard !cartItems.isEmpty else { return }
-        
-        //Display Confirmation Page in View
-        //View listens for change of isConfirming and hides/shows the menu.
-        isConfirmingSale = true
-    }
-    
-    func finalizeTapped() {
-        finalizeSale()
-    }
-    
-    func cancelTapped() {
-        returnToMakeASale()
-    }
-    
-    func getColumns(gridWidth: CGFloat) -> [GridItem] {
-        let itemSize = gridWidth * 0.20
-        //        let numberOfColums = 4
-        let itemSpacing = gridWidth * 0.05
-        
-        let columns = [
-            GridItem(.fixed(itemSize), spacing: itemSpacing),
-            GridItem(.fixed(itemSize), spacing: itemSpacing),
-            GridItem(.fixed(itemSize), spacing: itemSpacing),
-            GridItem(.fixed(itemSize), spacing: itemSpacing)
-        ]
-        return columns
-    }
-    
-    // MARK: - PRIVATE FUNCTIONS
-    
-    private func addItem(_ item: InventoryItemEntity) {
-        let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: 1)
-        cartItems.append(tempCartItem)
-    }
-    
-    private func adjustQuantityInCart(item: InventoryItemEntity, by amount: Int) {
-        guard let existingItem = cartItems.first(where: { $0.id == item._id }) else { return }
-        guard let index = cartItems.firstIndex(where: { $0.id == item._id }) else { return }
-        let newQty = (existingItem.qtyInCart ?? -2) + 1
-        //FOR TESTING
-        let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: newQty)
-        cartItems[index] = tempCartItem
-    }
-    
-    private func finalizeSale() {
-        //Subtract the number sold from the original on hand quantity and update the item in Realm
-        cartItems.forEach({ item in
-            
-            // When Checkout is first tapped, all items that have a nil or 0 qtyInCart are removed from cartItems array. This line should not be necessary. Maybe use closure to pass $0 to funtion.
-            guard let qtySold = item.qtyInCart else { return }
-            
-            do {
-                let realm = try Realm()
-                guard let result = realm.object(ofType: InventoryItemEntity.self, forPrimaryKey: item.id) else {
-                    print("Error getting result")
-                    return
-                }
-                
-                try realm.write {
-                    result.onHandQty = result.onHandQty - qtySold
-                }
-                print("Finished saving sale. New Qty should be \(result.onHandQty - qtySold)")
-            } catch {
-                print(error.localizedDescription)
-            }
-        })
-        
-        //Create and save sale in Realm
-        let saleTotal = cartItems
-            .map({ Double($0.retailPrice! * Double($0.qtyInCart!)) })
-            .reduce(into: 0.0, { $0 += $1 })
-        
-        let newSale = SaleEntity(timestamp: Date(), total: saleTotal)
-        cartItems.forEach({ item in
-            guard let name = item.name, let qtySold = item.qtyInCart, let price = item.retailPrice else { return }
-            let saleItem = SaleItemEntity(name: name, qtyToPurchase: qtySold, unitPrice: price)
-            newSale.items.append(saleItem)
-        })
-        
-        do {
-            let realm = try Realm()
-            
-            try realm.write {
-                realm.add(newSale)
-            }
-            print("New Sale Item Count: \(newSale.items.count)")
-        } catch {
-            print(error.localizedDescription)
-        }
-        
-        //Show success message, reset cart
-        cartItems.removeAll()
-        returnToMakeASale()
-    }
-    
-    private func returnToMakeASale() {
-        isConfirmingSale.toggle()
-    }
-    
-}
-
-
-
-
 struct MakeASaleView: View {
+    let viewWidth: CGFloat
     @EnvironmentObject var vm: MakeASaleViewModel
     
+    @ObservedResults(DepartmentEntity.self) var departments
+    @ObservedResults(ItemEntity.self) var items
     
-    @ObservedResults(CategoryEntity.self) var categories
-    @State var selectedCategory: CategoryEntity = .init()
-    
-    private func setDefaultCategory() {
-        guard let defaultCategory = categories.first else { return }
-        selectedCategory = defaultCategory
-    }
+    /// When `selectedDepartment` is nil, the app displays all items in the view.
+    @State var selectedDepartment: DepartmentEntity?
     
     var body: some View {
-        VStack(spacing: 0) {
-            buttonPanel
-                .padding(.top)
-                .background(secondaryBackground.edgesIgnoringSafeArea(.all))
-            
-            categorySelector
-        } //: VStack
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-//        .onChange(of: categories) { newCategories in
-//            guard selectedCategory == nil, newCategories.count > 0 else { return }
-//            selectedCategory = newCategories.first!
-//        }
-        .onAppear {
-            setDefaultCategory()
+        GeometryReader { geo in
+            VStack(spacing: 24) {
+                // MARK: - DEPARTMENT SELECTOR
+                ScrollView(.horizontal) {
+                    HStack(spacing: 16) {
+                        Button {
+                            selectedDepartment = nil
+                        } label: {
+                            Text("All A-Z")
+                                .modifier(DepartmentButtonMod(isSelected: selectedDepartment == nil))
+                        }
+                        
+                        ForEach(departments) { department in
+                            Button {
+                                selectedDepartment = department
+                            } label: {
+                                Text(department.name)
+                                    .modifier(DepartmentButtonMod(isSelected: selectedDepartment == department))
+                            }
+                        } //: For Each
+                    } //: HStack
+                } //: Scroll View
+                .onAppear {
+                    selectedDepartment = nil
+                }
+                
+                if items.count == 0 {
+                    // No items and no passcode means this is first time use. No items does not necessarily mean this is first time use because they could have set their passcode up then quit the app.
+                    VStack {
+                        Spacer()
+                        Text("No Items Yet!")
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                } else {
+                    ResponsiveView { props in
+                        ItemTableView(viewWidth: viewWidth, selectedDepartment: $selectedDepartment) { item in
+                            // If making a sale, add the item to cart. Otherwise select the item so it can be displayed in a add/modify item view.
+                            vm.itemTapped(item: item)
+                        }
+                    }
+                }
+                
+            } //: VStack
         }
     } //: Body
     
     
-    
-    
-    private var buttonPanel: some View {
-        GeometryReader { geo in
-            if selectedCategory.items.count > 0 {
-                LazyVGrid(columns: vm.getColumns(gridWidth: geo.size.width), spacing: geo.size.width * 0.05) {
-                    ForEach(selectedCategory.items) { item in
-                        Button {
-                            vm.itemTapped(item: item)
-                        } label: {
-                            Text(item.name)
-                                .modifier(TextMod(.title3, .semibold, .black))
-                                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        }
-                        .frame(height: 80)
-                        .background(itemButtonColor)
-                        .cornerRadius(9)
-                        .shadow(radius: 8)
-                    } //: ForEach
-                    Spacer()
-                } //: LazyVGrid
-            } else {
-                VStack {
-                    Spacer()
-                    
-                    Text("No Items Yet!")
-                    
-                    Spacer()
-                }
-                .frame(maxWidth: .infinity)
-            } //: If - Else
-        } //: Geometry Reader
-    } //: Button Panel
-    
-    private var categorySelector: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 2) {
-                ForEach(categories) { category in
-                    Button {
-                        selectedCategory = category
-                    } label: {
-                        Text(category.name)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .foregroundColor(selectedCategory == category ? darkFgColor : lightFgColor)
-                    }
-                    .frame(minWidth: 150)
-                    .background(selectedCategory == category ? secondaryBackground : selectedButtonColor)
-                    .cornerRadius(15, corners: [.bottomLeft, .bottomRight])
-                }
-            } //: HStack
-        } //: Scroll
-        .frame(maxWidth: .infinity, maxHeight: 40)
-        .background(primaryBackground)
-    } //: Category Selector
-    
 }
 
-struct MakeASaleView_Previews: PreviewProvider {
-    @State static var category: CategoryEntity = CategoryEntity.foodCategory
-    static var previews: some View {
-        MakeASaleView(selectedCategory: category)
-            .environmentObject(MakeASaleViewModel())
-            .modifier(PreviewMod())
+struct ItemTableView: View {
+    let viewWidth: CGFloat
+    @Binding var selectedDepartment: DepartmentEntity?
+    let onSelect: ((ItemEntity) -> Void)
+    
+    let minButtonWidth: CGFloat = 120
+    let gridSpacing: CGFloat = 16
+    let horizontalTablePadding: CGFloat = 16
+    
+    @State var availableWidth: CGFloat = 0
+    
+    func getColCount(forWidth: CGFloat) {
+        
     }
+    
+    private var numberOfColumns: Int {
+        /// Return one less than the calculated count
+        let columns = Float((availableWidth + gridSpacing) / (minButtonWidth + gridSpacing))
+        return max(1, Int(columns - 1))
+   }
+    
+    var gridColumns: [GridItem] {
+        return Array(repeating: GridItem(.flexible(minimum: 120, maximum: .infinity), spacing: gridSpacing), count: numberOfColumns)
+    }
+    
+    //TODO: Maybe pass items into this view?
+    @ObservedResults(ItemEntity.self) var items
+    
+    var body: some View {
+        GeometryReader { geo in
+            LazyVGrid(columns: gridColumns, spacing: gridSpacing) {
+                if let dept = selectedDepartment {
+                    ForEach(dept.items, id: \.id) { item in
+                        Button {
+                            onSelect(item)
+                        } label: {
+                            VStack(spacing: 8) {
+                                Text(item.name)
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity)
+                                
+                                Text(item.retailPrice.formatAsCurrencyString())
+                                    .font(.subheadline)
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .foregroundStyle(.black)
+                        } //: VStack
+                        .frame(minWidth: minButtonWidth)
+                        .padding(12)
+                        .modifier(ItemGridButtonMod())
+                    } //: ForEach
+                } else {
+                    // All items
+                    ForEach(items, id: \.id) { item in
+                        Button {
+                            onSelect(item)
+                        } label: {
+                            VStack(spacing: 8) {
+                                Text(item.name)
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity)
+                                
+                                Text(item.retailPrice.formatAsCurrencyString())
+                                    .font(.subheadline)
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .foregroundStyle(.black)
+                        } //: VStack
+                        .frame(minWidth: minButtonWidth)
+                        .padding(12)
+                        .modifier(ItemGridButtonMod())
+                    } //: ForEach
+                } //: If-Else
+            } //: LazyVGrid
+            .onAppear {
+                availableWidth = viewWidth
+                print("width changed to \(viewWidth)")
+            }
+            .onChange(of: geo.size.width) { newValue in
+                print("Width changed to: \(newValue)")
+            }
+        } //: Geometry Reader
+    } //: Body
+
 }
+
+//struct MakeASaleView_Previews: PreviewProvider {
+//    @State static var category: DepartmentEntity = DepartmentEntity.foodCategory
+//    static var previews: some View {
+//        MakeASaleView(selectedDepartment: category)
+//            .padding()
+//            .environmentObject(MakeASaleViewModel())
+//            .environment(\.realm, DepartmentEntity.previewRealm)
+//    }
+//}

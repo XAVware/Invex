@@ -12,9 +12,9 @@ struct ContentView: View {
     @EnvironmentObject var navMan: NavigationManager
     @StateObject var makeASaleViewModel: MakeASaleViewModel = MakeASaleViewModel()
     
-    @ObservedResults(CategoryEntity.self) var categories
+    @ObservedResults(DepartmentEntity.self) var categories
     
-    @State var selectedCategory: CategoryEntity?
+    @State var selectedCategory: DepartmentEntity?
     
     var body: some View {
         NavigationSplitView(columnVisibility: $navMan.menuVisibility) {
@@ -23,22 +23,29 @@ struct ContentView: View {
                 .toolbar(.hidden, for: .navigationBar)
         } detail: {
             ZStack {
-                primaryBackground
+                Theme.primaryBackground
                     .edgesIgnoringSafeArea(.all)
                 
                 if navMan.detailSize != .hidden {
                     HStack {
                         Spacer()
-                        detail
-                            .environmentObject(makeASaleViewModel)
-                            .frame(maxWidth: navMan.detailWidth, maxHeight: .infinity)
+                        if navMan.currentDisplay == .makeASale {
+                            CartView()
+                                .environmentObject(makeASaleViewModel)
+//                                .frame(maxWidth: navMan.detailWidth, maxHeight: .infinity)
+                        } else if navMan.currentDisplay == .inventoryList {
+                            ItemDetailView(selectedItem: $navMan.selectedItem)
+//                                .environmentObject(navMan)
+//                                .environmentObject(makeASaleViewModel)
+//                                .frame(maxWidth: navMan.detailWidth, maxHeight: .infinity)
+                        }
 //                            .edgesIgnoringSafeArea(.vertical)
                     } //: HStack
                 }
                 
                 HStack {
                     content
-                        .background(secondaryBackground)
+                        .background(Theme.secondaryBackground)
                         .frame(maxWidth: navMan.contentWidth, maxHeight: .infinity)
 
                     Spacer()
@@ -48,6 +55,7 @@ struct ContentView: View {
             
         } //: Navigation Split
         .onChange(of: categories) { newCategories in
+            // TODO: Fix this. Currently updating multiple times per frame.
             guard selectedCategory == nil, newCategories.count > 0 else { return }
             selectedCategory = newCategories.first!
         }
@@ -59,17 +67,15 @@ struct ContentView: View {
     
     @ViewBuilder private var content: some View {
         switch navMan.currentDisplay {
-        case .dashboard:
-            DashboardView()
-                .environmentObject(navMan)
+            
         case .makeASale:
             VStack(spacing: 0) {
                 makeASaleToolbar
-                MakeASaleView()
-                    .environmentObject(makeASaleViewModel)
-                    .onAppear {
-                        navMan.expandDetail(size: .quarter, animation: nil)
-                    }
+//                MakeASaleView()
+//                    .environmentObject(makeASaleViewModel)
+//                    .onAppear {
+//                        navMan.expandDetail(size: .quarter, animation: nil)
+//                    }
             }
         case .inventoryList:
             InventoryView()
@@ -77,9 +83,7 @@ struct ContentView: View {
         case .salesHistory:
             SalesHistoryView()
                 .environmentObject(navMan)
-        case .inventoryStatus:
-            InventoryStatusView()
-                .environmentObject(navMan)
+
         case .settings:
             SettingsView()
                 .environmentObject(navMan)
@@ -94,7 +98,7 @@ struct ContentView: View {
                 Image(systemName: "sidebar.squares.leading")
                     .resizable()
                     .scaledToFit()
-                    .foregroundColor(primaryBackground)
+                    .foregroundColor(Theme.primaryBackground)
             }
             Spacer()
             
@@ -106,19 +110,17 @@ struct ContentView: View {
                     .resizable()
                     .scaledToFit()
 //                    .frame(width: 30)
-                    .foregroundColor(primaryBackground)
+                    .foregroundColor(Theme.primaryBackground)
             } //: Button
             
         } //: HStack
-        .modifier(TextMod(.body, .light, primaryBackground))
+        .modifier(TextMod(.body, .light, Theme.primaryBackground))
         .frame(height: toolbarHeight)
         .padding(.horizontal)
     } //: Header Toolbar
     
     @ViewBuilder private var detail: some View {
         switch navMan.currentDisplay {
-        case .dashboard:
-            Text("Dashboard Detail")
         case .makeASale:
             CartView()
         case .inventoryList:
@@ -126,8 +128,6 @@ struct ContentView: View {
                 .environmentObject(navMan)
         case .salesHistory:
             Text("Sales Detail")
-        case .inventoryStatus:
-            Text("Status Detail")
         case .settings:
             Text("Settings Detail")
         }
@@ -146,18 +146,18 @@ struct ContentView: View {
                     .frame(width: 24, height: 24)
                 VStack {
                     Text("Ryan")
-                        .modifier(TextMod(.title3, .medium, secondaryBackground))
+                        .modifier(TextMod(.title3, .medium, Theme.secondaryBackground))
                     Text("Admin")
-                        .modifier(TextMod(.footnote, .regular, lightFgColor))
+                        .modifier(TextMod(.footnote, .regular, Theme.lightFgColor))
                 }
                 
             } //: HStack
-            .foregroundColor(secondaryBackground)
+            .foregroundColor(Theme.secondaryBackground)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading)
             
             Divider()
-                .background(secondaryBackground)
+                .background(Theme.secondaryBackground)
                 .padding(.vertical)
             
             ForEach(DisplayStates.allCases, id: \.self) { displayState in
@@ -173,7 +173,7 @@ struct ContentView: View {
                 }
                 .padding()
                 .frame(height: 50)
-                .overlay(navMan.currentDisplay == displayState ? lightFgColor.opacity(0.3).cornerRadius(5).padding(.horizontal, 4) : nil)
+                .overlay(navMan.currentDisplay == displayState ? Theme.lightFgColor.opacity(0.3).cornerRadius(5).padding(.horizontal, 4) : nil)
             }
             
             Spacer()
@@ -191,8 +191,8 @@ struct ContentView: View {
             .padding()
             .frame(height: 50)
         } //: VStack
-        .background(primaryBackground)
-        .modifier(TextMod(.title3, .semibold, lightFgColor))
+        .background(Theme.primaryBackground)
+        .modifier(TextMod(.title3, .semibold, Theme.lightFgColor))
     } //: Menu
 }
 
@@ -200,7 +200,8 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .environmentObject(NavigationManager())
-            .modifier(PreviewMod())
+            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
+            .previewInterfaceOrientation(.landscapeLeft)
         
     }
 }
