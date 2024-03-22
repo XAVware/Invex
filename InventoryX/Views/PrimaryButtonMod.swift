@@ -7,16 +7,15 @@
 
 import SwiftUI
 
-struct RoundedButtonMod: ViewModifier {
+struct PrimaryButtonMod: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .foregroundColor(.white)
-            .font(.title2)
+            .font(.title3)
             .fontWeight(.semibold)
-            .padding()
-            .frame(maxWidth: 350, maxHeight: 50)
+            .foregroundStyle(.white)
+            .frame(maxWidth: 420, maxHeight: 54)
+            .background(.ultraThinMaterial)
             .background(Theme.primaryColor)
-            .cornerRadius(25)
-            .shadow(radius: 3)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
