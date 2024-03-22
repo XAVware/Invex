@@ -74,109 +74,70 @@ struct AddItemView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        ZStack {
-            Theme.secondaryBackground
-                .edgesIgnoringSafeArea(.all)
+        
+        VStack(spacing: 32) {
+            Spacer()
+            Text("New Item")
+                .font(.largeTitle)
+                .fontWeight(.semibold)
+                .font(.largeTitle)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
             
-            VStack(spacing: 32) {
-                Text("New Item")
-                    .modifier(TextMod(.largeTitle, .semibold))
-                
-                Spacer()
-                
-                Picker(selection: $vm.selectedCategoryName) {
-                    ForEach(vm.categoryNames, id: \.self) { name in
-                        Text(name)
-                    }
-                } label: { }
-                .padding(.horizontal)
-                .tint(Theme.darkFgColor)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10).stroke(Theme.darkFgColor, lineWidth: 1)
-                )
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Item Name")
-                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
-                    
-                    TextField("", text: $vm.itemName)
-                        .frame(height: 40)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6).stroke(Theme.darkFgColor, lineWidth: 1)
-                        )
-                } //: VStack
-                
-                HStack {
-                    Text("On-Hand Qty.")
-                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
-                    
-                    Spacer()
-                    
-                    TextField("", text: $vm.quantity)
-                        .frame(width: 120, height: 40)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8).stroke(Theme.darkFgColor, lineWidth: 1)
-                        )
-                } //: HStack
-
-                HStack {
-                    Text("Retail Price")
-                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
-                    
-                    Spacer()
-                    
-                    Text("$")
-                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
-                    
-                    TextField("", text: $vm.retailPrice)
-                        .frame(width: 120, height: 40)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8).stroke(Theme.darkFgColor, lineWidth: 1)
-                        )
-                } //: HStack
-                
-                HStack {
-                    Text("Unit Cost")
-                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
-                    
-                    Spacer()
-                    
-                    Text("$")
-                        .modifier(TextMod(.body, .regular, Theme.darkFgColor))
-                    
-                    TextField("", text: $vm.unitCost)
-                        .frame(width: 120, height: 40)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8).stroke(Theme.darkFgColor, lineWidth: 1)
-                        )
-                } //: HStack
-                
-                Spacer()
-                
-                Button {
-                    vm.saveItem() {
-                        vm.reset()
-                    }
-                } label: {
-                    Text("Save and Add Another")
+            Spacer()
+            
+            Picker(selection: $vm.selectedCategoryName) {
+                ForEach(vm.categoryNames, id: \.self) { name in
+                    Text(name)
                 }
-                .modifier(RoundedButtonMod())
+            } label: { }
+                .modifier(ThemeFieldMod())
+//                .padding(.horizontal)
+//                .tint(Theme.darkFgColor)
+//                .overlay(
+//                    RoundedRectangle(cornerRadius: 10).stroke(Theme.darkFgColor, lineWidth: 1)
+//                )
+            
+            
+            CapsuleInputField(placeholder: "Item Name", boundTo: $vm.unitCost, iconName: nil)
+            
+            CapsuleInputField(placeholder: "On-hand quantity", boundTo: $vm.quantity, iconName: "dollarsign")
+            
+            HStack(spacing: 24) {
+                CapsuleInputField(placeholder: "Unit cost", boundTo: $vm.unitCost, iconName: "dollarsign")
                 
-                Button {
-                    vm.saveItem() {
-                        navMan.hideDetail(animation: .easeOut)
-                    }
-                } label: {
-                    Text("Save and Finish")
+                CapsuleInputField(placeholder: "Retail price", boundTo: $vm.retailPrice, iconName: "dollarsign")
+            } //: HStack
+            
+            
+            
+            Spacer()
+            
+            Button {
+                vm.saveItem() {
+                    vm.reset()
                 }
-                .modifier(RoundedButtonMod())
-                .frame(width: 250)
-                
-            } //: VStack
-            .frame(maxWidth: 400)
-            .padding(.bottom)
-        } //: ZStack
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } label: {
+                Text("Save and Add Another")
+                    .font(.headline)
+            }
+            .modifier(PrimaryButtonMod())
+            
+            Button {
+                vm.saveItem() {
+                    navMan.hideDetail(animation: .easeOut)
+                }
+            } label: {
+                Text("Save and Finish")
+                    .font(.subheadline)
+            }
+            .modifier(PrimaryButtonMod())
+            .frame(width: 250)
+            
+            Spacer()
+            
+        } //: VStack
+        .frame(maxWidth: 400)
         .onAppear {
             vm.setup()
         }

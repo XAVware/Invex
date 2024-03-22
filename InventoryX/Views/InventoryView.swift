@@ -8,13 +8,23 @@
 import SwiftUI
 import RealmSwift
 
+struct ColumnHeaderModel: Identifiable {
+    let id = UUID()
+    let headerText: String
+    let sortDescriptor: String
+}
+
 struct InventoryView: View {
     @EnvironmentObject var navMan: NavigationManager
     @ObservedResults(ItemEntity.self) var items
-    @State var sortBy: String = "name"
-    @State var isAscending: Bool = true
     //    @State var selectedItem: InventoryItemEntity?
     //    @State var isShowingDetailView: Bool = false
+    
+    @State var sortBy: String = "name"
+    @State var isAscending: Bool = true
+    @State var columnData: [ColumnHeaderModel] = [ColumnHeaderModel(headerText: "Item Name", sortDescriptor: "name"),
+                                                  ColumnHeaderModel(headerText: "On-Hand", sortDescriptor: "onHandQty"),
+                                                  ColumnHeaderModel(headerText: "Retail Price", sortDescriptor: "retailPrice")]
     
     func itemTapped(itemId: ObjectId) {
         let itemResult = items.where {
@@ -33,12 +43,7 @@ struct InventoryView: View {
     }
     
     func columnHeaderTapped(sortDescriptor: String) {
-        if sortBy == sortDescriptor {
-            isAscending.toggle()
-        } else {
-            sortBy = sortDescriptor
-            isAscending = true
-        }
+        
     }
     
     var body: some View {
@@ -96,64 +101,39 @@ struct InventoryView: View {
     
     private var columnHeaders: some View {
         HStack(spacing: 0) {
-            Button {
-                columnHeaderTapped(sortDescriptor: "name")
-            } label: {
-                Text("Item Name")
-                    .modifier(TextMod(.body, .semibold))
-                
-                if sortBy == "name" {
-                    Image(systemName: "arrow.up")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 12)
-                        .rotationEffect(Angle(degrees: isAscending ? 0 : 180))
+            
+            ForEach(columnData) { header in
+                HStack {
+                    Text(header.headerText)
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .fontDesign(.rounded)
+                    
+                    if sortBy == header.sortDescriptor {
+                        Image(systemName: "arrow.up")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 12)
+                            .rotationEffect(Angle(degrees: isAscending ? 0 : 180))
+                    }
+                } //: HStack
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                .onTapGesture {
+                    if sortBy == header.sortDescriptor {
+                        isAscending.toggle()
+                    } else {
+                        sortBy = header.sortDescriptor
+                        isAscending = true
+                    }
                 }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            
-            Divider()
-            
-            Button {
-                columnHeaderTapped(sortDescriptor: "onHandQty")
-            } label: {
-                Text("On-Hand")
-                    .modifier(TextMod(.body, .semibold))
                 
-                if sortBy == "onHandQty" {
-                    Image(systemName: "arrow.up")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 12)
-                        .rotationEffect(Angle(degrees: isAscending ? 0 : 180))
-                }
+                Divider()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             
-            Divider()
-            
-            Button {
-                columnHeaderTapped(sortDescriptor: "retailPrice")
-            } label: {
-                Text("Retail Price")
-                    .modifier(TextMod(.body, .semibold))
-                
-                if sortBy == "retailPrice" {
-                    Image(systemName: "arrow.up")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 12)
-                        .rotationEffect(Angle(degrees: isAscending ? 0 : 180))
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-            
-            Spacer().frame(width: 10)
         } //: HStack
         .frame(height: 50)
-        .padding(.horizontal)
-        .background(Theme.secondaryBackground)
-        .modifier(TextMod(.body, .regular, .black))
+        .background(Theme.primaryColor.opacity(0.1))
+//        .modifier(TextMod(.body, .regular, .black))
     } //: Column Headers
     
     private var itemList: some View {
@@ -180,7 +160,7 @@ struct InventoryView: View {
             } //: HStack
             .frame(height: 50)
             .padding(.horizontal)
-            .background(index % 2 == 0 ? Theme.lightFgColor : Theme.secondaryBackground)
+            .background(index % 2 == 0 ? Theme.primaryColor.opacity(0.05) : nil)
             .modifier(TextMod(.body, .regular, .black))
             .onTapGesture {
                 itemTapped(itemId: getItems()[index]._id)

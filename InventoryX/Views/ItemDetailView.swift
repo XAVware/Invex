@@ -148,14 +148,13 @@ struct ItemDetailView: View {
                     
                     Image(systemName: "pencil")
                 }
-                .modifier(RoundedButtonMod())
+                .modifier(PrimaryButtonMod())
                 
                 
                 Spacer()
             } //: VStack
             .padding()
             .frame(maxWidth: 500)
-            .background(Theme.lightFgColor)
         } //: If - Else
     } //: Body
 }

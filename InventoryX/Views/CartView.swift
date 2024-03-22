@@ -91,6 +91,7 @@ struct CartView: View {
                     Text("Check Out")
                         .frame(maxWidth: .infinity)
                 }
+                
                 .modifier(TextMod(.title3, .semibold, Theme.lightFgColor))
                 .padding(12)
                 .foregroundColor(Theme.darkFgColor)
@@ -169,7 +170,7 @@ struct CartView: View {
                     } label: {
                         Text("Finalize Sale")
                     }
-                    .modifier(RoundedButtonMod())
+                    .modifier(PrimaryButtonMod())
                     
                     Button {
                         vm.cancelTapped()

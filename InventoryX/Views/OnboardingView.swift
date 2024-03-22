@@ -377,7 +377,7 @@ struct OnboardingView: View {
         }, label: {
             Text(vm.currentOnboardingState.buttonText)
         })
-        .modifier(RoundedButtonMod())
+        .modifier(PrimaryButtonMod())
         .padding(.bottom)
     } //: Continue Button
 }

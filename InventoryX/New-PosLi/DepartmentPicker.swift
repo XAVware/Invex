@@ -60,44 +60,46 @@ struct DepartmentPicker: View {
     } //: Scroll Style
     
     private var listStyle: some View {
-        ForEach(departments) { department in
-            Button {
-                selectedDepartment = department
-            } label: {
-                HStack(spacing: 16) {
-                    
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(department.name)
-                            .font(.headline)
-                            .fontDesign(.rounded)
+        VStack(spacing: 16) {
+            ForEach(departments) { department in
+                Button {
+                    selectedDepartment = department
+                } label: {
+                    HStack(spacing: 16) {
                         
-                        Text("\(department.items.count) Items")
-                            .font(.subheadline)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(.gray)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(department.name)
+                                .font(.headline)
+                                .fontDesign(.rounded)
+                            
+                            Text("\(department.items.count) Items")
+                                .font(.subheadline)
+                                .fontDesign(.rounded)
+                                .foregroundStyle(.gray)
+                            
+                        } //: VStack
                         
-                    } //: VStack
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.right")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 12)
-                        .foregroundStyle(.gray.opacity(0.6))
-                        .fontWeight(.semibold)
-                } //: HStack
-            }
-            
-        }
-        .listStyle(PlainListStyle())
+                        Spacer()
+                        
+                        Image(systemName: "chevron.right")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 12)
+                            .foregroundStyle(.gray.opacity(0.6))
+                            .fontWeight(.semibold)
+                    } //: HStack
+                    .background(selectedDepartment == department ? Color("Purple050").opacity(0.5) : nil)
+                }
+                Divider()
+            } //: For Each
+        } //: VStack
     } //: List Style
     
     private var dropDownStyle: some View {
         Picker(selection: $selectedDepartment) {
-            Text("--Select Department--").tag(DepartmentEntity?(nil))
-            ForEach(departments) { department in
-                Text(department.name)
+            Text("- Department - ").tag(DepartmentEntity?(nil))
+            ForEach(departments, id: \.self) { department in
+                Text(department.name).tag(department.id)
             }
         } label: {
             Text("Department")
@@ -108,7 +110,7 @@ struct DepartmentPicker: View {
 
 
 #Preview {
-    DepartmentPicker(selectedDepartment: .constant(nil), style: .dropdown)
+    DepartmentPicker(selectedDepartment: .constant(nil), style: .list)
         .padding()
         .environmentObject(MakeASaleViewModel())
         .environment(\.realm, DepartmentEntity.previewRealm)

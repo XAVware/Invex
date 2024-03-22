@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CapsuleInputField: View {
-    private let CORNER_RADIUS: CGFloat = 24
+    private let CORNER_RADIUS: CGFloat = 12
     
     private enum Focus { case secure, text }
     @FocusState private var focus: Focus?
@@ -42,13 +42,13 @@ struct CapsuleInputField: View {
                     Image(systemName: iconName)
                         .resizable()
                         .scaledToFit()
-                        .foregroundColor(K.primaryColor)
+                        .foregroundColor(Theme.primaryColor)
                 } else {
-                    Spacer()
+                    Spacer().frame(width: 8)
                 }
             }
             .frame(width: 16, height: 16)
-            .padding(.horizontal)
+            .padding(.horizontal, iconName == nil ? 0 : 16)
             
             Group {
                 if showPassword {
@@ -59,7 +59,7 @@ struct CapsuleInputField: View {
             } //: Group
             .focused($focus, equals: showPassword ? .text : .secure)
             .foregroundStyle(.black)
-            .padding(.vertical, 12)
+            .padding(.vertical, 6)
             
             Group {
                 if isSecure {
@@ -67,7 +67,7 @@ struct CapsuleInputField: View {
                         toggleDisplayPassword()
                     } label: {
                         Image(systemName: showPassword ? "eye.slash" : "eye")
-                            .foregroundColor(Color.gray)
+                            .foregroundColor(Theme.primaryColor)
                     }
                 } else {
                     Spacer()
@@ -77,14 +77,7 @@ struct CapsuleInputField: View {
             .padding(.horizontal)
             .padding(.trailing, 4)
         } //: HStack
-        .frame(maxWidth: .infinity, maxHeight: 48)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: CORNER_RADIUS))
-        .overlay(
-            RoundedRectangle(cornerRadius: CORNER_RADIUS)
-                .stroke(lineWidth: 0.5)
-                .foregroundStyle(Color.gray)
-        )
+        .modifier(ThemeFieldMod())
     }
 }
 

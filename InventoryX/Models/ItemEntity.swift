@@ -10,7 +10,7 @@ import RealmSwift
 
 class ItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
-    @Persisted(originProperty: "items") var category: LinkingObjects<DepartmentEntity>
+    @Persisted(originProperty: "items") var department: LinkingObjects<DepartmentEntity>
     
     @Persisted var name: String!
     @Persisted var retailPrice: Double!

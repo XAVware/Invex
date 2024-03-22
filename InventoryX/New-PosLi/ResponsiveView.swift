@@ -41,7 +41,8 @@ struct CustomFontSize {
     let mediumLarge: CGFloat
     let large: CGFloat
     let extraLarge: CGFloat
-    init(height: CGFloat, width: CGFloat){
+    
+    init(height: CGFloat, width: CGFloat) {
         let widthToCalculate = height < width ? height : width
         switch widthToCalculate {
         case _ where widthToCalculate < 700:

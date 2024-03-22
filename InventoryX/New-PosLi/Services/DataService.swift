@@ -8,6 +8,16 @@
 import Foundation
 import RealmSwift
 
+/// DataService needs to remain a `@MainActor` because until a full migration is done from
+/// using the @ObservedResults property wrappers to using DataService entirely. Since Realm
+/// is being used on the main thread via the ObservedResults property wrapper, all reads/writes/
+/// etc. need to be done on the main thread
+///
+///
+
+/// If a threading error is thrown here in the future, DataService may need to be marked as a main actor ~ originally due to error while adding department.
+
+
 /// `DataService` handles all communications with Realm. Duplicate department names should be handled here.
 class DataService {
     

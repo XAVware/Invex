@@ -19,50 +19,30 @@ import RealmSwift
 
 @main
 struct InventoryXApp: SwiftUI.App {
-    //    @StateObject var userManager: UserManager = UserManager()
-//    @StateObject var navMan: NavigationManager = NavigationManager()
-    /*let migrator: RealmMigrator = RealmMigrator()*/ // Storing like this is bad for memory. This only needs to run once.
-    
-//    @ObservedResults(CategoryEntity.self) var categories
-//    @ObservedResults(UserEntity.self) var users
-    
+    /// Initialize DataService immediately at launch since it is required for first screen.
     let db: DataService = DataService.shared
     
     var body: some Scene {
         WindowGroup {
-            GeometryReader { geo in
-                ActiveOrderView()
-                    .task {
-                        do {
-                            try await DataService.resetRealm()
-                            let drinks = DepartmentEntity(name: "Drinks", restockNum: 12)
-                            drinks.items.append(objectsIn: ItemEntity.drinkArray)
-                            drinks.items.append(objectsIn: ItemEntity.foodArray)
-                            try await DataService.addDepartment(dept: drinks)
-                        } catch {
-                            print(error)
-                        }
-                    }
-                    .onAppear {
-                        print("Main width: \(geo.size.width)")
-                    }
+            ResponsiveView { props in
+                RootView(uiProperties: props)
             }
-//            if categories.count == 0 {
-//                OnboardingView()
-////                    .environmentObject(userManager)
-//            } else {
-//                GeometryReader { geo in
-//                    ContentView()
-//                        .environmentObject(navMan)
-//                        .onAppear {
-//                            print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.path)
-//                            UserDefaults.standard.setValue(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
-//                            //                            navMan.setup(screenWidth: geo.size.width)
-////                            print(geo.safeAreaInsets.top)
+//                    .onAppear {
+//                        UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+//                    }
+//                    .task {
+//                        do {
+//                            try await DataService.resetRealm()
+//                            let drinks = DepartmentEntity(name: "Drinks", restockNum: 12)
+//                            drinks.items.append(objectsIn: ItemEntity.drinkArray)
+//                            drinks.items.append(objectsIn: ItemEntity.foodArray)
+//                            try await DataService.addDepartment(dept: drinks)
+//                        } catch {
+//                            print(error)
 //                        }
-//                        .statusBar(hidden: true)
-//                } //: Geometry Reader
-//            }
+//                    }
+
+            
         }
     } //: Body
 }
