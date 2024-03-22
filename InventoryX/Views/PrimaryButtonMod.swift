@@ -25,27 +25,32 @@ struct ThemeFieldMod: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .padding(.leading, overlayText.isEmpty ? 0 : 48)
-            .padding(8)
-            .frame(maxWidth: .infinity, maxHeight: 42)
-            .background(.white)
+            .padding(.leading, overlayText.isEmpty ? 0 : 42)
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: 48)
+            .background(.white.opacity(0.95))
             .clipShape(RoundedRectangle(cornerRadius: 6))
+            .overlay(overlayText.isEmpty ? nil : highlight, alignment: .leading)
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
                     .stroke(lineWidth: 0.5)
                     .foregroundStyle(.gray)
+                    .shadow(color: Color("Purple050"), radius: 4, x: 3, y: 3)
+                    .shadow(color: Color("Purple050"), radius: 4, x: -3, y: -3)
             )
-            .overlay(overlayText.isEmpty ? nil : highlight, alignment: .leading)
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .shadow(color: Color.gray.opacity(0.25), radius: 4, x: 0, y: 0)
     }
     
     private var highlight: some View {
         ZStack {
             RoundedCorner(radius: 6, corners: [.topLeft, .bottomLeft])
-                .fill(Color("Purple800"))
+                .fill(Color("Purple800").opacity(0.9))
+                .opacity(0.8)
                 .frame(width: 42)
             Text(overlayText)
                 .foregroundStyle(Color("Purple050"))
-                .font(.headline)
+                .font(.subheadline)
                 .fontDesign(.rounded)
         }
     }
@@ -55,8 +60,8 @@ struct ThemeFieldMod: ViewModifier {
 struct FieldTitleMod: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.title3)
-            .fontWeight(.semibold)
+            .font(.headline)
+            .fontWeight(.regular)
             .fontDesign(.rounded)
             .foregroundStyle(.black)
     }
@@ -65,9 +70,12 @@ struct FieldTitleMod: ViewModifier {
 struct FieldSubtitleMod: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.headline)
-            .fontWeight(.medium)
+            .font(.subheadline)
+//            .fontWeight(.medium)
             .fontDesign(.rounded)
             .foregroundStyle(.gray)
     }
+}
+#Preview {
+    AddDepartmentView(department: nil)
 }

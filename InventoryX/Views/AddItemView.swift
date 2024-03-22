@@ -9,143 +9,170 @@ import SwiftUI
 import RealmSwift
 
 @MainActor class AddItemViewModel: ObservableObject {
-    @Published var itemName: String = ""
-    @Published var quantity: String = ""
-    @Published var retailPrice: String = ""
-    @Published var unitCost: String = ""
-    @Published var selectedCategoryName: String = "Select Category"
-    @Published var categoryModels: [CategoryModel] = []
-    @Published var categoryNames: [String] = ["Select Category"]
-    @Published var errorMessage: String = ""
-    @Published var savedSuccessfully: Bool = false
-    
-    func setup() {
-        setCategoryNames()
-    }
-    
-    func reset() {
-        itemName = ""
-        quantity = ""
-        retailPrice = ""
-        unitCost = ""
-        selectedCategoryName = "Select Category"
-    }
-    
-    private func setCategoryNames() {
+
+    func saveItem(dept: DepartmentEntity, name: String, att: String, qty: String, price: String, cost: String, completion: @escaping () -> Void) async {
+        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
+        
+        let newItem = ItemEntity(name: name, retailPrice: Double(price) ?? 1.0, avgCostPer: Double(cost) ?? 0.5, onHandQty: Int(qty) ?? 10)
         do {
-            let realm = try Realm()
-            let results = realm.objects(DepartmentEntity.self)
+            try await DataService.add(newItem, to: dept)
+            completion()
             
-            for index in 0 ..< results.count {
-                let tempId: ObjectId = results[index]._id
-                let tempName: String = results[index].name
-                let tempCategory: CategoryModel = CategoryModel(_id: tempId, name: tempName)
-                categoryModels.append(tempCategory)
-                categoryNames.append(tempName)
-            }
         } catch {
-            LogService(self).error("Error setting category names: \(error.localizedDescription)")
-        }
-    }
-    
-    func saveItem(completion: @escaping () -> Void) {
-        guard itemName.isNotEmpty, quantity.isNotEmpty, retailPrice.isNotEmpty else { return }
-        guard selectedCategoryName != categoryNames[0] else { return }
-        
-        let newItem = ItemEntity(name: itemName, retailPrice: Double(retailPrice) ?? 1.0, avgCostPer: Double(unitCost) ?? 0.5, onHandQty: Int(quantity) ?? 10)
-        
-        Task {
-            do {
-                guard let departmentResult = try await DataService.fetchDepartment(named: selectedCategoryName) else { return }
-                
-                try await DataService.add(newItem, to: departmentResult)
-                completion()
-                
-            } catch {
-                LogService(self).error("Error saving item to Realm: \(error.localizedDescription)")
-            }
+            LogService(self).error("Error saving item to Realm: \(error.localizedDescription)")
         }
     } //: Save Item
+    
+    
 }
 
+// TODO: Error is thrown briefly from the department dropdown after an item was successfully added, therefore changing the department
 struct AddItemView: View {
     @StateObject var vm: AddItemViewModel = AddItemViewModel()
-    @EnvironmentObject var navMan: NavigationManager
     @Environment(\.dismiss) var dismiss
+    
+    @State var selectedDepartment: DepartmentEntity?
+    @State var itemName: String = ""
+    @State var attribute: String = ""
+    @State var quantity: String = ""
+    @State var retailPrice: String = ""
+    @State var unitCost: String = ""
     
     var body: some View {
         
         VStack(spacing: 32) {
-            Spacer()
-            Text("New Item")
-                .font(.largeTitle)
-                .fontWeight(.semibold)
-                .font(.largeTitle)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Spacer()
-            
-            Picker(selection: $vm.selectedCategoryName) {
-                ForEach(vm.categoryNames, id: \.self) { name in
-                    Text(name)
+            VStack(alignment: .leading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24)
+                        .foregroundStyle(.black)
                 }
-            } label: { }
-                .modifier(ThemeFieldMod())
-//                .padding(.horizontal)
-//                .tint(Theme.darkFgColor)
-//                .overlay(
-//                    RoundedRectangle(cornerRadius: 10).stroke(Theme.darkFgColor, lineWidth: 1)
-//                )
-            
-            
-            CapsuleInputField(placeholder: "Item Name", boundTo: $vm.unitCost, iconName: nil)
-            
-            CapsuleInputField(placeholder: "On-hand quantity", boundTo: $vm.quantity, iconName: "dollarsign")
-            
-            HStack(spacing: 24) {
-                CapsuleInputField(placeholder: "Unit cost", boundTo: $vm.unitCost, iconName: "dollarsign")
                 
-                CapsuleInputField(placeholder: "Retail price", boundTo: $vm.retailPrice, iconName: "dollarsign")
-            } //: HStack
+                Text("Add an item")
+                    .font(.largeTitle)
+                    .fontWeight(.semibold)
+                    .fontDesign(.rounded)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+            } //: VStack
+            .frame(maxWidth: 720)
             
+            HStack {
+                VStack(alignment: .leading, spacing: 12) {
+                    InputFieldLabel(title: "Department:", subtitle: nil)
+                        .frame(maxWidth: 420, alignment: .leading)
+                    
+                    
+                    DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
+                        .modifier(ThemeFieldMod())
+                        .frame(maxWidth: 280)
+                } //: VStack - Department
+                
+                Spacer()
+            } //: HStack
+            .frame(maxWidth: 720)
+            
+            HStack {
+                VStack(alignment: .leading, spacing: 12) {
+                    InputFieldLabel(title: "Item Name:", subtitle: nil)
+                        .frame(maxWidth: 420, alignment: .leading)
+                    
+                    
+                    TextField("i.e. Gatorade", text: $itemName)
+                        .modifier(ThemeFieldMod())
+                        .frame(maxWidth: 280)
+                    
+                } //: VStack
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    InputFieldLabel(title: "Attribute:", subtitle: nil)
+                        .frame(maxWidth: 420, alignment: .leading)
+                    
+                    
+                    TextField("i.e. Blue", text: $attribute)
+                        .modifier(ThemeFieldMod())
+                        .frame(minWidth: 240, maxWidth: 280)
+                    
+                } //: VStack
+            } //: HStack
+            .frame(maxWidth: 720)
+            
+            Divider()
+            
+            HStack {
+                VStack(alignment: .leading, spacing: 12) {
+                    InputFieldLabel(title: "On-hand quantity:", subtitle: nil)
+                        .frame(maxWidth: 420, alignment: .leading)
+                    
+                    
+                    TextField("2.00", text: $quantity)
+                        .modifier(ThemeFieldMod(overlayText: "123"))
+                        .frame(maxWidth: 280)
+                    
+                } //: VStack
+                
+                VStack(alignment: .leading, spacing: 12) {
+                    InputFieldLabel(title: "Retail Price:", subtitle: nil)
+                        .frame(maxWidth: 420, alignment: .leading)
+                    
+                    
+                    TextField("2.00", text: $retailPrice)
+                        .modifier(ThemeFieldMod(overlayText: "$"))
+                        .frame(maxWidth: 280)
+                    
+                } //: VStack
+            } //: HStack
+            .frame(maxWidth: 720)
+            
+            HStack {
+                VStack(alignment: .leading, spacing: 12) {
+                    InputFieldLabel(title: "Unit Cost:", subtitle: nil)
+                        .frame(maxWidth: 420, alignment: .leading)
+                    
+                    
+                    TextField("1.00", text: $unitCost)
+                        .modifier(ThemeFieldMod(overlayText: "$"))
+                        .frame(minWidth: 240, maxWidth: 280)
+                    
+                } //: VStack
+                
+                Spacer()
+            } //: HStack
+            .frame(maxWidth: 720)
             
             
             Spacer()
             
             Button {
-                vm.saveItem() {
-                    vm.reset()
+                guard let dept = selectedDepartment else { return }
+                Task {
+                    await vm.saveItem(dept: dept, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost) {
+                        dismiss()
+                    }
                 }
             } label: {
-                Text("Save and Add Another")
-                    .font(.headline)
+                Text("Save Item")
             }
             .modifier(PrimaryButtonMod())
-            
-            Button {
-                vm.saveItem() {
-                    navMan.hideDetail(animation: .easeOut)
-                }
-            } label: {
-                Text("Save and Finish")
-                    .font(.subheadline)
-            }
-            .modifier(PrimaryButtonMod())
-            .frame(width: 250)
-            
             Spacer()
             
         } //: VStack
-        .frame(maxWidth: 400)
-        .onAppear {
-            vm.setup()
-        }
+        .padding()
+        .toolbar(.hidden, for: .navigationBar)
+        .background(Color("Purple050").opacity(0.3))
+//        .onAppear {
+//            vm.setup()
+//        }
     } //: Body
 }
 
 struct AddItemView_Previews: PreviewProvider {
     static var previews: some View {
         AddItemView()
+//            .frame(width: 400)
     }
 }

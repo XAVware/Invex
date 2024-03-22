@@ -39,7 +39,14 @@ class DataService {
     
     static func add(_ item: ItemEntity, to department: DepartmentEntity) async throws {
         let realm = try await Realm()
-        try await realm.asyncWrite { department.items.append(item) }
+        if let thawedDepartment = department.thaw() {
+            try await realm.asyncWrite {
+                thawedDepartment.items.append(item)
+                
+            }
+        } else {
+            LogService(self).error("Error thawing department")
+        }
     }
     
     static func fetchDepartment(named name: String) async throws -> DepartmentEntity? {

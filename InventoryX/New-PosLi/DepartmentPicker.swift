@@ -97,20 +97,27 @@ struct DepartmentPicker: View {
     
     private var dropDownStyle: some View {
         Picker(selection: $selectedDepartment) {
-            Text("- Department - ").tag(DepartmentEntity?(nil))
-            ForEach(departments, id: \.self) { department in
-                Text(department.name).tag(department.id)
+            Text("Select Department       ")
+                .tag(nil as DepartmentEntity?)
+            
+            ForEach(departments) { department in
+                Text(department.name)
+                    .tag(department as DepartmentEntity?)
             }
         } label: {
             Text("Department")
+                
         }
+        .tint(.black.opacity(0.8))
+        .pickerStyle(.menu)
+        .frame(minWidth: 190, maxWidth: 280, alignment: .trailing)
 
     } //: Drop Down Style
 }
 
 
 #Preview {
-    DepartmentPicker(selectedDepartment: .constant(nil), style: .list)
+    DepartmentPicker(selectedDepartment: .constant(nil), style: .dropdown)
         .padding()
         .environmentObject(MakeASaleViewModel())
         .environment(\.realm, DepartmentEntity.previewRealm)

@@ -53,12 +53,11 @@ struct ItemTableView: View {
     private var listView: some View {
         VStack {
             HStack {
-                DepartmentPicker(selectedDepartment: $department, style: .dropdown)
-                    .padding(6)
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.gray.opacity(0.5)))
+                
                 Spacer()
+                
+                DepartmentPicker(selectedDepartment: $department, style: .dropdown)
+                    
             } //: HStack
             .padding(.horizontal)
             .frame(height: 64)

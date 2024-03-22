@@ -34,7 +34,7 @@ class AddDepartmentViewModel: ObservableObject {
         } catch {
             print(error.localizedDescription)
         }
-
+        
     }
     
 }
@@ -45,7 +45,7 @@ struct AddDepartmentView: View {
     
     @State var department: DepartmentEntity?
     
-    @State var name: String = ""
+    @State var name: String = "Test"
     @State var restockThreshold: String = ""
     @State var hasTax: Bool = false
     @State var markup: Double = 0.00
@@ -71,8 +71,9 @@ struct AddDepartmentView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24)
-                        .foregroundStyle(Theme.primaryColor)
+                        .foregroundStyle(.black)
                 }
+                
                 Text("Add a department")
                     .font(.largeTitle)
                     .fontWeight(.semibold)
@@ -80,63 +81,60 @@ struct AddDepartmentView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
             } //: VStack
+            .frame(maxWidth: 720)
             
-            VStack(alignment: .leading, spacing: 16) {
-                
-                VStack(alignment: .leading) {
-                    Text("Department Name:")
-                        .modifier(FieldTitleMod())
-                } //: VStack
-                
-                TextField("i.e. Clothing", text: $name)
-                    .modifier(ThemeFieldMod())
-                
-            } //: VStack - Department Name
-            
-            HStack(spacing: 16) {
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Restock Threshold:")
-                        .modifier(FieldTitleMod())
+            HStack {
+                VStack(alignment: .leading, spacing: 16) {
+                    InputFieldLabel(title: "Department Name:", subtitle: nil)
+                        .frame(maxWidth: 420, alignment: .leading)
                     
-                    Text("This is the number that you want to restock the items in the department at. This will help you quickly find items that need to be restocked.")
-                        .modifier(FieldSubtitleMod())
-                } //: VStack
-                Spacer()
-                TextField("0", text: $restockThreshold)
-                    .modifier(ThemeFieldMod())
-                    .frame(maxWidth: 200)
-                
-            } //: VStack - Restock Threshold
-            
-            HStack(spacing: 16) {
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Default markup:")
-                        .modifier(FieldTitleMod())
-                    
-                    Text("When an item is added to this department it will be marked up by this percentage by default.")
-                        .modifier(FieldSubtitleMod())
-                } //: VStack
+                    TextField("i.e. Clothing", text: $name)
+                        .modifier(ThemeFieldMod())
+//                        .frame(maxWidth: 320)
+                } //: VStack - Department Name
                 
                 Spacer()
+            } //: HStack
+            .frame(maxWidth: 720)
+            
+            Divider()
+            
+            VStack(spacing: 42) {
+                HStack(spacing: 16) {
+                    InputFieldLabel(title: "Restock Threshold:", subtitle: "This is the number that you want to restock the items in the department at. This will help you quickly find items that need to be restocked.")
+                        .frame(maxWidth: 420)
+                    
+                    Spacer()
+                    
+                    TextField("0", text: $restockThreshold)
+                        .modifier(ThemeFieldMod(overlayText: "123"))
+                        .frame(maxWidth: 120)
+                    
+                } //: HStack - Restock Threshold
+                .frame(maxWidth: 720)
                 
-                TextField("0", text: $restockThreshold)
-                    .modifier(ThemeFieldMod(overlayText: "%"))
-                    .frame(maxWidth: 200)
-            } //: VStack - Restock Threshold
-            
-            Toggle(isOn: $hasTax, label: {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Tax free")
-                        .modifier(FieldTitleMod())
+                
+                HStack(spacing: 16) {
+                    InputFieldLabel(title: "Default markup:", subtitle: "When an item is added to this department it will be marked up by this percentage by default.")
+                        .frame(maxWidth: 420)
                     
-                    Text("If you mark this department as tax free, when you sell items from this department tax will not be added.")
-                        .modifier(FieldSubtitleMod())
+                    Spacer()
                     
-                } //: VStack
-            })
-            
+                    TextField("0", text: $restockThreshold)
+                        .modifier(ThemeFieldMod(overlayText: "%"))
+                        .frame(maxWidth: 120)
+                } //: HStack - Markup
+                .frame(maxWidth: 720)
+                
+                
+                Toggle(isOn: $hasTax, label: {
+                    InputFieldLabel(title: "Tax free:", subtitle: "If you mark this department as tax free, when you sell items from this department tax will not be added.")
+                        .padding(.trailing)
+                        .frame(maxWidth: 420)
+                    
+                })
+                .frame(maxWidth: 720)
+            } //: VStack
             Spacer()
             
             Button {
@@ -154,9 +152,9 @@ struct AddDepartmentView: View {
             Image(systemName: "building.2.fill")
                 .resizable()
                 .scaledToFit()
-                .frame(width: 72)
+                .frame(width: 96)
                 .foregroundColor(Color("Purple800"))
-                .opacity(0.2)
+                .opacity(0.1)
             ,alignment: .topTrailing
         )
         .padding()
