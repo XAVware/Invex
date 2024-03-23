@@ -10,7 +10,7 @@ import SwiftUI
 struct ToolbarView: View {
     @Binding var menuState: MenuState
     @Binding var cartState: CartState
-    @Binding var itemTableStyle: TableViewStyle
+    @Binding var display: DisplayStates
     
     @State var showAddDepartment: Bool = false
     @State var showAddItem: Bool = false
@@ -45,70 +45,65 @@ struct ToolbarView: View {
             }
             
             
-            Picker("Item selection view layout", selection: $itemTableStyle) {
-                ForEach(TableViewStyle.allCases, id: \.self) { style in
-                    Image(systemName: style.rawValue)
+            if display == .inventoryList {
+                
+                Button {
+                    showAddDepartment = true
+                } label: {
+                    Image(systemName: "plus")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 12)
+                        .foregroundStyle(Theme.primaryColor)
+                    
+                    Text("Add Department")
+                        .foregroundStyle(.black)
+                }
+                .padding(8)
+                .background(Color("Purple050"))
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .shadow(radius: 2)
+                .sheet(isPresented: $showAddDepartment) {
+                    AddDepartmentView()
+                }
+                
+                Button {
+                    showAddItem = true
+                } label: {
+                    Image(systemName: "plus")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 12)
+                        .foregroundStyle(Theme.primaryColor)
+                    
+                    Text("Add Item")
+                        .foregroundStyle(.black)
+                }
+                .padding(8)
+                .background(Color("Purple050"))
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .shadow(radius: 2)
+                .sheet(isPresented: $showAddItem) {
+                    AddItemView()
                 }
             }
-            .pickerStyle(SegmentedPickerStyle())
-            .frame(width: 120)
-            
-            Button {
-                showAddDepartment = true
-            } label: {
-                Image(systemName: "plus")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 12)
-                    .foregroundStyle(Theme.primaryColor)
-                
-                Text("Add Department")
-                    .foregroundStyle(.black)
-            }
-            .padding(8)
-            .background(Color("Purple050"))
-            .clipShape(RoundedRectangle(cornerRadius: 6))
-            .shadow(radius: 2)
-            .sheet(isPresented: $showAddDepartment) {
-                AddDepartmentView()
-            }
-            
-            Button {
-                showAddItem = true
-            } label: {
-                Image(systemName: "plus")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 12)
-                    .foregroundStyle(Theme.primaryColor)
-                
-                Text("Add Item")
-                    .foregroundStyle(.black)
-            }
-            .padding(8)
-            .background(Color("Purple050"))
-            .clipShape(RoundedRectangle(cornerRadius: 6))
-            .shadow(radius: 2)
-            .sheet(isPresented: $showAddItem) {
-                AddItemView()
-            }
-            
             Spacer()
-            
-            Button {
-                toggleCart()
-            } label: {
-                Image(systemName: "cart")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                    .foregroundStyle(Color("Purple800"))
-            }
-        } //: HStack
+            if display == .makeASale {
+                Button {
+                    toggleCart()
+                } label: {
+                    Image(systemName: "cart")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .foregroundStyle(Color("Purple800"))
+                }
+            } //: HStack
+        }
     } //: Toolbar
 }
 
 #Preview {
-    ToolbarView(menuState: .constant(.compact), cartState: .constant(.sidebar), itemTableStyle: .constant(.grid))
+    ToolbarView(menuState: .constant(.compact), cartState: .constant(.sidebar), display: .constant(.makeASale))
         .padding()
 }

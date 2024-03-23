@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @EnvironmentObject var navMan: NavigationManager
+//    @EnvironmentObject var navMan: NavigationManager
     
     enum Settings: CaseIterable {
         case resetAll
@@ -41,9 +41,9 @@ struct SettingsView: View {
             ForEach(Settings.allCases, id: \.self) { setting in
                 Button {
 //                    setting.action
-                    if setting == .resetAll {
-                        navMan.changeDisplay(to: .makeASale)
-                    }
+//                    if setting == .resetAll {
+//                        navMan.changeDisplay(to: .makeASale)
+//                    }
                 } label: {
                     Text(setting.buttonText)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -92,7 +92,7 @@ struct SettingsView: View {
     private var headerToolbar: some View {
         HStack(spacing: 24) {
             Button {
-                navMan.toggleMenu()
+//                navMan.toggleMenu()
             } label: {
                 Image(systemName: "sidebar.squares.leading")
                     .resizable()
@@ -103,13 +103,13 @@ struct SettingsView: View {
             
             
             Button {
-                navMan.toggleCartPreview()
+//                navMan.toggleCartPreview()
             } label: {
-                Image(systemName: navMan.detailSize == .hidden ? "cart" : "chevron.forward.2")
-                    .resizable()
-                    .scaledToFit()
-//                    .frame(width: 30)
-                    .foregroundColor(Theme.primaryBackground)
+//                Image(systemName: navMan.detailSize == .hidden ? "cart" : "chevron.forward.2")
+//                    .resizable()
+//                    .scaledToFit()
+////                    .frame(width: 30)
+//                    .foregroundColor(Theme.primaryBackground)
             } //: Button
             
         } //: HStack

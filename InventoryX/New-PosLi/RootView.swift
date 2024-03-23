@@ -18,26 +18,43 @@ struct RootView: View {
     @State var cartState: CartState = .sidebar
     
     @State var selectedDepartment: DepartmentEntity?
-    @State var itemTableStyle: TableViewStyle = .grid
     
     
-    // Detail view width
     var detailWidth: CGFloat {
-        return switch currentDisplay {
+        var dWidth: CGFloat = 1
+        
+        switch currentDisplay {
         case .makeASale:
-            cartState == .sidebar ? (menuState == .open ? uiProperties.width * 0.20 : uiProperties.width * 0.25) : 0
+            switch cartState {
+            case .hidden:
+                dWidth = 0
+                
+            case .sidebar:
+                if menuState == .open {
+                    dWidth = uiProperties.width * 0.20
+                } else {
+                    dWidth = uiProperties.width * 0.25
+                }
+                
+            case .confirming:
+                dWidth = uiProperties.width
+            }
+            
         case .inventoryList:
-            0
+            dWidth = 0
         case .salesHistory:
-            0
+            dWidth = 0
         case .settings:
-            0
+            dWidth = 0
         }
+        return dWidth
     }
-    
+
+        
     var body: some View {
         HStack {
-            if uiProperties.horizontalSizeClass == .regular {
+            // SHould make state not
+            if uiProperties.horizontalSizeClass == .regular && cartState != .confirming {
                 Menu(display: $currentDisplay, menuState: $menuState)
                     .frame(maxWidth: menuState == .open ? uiProperties.width * 0.2 : nil)
             }
@@ -45,39 +62,40 @@ struct RootView: View {
             HStack {
                 // MARK: - CONTENT
                 VStack(spacing: 6) {
-                    ToolbarView(menuState: $menuState, cartState: $cartState, itemTableStyle: $itemTableStyle)
-                        .padding()
+                    if cartState != .confirming {
+                        ToolbarView(menuState: $menuState, cartState: $cartState, display: $currentDisplay)
+                            .padding()
+                    }
                     
                     switch currentDisplay {
                     case .makeASale:
-                        VStack(spacing: 24) {
-                            DepartmentPicker(selectedDepartment: $selectedDepartment, style: .scrolling)
-                            
-                            ItemTableView(department: $selectedDepartment, style: .grid) { item in
-                                // If making a sale, add the item to cart. Otherwise select the item so it can be displayed in a add/modify item view.
-                                // Handle through protocol
-                                posVM.itemTapped(item: item)
-                            }
-                            
-                        } //: VStack
-                        .padding(.horizontal)
+                        if cartState != .confirming {
+                            VStack(spacing: 24) {
+                                DepartmentPicker(selectedDepartment: $selectedDepartment, style: .scrolling)
+                                
+                                ItemTableView(department: $selectedDepartment, style: .grid) { item in
+                                    // Add the item to cart. Otherwise select the item so it can be displayed in a add/modify item view.
+                                    posVM.itemTapped(item: item)
+                                }
+                                
+                            } //: VStack
+                            .padding(.horizontal)
+                        } 
                         
                     case .inventoryList:
                             
                             ItemTableView(department: $selectedDepartment, style: .list) { item in
-                                // If making a sale, add the item to cart. Otherwise select the item so it can be displayed in a add/modify item view.
+                                // Display item in view/edit item view.
                                 // Handle through protocol
                                 posVM.itemTapped(item: item)
                             }
                             
-                        
                     case .salesHistory:
                         Text("Sales")
                         
                     case .settings:
                         DepartmentsView()
                     }
-                    
                     
                 } //: VStack
                 
@@ -88,8 +106,9 @@ struct RootView: View {
                         CartViewNew(cartState: $cartState, menuState: $menuState)
                             .environmentObject(posVM)
                             .padding()
-                            .frame(width: detailWidth)
                             .background(Color("Purple050").opacity(0.5))
+                            .frame(maxWidth: cartState == .confirming ? .infinity : detailWidth)
+                            .frame(maxHeight: .infinity)
                         
                     case .inventoryList:
                         

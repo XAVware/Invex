@@ -10,19 +10,11 @@ import RealmSwift
 
 class MakeASaleViewModel: ObservableObject {
 //    @Published var cartItems: [InventoryItemModel] = []
-        @Published var cartItems: [InventoryItemModel] = [InventoryItemModel(id: ItemEntity.item1._id, name: ItemEntity.item1.name, retailPrice: 1.00, qtyInCart: 2)]
-    @Published var isConfirmingSale: Bool = false
+        @Published var cartItems: [InventoryItemModel] = [InventoryItemModel(id: ItemEntity.item1._id, name: ItemEntity.item1.name, retailPrice: ItemEntity.item1.retailPrice, qtyInCart: 2),
+                                                          InventoryItemModel(id: ItemEntity.item4._id, name: ItemEntity.item4.name, retailPrice: ItemEntity.item4.retailPrice, qtyInCart: 1),
+                                                          InventoryItemModel(id: ItemEntity.item5._id, name: ItemEntity.item5.name, retailPrice: ItemEntity.item5.retailPrice, qtyInCart: 6)]
+//    @Published var isConfirmingSale: Bool = false
     //    @Published var isShowingCartPreview: Bool = true
-    
-    var cartSubtotal: Double {
-        var tempTotal: Double = 0
-        for item in cartItems {
-            guard let retailPrice = item.retailPrice else { return -2 }
-            guard let qtyInCart = item.qtyInCart else { return -3 }
-            tempTotal += retailPrice * Double(qtyInCart)
-        }
-        return tempTotal
-    }
     
     func itemTapped(item: ItemEntity) {
         if let _ = cartItems.first(where: { $0.id == item._id }) {
@@ -34,23 +26,21 @@ class MakeASaleViewModel: ObservableObject {
         }
     }
     
-    func checkoutTapped() {
-        //Remove items from cart if the quantity is 0 and check that there are still items in cart.
-        cartItems.removeAll (where: { $0.qtyInCart == 0 })
-        guard !cartItems.isEmpty else { return }
-        
-        //Display Confirmation Page in View
-        //View listens for change of isConfirming and hides/shows the menu.
-        isConfirmingSale = true
-    }
+//    func checkoutTapped() {
+//        //Remove items from cart if the quantity is 0 and check that there are still items in cart.
+//        cartItems.removeAll (where: { $0.qtyInCart == 0 })
+//        guard !cartItems.isEmpty else { return }
+//        
+//        isConfirmingSale = true
+//    }
     
-    func finalizeTapped() {
-        finalizeSale()
-    }
+//    func finalizeTapped() {
+//        finalizeSale()
+//    }
     
-    func cancelTapped() {
-        returnToMakeASale()
-    }
+//    func cancelTapped() {
+//        returnToMakeASale()
+//    }
     
     private func addItem(_ item: ItemEntity) {
         let tempCartItem = InventoryItemModel(id: item._id, name: item.name, retailPrice: item.retailPrice, qtyInCart: 1)
@@ -66,12 +56,11 @@ class MakeASaleViewModel: ObservableObject {
         cartItems[index] = tempCartItem
     }
     
-    private func finalizeSale() {
-        //Subtract the number sold from the original on hand quantity and update the item in Realm
+    /// When a sale is finalized, the on-hand quantity of each item sold needs to be updated to reflect the items that were sold and a Sale needs to be created and saved.
+    ///     - When Checkout is first tapped, all items that have a nil or 0 qtyInCart are removed from cartItems array. This line should not be necessary. Maybe use closure to pass $0 to funtion.
+    func finalizeSale(completion: @escaping (() -> Void)) {
         cartItems.forEach { item in
-            
-            // When Checkout is first tapped, all items that have a nil or 0 qtyInCart are removed from cartItems array. This line should not be necessary. Maybe use closure to pass $0 to funtion.
-            guard let qtySold = item.qtyInCart else { return }
+        guard let qtySold = item.qtyInCart else { return }
             Task {
                 do {
                     guard let result = try await DataService.fetchItem(withId: item.id) else {
@@ -104,19 +93,16 @@ class MakeASaleViewModel: ObservableObject {
         Task {
             do {
                 try await DataService.saveSale(newSale)
+                print("Sale saved")
+                cartItems.removeAll()
+                completion()
             } catch {
                 LogService(self).error("Error saving sale: \(error.localizedDescription)")
             }
         }
         
-        //Show success message, reset cart
-        cartItems.removeAll()
-        returnToMakeASale()
     }
-    
-    private func returnToMakeASale() {
-        isConfirmingSale.toggle()
-    }
+
     
 }
 

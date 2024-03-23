@@ -8,6 +8,12 @@
 import SwiftUI
 import RealmSwift
 
+struct ColumnHeaderModel: Identifiable {
+    let id = UUID()
+    let headerText: String
+    let sortDescriptor: String
+}
+
 enum TableViewStyle: String, CaseIterable {
     case grid = "square.grid.2x2.fill"
     case list = "list.dash"

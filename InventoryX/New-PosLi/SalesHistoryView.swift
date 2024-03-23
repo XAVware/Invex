@@ -1,11 +1,19 @@
+//
+//  SalesHistoryView.swift
+//  InventoryX
+//
+//  Created by Ryan Smetana on 3/23/24.
+//
+
+import SwiftUI
+
 
 
 import Charts
-import SwiftUI
 import RealmSwift
 
 struct SalesHistoryView: View {
-    @EnvironmentObject var navMan: NavigationManager
+//    @EnvironmentObject var navMan: NavigationManager
     var columnTitles: [String] = ["Timestamp", "No. Items", "Subtotal"]
     
     @State var selectedDateRange: DateRanges = DateRanges.today
@@ -93,14 +101,14 @@ struct SalesHistoryView: View {
                     .padding(.bottom)
                 
                 Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatAsCurrencyString())")
-                    .modifier(TextMod(.title3, .semibold, Theme.darkFgColor))
+                    .modifier(TextMod(.title3, .semibold, .black))
                 
                 
                 Chart {
                     ForEach(getGroupedSales()) { group in
                         BarMark(x: .value("Hour", group.label),
                                 y: .value("Value", group.total))
-                        .foregroundStyle(Theme.primaryBackground)
+                        .foregroundStyle(Theme.primaryColor)
                         .cornerRadius(8)
                     }
                 }
@@ -146,15 +154,14 @@ struct SalesHistoryView: View {
                 } //: List
                 .scrollContentBackground(.hidden)
                 .frame(maxWidth: 0.6 * geo.size.width)
-                .background(Theme.lightFgColor)
+                .background(Color("Purple050"))
                 .cornerRadius(15)
                 
             } //: VStack
             .padding()
-            .background(Theme.secondaryBackground)
+            .background(Color("Purple050"))
             .onAppear {
                 updateSales(newRange: selectedDateRange)
-//                print(UserManager.shared.getLoggedInUserName())
             }
             .sheet(item: $selectedSale, onDismiss: {
                 selectedSale = nil
@@ -171,18 +178,18 @@ struct SalesHistoryView: View {
     private var headerToolbar: some View {
         HStack(spacing: 24) {
             Button {
-                navMan.toggleMenu()
+//                navMan.toggleMenu()
             } label: {
                 Image(systemName: "sidebar.squares.leading")
                     .resizable()
                     .scaledToFit()
-                    .foregroundColor(Theme.primaryBackground)
+                    .foregroundColor(Theme.primaryColor)
             }
             
             Spacer()
             
             Text("Sales History")
-                .modifier(TextMod(.title3, .semibold, Theme.darkFgColor))
+                .modifier(TextMod(.title3, .semibold, .black))
             
             Spacer()
             
@@ -194,9 +201,9 @@ struct SalesHistoryView: View {
             } label: {
                 Text("Range")
             }
-            .tint(Theme.darkFgColor)
+//            .tint()
         } //: HStack
-        .modifier(TextMod(.body, .light, Theme.primaryBackground))
+        .modifier(TextMod(.body, .light, Theme.primaryColor))
         .frame(height: toolbarHeight)
         .padding(.horizontal)
     } //: Header Toolbar
@@ -218,11 +225,7 @@ struct SalesHistoryView: View {
     
 }
 
-struct SalesHistoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        SalesHistoryView()
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
-}
 
+#Preview {
+    SalesHistoryView()
+}
