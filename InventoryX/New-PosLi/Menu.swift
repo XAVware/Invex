@@ -10,7 +10,7 @@ import SwiftUI
 enum MenuState { case open, compact, closed }
 
 struct Menu: View {
-    @Binding var display: DisplayStates
+    @Binding var display: DisplayState
     @Binding var menuState: MenuState
     
     var body: some View {
@@ -62,14 +62,14 @@ struct Menu: View {
             }
         }
         
-        var display: DisplayStates {
+        var display: DisplayState {
             return switch self {
-            case .dashboard: .makeASale
-            case .makeASale: .makeASale
-            case .inventoryList: .inventoryList
-            case .salesHistory: .salesHistory
-            case .settings: .settings
-            case .lock: .makeASale
+            case .dashboard:        .makeASale
+            case .makeASale:        .makeASale
+            case .inventoryList:    .inventoryList
+            case .salesHistory:     .salesHistory
+            case .settings:         .settings
+            case .lock:             .lockScreen
                 
             }
         }

@@ -19,7 +19,7 @@ import RealmSwift
 
 
 /// `DataService` handles all communications with Realm. Duplicate department names should be handled here.
-class DataService {
+@MainActor class DataService {
     
     private let migrator: RealmMigrator = RealmMigrator()
     

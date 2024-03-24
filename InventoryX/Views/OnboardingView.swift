@@ -8,378 +8,160 @@
 import SwiftUI
 import RealmSwift
 
-@MainActor class OnboardingViewModel: ObservableObject {
-    var navCounter: Int = 0
-    private let lastPageInt: Int
-    @Published var currentOnboardingState: OnboardingState = .start
-    
-    //    @Published var currentUser: UserEntity?
-    
-    //Categories
-    @Published var tempCategories: [DepartmentEntity] = []
-    @Published var newCategoryName: String = ""
-    @Published var thresholdString: String = "10"
-    
-    //Profile
-//    @Published var newProfileName: String = ""
-//    @Published var newProfileEmail: String = ""
-    
-    enum OnboardingState: Int, CaseIterable {
-        case start = 0
-        case categoryNames = 1
-//        case profileSetup = 2
-        
-        var buttonText: String {
-            switch self {
-            case .start:
-                return "Get Started"
-            case .categoryNames:
-                return "Save & Continue"
-//            case .profileSetup:
-//                return "Finish"
-            }
-        }
-        
-        //        func next() {
-        //            let currentIndex = self.rawValue
-        //            let newDisplay = OnboardingState.init(rawValue: currentIndex + 1)
-        //            self = newDisplay
-        //        }
-    }
-    
-    init() {
-        // Iterate through OnboardingState enum to figure out how many pages there are. This allows the overall workflow (welcome page, categories, admin) to be reorganized or edited via integer value in enum.
-        var pageInt: Int = 0
-        for navState in OnboardingState.allCases {
-            let pageNum = navState.rawValue
-            if pageNum > pageInt {
-                pageInt = pageNum
-            }
-        }
-        lastPageInt = pageInt
-    }
-    
-    func nextTapped() {
-        guard navCounter != lastPageInt else {
-            finishOnboarding()
-            return
-            
-        }
-        
-        switch currentOnboardingState {
-        case .start:
-            break
-            
-        case .categoryNames:
-            if self.newCategoryName != "" {
-                addTempCategory()
-            }
-            
-//        case .profileSetup:
-//            guard let _ = getAdmin() else {
-//                print("Saving user failed")
-//                return
-//            }
-            //            saveUser(user)
-        }
-        
-        navCounter += 1
-        
-        guard let newState = OnboardingState(rawValue: navCounter) else {
-            print("Error setting new state")
-            return
-        }
-        currentOnboardingState = newState
-    }
-    
-    // MARK: - CATEGORY FUNCTIONS
-    func addTempCategory() {
-        guard let threshold = Int(thresholdString) else { return }
-        for category in tempCategories {
-            if category.name == newCategoryName { return }
-        }
-        
-        let newCategory = DepartmentEntity(name: newCategoryName, restockNum: threshold)
-        tempCategories.append(newCategory)
-        newCategoryName = ""
-        thresholdString = "10"
-    }
-    
-    func removeTempCategory(_ category: DepartmentEntity) {
-        guard let index = tempCategories.firstIndex(of: category) else { return }
-        tempCategories.remove(at: index)
-    }
-    
-    // MARK: - USER FUNCTIONS
-//    func getAdmin() -> UserEntity? {
-//        guard newProfileName.isNotEmpty else { return nil }
-//        let name: String = newProfileName
-//        var email: String?
-//        
-//        if newProfileEmail.isNotEmpty {
-//            email = newProfileEmail
-//        }
-//        
-//        let newUser = UserEntity()
-//        newUser.profileName = name
-//        newUser.email = email
-//        
-//        newUser.role = .admin
-//        
-//        return newUser
+//@MainActor class OnboardingViewModel: ObservableObject {
+//    var navCounter: Int = 0
+//    private let lastPageInt: Int
+//    @Published var currentOnboardingState: OnboardingState = .start
+//    
+//    enum OnboardingState: Int, CaseIterable {
+//        case start = 0
+//        case setPasscode = 1
+//        case department = 2
+//        case item = 3
 //    }
-    
-    func finishOnboarding() {
-        debugPrint("Finishing onboarding process...")
-//        guard let newUser = getAdmin() else { return }
-        
-        do {
-            let realm = try Realm()
-            try realm.write ({
-                realm.add(tempCategories)
-//                realm.add(newUser)
-            })
-//            UserManager.shared.loginUser(newUser)
-            debugPrint("Categories and user saved")
-        } catch {
-//            AlertManager.shared.showError(title: "Error Saving", message: "\(error.localizedDescription)")
-            print("Error saving category to Realm: \(error.localizedDescription)")
-        }
-    }
-    
-    
+//    
+//    init() {
+//        // Iterate through OnboardingState enum to figure out how many pages there are. This allows the overall workflow (welcome page, categories, admin) to be reorganized or edited via integer value in enum.
+//        var pageInt: Int = 0
+//        for navState in OnboardingState.allCases {
+//            let pageNum = navState.rawValue
+//            if pageNum > pageInt {
+//                pageInt = pageNum
+//            }
+//        }
+//        lastPageInt = pageInt
+//    }
+//    
+//    func nextTapped() {
+//
+//    }
+//    
+//    
+//}
+
+enum OnboardingState: Int {
+    case start
+    case setPasscode
+    case department
+    case item
 }
 
-// MARK: - VIEW
-
 struct OnboardingView: View {
-//    @EnvironmentObject var userManager: UserManager
-    @StateObject var vm: OnboardingViewModel = OnboardingViewModel()
-//    @StateObject var alertManager: AlertManager = AlertManager.shared
-    @ObservedResults(DepartmentEntity.self) var categories
+    @Environment(\.dismiss) var dismiss
+//    @StateObject var vm: OnboardingViewModel = OnboardingViewModel()
+    
+    @State var currentDisplay: OnboardingState = .start
+    
+    @State var companyName: String = ""
+    @State var taxRate: String = ""
+    
+    @State var passcodeHash: String = ""
     
     var body: some View {
-        GeometryReader { geo in
-            ZStack {
-                Theme.primaryBackground
-                    .edgesIgnoringSafeArea(.all)
-                
-                VStack {
-                    switch(vm.currentOnboardingState) {
-                    case .start:
-                        welcomePage
+        
+        VStack {
+            switch(currentDisplay) {
+            case .start:
+                VStack(spacing: 24) {
+                    LogoView()
+                        .scaleEffect(2.0)
+                        .padding(.top)
+                    
+                    Text("Welcome to Invex! Let's get you set up.")
+                        .font(.largeTitle)
+                        .padding(.vertical)
+                    
+                    
+                    VStack(alignment: .leading, spacing: 16) {
+                        InputFieldLabel(title: "Business Name:", subtitle: nil)
+                            .frame(maxWidth: 420, alignment: .leading)
                         
-                    case .categoryNames:
-                        categoriesView
+                        TextField("Company name", text: $companyName)
+                            .modifier(ThemeFieldMod())
+                    } //: VStack - Department Name
+                    
+                    Divider()
+                    
+                    HStack(spacing: 16) {
+                        InputFieldLabel(title: "Tax Rate:", subtitle: "If you want us to calculate the tax on your sales, enter a tax rate here.")
                         
-//                    case .profileSetup:
-//                        profileSetup
-                    } //: Switch
+                        Spacer()
+                        
+                        TextField("X.xx", text: $taxRate)
+                            .frame(maxWidth: 72, alignment: .center)
+                            .modifier(ThemeFieldMod(overlayText: "%", overlaySide: .trailing))
+                    } //: HStack - Markup
+                    .frame(maxWidth: 720)
+                    
+                    Spacer()
+                    
+                    Button {
+                        // Save company info
+                        currentDisplay = .setPasscode
+                    } label: {
+                        Text("Continue")
+                    }
+                    .modifier(PrimaryButtonMod())
+                    .padding(.bottom)
+                    
                 } //: VStack
-                .padding()
-                .frame(maxWidth: 0.75 * geo.size.width)
-                .background(Theme.secondaryBackground)
-                .cornerRadius(20)
-                .padding()
-//                .alert(isPresented: $alertManager.isShowing) {
-//                    alertManager.alert
-//                }
-            } //: ZStack
-        }
+                .frame(maxWidth: 480)
+                
+            case .setPasscode:
+                VStack(alignment: .center) {
+                    VStack(spacing: 24) {
+                        Text("Enter Passcode")
+                            .font(.largeTitle)
+                            .fontWeight(.semibold)
+                        
+                        Text("Enter a 4-digit passcode to be used to unlock the app.")
+                            .font(.subheadline)
+                            .multilineTextAlignment(.center)
+                    } //: VStack
+                    
+                    PasscodeView() { hash in
+                        if passcodeHash.isEmpty {
+                            print("Setting first passcode to: \(hash)")
+                            passcodeHash = hash
+                        } else {
+                            guard passcodeHash == hash else {
+                                passcodeHash = ""
+                                return
+                            }
+                            
+                            print("Passcodes match")
+                            
+                            AuthService.shared.savePasscode(hash: passcodeHash)
+                            currentDisplay = .department
+                        }
+                    }
+                    .padding(.vertical)
+                    .frame(maxWidth: 360, maxHeight: 540, alignment: .center)
+                    
+                    
+                } //: VStack
+                
+            case .department:
+                AddDepartmentView(isOnboarding: true) {
+                    currentDisplay = .item
+                }
+                
+            case .item:
+                AddItemView(isOnboarding: true) {
+                    dismiss()
+                }
+                
+            } //: Switch
+            
+            
+        } //: VStack
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color("Purple050").opacity(0.5))
+        
     } //: Body
     
-    // MARK: - WELCOME PAGE
-    private var welcomePage: some View {
-        VStack {
-            LogoView()
-                .scaleEffect(2.0)
-                .padding(.top)
-            
-            Spacer()
-            
-            continueButton
-        } //: VStack
-    } //: Welcome Page
     
-    // MARK: - ADD CATEGORIES
-    private var categoriesView: some View {
-        GeometryReader { geo in
-            VStack(spacing: 16) {
-                Text("Setup Categories")
-                    .modifier(TextMod(.largeTitle, .bold, Theme.darkFgColor))
-                
-                HStack(spacing: 8) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Category Name")
-                            .modifier(TextMod(.title3, .bold, .black))
-    
-                        Text("Your inventory will be displayed based on their category. This should be a broad term that represents some of your items. I.e Food, Books, etc.")
-                            .modifier(TextMod(.footnote, .thin, .black))
-                            .multilineTextAlignment(.leading)
-                            .frame(width: 0.4 * geo.size.width, alignment: .leading)
-                    } //: VStack
-                    .frame(width: 0.4 * geo.size.width)
-                    
-                    Spacer()
-                    
-                    AnimatedTextField(boundTo: $vm.newCategoryName, placeholder: "Category Name")
-                        .autocapitalization(UITextAutocapitalizationType.words)
-                        .frame(width: 0.4 * geo.size.width)
-                } //: HStack
-                .frame(maxWidth: .infinity)
-                .padding(.vertical)
-    
-                HStack(spacing: 8) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Restock Threshold")
-                            .modifier(TextMod(.title3, .bold, .black))
-    
-                        Text("If an item reaches its category's restock threshold, InventoryX will alert you.")
-                            .modifier(TextMod(.footnote, .thin, .black))
-                            .multilineTextAlignment(.leading)
-                            .frame(width: 0.4 * geo.size.width, alignment: .leading)
-                    } //: VStack
-                    .frame(width: 0.4 * geo.size.width)
-                    
-                    Spacer()
-                    
-                    AnimatedTextField(boundTo: $vm.thresholdString, placeholder: "Threshold")
-                        .autocapitalization(UITextAutocapitalizationType.words)
-                        .frame(width: 0.4 * geo.size.width)
-                } //: HStack
-                .frame(maxWidth: .infinity)
-                .padding(.vertical)
-                                
-                Button {
-                    vm.addTempCategory()
-                } label: {
-                    HStack(spacing: 24) {
-                        Text("Save and Add Another")
-                        Image(systemName: "plus")
-                    } //: HStack
-                    .modifier(TextMod(.body, .regular, Theme.darkFgColor))
-                    .frame(maxWidth: 0.35 * geo.size.width, maxHeight: 32)
-                }
-                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Theme.primaryBackground, lineWidth: 1))
-                
-                Spacer()
-                
-                if !vm.tempCategories.isEmpty {
-                    VStack(spacing: 16) {
-                        HStack {
-                            Text("Category")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                                        
-                            Text("Threshold")
-                                .frame(maxWidth: .infinity, alignment: .center)
-                            
-                            Spacer()
-                                .frame(maxWidth: .infinity)   .opacity(0.6)
-                        } //: HStack
-                        .modifier(TextMod(.callout, .semibold))
-                            
-                        ScrollView(.vertical, showsIndicators: false) {
-                            ForEach(vm.tempCategories, id: \.self) { category in
-                                HStack {
-                                    Text(category.name)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                                                        
-                                    Text("\(category.restockNumber)")
-                                        .frame(maxWidth: .infinity, alignment: .center)
-                                                                        
-                                    Button {
-                                        vm.removeTempCategory(category)
-                                    } label: {
-                                        Image(systemName: "trash")
-                                            .foregroundColor(.red)
-                                            .opacity(0.6)
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                }//: HStack
-                                .modifier(TextMod(.footnote, .thin, .black))
-                                
-                                Divider().opacity(0.5)
-                            }//: ForEach
-                        }//: Scroll
-                        
-                        continueButton
-                    } //: VStack
-                    .frame(maxWidth: 0.5 * geo.size.width)
-                }
-            } //: VStack
-            .padding()
-            .frame(maxWidth: .infinity)
-        } //: Geometry Reader
-    } //: Categories View
-    
-    
-    // MARK: - PROFILE
-//    private var profileSetup: some View {
-//        GeometryReader { geo in
-//            VStack {
-//                Text("Profile Setup")
-//                    .modifier(TextMod(.largeTitle, .bold, Theme.darkFgColor))
-//                
-//                VStack(spacing: 24) {
-//                    HStack {
-//                        VStack(alignment: .leading, spacing: 8) {
-//                            Text("Create Admin Profile")
-//                                .modifier(TextMod(.title3, .bold, .black))
-//                            
-//                            Text("Your admin profile will give you full access to the app. You can create other accounts later.")
-//                                .modifier(TextMod(.footnote, .thin, .black))
-//                                .multilineTextAlignment(.leading)
-//                        } //: VStack
-//                        .frame(width: 0.4 * geo.size.width)
-//                        
-//                        Spacer()
-//                        
-////                        AnimatedTextField(boundTo: $vm.newProfileName, placeholder: "Profile Name")
-////                            .autocapitalization(UITextAutocapitalizationType.words)
-////                            .frame(width: 0.4 * geo.size.width)
-//                    } //: HStack
-//                    
-//                    Divider().background(Theme.secondaryBackground)
-//                                        
-//                    HStack(spacing: 32) {
-//                        VStack(alignment: .leading, spacing: 8) {
-//                            Text("Add An Email")
-//                                .modifier(TextMod(.title3, .bold, .black))
-//                                                        
-//                            Text("If you add an email you can receive email notifications when item inventory is low.")
-//                                .modifier(TextMod(.footnote, .thin, .black))
-//                                .multilineTextAlignment(.leading)
-//                        } //: VStack
-//                        .frame(width: 0.4 * geo.size.width)
-//                        
-//                        Spacer()
-//                        
-////                        AnimatedTextField(boundTo: $vm.newProfileEmail, placeholder: "Email")
-////                            .autocapitalization(UITextAutocapitalizationType.none)
-////                            .frame(width: 0.4 * geo.size.width)
-//                    } //: HStack
-//                    
-//                    Spacer()
-//                } //: VStack
-//                
-//                continueButton
-//            } //: VStack
-//            .frame(width: 0.9 * geo.size.width)
-//            .padding(.vertical)
-//            .frame(maxWidth: .infinity)
-//        } //: Geometry Reader
-//    } //: Profile Setup
-    
-    
-    private var continueButton: some View {
-        Button(action: {
-            vm.nextTapped()
-        }, label: {
-            Text(vm.currentOnboardingState.buttonText)
-        })
-        .modifier(PrimaryButtonMod())
-        .padding(.bottom)
-    } //: Continue Button
 }
 
 struct OnboardingView_Previews: PreviewProvider {
@@ -388,5 +170,6 @@ struct OnboardingView_Previews: PreviewProvider {
         OnboardingView()
             .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
             .previewInterfaceOrientation(.landscapeLeft)
+            .environment(\.realm, DepartmentEntity.previewRealm)
     }
 }

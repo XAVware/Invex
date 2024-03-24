@@ -10,7 +10,7 @@ import SwiftUI
 struct ToolbarView: View {
     @Binding var menuState: MenuState
     @Binding var cartState: CartState
-    @Binding var display: DisplayStates
+    @Binding var display: DisplayState
     
     @State var showAddDepartment: Bool = false
     @State var showAddItem: Bool = false
@@ -64,7 +64,7 @@ struct ToolbarView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .shadow(radius: 2)
                 .sheet(isPresented: $showAddDepartment) {
-                    AddDepartmentView()
+                    AddDepartmentView() {}
                 }
                 
                 Button {
@@ -84,7 +84,7 @@ struct ToolbarView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .shadow(radius: 2)
                 .sheet(isPresented: $showAddItem) {
-                    AddItemView()
+                    AddItemView() {}
                 }
             }
             Spacer()

@@ -22,15 +22,16 @@ struct PrimaryButtonMod: ViewModifier {
 
 struct ThemeFieldMod: ViewModifier {
     @State var overlayText: String = ""
+    @State var overlaySide: Alignment = .leading
     
     func body(content: Content) -> some View {
         content
             .padding(.leading, overlayText.isEmpty ? 0 : 42)
             .padding()
-            .frame(maxWidth: .infinity, maxHeight: 48)
+            .frame(maxHeight: 48)
             .background(.white.opacity(0.95))
             .clipShape(RoundedRectangle(cornerRadius: 6))
-            .overlay(overlayText.isEmpty ? nil : highlight, alignment: .leading)
+            .overlay(overlayText.isEmpty ? nil : highlight, alignment: overlaySide)
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
                     .stroke(lineWidth: 0.5)
@@ -44,7 +45,7 @@ struct ThemeFieldMod: ViewModifier {
     
     private var highlight: some View {
         ZStack {
-            RoundedCorner(radius: 6, corners: [.topLeft, .bottomLeft])
+            RoundedCorner(radius: 6, corners: overlaySide == .leading ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight])
                 .fill(Color("Purple800").opacity(0.9))
                 .opacity(0.8)
                 .frame(width: 42)
@@ -76,6 +77,4 @@ struct FieldSubtitleMod: ViewModifier {
             .foregroundStyle(.gray)
     }
 }
-#Preview {
-    AddDepartmentView(department: nil)
-}
+

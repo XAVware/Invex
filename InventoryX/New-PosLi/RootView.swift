@@ -7,18 +7,52 @@
 
 import SwiftUI
 import RealmSwift
+import Combine
+
+class RootViewModel: ObservableObject {
+    
+    private let service = AuthService.shared
+    private var cancellables = Set<AnyCancellable>()
+    
+    @Published var companyExists: Bool = false
+//    @Published var passHash: String = ""
+    
+    
+    init() {
+        configureSubscribers()
+    }
+    
+    func configureSubscribers() {
+        service.$exists
+            .sink { [weak self] exists in
+                self?.companyExists = exists
+                print("Exists received: \(exists)")
+            }
+            .store(in: &cancellables)
+        
+        
+//        service.$passHash
+//            .sink { [weak self] hash in
+//                self?.passHash = hash
+//                print("Hash received: \(hash)")
+//            }
+//            .store(in: &cancellables)
+    }
+}
 
 struct RootView: View {
     let uiProperties: LayoutProperties
-    
+    @StateObject var vm = RootViewModel()
     @StateObject var posVM = MakeASaleViewModel()
     
-    @State var currentDisplay: DisplayStates = .makeASale
+    @State var currentDisplay: DisplayState = .makeASale
     @State var menuState: MenuState = .compact
     @State var cartState: CartState = .sidebar
     
     @State var selectedDepartment: DepartmentEntity?
     
+    @State var showingOnboarding: Bool = false
+    @State var showingLockScreen: Bool = false
     
     var detailWidth: CGFloat {
         var dWidth: CGFloat = 1
@@ -40,11 +74,7 @@ struct RootView: View {
                 dWidth = uiProperties.width
             }
             
-        case .inventoryList:
-            dWidth = 0
-        case .salesHistory:
-            dWidth = 0
-        case .settings:
+        default:
             dWidth = 0
         }
         return dWidth
@@ -95,6 +125,8 @@ struct RootView: View {
                         
                     case .settings:
                         DepartmentsView()
+                        
+                    default: Divider()
                     }
                     
                 } //: VStack
@@ -109,24 +141,35 @@ struct RootView: View {
                             .background(Color("Purple050").opacity(0.5))
                             .frame(maxWidth: cartState == .confirming ? .infinity : detailWidth)
                             .frame(maxHeight: .infinity)
-                        
-                    case .inventoryList:
-                        
-                            Text("Inventory")
-                        
-                        
-                    case .salesHistory:
-                        Text("Sales")
+
                         
                     case .settings:
                         DepartmentsView()
+                        
+                    default: Divider()
                     }
+                    
+                
                 } else {
                     Divider()
                 }
             } //: HStack
 
         } //: HStack
+        .onReceive(vm.$companyExists) { exists in
+            showingOnboarding = !exists
+        }
+        .onChange(of: currentDisplay) { newValue in
+            if newValue == .lockScreen {
+                showingLockScreen = true
+            }
+        }
+        .fullScreenCover(isPresented: $showingLockScreen) {
+            LockScreenView()
+        }
+        .fullScreenCover(isPresented: $showingOnboarding) {
+            OnboardingView()
+        }
         
     } //: Body
     

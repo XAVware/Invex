@@ -8,15 +8,14 @@
 import SwiftUI
 import RealmSwift
 
-@MainActor class AddItemViewModel: ObservableObject {
+class AddItemViewModel: ObservableObject {
 
-    func saveItem(dept: DepartmentEntity, name: String, att: String, qty: String, price: String, cost: String, completion: @escaping () -> Void) async {
+    func saveItem(dept: DepartmentEntity, name: String, att: String, qty: String, price: String, cost: String) async {
         guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
         
         let newItem = ItemEntity(name: name, retailPrice: Double(price) ?? 1.0, avgCostPer: Double(cost) ?? 0.5, onHandQty: Int(qty) ?? 10)
         do {
             try await DataService.add(newItem, to: dept)
-            completion()
             
         } catch {
             LogService(self).error("Error saving item to Realm: \(error.localizedDescription)")
@@ -38,18 +37,23 @@ struct AddItemView: View {
     @State var retailPrice: String = ""
     @State var unitCost: String = ""
     
+    @State var isOnboarding: Bool = false
+    let completion: (() -> Void)?
+    
     var body: some View {
         
         VStack(spacing: 32) {
             VStack(alignment: .leading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24)
-                        .foregroundStyle(.black)
+                if !isOnboarding {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24)
+                            .foregroundStyle(.black)
+                    }
                 }
                 
                 Text("Add an item")
@@ -144,20 +148,25 @@ struct AddItemView: View {
             } //: HStack
             .frame(maxWidth: 720)
             
-            
             Spacer()
             
             Button {
                 guard let dept = selectedDepartment else { return }
                 Task {
-                    await vm.saveItem(dept: dept, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost) {
+                    await vm.saveItem(dept: dept, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
+                    
+                    if !isOnboarding {
                         dismiss()
+                    } else {
+                        completion?()
                     }
+                    
                 }
             } label: {
                 Text("Save Item")
             }
             .modifier(PrimaryButtonMod())
+            
             Spacer()
             
         } //: VStack
@@ -172,7 +181,7 @@ struct AddItemView: View {
 
 struct AddItemView_Previews: PreviewProvider {
     static var previews: some View {
-        AddItemView()
+        AddItemView() {}
 //            .frame(width: 400)
     }
 }

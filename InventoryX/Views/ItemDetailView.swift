@@ -12,7 +12,7 @@ struct ItemDetailView: View {
     
     var body: some View {
         if selectedItem == nil {
-            AddItemView()
+            AddItemView() {}
         } else {
             VStack(spacing: 16) {
                 Text("Item Details")

@@ -9,27 +9,20 @@ import SwiftUI
 
 struct PasscodeView: View {
     @State private var passcode = ""
-    @State private var showPasscodeError = false
-    @Binding var isAuthenticated: Bool
+
+    // Pass hash
+    var onSubmit: ((String) -> Void)
+    
     
     var body: some View {
-        VStack {
-            VStack(spacing: 48) {
-                VStack(spacing: 24) {
-                    Text("Enter Passcode")
-                        .font(.largeTitle)
-                        .fontWeight(.heavy)
-                    
-                    Text("Please enter your 4-digit pin to securely access your account.")
-                        .font(.subheadline)
-                        .multilineTextAlignment(.center)
-                }
-                .padding(.top)
+        VStack(spacing: 96) {
+//            VStack(spacing: 48) {
+
                 
                 HStack(spacing: 26) {
                     ForEach(0 ..< 4) { index in
                         Circle()
-                            .fill(passcode.count > index ? Color("Purple600") : Color("Purple200"))
+                            .fill(passcode.count > index ? Color("Purple800") : .clear)
                             .frame(width: 20, height: 20)
                             .overlay {
                                 if passcode.count <= index {
@@ -39,15 +32,9 @@ struct PasscodeView: View {
                             }
                     }
                 }
-                
-                if showPasscodeError {
-                    Text("Incorrect passcode. Please try again.")
-                        .font(.caption)
-                        .foregroundStyle(.red)
-                }
-            }
+
+//            }
             
-            Spacer()
             
             NumberPadView(passcode: $passcode)
         }
@@ -59,16 +46,15 @@ struct PasscodeView: View {
     private func verifyPasscode() {
         guard passcode.count == 4 else { return }
         
-        Task {
-            try? await Task.sleep(nanoseconds: 125_000_000)
-            isAuthenticated = passcode == "1111"
-            showPasscodeError = !isAuthenticated
-            passcode = ""
-        }
+//            try? await Task.sleep(nanoseconds: 125_000_000)
+//            isAuthenticated = passcode == "1111"
+//            showPasscodeError = !isAuthenticated
+        onSubmit(AuthService.shared.hashString(passcode))
+        passcode = ""
     }
 }
 
-#Preview {
-    PasscodeView(isAuthenticated: .constant(false))
-}
+//#Preview {
+//    PasscodeView(isAuthenticated: .constant(false))
+//}
 

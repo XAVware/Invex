@@ -13,8 +13,8 @@ enum AppError: Error {
     
     var localizedDescription: String {
         switch self {
-        case .departmentAlreadyExists: "Department already exists with this name"
-        case .numericThresholdRequired:          "Please enter a valid number for the restock threshold"
+        case .departmentAlreadyExists:      "Department already exists with this name"
+        case .numericThresholdRequired:     "Please enter a valid number for the restock threshold"
         }
     }
 }
@@ -22,9 +22,9 @@ enum AppError: Error {
 
 class AddDepartmentViewModel: ObservableObject {
     
-    func saveDepartment(name: String, threshold: String, hasTax: Bool, markup: Double) async throws {
+    func saveDepartment(name: String, threshold: String, hasTax: Bool, markup: String) async throws {
         // Make sure `threshold` was entered as a number
-        guard let threshold = Int(threshold) else { return }
+        guard let threshold = Int(threshold) else { throw AppError.numericThresholdRequired }
         
         let department = DepartmentEntity(name: name, restockNum: threshold)
         
@@ -45,12 +45,16 @@ struct AddDepartmentView: View {
     
     @State var department: DepartmentEntity?
     
-    @State var name: String = "Test"
+    
+    @State var name: String = ""
     @State var restockThreshold: String = ""
     @State var hasTax: Bool = false
-    @State var markup: Double = 0.00
+    @State var markup: String = ""
     
     @State var isEditing: Bool = false
+    
+    @State var isOnboarding: Bool = false
+    let completion: (() -> Void)?
     
     func setup(forDepartment department: DepartmentEntity?) {
         if let dept = department {
@@ -64,14 +68,16 @@ struct AddDepartmentView: View {
         VStack(alignment: .center, spacing: 32) {
             
             VStack(alignment: .leading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24)
-                        .foregroundStyle(.black)
+                if !isOnboarding {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24)
+                            .foregroundStyle(.black)
+                    }
                 }
                 
                 Text("Add a department")
@@ -79,6 +85,14 @@ struct AddDepartmentView: View {
                     .fontWeight(.semibold)
                     .fontDesign(.rounded)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                
+                if isOnboarding {
+                    Text("You will be able to quickly search for your items by their department.")
+                        .font(.title3)
+                        .fontWeight(.regular)
+                        .fontDesign(.rounded)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
                 
             } //: VStack
             .frame(maxWidth: 720)
@@ -120,32 +134,42 @@ struct AddDepartmentView: View {
                     
                     Spacer()
                     
-                    TextField("0", text: $restockThreshold)
+                    TextField("0", text: $markup)
                         .modifier(ThemeFieldMod(overlayText: "%"))
                         .frame(maxWidth: 120)
                 } //: HStack - Markup
                 .frame(maxWidth: 720)
                 
                 
-                Toggle(isOn: $hasTax, label: {
+                Toggle(isOn: $hasTax) {
                     InputFieldLabel(title: "Tax free:", subtitle: "If you mark this department as tax free, when you sell items from this department tax will not be added.")
                         .padding(.trailing)
                         .frame(maxWidth: 420)
                     
-                })
+                }
                 .frame(maxWidth: 720)
             } //: VStack
+            
             Spacer()
             
             Button {
                 Task {
-                    try await vm.saveDepartment(name: name, threshold: restockThreshold, hasTax: hasTax, markup: markup)
-                    dismiss()
+                    do {
+                        try await vm.saveDepartment(name: name, threshold: restockThreshold, hasTax: hasTax, markup: markup)
+                        if !isOnboarding {
+                            dismiss()
+                        } else {
+                            completion?()
+                        }
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 }
             } label: {
-                Text("Save Department")
+                Text(isOnboarding ? "Continue" : "Save Department")
             }
             .modifier(PrimaryButtonMod())
+            
             Spacer()
         } //: VStack
         .overlay(
@@ -169,5 +193,5 @@ struct AddDepartmentView: View {
 }
 
 #Preview {
-    AddDepartmentView(department: nil)
+    AddDepartmentView(department: nil) {}
 }

@@ -9,14 +9,32 @@ import SwiftUI
 import CryptoKit
 
 class AuthService {
-    static let shared = AuthService()
+    @Published var exists: Bool
+    @Published var passHash: String = ""
+    @Published var isLocked: Bool = false
     
-    @AppStorage("passcode", store: .standard) var passcode: String = ""
+    static let shared = AuthService()
+        
+    init() {
+        self.exists = UserDefaults.standard.object(forKey: "passcode") != nil
+        
+        print("Passcode exists: \(exists)")
+    }
     
     func hashString(_ str: String) -> String {
         let data = Data(str.utf8)
         let digest = SHA256.hash(data: data)
         let hash = digest.compactMap { String(format: "%02x", $0)}.joined()
         return hash
+    }
+    
+    func savePasscode(hash: String) {
+        UserDefaults.standard.setValue(hash, forKey: "passcode")
+    }
+    
+    func checkPasscode(hash: String) -> Bool {
+        let savedPasscode = UserDefaults.standard.value(forKey: "passcode") as? String
+        
+        return savedPasscode == hash
     }
 }
