@@ -63,8 +63,8 @@ extension DepartmentEntity {
     }
 }
 
-struct CategoryModel {
-    var _id: ObjectId?
-    var name: String?
-    var restockNumber: Int?
-}
+//struct CategoryModel {
+//    var _id: ObjectId?
+//    var name: String?
+//    var restockNumber: Int?
+//}

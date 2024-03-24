@@ -30,18 +30,18 @@ struct InventoryXApp: SwiftUI.App {
 //                    .onAppear {
 //                        UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
 //                    }
-                    .task {
-                        do {
-                            UserDefaults.standard.removeObject(forKey: "passcode")
-                            try await DataService.resetRealm()
+//                    .task {
+//                        do {
+//                            UserDefaults.standard.removeObject(forKey: "passcode")
+//                            try await DataService.resetRealm()
 //                            let drinks = DepartmentEntity(name: "Drinks", restockNum: 12)
 //                            drinks.items.append(objectsIn: ItemEntity.drinkArray)
 //                            drinks.items.append(objectsIn: ItemEntity.foodArray)
 //                            try await DataService.addDepartment(dept: drinks)
-                        } catch {
-                            print(error)
-                        }
-                    }
+//                        } catch {
+//                            print(error)
+//                        }
+//                    }
 
             
         }

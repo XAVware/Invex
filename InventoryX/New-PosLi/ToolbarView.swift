@@ -84,7 +84,7 @@ struct ToolbarView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .shadow(radius: 2)
                 .sheet(isPresented: $showAddItem) {
-                    AddItemView() {}
+                    AddItemView(selectedItem: nil) {}
                 }
             }
             Spacer()

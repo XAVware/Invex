@@ -13,12 +13,14 @@ struct Menu: View {
     @Binding var display: DisplayState
     @Binding var menuState: MenuState
     
+    @State var showingLockScreen: Bool = false
+    
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
             
             ForEach(MenuButton.allCases, id: \.self) { data in
-                if data == MenuButton.lock { Spacer() }
+//                if data == MenuButton.lock { Spacer() }
                 Button {
                     display = data.display
                 } label: {
@@ -37,7 +39,32 @@ struct Menu: View {
                 )
             } //: For Each
             
+            Spacer()
+            
+            Button {
+                showingLockScreen = true
+            } label: {
+                HStack(spacing: 16) {
+                    Image(systemName: "lock")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .padding(.horizontal, 8)
+                    
+                    if menuState == .open {
+                        Text("Lock")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                } //: HStack
+                .padding()
+                .foregroundStyle(Color("Purple200"))
+            }
+            
         } //: VStack
+        .fullScreenCover(isPresented: $showingLockScreen) {
+            LockScreenView()
+        }
         .background(Color("Purple800"))
         
     }
@@ -49,7 +76,6 @@ struct Menu: View {
         case inventoryList  = "tray.full.fill"
         case salesHistory   = "chart.xyaxis.line"
         case settings       = "gearshape"
-        case lock           = "lock"
         
         var title: String {
             return switch self {
@@ -58,7 +84,6 @@ struct Menu: View {
             case .inventoryList:    "Inventory"
             case .salesHistory:     "Sales"
             case .settings:         "Settings"
-            case .lock:             "Lock"
             }
         }
         
@@ -69,7 +94,6 @@ struct Menu: View {
             case .inventoryList:    .inventoryList
             case .salesHistory:     .salesHistory
             case .settings:         .settings
-            case .lock:             .lockScreen
                 
             }
         }

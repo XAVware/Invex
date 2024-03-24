@@ -56,6 +56,9 @@ struct ItemTableView: View {
                                                   ColumnHeaderModel(headerText: "On-Hand", sortDescriptor: "onHandQty"),
                                                   ColumnHeaderModel(headerText: "Retail Price", sortDescriptor: "retailPrice")]
     
+    @State var selectedItem: ItemEntity?
+    @State var showingDetailView: Bool = false
+    
     private var listView: some View {
         VStack {
             HStack {
@@ -100,7 +103,9 @@ struct ItemTableView: View {
                 
             } //: HStack
             .frame(height: 50)
+            
             Divider().opacity(0.4)
+            
             ForEach(itemArr) { item in
                 HStack(spacing: 0) {
                     Text(item.name)
@@ -115,8 +120,14 @@ struct ItemTableView: View {
                 } //: HStack
                 .frame(height: 50)
                 .onTapGesture {
-                    onSelect(item)
+                    selectedItem = item
                 }
+                .onChange(of: selectedItem) { newValue in
+                    if selectedItem != nil {
+                        showingDetailView = true
+                    }
+                }
+                
                 Divider().opacity(0.4)
             } //: For Each
                 
@@ -127,6 +138,13 @@ struct ItemTableView: View {
                 .shadow(color: Color.gray.opacity(0.5), radius: 2)
  
         )
+        .sheet(isPresented: $showingDetailView, onDismiss: {
+            selectedItem = nil
+        }) {
+            AddItemView(selectedItem: selectedItem) {
+                
+            }
+        }
     } //: List View
     
     

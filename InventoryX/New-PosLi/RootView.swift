@@ -15,7 +15,7 @@ class RootViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     @Published var companyExists: Bool = false
-//    @Published var passHash: String = ""
+    //    @Published var passHash: String = ""
     
     
     init() {
@@ -31,12 +31,12 @@ class RootViewModel: ObservableObject {
             .store(in: &cancellables)
         
         
-//        service.$passHash
-//            .sink { [weak self] hash in
-//                self?.passHash = hash
-//                print("Hash received: \(hash)")
-//            }
-//            .store(in: &cancellables)
+        //        service.$passHash
+        //            .sink { [weak self] hash in
+        //                self?.passHash = hash
+        //                print("Hash received: \(hash)")
+        //            }
+        //            .store(in: &cancellables)
     }
 }
 
@@ -52,8 +52,7 @@ struct RootView: View {
     @State var selectedDepartment: DepartmentEntity?
     
     @State var showingOnboarding: Bool = false
-    @State var showingLockScreen: Bool = false
-    
+
     var detailWidth: CGFloat {
         var dWidth: CGFloat = 1
         
@@ -79,11 +78,10 @@ struct RootView: View {
         }
         return dWidth
     }
-
-        
+    
+    
     var body: some View {
         HStack {
-            // SHould make state not
             if uiProperties.horizontalSizeClass == .regular && cartState != .confirming {
                 Menu(display: $currentDisplay, menuState: $menuState)
                     .frame(maxWidth: menuState == .open ? uiProperties.width * 0.2 : nil)
@@ -104,29 +102,27 @@ struct RootView: View {
                                 DepartmentPicker(selectedDepartment: $selectedDepartment, style: .scrolling)
                                 
                                 ItemTableView(department: $selectedDepartment, style: .grid) { item in
-                                    // Add the item to cart. Otherwise select the item so it can be displayed in a add/modify item view.
+                                    // Add the item to cart.
                                     posVM.itemTapped(item: item)
                                 }
                                 
                             } //: VStack
                             .padding(.horizontal)
-                        } 
+                        }
                         
                     case .inventoryList:
-                            
-                            ItemTableView(department: $selectedDepartment, style: .list) { item in
-                                // Display item in view/edit item view.
-                                // Handle through protocol
-                                posVM.itemTapped(item: item)
-                            }
-                            
+                        
+                        ItemTableView(department: $selectedDepartment, style: .list) { item in
+                            // Display item in view/edit item view.
+//                            posVM.itemTapped(item: item)
+                        }
+                        
                     case .salesHistory:
-                        Text("Sales")
+                        SalesHistoryView()
                         
                     case .settings:
-                        DepartmentsView()
+                        SettingsView()
                         
-                    default: Divider()
                     }
                     
                 } //: VStack
@@ -141,7 +137,7 @@ struct RootView: View {
                             .background(Color("Purple050").opacity(0.5))
                             .frame(maxWidth: cartState == .confirming ? .infinity : detailWidth)
                             .frame(maxHeight: .infinity)
-
+                        
                         
                     case .settings:
                         DepartmentsView()
@@ -149,23 +145,15 @@ struct RootView: View {
                     default: Divider()
                     }
                     
-                
+                    
                 } else {
                     Divider()
                 }
             } //: HStack
-
+            
         } //: HStack
         .onReceive(vm.$companyExists) { exists in
             showingOnboarding = !exists
-        }
-        .onChange(of: currentDisplay) { newValue in
-            if newValue == .lockScreen {
-                showingLockScreen = true
-            }
-        }
-        .fullScreenCover(isPresented: $showingLockScreen) {
-            LockScreenView()
         }
         .fullScreenCover(isPresented: $showingOnboarding) {
             OnboardingView()

@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum DisplayState: CaseIterable {
-    case makeASale, inventoryList, salesHistory, settings, lockScreen
+    case makeASale, inventoryList, salesHistory, settings
     
     var menuButtonText: String {
         return switch self {
@@ -16,7 +16,6 @@ enum DisplayState: CaseIterable {
         case .inventoryList:    "Inventory"
         case .salesHistory:     "Sales"
         case .settings:         "Settings"
-        case .lockScreen:   "Lock"
         }
     }
     
@@ -26,7 +25,6 @@ enum DisplayState: CaseIterable {
         case .inventoryList:    "tray.full.fill"
         case .salesHistory:     "chart.xyaxis.line"
         case .settings:         "gearshape"
-        case .lockScreen: "lock"
         }
     }
     
@@ -36,7 +34,6 @@ enum DisplayState: CaseIterable {
         case .inventoryList:    1.0
         case .salesHistory:     1.0
         case .settings:         1.0
-        case .lockScreen: 1.0
         }
     }
 }

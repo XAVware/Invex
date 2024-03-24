@@ -25,10 +25,14 @@ class AddItemViewModel: ObservableObject {
     
 }
 
+enum DetailViewType { case create, view, modify }
+
 // TODO: Error is thrown briefly from the department dropdown after an item was successfully added, therefore changing the department
 struct AddItemView: View {
     @StateObject var vm: AddItemViewModel = AddItemViewModel()
     @Environment(\.dismiss) var dismiss
+    
+    let selectedItem: ItemEntity?
     
     @State var selectedDepartment: DepartmentEntity?
     @State var itemName: String = ""
@@ -65,7 +69,8 @@ struct AddItemView: View {
             } //: VStack
             .frame(maxWidth: 720)
             
-            HStack {
+            if selectedItem == nil {
+                HStack {
                 VStack(alignment: .leading, spacing: 12) {
                     InputFieldLabel(title: "Department:", subtitle: nil)
                         .frame(maxWidth: 420, alignment: .leading)
@@ -78,8 +83,9 @@ struct AddItemView: View {
                 
                 Spacer()
             } //: HStack
-            .frame(maxWidth: 720)
-            
+                .frame(maxWidth: 720)
+            }
+        
             HStack {
                 VStack(alignment: .leading, spacing: 12) {
                     InputFieldLabel(title: "Item Name:", subtitle: nil)
@@ -173,15 +179,20 @@ struct AddItemView: View {
         .padding()
         .toolbar(.hidden, for: .navigationBar)
         .background(Color("Purple050").opacity(0.3))
-//        .onAppear {
-//            vm.setup()
-//        }
+        .onAppear {
+            if let item = selectedItem {
+                itemName = item.name
+                quantity = String(describing: item.onHandQty!)
+                retailPrice = String(describing: item.retailPrice!)
+                unitCost = String(describing: item.avgCostPer!)
+            }
+        }
     } //: Body
 }
 
 struct AddItemView_Previews: PreviewProvider {
     static var previews: some View {
-        AddItemView() {}
+        AddItemView(selectedItem: nil) {}
 //            .frame(width: 400)
     }
 }

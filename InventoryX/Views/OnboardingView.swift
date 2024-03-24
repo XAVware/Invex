@@ -147,7 +147,7 @@ struct OnboardingView: View {
                 }
                 
             case .item:
-                AddItemView(isOnboarding: true) {
+                AddItemView(selectedItem: nil, isOnboarding: true) {
                     dismiss()
                 }
                 

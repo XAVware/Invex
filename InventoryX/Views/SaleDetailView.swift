@@ -9,6 +9,7 @@ import SwiftUI
 import RealmSwift
 
 struct SaleDetailView: View {
+    @Environment(\.dismiss) var dismiss
     @State var sale: SaleEntity
     
     private func getSubtotal(item: SaleItemEntity) -> Double {
@@ -105,7 +106,18 @@ struct SaleDetailView: View {
             
             Spacer()
         } //: VStack
-        .overlay(BackButton(), alignment: .topLeading)
+        .overlay(
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "xmark")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 24)
+                    .foregroundColor(.black)
+            }
+            .padding()
+            , alignment: .topLeading)
         .background(Theme.lightFgColor)
     } //: Body
     
