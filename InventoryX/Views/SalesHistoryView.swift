@@ -208,6 +208,8 @@ struct SalesHistoryView: View {
         .padding(.horizontal)
     } //: Header Toolbar
     
+    let toolbarHeight: CGFloat = 24
+    
     class ChartData: Identifiable {
         let id: UUID = UUID()
         let label: String

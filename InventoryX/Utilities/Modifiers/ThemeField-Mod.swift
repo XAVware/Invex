@@ -1,24 +1,11 @@
 //
-//  RoundedButtonMod.swift
+//  ThemeField-Mod.swift
 //  InventoryX
 //
-//  Created by Smetana, Ryan on 4/24/23.
+//  Created by Ryan Smetana on 3/25/24.
 //
 
 import SwiftUI
-
-struct PrimaryButtonMod: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.title3)
-            .fontWeight(.semibold)
-            .foregroundStyle(.white)
-            .frame(maxWidth: 420, maxHeight: 54)
-            .background(.ultraThinMaterial)
-            .background(Theme.primaryColor)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-    }
-}
 
 struct ThemeFieldMod: ViewModifier {
     @State var overlayText: String = ""
@@ -56,25 +43,3 @@ struct ThemeFieldMod: ViewModifier {
         }
     }
 }
-
-
-struct FieldTitleMod: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.headline)
-            .fontWeight(.regular)
-            .fontDesign(.rounded)
-            .foregroundStyle(.black)
-    }
-}
-
-struct FieldSubtitleMod: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.subheadline)
-//            .fontWeight(.medium)
-            .fontDesign(.rounded)
-            .foregroundStyle(.gray)
-    }
-}
-

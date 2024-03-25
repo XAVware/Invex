@@ -1,10 +1,8 @@
 //
-//  Modifiers.swift
-//  XAV_Customs
+//  Text+Mod.swift
+//  InventoryX
 //
-//  © 2023 XAVware, LLC.
-//
-// ~~~~~~~~~~~~~~~ README ~~~~~~~~~~~~~~~
+//  Created by Ryan Smetana on 3/24/24.
 //
 
 import SwiftUI

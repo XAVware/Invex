@@ -14,9 +14,7 @@ class RootViewModel: ObservableObject {
     private let service = AuthService.shared
     private var cancellables = Set<AnyCancellable>()
     
-    @Published var companyExists: Bool = false
-    //    @Published var passHash: String = ""
-    
+    @Published var companyExists: Bool = false    
     
     init() {
         configureSubscribers()
@@ -29,14 +27,6 @@ class RootViewModel: ObservableObject {
                 print("Exists received: \(exists)")
             }
             .store(in: &cancellables)
-        
-        
-        //        service.$passHash
-        //            .sink { [weak self] hash in
-        //                self?.passHash = hash
-        //                print("Hash received: \(hash)")
-        //            }
-        //            .store(in: &cancellables)
     }
 }
 
@@ -47,7 +37,7 @@ struct RootView: View {
     
     @State var currentDisplay: DisplayState = .makeASale
     @State var menuState: MenuState = .compact
-    @State var cartState: CartState = .sidebar
+    @State var cartState: CartState = .hidden
     
     @State var selectedDepartment: DepartmentEntity?
     
@@ -131,7 +121,7 @@ struct RootView: View {
                 if detailWidth > 0 {
                     switch currentDisplay {
                     case .makeASale:
-                        CartViewNew(cartState: $cartState, menuState: $menuState)
+                        CartView(cartState: $cartState, menuState: $menuState)
                             .environmentObject(posVM)
                             .padding()
                             .background(Color("Purple050").opacity(0.5))
@@ -166,6 +156,6 @@ struct RootView: View {
 #Preview {
     ResponsiveView { props in
         RootView(uiProperties: props)
-            .environment(\.realm, DepartmentEntity.previewRealm)
+            .environment(\.realm, DepartmentEntity.previewRealm) 
     }
 }

@@ -71,7 +71,6 @@ struct Menu: View {
     
     enum MenuButton: String, CaseIterable {
         /// The icon name is assigned to the enum because it appears in compact menu state and open. Whereas the title only displays while open.
-        case dashboard      = "rectangle.3.group.fill"
         case makeASale      = "cart.fill"
         case inventoryList  = "tray.full.fill"
         case salesHistory   = "chart.xyaxis.line"
@@ -79,7 +78,6 @@ struct Menu: View {
         
         var title: String {
             return switch self {
-            case .dashboard:        "Dashboard"
             case .makeASale:        "Sale"
             case .inventoryList:    "Inventory"
             case .salesHistory:     "Sales"
@@ -89,7 +87,6 @@ struct Menu: View {
         
         var display: DisplayState {
             return switch self {
-            case .dashboard:        .makeASale
             case .makeASale:        .makeASale
             case .inventoryList:    .inventoryList
             case .salesHistory:     .salesHistory

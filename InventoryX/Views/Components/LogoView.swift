@@ -11,7 +11,7 @@ struct LogoView: View {
     
     var body: some View {
         HStack(spacing: 0) {
-            Text("Inventory")
+            Text("Inven")
                 .modifier(TextMod(.title, .semibold, Theme.logoColor))
                 .offset(y: -2)
             
@@ -22,12 +22,4 @@ struct LogoView: View {
         } //: HStack
         .foregroundColor(Theme.logoColor)
     } //: Body
-}
-
-struct LogoView_Previews: PreviewProvider {
-    static var previews: some View {
-        LogoView()
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
-            .previewInterfaceOrientation(.landscapeLeft)
-    }
 }

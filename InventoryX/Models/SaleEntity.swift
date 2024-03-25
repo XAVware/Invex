@@ -41,6 +41,8 @@ class SaleEntity: Object, ObjectKeyIdentifiable {
     
 }
 
+let dayTimeInterval: Double = 86400
+
 class SaleItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted(originProperty: "items") var sale: LinkingObjects<SaleEntity>

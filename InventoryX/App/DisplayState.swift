@@ -1,19 +1,17 @@
 //
-//  ActiveOrderView.swift
+//  GlobalEnums.swift
 //  InventoryX
 //
-//  Created by Ryan Smetana on 3/16/24.
+//  Created by Smetana, Ryan on 4/27/23.
 //
 
 import SwiftUI
-import RealmSwift
 
-enum ViewState: CaseIterable {
-    case dashboard, makeASale, inventoryList, salesHistory, settings
+enum DisplayState: CaseIterable {
+    case makeASale, inventoryList, salesHistory, settings
     
     var menuButtonText: String {
         return switch self {
-        case .dashboard:        "Dashboard"
         case .makeASale:        "Sale"
         case .inventoryList:    "Inventory"
         case .salesHistory:     "Sales"
@@ -23,9 +21,8 @@ enum ViewState: CaseIterable {
     
     var menuIconName: String {
         return switch self {
-        case .dashboard:        "square.grid.2x2.fill"
-        case .makeASale:        "dollarsign.circle.fill"
-        case .inventoryList:    "list.bullet.clipboard.fill"
+        case .makeASale:        "cart.fill"
+        case .inventoryList:    "tray.full.fill"
         case .salesHistory:     "chart.xyaxis.line"
         case .settings:         "gearshape"
         }

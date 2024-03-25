@@ -1,5 +1,5 @@
  //
-//  CartViewNew.swift
+//  CartView.swift
 //  InventoryX
 //
 //  Created by Ryan Smetana on 3/19/24.
@@ -7,14 +7,13 @@
 
 import SwiftUI
 
-
 enum CartState {
     case hidden
     case sidebar
     case confirming
 }
 
-struct CartViewNew: View {
+struct CartView: View {
     
     @EnvironmentObject var vm: MakeASaleViewModel
     
