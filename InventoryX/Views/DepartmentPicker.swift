@@ -98,20 +98,25 @@ struct DepartmentPicker: View {
     private var dropDownStyle: some View {
         Menu {
             ForEach(departments) { department in
-                Text(department.name)
+                Button {
+                    selectedDepartment = department
+                } label: {
+                    Text(department.name)
+                }
                     .tag(department as DepartmentEntity?)
             }
         } label: {
             HStack {
-            Spacer()
-            Text(selectedDepartment?.name ?? "Select Department")
-            Spacer()
-            Image(systemName: "chevron.up.chevron.down")
+                Spacer()
+                Text(selectedDepartment?.name ?? "Select Department")
+                Spacer()
+                Image(systemName: "chevron.up.chevron.down")
                 
             }
         }
         .padding()
-        .frame(minWidth: 190, maxWidth: 280, alignment: .trailing)
+        .frame(minWidth: 190, maxWidth: 220, alignment: .trailing)
+        .frame(height: 56)
         .foregroundStyle(.black)
         .modifier(GlowingOutlineMod())
 //        Picker(selection: $selectedDepartment) {

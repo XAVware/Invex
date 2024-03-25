@@ -20,7 +20,8 @@ import RealmSwift
 @main
 struct InventoryXApp: SwiftUI.App {
     /// Initialize DataService immediately at launch since it is required for first screen.
-    let db: DataService = DataService.shared
+    let migrator: RealmMigrator = RealmMigrator()
+//    let db: DataService = DataService.shared
     
     var body: some Scene {
         WindowGroup {
@@ -34,6 +35,8 @@ struct InventoryXApp: SwiftUI.App {
 //                        do {
 //                            UserDefaults.standard.removeObject(forKey: "passcode")
 //                            try await DataService.resetRealm()
+//                            let realm = try await Realm()
+//                            try await realm.asyncWrite { realm.deleteAll() }
 //                            let drinks = DepartmentEntity(name: "Drinks", restockNum: 12)
 //                            drinks.items.append(objectsIn: ItemEntity.drinkArray)
 //                            drinks.items.append(objectsIn: ItemEntity.foodArray)
@@ -47,3 +50,28 @@ struct InventoryXApp: SwiftUI.App {
         }
     } //: Body
 }
+
+
+/// Supplemental functions for ease of development
+//extension DataService {
+//    static func createRandomSales(qty: Int) async throws {
+//        var sales: [SaleEntity] = []
+//        for _ in 0 ..< qty {
+//            let randomSeconds = Int.random(in: 0 ... 2628288)
+//            let newSale = SaleEntity(timestamp: Date(timeIntervalSinceNow: -Double(randomSeconds)), total: Double(randomSeconds / 1000))
+//            sales.append(newSale)
+//        }
+//
+//        try await self.saveSales(sales)
+//    }
+//
+//    static func createRandomSalesToday(qty: Int) async throws {
+//        var sales: [SaleEntity] = []
+//        for _ in 0 ..< qty {
+//            let randomSeconds = Int.random(in: 0 ... 43200)
+//            let newSale = SaleEntity(timestamp: Date(timeIntervalSinceNow: -Double(randomSeconds)), total: Double(randomSeconds / 1000))
+//            sales.append(newSale)
+//        }
+//        try await self.saveSales(sales)
+//    }
+//}

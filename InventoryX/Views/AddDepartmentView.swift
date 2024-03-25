@@ -6,18 +6,9 @@
 //
 
 import SwiftUI
+import RealmSwift
 
-enum AppError: Error {
-    case departmentAlreadyExists
-    case numericThresholdRequired
-    
-    var localizedDescription: String {
-        switch self {
-        case .departmentAlreadyExists:      "Department already exists with this name"
-        case .numericThresholdRequired:     "Please enter a valid number for the restock threshold"
-        }
-    }
-}
+
 
 
 class AddDepartmentViewModel: ObservableObject {
@@ -29,7 +20,9 @@ class AddDepartmentViewModel: ObservableObject {
         let department = DepartmentEntity(name: name, restockNum: threshold)
         
         do {
-            try await DataService.addDepartment(dept: department)
+//            try await DataService.addDepartment(dept: department)
+            let realm = try await Realm()
+            try await realm.asyncWrite { realm.add(department) }
             print("Department saved successfully")
         } catch {
             print(error.localizedDescription)
@@ -97,49 +90,33 @@ struct AddDepartmentView: View {
             } //: VStack
             .frame(maxWidth: 720)
             
-            HStack {
-                VStack(alignment: .leading, spacing: 16) {
-                    InputFieldLabel(title: "Department Name:", subtitle: nil)
-                        .frame(maxWidth: 420, alignment: .leading)
-                    
-                    TextField("i.e. Clothing", text: $name)
-                        .modifier(ThemeFieldMod())
-//                        .frame(maxWidth: 320)
-                } //: VStack - Department Name
-                
-                Spacer()
-            } //: HStack
-            .frame(maxWidth: 720)
-            
-            Divider()
+            ThemeTextField(boundTo: $name,
+                           placeholder: "i.e. Clothing",
+                           title: "Department Name:",
+                           subtitle: nil,
+                           type: .text,
+                           layout: .vertical)
+//                .frame(maxHeight: 140)
+
+//            Divider()
             
             VStack(spacing: 42) {
-                HStack(spacing: 16) {
-                    InputFieldLabel(title: "Restock Threshold:", subtitle: "This is the number that you want to restock the items in the department at. This will help you quickly find items that need to be restocked.")
-                        .frame(maxWidth: 420)
-                    
-                    Spacer()
-                    
-                    TextField("0", text: $restockThreshold)
-                        .modifier(ThemeFieldMod(overlayText: "123"))
-                        .frame(maxWidth: 120)
-                    
-                } //: HStack - Restock Threshold
-                .frame(maxWidth: 720)
                 
-                
-                HStack(spacing: 16) {
-                    InputFieldLabel(title: "Default markup:", subtitle: "When an item is added to this department it will be marked up by this percentage by default.")
-                        .frame(maxWidth: 420)
-                    
-                    Spacer()
-                    
-                    TextField("0", text: $markup)
-                        .modifier(ThemeFieldMod(overlayText: "%"))
-                        .frame(maxWidth: 120)
-                } //: HStack - Markup
-                .frame(maxWidth: 720)
-                
+                ThemeTextField(boundTo: $restockThreshold,
+                               placeholder: "0",
+                               title: "Restock Threshold:",
+                               subtitle: "This is the number that you want to restock the items in the department at. This will help you quickly find items that need to be restocked.",
+                               type: .integer,
+                               layout: .horizontal)
+//                    .frame(maxHeight: 108)
+
+                ThemeTextField(boundTo: $markup,
+                               placeholder: "0",
+                               title: "Default markup:",
+                               subtitle: "When an item is added to this department it will be marked up by this percentage by default.",
+                               type: .percentage,
+                               layout: .horizontal)
+//                    .frame(maxHeight: 72)
                 
                 Toggle(isOn: $hasTax) {
                     InputFieldLabel(title: "Tax free:", subtitle: "If you mark this department as tax free, when you sell items from this department tax will not be added.")
@@ -147,8 +124,8 @@ struct AddDepartmentView: View {
                         .frame(maxWidth: 420)
                     
                 }
-                .frame(maxWidth: 720)
             } //: VStack
+            .frame(maxWidth: 720)
             
             Spacer()
             
@@ -183,7 +160,7 @@ struct AddDepartmentView: View {
         )
         .padding()
         .toolbar(.hidden, for: .navigationBar)
-        .background(Color("Purple050").opacity(0.3))
+        .background(Color("Purple050").opacity(0.2))
         .onAppear {
             setup(forDepartment: department)
             
@@ -195,3 +172,6 @@ struct AddDepartmentView: View {
 #Preview {
     AddDepartmentView(department: nil) {}
 }
+
+
+

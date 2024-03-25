@@ -22,11 +22,10 @@ enum TableViewStyle: String, CaseIterable {
 // TODO: Fix odd button animation when screen size changes
 struct ItemTableView: View {
     @ObservedResults(ItemEntity.self) var allItems
-//    let items: Array<ItemEntity>
     @Binding var department: DepartmentEntity?
     @State var style: TableViewStyle
-    
     let onSelect: ((ItemEntity) -> Void)
+
     
     // TODO: Check if computed property is efficient here
     // Can probably update a variable on change of department
@@ -39,12 +38,11 @@ struct ItemTableView: View {
         VStack {
             switch style {
             case .grid: gridView
-            case .list: 
-                
-                listView
+            case .list: listView
             }
             Spacer()
         } //: VStack
+        
     } //: Body
     
     
@@ -62,13 +60,24 @@ struct ItemTableView: View {
     private var listView: some View {
         VStack {
             HStack {
-                
-                Spacer()
-                
                 DepartmentPicker(selectedDepartment: $department, style: .dropdown)
                     
+                Spacer()
+                
+                Button {
+                    showingDetailView = true
+                } label: {
+                    Image(systemName: "plus")
+                    
+                    Text("Add Item")
+                }
+                .padding(12)
+                .frame(height: 56)
+                .foregroundStyle(.black)
+                .modifier(GlowingOutlineMod())
+                    
             } //: HStack
-            .padding(.horizontal)
+            .padding(.horizontal, 4)
             .frame(height: 64)
             .background(Color("Purple050").opacity(0.5))
             
@@ -118,7 +127,7 @@ struct ItemTableView: View {
                         .frame(maxWidth: .infinity)
 
                 } //: HStack
-                .frame(height: 50)
+                .frame(height: 64)
                 .onTapGesture {
                     selectedItem = item
                 }
@@ -144,13 +153,14 @@ struct ItemTableView: View {
             AddItemView(selectedItem: selectedItem) {
                 
             }
+            .ignoresSafeArea(.keyboard)
         }
     } //: List View
     
     
     // MARK: - GRID VIEW STYLE
     
-    let minButtonWidth: CGFloat = 128
+    let minButtonWidth: CGFloat = 160
     let gridSpacing: CGFloat = 16
     let horPadding: CGFloat = 0
     
@@ -194,10 +204,10 @@ struct ItemTableView: View {
                                 .font(.subheadline)
                                 .frame(maxWidth: .infinity)
                         }
+                        .padding(12)
                         .frame(minWidth: minButtonWidth, maxWidth: .infinity)
                         .foregroundStyle(.black)
                     } //: VStack
-                    .padding(12)
                     .modifier(ItemGridButtonMod())
                 } //: ForEach
 
@@ -220,4 +230,5 @@ struct ItemTableView: View {
         
     })
     .padding()
+    .environment(\.realm, DepartmentEntity.previewRealm)
 }

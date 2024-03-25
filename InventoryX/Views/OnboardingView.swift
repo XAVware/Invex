@@ -46,11 +46,37 @@ enum OnboardingState: Int {
     case item
 }
 
+@MainActor class OnboardingViewModel: ObservableObject {
+    @Published var currentDisplay: OnboardingState = .start
+    
+    func saveCompany(name: String, tax: String) {
+        guard let taxRate = Double(tax) else {
+            print("Please enter a valid tax rate percentage.")
+            return
+        }
+        
+        let company = CompanyEntity(name: name, taxRate: taxRate)
+        do {
+            let realm = try Realm()
+            try realm.write {
+                realm.add(company)
+            }
+            currentDisplay = .setPasscode
+        } catch {
+            print("Error saving company: \(error.localizedDescription)")
+        }
+    }
+    
+    func savePasscode(passcodeHash: String) {
+        
+    }
+}
+
 struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
-//    @StateObject var vm: OnboardingViewModel = OnboardingViewModel()
+    @StateObject var vm: OnboardingViewModel = OnboardingViewModel()
     
-    @State var currentDisplay: OnboardingState = .start
+    
     
     @State var companyName: String = ""
     @State var taxRate: String = ""
@@ -60,49 +86,20 @@ struct OnboardingView: View {
     var body: some View {
         
         VStack {
-            switch(currentDisplay) {
+            switch vm.currentDisplay {
             case .start:
                 VStack(spacing: 24) {
                     LogoView()
-                        .scaleEffect(2.0)
+                        .scaleEffect(1.0)
                         .padding(.top)
                     
                     Text("Welcome to Invex! Let's get you set up.")
                         .font(.largeTitle)
                         .padding(.vertical)
                     
-                    
-                    VStack(alignment: .leading, spacing: 16) {
-                        InputFieldLabel(title: "Business Name:", subtitle: nil)
-                            .frame(maxWidth: 420, alignment: .leading)
-                        
-                        TextField("Company name", text: $companyName)
-                            .modifier(ThemeFieldMod())
-                    } //: VStack - Department Name
-                    
-                    Divider()
-                    
-                    HStack(spacing: 16) {
-                        InputFieldLabel(title: "Tax Rate:", subtitle: "If you want us to calculate the tax on your sales, enter a tax rate here.")
-                        
-                        Spacer()
-                        
-                        TextField("X.xx", text: $taxRate)
-                            .frame(maxWidth: 72, alignment: .center)
-                            .modifier(ThemeFieldMod(overlayText: "%", overlaySide: .trailing))
-                    } //: HStack - Markup
-                    .frame(maxWidth: 720)
-                    
-                    Spacer()
-                    
-                    Button {
-                        // Save company info
-                        currentDisplay = .setPasscode
-                    } label: {
-                        Text("Continue")
+                    CompanyDetailView(company: nil, showTitles: false) {
+                        vm.currentDisplay = .setPasscode
                     }
-                    .modifier(PrimaryButtonMod())
-                    .padding(.bottom)
                     
                 } //: VStack
                 .frame(maxWidth: 480)
@@ -110,7 +107,7 @@ struct OnboardingView: View {
             case .setPasscode:
                 VStack(alignment: .center) {
                     VStack(spacing: 24) {
-                        Text("Enter Passcode")
+                        Text(passcodeHash.isEmpty ? "Enter Passcode" : "Re-enter passcode")
                             .font(.largeTitle)
                             .fontWeight(.semibold)
                         
@@ -132,7 +129,7 @@ struct OnboardingView: View {
                             print("Passcodes match")
                             
                             AuthService.shared.savePasscode(hash: passcodeHash)
-                            currentDisplay = .department
+                            vm.currentDisplay = .department
                         }
                     }
                     .padding(.vertical)
@@ -143,7 +140,7 @@ struct OnboardingView: View {
                 
             case .department:
                 AddDepartmentView(isOnboarding: true) {
-                    currentDisplay = .item
+                    vm.currentDisplay = .item
                 }
                 
             case .item:
@@ -164,12 +161,11 @@ struct OnboardingView: View {
     
 }
 
-struct OnboardingView_Previews: PreviewProvider {
-    @State static var onboarding: Bool = true
-    static var previews: some View {
-        OnboardingView()
-            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
-            .previewInterfaceOrientation(.landscapeLeft)
-            .environment(\.realm, DepartmentEntity.previewRealm)
-    }
+#Preview {
+    OnboardingView()
+//    CompanyDetailView()
+        .environment(\.realm, DepartmentEntity.previewRealm)
 }
+
+
+

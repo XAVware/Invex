@@ -65,27 +65,10 @@ struct ToolbarView: View {
                 .shadow(radius: 2)
                 .sheet(isPresented: $showAddDepartment) {
                     AddDepartmentView() {}
+                        .ignoresSafeArea(.keyboard)
                 }
                 
-                Button {
-                    showAddItem = true
-                } label: {
-                    Image(systemName: "plus")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 12)
-                        .foregroundStyle(Theme.primaryColor)
-                    
-                    Text("Add Item")
-                        .foregroundStyle(.black)
-                }
-                .padding(8)
-                .background(Color("Purple050"))
-                .clipShape(RoundedRectangle(cornerRadius: 6))
-                .shadow(radius: 2)
-                .sheet(isPresented: $showAddItem) {
-                    AddItemView(selectedItem: nil) {}
-                }
+                
             }
             Spacer()
             if display == .makeASale {

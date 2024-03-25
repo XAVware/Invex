@@ -63,13 +63,20 @@ class MakeASaleViewModel: ObservableObject {
         guard let qtySold = item.qtyInCart else { return }
             Task {
                 do {
-                    guard let result = try await DataService.fetchItem(withId: item.id) else {
+                    let realm = try await Realm()
+                    
+                    guard let result = realm.object(ofType: ItemEntity.self, forPrimaryKey: item.id) else {
                         LogService(self).error("No item found with id: \(item.id)")
                         return
                     }
                     
                     let newOnHandQty = result.onHandQty - qtySold
-                    try await DataService.updateItemOnHandQty(result, newQty: newOnHandQty)
+                    
+//                    let realm = try await Realm()
+                    try await realm.asyncWrite {
+                        item.onHandQty = newOnHandQty
+                    }
+//                    try await DataService.updateItemOnHandQty(result, newQty: newOnHandQty)
                     LogService(self).info("Finished saving sale. New Qty should be \(result.onHandQty - qtySold)")
                 } catch {
                     LogService(self).error(error.localizedDescription)
@@ -92,7 +99,11 @@ class MakeASaleViewModel: ObservableObject {
         
         Task {
             do {
-                try await DataService.saveSale(newSale)
+                
+                let realm = try await Realm()
+                try await realm.asyncWrite { realm.add(newSale) }
+                
+//                try await DataService.saveSale(newSale)
                 print("Sale saved")
                 cartItems.removeAll()
                 completion()

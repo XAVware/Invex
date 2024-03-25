@@ -36,7 +36,7 @@ struct DepartmentsView: View {
                             
                         }
                         .padding(6)
-                        .background(Color("Purple600"))
+                        .background(Color("Purple800"))
                         .clipShape(RoundedRectangle(cornerRadius: 24))
                         .shadow(radius: 2)
                     } //: HStack

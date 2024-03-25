@@ -8,14 +8,35 @@
 import SwiftUI
 import RealmSwift
 
-class AddItemViewModel: ObservableObject {
 
-    func saveItem(dept: DepartmentEntity, name: String, att: String, qty: String, price: String, cost: String) async {
+@MainActor class AddItemViewModel: ObservableObject {
+    
+    func saveItem(dept: DepartmentEntity, name: String, att: String, qty: String, price: String, cost: String) {
         guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
+        guard let thawedDept = dept.thaw() else { return }
         
         let newItem = ItemEntity(name: name, retailPrice: Double(price) ?? 1.0, avgCostPer: Double(cost) ?? 0.5, onHandQty: Int(qty) ?? 10)
         do {
-            try await DataService.add(newItem, to: dept)
+//            try await DataService.add(newItem, to: dept)
+            
+            let realm = try Realm()
+            try realm.write {
+                thawedDept.items.append(newItem)
+            }
+            
+//            let realm = try await Realm()
+//            try await realm.asyncWrite {
+//                thawedDept.items.append(newItem)
+//            }
+            
+//            if let thawedDepartment = department.thaw() {
+//                try await realm.asyncWrite {
+//                    thawedDepartment.items.append(item)
+//                    
+//                }
+//            } else {
+//                LogService(self).error("Error thawing department")
+//            }
             
         } catch {
             LogService(self).error("Error saving item to Realm: \(error.localizedDescription)")
@@ -71,84 +92,79 @@ struct AddItemView: View {
             
             if selectedItem == nil {
                 HStack {
-                VStack(alignment: .leading, spacing: 12) {
-                    InputFieldLabel(title: "Department:", subtitle: nil)
-                        .frame(maxWidth: 420, alignment: .leading)
+                    VStack(alignment: .leading, spacing: 12) {
+                        InputFieldLabel(title: "Department:", subtitle: nil)
+                            .frame(maxWidth: 420, alignment: .leading)
+                        
+                        
+                        DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
+                            .modifier(ThemeFieldMod())
+                            .frame(maxWidth: 280)
+                    } //: VStack - Department
                     
-                    
-                    DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
-                        .modifier(ThemeFieldMod())
-                        .frame(maxWidth: 280)
-                } //: VStack - Department
-                
-                Spacer()
-            } //: HStack
+                    Spacer()
+                } //: HStack
                 .frame(maxWidth: 720)
             }
-        
+            
             HStack {
-                VStack(alignment: .leading, spacing: 12) {
-                    InputFieldLabel(title: "Item Name:", subtitle: nil)
-                        .frame(maxWidth: 420, alignment: .leading)
-                    
-                    
-                    TextField("i.e. Gatorade", text: $itemName)
-                        .modifier(ThemeFieldMod())
-                        .frame(maxWidth: 280)
-                    
-                } //: VStack
+                ThemeTextField(boundTo: $itemName,
+                               placeholder: "i.e. Gatorade",
+                               title: "Item Name:",
+                               subtitle: nil,
+                               type: .text,
+                               layout: .vertical)
+                .frame(maxWidth: 280)
                 
-                VStack(alignment: .leading, spacing: 12) {
-                    InputFieldLabel(title: "Attribute:", subtitle: nil)
-                        .frame(maxWidth: 420, alignment: .leading)
-                    
-                    
-                    TextField("i.e. Blue", text: $attribute)
-                        .modifier(ThemeFieldMod())
-                        .frame(minWidth: 240, maxWidth: 280)
-                    
-                } //: VStack
+                Spacer()
+                
+                ThemeTextField(boundTo: $attribute, placeholder: "i.e. Blue", title: "Attribute:", subtitle: nil, type: .text, layout: .vertical)
+                .frame(maxWidth: 280)
+                
             } //: HStack
             .frame(maxWidth: 720)
             
             Divider()
             
             HStack {
-                VStack(alignment: .leading, spacing: 12) {
-                    InputFieldLabel(title: "On-hand quantity:", subtitle: nil)
-                        .frame(maxWidth: 420, alignment: .leading)
-                    
-                    
-                    TextField("2.00", text: $quantity)
-                        .modifier(ThemeFieldMod(overlayText: "123"))
-                        .frame(maxWidth: 280)
-                    
-                } //: VStack
+                ThemeTextField(boundTo: $quantity,
+                               placeholder: "24",
+                               title: "On-hand quantity:",
+                               subtitle: nil,
+                               type: .integer,
+                               layout: .vertical)
+                .frame(maxWidth: 220)
                 
-                VStack(alignment: .leading, spacing: 12) {
-                    InputFieldLabel(title: "Retail Price:", subtitle: nil)
-                        .frame(maxWidth: 420, alignment: .leading)
-                    
-                    
-                    TextField("2.00", text: $retailPrice)
-                        .modifier(ThemeFieldMod(overlayText: "$"))
-                        .frame(maxWidth: 280)
-                    
-                } //: VStack
+                Spacer()
+                
+                ThemeTextField(boundTo: $retailPrice,
+                               placeholder: "$ 2.00",
+                               title: "Retail Price:",
+                               subtitle: nil,
+                               type: .price,
+                               layout: .vertical)
+                .frame(maxWidth: 220)
+//                .onChange(of: retailPrice) { _ in
+//                    let formattedPrice = retailPrice.replacingOccurrences( of:"[^0-9.]", with: "", options: .regularExpression)
+//                    guard let price = Double(formattedPrice) else {
+//                        print("Err")
+//                        return
+//                    }
+//                    retailPrice = price.formatAsCurrencyString()
+//                }
+                
+                
             } //: HStack
             .frame(maxWidth: 720)
             
             HStack {
-                VStack(alignment: .leading, spacing: 12) {
-                    InputFieldLabel(title: "Unit Cost:", subtitle: nil)
-                        .frame(maxWidth: 420, alignment: .leading)
-                    
-                    
-                    TextField("1.00", text: $unitCost)
-                        .modifier(ThemeFieldMod(overlayText: "$"))
-                        .frame(minWidth: 240, maxWidth: 280)
-                    
-                } //: VStack
+                ThemeTextField(boundTo: $unitCost,
+                               placeholder: "$ 1.00",
+                               title: "Unit Cost:",
+                               subtitle: nil,
+                               type: .price,
+                               layout: .vertical)
+                .frame(maxWidth: 220)
                 
                 Spacer()
             } //: HStack
@@ -159,7 +175,7 @@ struct AddItemView: View {
             Button {
                 guard let dept = selectedDepartment else { return }
                 Task {
-                    await vm.saveItem(dept: dept, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
+                    vm.saveItem(dept: dept, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
                     
                     if !isOnboarding {
                         dismiss()
@@ -193,6 +209,6 @@ struct AddItemView: View {
 struct AddItemView_Previews: PreviewProvider {
     static var previews: some View {
         AddItemView(selectedItem: nil) {}
-//            .frame(width: 400)
+        //            .frame(width: 400)
     }
 }
