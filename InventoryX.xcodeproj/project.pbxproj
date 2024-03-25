@@ -26,13 +26,14 @@
 		944F8CE72A2AA94E007AD864 /* SaleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */; };
 		944F8CEB2A2C4AE4007AD864 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */; };
 		945DF5A92BAA5CAC002014F6 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945DF5A82BAA5CAC002014F6 /* RootView.swift */; };
-		945DF5AB2BAA5CF3002014F6 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945DF5AA2BAA5CF3002014F6 /* Menu.swift */; };
+		945DF5AB2BAA5CF3002014F6 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945DF5AA2BAA5CF3002014F6 /* MenuView.swift */; };
 		945DF5AF2BAB64AE002014F6 /* DepartmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945DF5AE2BAB64AE002014F6 /* DepartmentsView.swift */; };
 		9465244F2BA658EE00F24CDD /* ResponsiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9465244E2BA658EE00F24CDD /* ResponsiveView.swift */; };
 		9465246F2BA7E55C00F24CDD /* DepartmentButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9465246E2BA7E55C00F24CDD /* DepartmentButton-Mod.swift */; };
 		946524712BA8036800F24CDD /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946524702BA8036800F24CDD /* LockScreenView.swift */; };
 		946524732BA803D000F24CDD /* DateTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946524722BA803D000F24CDD /* DateTimeLabel.swift */; };
 		94681A3E2BAA1A64006A0578 /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94681A3D2BAA1A64006A0578 /* CartView.swift */; };
+		94860BA02BB14EDF00B1138A /* GlowingOutline-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94860B9F2BB14EDF00B1138A /* GlowingOutline-Mod.swift */; };
 		948861582BACB0E300580F38 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948861572BACB0E300580F38 /* ToolbarView.swift */; };
 		9488615B2BACC40A00580F38 /* AddDepartmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9488615A2BACC40A00580F38 /* AddDepartmentView.swift */; };
 		94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */; };
@@ -76,13 +77,14 @@
 		944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleDetailView.swift; sourceTree = "<group>"; };
 		944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		945DF5A82BAA5CAC002014F6 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		945DF5AA2BAA5CF3002014F6 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		945DF5AA2BAA5CF3002014F6 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		945DF5AE2BAB64AE002014F6 /* DepartmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentsView.swift; sourceTree = "<group>"; };
 		9465244E2BA658EE00F24CDD /* ResponsiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveView.swift; sourceTree = "<group>"; };
 		9465246E2BA7E55C00F24CDD /* DepartmentButton-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DepartmentButton-Mod.swift"; sourceTree = "<group>"; };
 		946524702BA8036800F24CDD /* LockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
 		946524722BA803D000F24CDD /* DateTimeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTimeLabel.swift; sourceTree = "<group>"; };
 		94681A3D2BAA1A64006A0578 /* CartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
+		94860B9F2BB14EDF00B1138A /* GlowingOutline-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GlowingOutline-Mod.swift"; sourceTree = "<group>"; };
 		948861572BACB0E300580F38 /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
 		9488615A2BACC40A00580F38 /* AddDepartmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDepartmentView.swift; sourceTree = "<group>"; };
 		94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
@@ -192,7 +194,7 @@
 				94B7EAC82BACDDEF00895FF7 /* ItemTableView.swift */,
 				946524702BA8036800F24CDD /* LockScreenView.swift */,
 				94C7625F2BA8C41100A61F7D /* MakeASaleViewModel.swift */,
-				945DF5AA2BAA5CF3002014F6 /* Menu.swift */,
+				945DF5AA2BAA5CF3002014F6 /* MenuView.swift */,
 				80DBB97E29F70EE000497695 /* OnboardingView.swift */,
 				945DF5A82BAA5CAC002014F6 /* RootView.swift */,
 				944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */,
@@ -264,6 +266,7 @@
 				94F624512BB12E370069C81E /* Text-Mod.swift */,
 				94F624562BB12F860069C81E /* ThemeField-Mod.swift */,
 				94F624582BB12FB90069C81E /* Title-Mod.swift */,
+				94860B9F2BB14EDF00B1138A /* GlowingOutline-Mod.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -300,7 +303,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1510;
 				TargetAttributes = {
 					80B5EF6C29F0C318007D9842 = {
 						CreatedOnToolsVersion = 14.2;
@@ -356,6 +359,7 @@
 				80FFBD0A2A1D2F2700992440 /* ItemEntity.swift in Sources */,
 				94C7625A2BA8999B00A61F7D /* DataService.swift in Sources */,
 				94341C102BA5895500334505 /* UIColor+Ext.swift in Sources */,
+				94860BA02BB14EDF00B1138A /* GlowingOutline-Mod.swift in Sources */,
 				94C7625C2BA8A9F800A61F7D /* AuthService.swift in Sources */,
 				94B7EAC92BACDDEF00895FF7 /* ItemTableView.swift in Sources */,
 				94B3DE932A47C2CB00BBCB3A /* AddItemView.swift in Sources */,
@@ -385,7 +389,7 @@
 				94F6244C2BB12D710069C81E /* String+Ext.swift in Sources */,
 				80B5EF7129F0C318007D9842 /* InventoryXApp.swift in Sources */,
 				94D3F1052A1C6A1C00AF4393 /* DepartmentEntity.swift in Sources */,
-				945DF5AB2BAA5CF3002014F6 /* Menu.swift in Sources */,
+				945DF5AB2BAA5CF3002014F6 /* MenuView.swift in Sources */,
 				94341C122BA5897000334505 /* PrimaryButton-Mod.swift in Sources */,
 				94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */,
 			);
@@ -398,6 +402,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -430,6 +435,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -458,6 +464,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -490,6 +497,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

@@ -96,21 +96,39 @@ struct DepartmentPicker: View {
     } //: List Style
     
     private var dropDownStyle: some View {
-        Picker(selection: $selectedDepartment) {
-            Text("Select Department       ")
-                .tag(nil as DepartmentEntity?)
-            
+        Menu {
             ForEach(departments) { department in
                 Text(department.name)
                     .tag(department as DepartmentEntity?)
             }
         } label: {
-            Text("Department")
+            HStack {
+            Spacer()
+            Text(selectedDepartment?.name ?? "Select Department")
+            Spacer()
+            Image(systemName: "chevron.up.chevron.down")
                 
+            }
         }
-        .tint(.black.opacity(0.8))
-        .pickerStyle(.menu)
+        .padding()
         .frame(minWidth: 190, maxWidth: 280, alignment: .trailing)
+        .foregroundStyle(.black)
+        .modifier(GlowingOutlineMod())
+//        Picker(selection: $selectedDepartment) {
+//            Text("Select Department       ")
+//                .tag(nil as DepartmentEntity?)
+//            
+//            ForEach(departments) { department in
+//                Text(department.name)
+//                    .tag(department as DepartmentEntity?)
+//            }
+//        } label: {
+//            Text("Department")
+//                
+//        }
+//        .tint(.black.opacity(0.8))
+//        .pickerStyle(.menu)
+//        .frame(minWidth: 190, maxWidth: 280, alignment: .trailing)
 
     } //: Drop Down Style
 }

@@ -1,4 +1,4 @@
- //
+//
 //  CartView.swift
 //  InventoryX
 //
@@ -20,7 +20,9 @@ struct CartView: View {
     @Binding var cartState: CartState
     @Binding var menuState: MenuState
     
-    @State var origWidth: CGFloat = 0
+    //    @State var origWidth: CGFloat = 0
+    
+    let uiProperties: LayoutProperties
     
     var cartSubtotal: Double {
         return vm.cartItems.reduce(0) {
@@ -50,16 +52,30 @@ struct CartView: View {
         }
     }
     
+    var paddingVal: CGFloat {
+        return cartState == .confirming ? 16 : 8
+    }
+    
+    var columns: [GridItem] {
+        var colCount = 1
+        if uiProperties.width > 600 {
+            colCount += 1
+        }
+        return Array(repeating: GridItem(.flexible(minimum: 300, maximum: .infinity), spacing: 16), count: colCount)
+    }
+    
+    
     var body: some View {
-        GeometryReader { geo in
-            VStack {
-                Text(cartState == .confirming ? "Order Summary" : "Cart")
-                    .font(cartState == .confirming ? .largeTitle : .title2)
-                
-                
+        VStack(alignment: .center) {
+            Text(cartState == .confirming ? "Order Summary" : "Cart")
+                .font(cartState == .confirming ? .largeTitle : .title2)
+                .fontWeight(cartState == .confirming ? .bold : .regular)
+                .fontDesign(cartState == .confirming ? .rounded : .default)
+            
+            LazyVGrid(columns: columns) {
                 if cartState == .confirming {
                     // MARK: - CONFIRMATION VIEW
-                    VStack {
+                    VStack(spacing: 16) {
                         HStack {
                             VStack(alignment: .leading) {
                                 Text("Sale #123456")
@@ -75,15 +91,10 @@ struct CartView: View {
                                 Text(Date().formatted(date: .omitted, time: .shortened))
                             } //: VStack
                         } //: HStack
-                        .padding(.vertical, 16)
-                        .padding(.bottom, 16)
                         
                         HStack {
                             Text("Item")
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                            
-    //                        Text("Quantity")
-    //                            .frame(maxWidth: .infinity)
                             
                             Text("Price")
                                 .frame(maxWidth: .infinity)
@@ -94,7 +105,7 @@ struct CartView: View {
                         .font(.callout)
                         .foregroundStyle(.black)
                         
-                        Divider()
+                        Divider().opacity(0.4)
                         
                         ScrollView(.vertical, showsIndicators: false) {
                             VStack {
@@ -105,7 +116,6 @@ struct CartView: View {
                                                 .frame(maxWidth: .infinity, alignment: .leading)
                                             
                                             Text("Qty: \(item.qtyInCart ?? -1)")
-    //                                            .frame(maxWidth: .infinity)
                                         }
                                         Text(item.retailPrice?.formatAsCurrencyString() ?? "Error")
                                             .frame(maxWidth: .infinity)
@@ -114,22 +124,20 @@ struct CartView: View {
                                             .frame(maxWidth: .infinity, alignment: .trailing)
                                     } //: HStack
                                     .font(.callout)
-    //                                .fontWeight(.semibold)
                                     .foregroundStyle(.black)
                                     .frame(height: 30)
                                     .padding(.vertical, 12)
                                     
-                                    Divider()
+                                    Divider().opacity(0.4)
                                 } //: ForEach
                             } //: VStack
+                            Spacer()
                         } //: ScrollView
+                        .frame(minHeight: 400, idealHeight: uiProperties.height * 0.65, maxHeight: 800)
+                        Spacer()
                     } //: VStack
-                    
-                    .frame(maxWidth: 420)
                     .padding()
-                    .background(.white.opacity(0.3))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    
+                    .modifier(GlowingOutlineMod())
                 } else {
                     // MARK: - CART VIEW
                     ScrollView {
@@ -144,111 +152,92 @@ struct CartView: View {
                                         .font(.subheadline)
                                 } //: HStack
                                 
-
-                                    HStack(spacing: 0) {
-                                        Button {
-                                            item.qtyInCart? -= 1
-                                        } label: {
-                                            Image(systemName: "minus")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .padding(6)
-                                                .frame(width: 24, height: 24)
-                                        }
-                                        
-                                        Divider()
-                                        
-                                        Text("\(item.qtyInCart ?? -1)")
-                                            .font(.subheadline)
-                                            .frame(width: 36)
-                                        
-                                        Divider()
-                                        
-                                        Button {
-                                            item.qtyInCart? += 1
-                                        } label: {
-                                            Image(systemName: "plus")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .padding(6)
-                                                .frame(width: 24, height: 24)
-                                        }
-                                        
-                                    } //: HStack
-                                    .background(Color("Purple050").opacity(0.5))
-                                    .background(.ultraThinMaterial)
-                                    .frame(height: 24)
-                                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                                    
-                                
+                                if let qty = item.qtyInCart {
+                                    Stepper("x \(qty)") {
+                                        item.qtyInCart? += 1
+                                    } onDecrement: {
+                                        item.qtyInCart? -= 1
+                                    }
+                                    .frame(maxWidth: uiProperties.width)
+                                }
                             } //: VStack
-                            .frame(maxWidth: 350, maxHeight: 72, alignment: .leading)
                             
                             Divider().opacity(0.6).padding()
                         } //: For Each
                         Spacer()
+                    } //: Scroll
+                    .frame(maxWidth: uiProperties.width)
+                    .frame(height: uiProperties.height * 0.75)
+                    Spacer()
+                }
+                
+                
+                // ITEM 2
+                VStack(alignment: cartState == .confirming ? .center : .leading, spacing: 16) {
+                    VStack(spacing: 16) {
+                        
+                        HStack {
+                            Text("Subtotal:")
+                            
+                            Spacer()
+                            Text(cartSubtotal.formatAsCurrencyString())
+                        } //: HStack
+                        .font(cartState == .confirming ? .title3 : .subheadline)
+                        .fontWeight(.regular)
+                        
+                        HStack {
+                            Text("Tax:")
+                            Spacer()
+                            Text("\(taxAmount.formatAsCurrencyString())")
+                        } //: HStack
+                        .font(cartState == .confirming ? .title3 : .subheadline)
+                        .fontWeight(.regular)
+                        
+                        if cartState == .confirming {
+                            Divider()
+                        }
+                        
+                        HStack {
+                            Text("Total:")
+                            Spacer()
+                            Text((cartSubtotal + taxAmount).formatAsCurrencyString())
+                        } //: HStack
+                        .font(cartState == .confirming ? .title2 : .subheadline)
+                        .fontWeight(.semibold)
+                        .padding(.vertical, 8)
+                        
                     } //: VStack
-                    .padding(.vertical)
-                    .frame(maxHeight: .infinity)
+                    .padding(cartState == .confirming ? 16 : 2)
+                    .frame(maxWidth: cartState == .confirming ? 420 : uiProperties.width)
+                    .background(Color("Purple050").opacity(cartState == .confirming ? 0.8 : 0.0))
+                    .clipShape(RoundedRectangle(cornerRadius: cartState == .confirming ? 8 : 0))
                     
-                }
-                
-                VStack(spacing: 16) {
-                    
-                    HStack {
-                        Text("Subtotal:")
-                        Spacer()
-                        Text(cartSubtotal.formatAsCurrencyString())
-                    } //: HStack
-                    .font(cartState == .confirming ? .title3 : .subheadline)
-                    .fontWeight(.regular)
-                    
-                    HStack {
-                        Text("Tax:")
-                        Spacer()
-                        Text("\(taxAmount.formatAsCurrencyString())")
-                    } //: HStack
-                    .font(cartState == .confirming ? .title3 : .subheadline)
-                    .fontWeight(.regular)
-                    
-                    Divider()
-                    
-                    HStack {
-                        Text("Total:")
-                        Spacer()
-                        Text((cartSubtotal + taxAmount).formatAsCurrencyString())
-                    } //: HStack
-                    .font(cartState == .confirming ? .title2 : .subheadline)
-                    .fontWeight(.semibold)
-                    .padding(.vertical, 8)
-                    
+                    Button {
+                        continueTapped()
+                    } label: {
+                        Text("Checkout")
+                    }
+                    .modifier(PrimaryButtonMod())
+                    .frame(height: 48)
+                    .frame(maxWidth: uiProperties.width)
+                    .padding(.bottom)
                 } //: VStack
-                .padding()
-                .frame(maxWidth: 420)
-                .background(Color("Purple050").opacity(0.8))
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                
-                Button {
-                    continueTapped()
-                } label: {
-                    Text("Checkout")
-                }
-                .modifier(PrimaryButtonMod())
-            } //: VStack
-            .onAppear {
-                origWidth = geo.size.width
-            }
-        } //: Geometry Reader
+                .frame(height: uiProperties.height * 0.25)
+            } //: Lazy V Grid
+            .frame(width: uiProperties.width, height: uiProperties.height)
+        } //: VStack
+        
     } //: Body
     
     
 }
 
 //#Preview {
-//    CartViewNew(cartState: .constant(.sidebar), menuState: .constant(.open))
+//    CartView(cartState: .constant(.confirming), menuState: .constant(.open))
 //        .environmentObject(MakeASaleViewModel())
-//    
+//
 //}
+
 
 #Preview {
     ResponsiveView { props in

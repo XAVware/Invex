@@ -56,16 +56,7 @@ struct SettingsView: View {
                     .padding(24)
                     .frame(maxWidth: 360, maxHeight: 140)
                     .background(Color("Purple050"))
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 6)
-                            .stroke(lineWidth: 0.5)
-                            .foregroundStyle(.gray)
-                            .shadow(color: Color("Purple050"), radius: 4, x: 3, y: 3)
-                            .shadow(color: Color("Purple050"), radius: 4, x: -3, y: -3)
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                    .shadow(color: Color.gray.opacity(0.25), radius: 4, x: 0, y: 0)
+                    .modifier(GlowingOutlineMod())
                     
                     
                     Spacer()

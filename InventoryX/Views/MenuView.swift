@@ -9,7 +9,7 @@ import SwiftUI
 
 enum MenuState { case open, compact, closed }
 
-struct Menu: View {
+struct MenuView: View {
     @Binding var display: DisplayState
     @Binding var menuState: MenuState
     
@@ -129,5 +129,5 @@ struct Menu: View {
 }
 
 #Preview {
-    Menu(display: .constant(.makeASale), menuState: .constant(.compact))
+    MenuView(display: .constant(.makeASale), menuState: .constant(.compact))
 }

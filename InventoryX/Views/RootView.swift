@@ -37,7 +37,7 @@ struct RootView: View {
     
     @State var currentDisplay: DisplayState = .makeASale
     @State var menuState: MenuState = .compact
-    @State var cartState: CartState = .hidden
+    @State var cartState: CartState = .sidebar
     
     @State var selectedDepartment: DepartmentEntity?
     
@@ -73,7 +73,7 @@ struct RootView: View {
     var body: some View {
         HStack {
             if uiProperties.horizontalSizeClass == .regular && cartState != .confirming {
-                Menu(display: $currentDisplay, menuState: $menuState)
+                MenuView(display: $currentDisplay, menuState: $menuState)
                     .frame(maxWidth: menuState == .open ? uiProperties.width * 0.2 : nil)
             }
             
@@ -121,13 +121,14 @@ struct RootView: View {
                 if detailWidth > 0 {
                     switch currentDisplay {
                     case .makeASale:
-                        CartView(cartState: $cartState, menuState: $menuState)
-                            .environmentObject(posVM)
-                            .padding()
-                            .background(Color("Purple050").opacity(0.5))
-                            .frame(maxWidth: cartState == .confirming ? .infinity : detailWidth)
-                            .frame(maxHeight: .infinity)
-                        
+                        ResponsiveView { properties in
+                            CartView(cartState: $cartState, menuState: $menuState, uiProperties: properties)
+                                .environmentObject(posVM)
+                            
+                        }
+                        .padding()
+                        .frame(maxWidth: cartState == .confirming ? .infinity : detailWidth)
+                        .background(Color("Purple050").opacity(0.5))
                         
                     case .settings:
                         DepartmentsView()
