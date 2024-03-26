@@ -23,11 +23,14 @@ class DepartmentEntity: Object, ObjectKeyIdentifiable {
     
 }
 
+
+// If data has changed drastically and preview data needs to be updated, uncomment the block containing the deleteAll function, open preview, then recomment the function out.
 extension DepartmentEntity {
     static let foodCategory: DepartmentEntity = DepartmentEntity(name: "Food", restockNum: 10)
     static let drinkCategory: DepartmentEntity = DepartmentEntity(name: "Drinks", restockNum: 10)
     static let frozenCategory: DepartmentEntity = DepartmentEntity(name: "Frozen", restockNum: 10)
     static let categoryArray = [foodCategory, drinkCategory, frozenCategory]
+    static let company: CompanyEntity = CompanyEntity(name: "Preview Co.", taxRate: 0.06)
     
     static var previewRealm: Realm {
         var realm: Realm
@@ -35,9 +38,6 @@ extension DepartmentEntity {
         let config = Realm.Configuration(inMemoryIdentifier: identifier)
         do {
             realm = try Realm(configuration: config)
-            // Check to see whether the in-memory realm already contains a Person.
-            // If it does, we'll just return the existing realm.
-            // If it doesn't, we'll add a Person append the Dogs.
             let realmObjects = realm.objects(DepartmentEntity.self)
             if realmObjects.count != 0 {
 //                let realm = try Realm()
@@ -50,21 +50,15 @@ extension DepartmentEntity {
                     realm.add(foodCategory)
                     realm.add(drinkCategory)
                     realm.add(frozenCategory)
-                    
+                    realm.add(company)
                     foodCategory.items.append(objectsIn: ItemEntity.foodArray)
                     drinkCategory.items.append(objectsIn: ItemEntity.drinkArray)
                     frozenCategory.items.append(objectsIn: ItemEntity.frozenArray)
                 }
                 return realm
             }
-        } catch let error {
+        } catch {
             fatalError("Can't bootstrap item data: \(error.localizedDescription)")
         }
     }
 }
-
-//struct CategoryModel {
-//    var _id: ObjectId?
-//    var name: String?
-//    var restockNumber: Int?
-//}

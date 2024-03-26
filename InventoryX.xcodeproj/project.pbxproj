@@ -39,6 +39,7 @@
 		94860BA22BB1C72D00B1138A /* ThemeTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94860BA12BB1C72D00B1138A /* ThemeTextField.swift */; };
 		948861582BACB0E300580F38 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948861572BACB0E300580F38 /* ToolbarView.swift */; };
 		9488615B2BACC40A00580F38 /* DepartmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */; };
+		9490BAE02BB32044003C925A /* SecondaryButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */; };
 		94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */; };
 		94B3DE932A47C2CB00BBCB3A /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */; };
 		94B7EAC92BACDDEF00895FF7 /* ItemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7EAC82BACDDEF00895FF7 /* ItemTableView.swift */; };
@@ -94,6 +95,7 @@
 		94860BA12BB1C72D00B1138A /* ThemeTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeTextField.swift; sourceTree = "<group>"; };
 		948861572BACB0E300580F38 /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
 		9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentDetailView.swift; sourceTree = "<group>"; };
+		9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SecondaryButton-Mod.swift"; sourceTree = "<group>"; };
 		94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		94B7EAC82BACDDEF00895FF7 /* ItemTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableView.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 			children = (
 				94F6244A2BB12B860069C81E /* Components */,
 				94341C152BA629F000334505 /* Passcode */,
+				9421930F2BB23C92001D720D /* CompanyDetailView.swift */,
 				9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */,
 				94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */,
 				94681A3D2BAA1A64006A0578 /* CartView.swift */,
@@ -210,7 +213,6 @@
 				94F624452BAF1B1E0069C81E /* SalesHistoryView.swift */,
 				944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */,
 				948861572BACB0E300580F38 /* ToolbarView.swift */,
-				9421930F2BB23C92001D720D /* CompanyDetailView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -279,6 +281,7 @@
 				94F624562BB12F860069C81E /* ThemeField-Mod.swift */,
 				94F624582BB12FB90069C81E /* Title-Mod.swift */,
 				94860B9F2BB14EDF00B1138A /* GlowingOutline-Mod.swift */,
+				9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -365,6 +368,7 @@
 				94F6244E2BB12DAA0069C81E /* Double+Ext.swift in Sources */,
 				94F624592BB12FB90069C81E /* Title-Mod.swift in Sources */,
 				80DBB97F29F70EE000497695 /* OnboardingView.swift in Sources */,
+				9490BAE02BB32044003C925A /* SecondaryButton-Mod.swift in Sources */,
 				94C762602BA8C41100A61F7D /* MakeASaleViewModel.swift in Sources */,
 				94EA1CE32BB2763300BD0388 /* ChangePasscodeView.swift in Sources */,
 				942193102BB23C92001D720D /* CompanyDetailView.swift in Sources */,

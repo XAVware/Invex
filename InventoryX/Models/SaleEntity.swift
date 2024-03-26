@@ -21,7 +21,6 @@ class SaleEntity: Object, ObjectKeyIdentifiable {
         self._id = _id
         self.timestamp = timestamp
         self.total = total
-//        self.cashierName = UserManager.shared.getLoggedInUserName()
     }
     
     private func getDate(from dateString: String) -> Date {

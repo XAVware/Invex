@@ -52,7 +52,7 @@ struct NumberPadView: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical)
             }
-        }
+        } //: Lazy V Grid
         .foregroundStyle(.primary)
     }
     

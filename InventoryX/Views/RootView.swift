@@ -69,10 +69,13 @@ struct RootView: View {
         return dWidth
     }
     
+    var shouldShowMenu: Bool {
+        return uiProperties.horizontalSizeClass == .regular && cartState != .confirming 
+    }
     
     var body: some View {
-        HStack {
-            if uiProperties.horizontalSizeClass == .regular && cartState != .confirming {
+        HStack(spacing: 0) {
+            if shouldShowMenu {
                 MenuView(display: $currentDisplay, menuState: $menuState)
                     .frame(maxWidth: menuState == .open ? uiProperties.width * 0.2 : nil)
             }
@@ -95,6 +98,7 @@ struct RootView: View {
                                     // Add the item to cart.
                                     posVM.itemTapped(item: item)
                                 }
+                                .padding(2)
                                 
                             } //: VStack
                             .padding(.horizontal)
@@ -148,6 +152,7 @@ struct RootView: View {
         }
         .fullScreenCover(isPresented: $showingOnboarding) {
             OnboardingView()
+                .ignoresSafeArea(.all)
         }
         
     } //: Body

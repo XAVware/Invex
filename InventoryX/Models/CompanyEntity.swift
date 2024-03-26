@@ -12,7 +12,7 @@ class CompanyEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var name: String
     @Persisted var taxRate: Double
-    
+        
     convenience init(name: String, taxRate: Double = 0) {
         self.init()
         self.name = name

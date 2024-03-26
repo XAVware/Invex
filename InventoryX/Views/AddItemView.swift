@@ -18,26 +18,26 @@ import RealmSwift
         
         let newItem = ItemEntity(name: name, retailPrice: Double(price) ?? 1.0, avgCostPer: Double(cost) ?? 0.5, onHandQty: Int(qty) ?? 10)
         do {
-//            try await DataService.add(newItem, to: dept)
+            //            try await DataService.add(newItem, to: dept)
             
             let realm = try Realm()
             try realm.write {
                 thawedDept.items.append(newItem)
             }
             
-//            let realm = try await Realm()
-//            try await realm.asyncWrite {
-//                thawedDept.items.append(newItem)
-//            }
+            //            let realm = try await Realm()
+            //            try await realm.asyncWrite {
+            //                thawedDept.items.append(newItem)
+            //            }
             
-//            if let thawedDepartment = department.thaw() {
-//                try await realm.asyncWrite {
-//                    thawedDepartment.items.append(item)
-//                    
-//                }
-//            } else {
-//                LogService(self).error("Error thawing department")
-//            }
+            //            if let thawedDepartment = department.thaw() {
+            //                try await realm.asyncWrite {
+            //                    thawedDepartment.items.append(item)
+            //                    
+            //                }
+            //            } else {
+            //                LogService(self).error("Error thawing department")
+            //            }
             
         } catch {
             LogService(self).error("Error saving item to Realm: \(error.localizedDescription)")
@@ -53,14 +53,14 @@ enum DetailViewType { case create, view, modify }
 struct AddItemView: View {
     @StateObject var vm: AddItemViewModel = AddItemViewModel()
     @Environment(\.dismiss) var dismiss
-        
+    
     @State private var selectedDepartment: DepartmentEntity?
     @State private var itemName: String = ""
     @State private var attribute: String = ""
     @State private var quantity: String = ""
     @State private var retailPrice: String = ""
     @State private var unitCost: String = ""
-
+    
     let selectedItem: ItemEntity?
     
     /// Used to hide the back button and title while onboarding.
@@ -75,7 +75,7 @@ struct AddItemView: View {
         if let item = item {
             self.selectedDepartment = item.department.first
             self.itemName = item.name
-//            self.attribute = item.attribute
+            //            self.attribute = item.attribute
             self.quantity = String(describing: item.onHandQty)
             self.retailPrice = String(describing: item.retailPrice)
             self.unitCost = String(describing: item.avgCostPer)
@@ -108,151 +108,108 @@ struct AddItemView: View {
     }
     
     var body: some View {
-        
-        VStack(spacing: 32) {
-            VStack(alignment: .leading) {
+        ScrollView {
+            VStack(alignment: .center, spacing: 36) {
                 if showTitles {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24)
-                            .foregroundStyle(.black)
-                    }
+                    VStack(alignment: .leading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24)
+                                .foregroundStyle(.black)
+                        }
+                        Text("Add an item")
+                            .modifier(TitleMod())
+                        
+                    } //: VStack
+                    
+                }
+                if selectedItem == nil && showTitles == true {
+                    DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
                 }
                 
-                Text("Add an item")
-                    .font(.largeTitle)
-                    .fontWeight(.semibold)
-                    .fontDesign(.rounded)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-            } //: VStack
-            .frame(maxWidth: 720)
-            
-            if selectedItem == nil {
-                HStack {
-                    VStack(alignment: .leading, spacing: 12) {
-                        InputFieldLabel(title: "Department:", subtitle: nil)
-                            .frame(maxWidth: 420, alignment: .leading)
-                        
-                        
-                        DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
-                            .modifier(ThemeFieldMod())
-                            .frame(maxWidth: 280)
-                    } //: VStack - Department
-                    
-                    Spacer()
-                } //: HStack
-                .frame(maxWidth: 720)
-            }
-            
-            HStack {
                 ThemeTextField(boundTo: $itemName,
                                placeholder: "i.e. Gatorade",
                                title: "Item Name:",
                                subtitle: nil,
-                               type: .text,
-                               layout: .vertical)
-                .frame(maxWidth: 280)
+                               type: .text)
                 
-                Spacer()
+                ThemeTextField(boundTo: $attribute,
+                               placeholder: "i.e. Blue",
+                               title: "Attribute:",
+                               subtitle: nil,
+                               type: .text)
                 
-                ThemeTextField(boundTo: $attribute, placeholder: "i.e. Blue", title: "Attribute:", subtitle: nil, type: .text, layout: .vertical)
-                .frame(maxWidth: 280)
-                
-            } //: HStack
-            .frame(maxWidth: 720)
-            
-            Divider()
-            
-            HStack {
                 ThemeTextField(boundTo: $quantity,
                                placeholder: "24",
                                title: "On-hand quantity:",
                                subtitle: nil,
-                               type: .integer,
-                               layout: .vertical)
-                .frame(maxWidth: 220)
-                
-                Spacer()
+                               type: .integer)
                 
                 ThemeTextField(boundTo: $retailPrice,
                                placeholder: "$ 2.00",
                                title: "Retail Price:",
                                subtitle: nil,
-                               type: .price,
-                               layout: .vertical)
-                .frame(maxWidth: 220)
-//                .onChange(of: retailPrice) { _ in
-//                    let formattedPrice = retailPrice.replacingOccurrences( of:"[^0-9.]", with: "", options: .regularExpression)
-//                    guard let price = Double(formattedPrice) else {
-//                        print("Err")
-//                        return
-//                    }
-//                    retailPrice = price.formatAsCurrencyString()
-//                }
+                               type: .price)
+                //                .onChange(of: retailPrice) { _ in
+                //                    let formattedPrice = retailPrice.replacingOccurrences( of:"[^0-9.]", with: "", options: .regularExpression)
+                //                    guard let price = Double(formattedPrice) else {
+                //                        print("Err")
+                //                        return
+                //                    }
+                //                    retailPrice = price.formatAsCurrencyString()
+                //                }
                 
-                
-            } //: HStack
-            .frame(maxWidth: 720)
-            
-            HStack {
                 ThemeTextField(boundTo: $unitCost,
                                placeholder: "$ 1.00",
                                title: "Unit Cost:",
                                subtitle: nil,
-                               type: .price,
-                               layout: .vertical)
-                .frame(maxWidth: 220)
+                               type: .price)
+                
                 
                 Spacer()
-            } //: HStack
-            .frame(maxWidth: 720)
-            
-            Spacer()
-            
-            Button {
-                guard let dept = selectedDepartment else { return }
-                do {
-                    try vm.saveItem(dept: dept, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
-                    
-                    if showTitles {
-                        dismiss()
+                
+                Button {
+                    guard let dept = selectedDepartment else { return }
+                    do {
+                        try vm.saveItem(dept: dept, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
+                        
+                        if showTitles {
+                            dismiss()
+                        }
+                        onSuccess?()
+                        
                     }
-                    onSuccess?()
-                    
+                    catch {
+                        print(error.localizedDescription)
+                    }
+                } label: {
+                    Text("Save Item")
                 }
-                catch {
-                   print(error.localizedDescription)
-               }
-            } label: {
-                Text("Save Item")
-            }
-            .modifier(PrimaryButtonMod())
-            
-            Spacer()
-            
-        } //: VStack
-        .padding()
-        .toolbar(.hidden, for: .navigationBar)
-        .background(Color("Purple050").opacity(0.3))
-        .onAppear {
-            if let item = selectedItem {
-                itemName = item.name
-                quantity = String(describing: item.onHandQty!)
-                retailPrice = String(describing: item.retailPrice!)
-                unitCost = String(describing: item.avgCostPer!)
+                .modifier(PrimaryButtonMod())
+                
+                Spacer()
+                
+            } //: VStack
+            .frame(maxWidth: 720)
+            .padding()
+            .toolbar(.hidden, for: .navigationBar)
+            //        .background(Color("Purple050").opacity(0.3))
+            .onAppear {
+                if let item = selectedItem {
+                    itemName = item.name
+                    quantity = String(describing: item.onHandQty!)
+                    retailPrice = String(describing: item.retailPrice!)
+                    unitCost = String(describing: item.avgCostPer!)
+                }
             }
         }
     } //: Body
 }
 
-//struct AddItemView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AddItemView(selectedItem: nil) {}
-//        //            .frame(width: 400)
-//    }
-//}
+#Preview {
+    AddItemView(item: nil)
+}

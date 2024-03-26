@@ -7,22 +7,12 @@
 
 import SwiftUI
 
-struct FieldTitleMod: ViewModifier {
+struct TitleMod: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.headline)
-            .fontWeight(.regular)
+            .font(.largeTitle)
+            .fontWeight(.bold)
             .fontDesign(.rounded)
-            .foregroundStyle(.black)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
-
-struct FieldSubtitleMod: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.subheadline)
-            .fontDesign(.rounded)
-            .foregroundStyle(.gray)
-    }
-}
-

@@ -11,7 +11,7 @@ struct LogoView: View {
     
     var body: some View {
         HStack(spacing: 0) {
-            Text("Inven")
+            Text("Inve")
                 .modifier(TextMod(.title, .semibold, Theme.logoColor))
                 .offset(y: -2)
             

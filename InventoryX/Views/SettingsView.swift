@@ -6,9 +6,28 @@
 //
 
 import SwiftUI
+import RealmSwift
+
+@MainActor class SettingsViewModel: ObservableObject {
+    @Published var company: CompanyEntity?
+    
+    init() {
+        fetchCompanyData()
+    }
+    
+    func fetchCompanyData() {
+        do {
+            let realm = try Realm()
+            self.company = realm.objects(CompanyEntity.self).first
+        } catch {
+            print("Settings VM err")
+        }
+    }
+}
 
 struct SettingsView: View {
-    
+    @StateObject var vm: SettingsViewModel = SettingsViewModel()
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("Settings")
@@ -23,7 +42,12 @@ struct SettingsView: View {
             HStack {
                 VStack {
                     VStack(alignment: .leading, spacing: 24) {
-                        HStack {
+                        HStack(spacing: 16) {
+                            Image(systemName: "case.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24)
+                                .foregroundStyle(Color("Purple800"))
                             Text("Company Info")
                                 .font(.title3)
                                 .fontWeight(.semibold)
@@ -41,7 +65,7 @@ struct SettingsView: View {
                                     .font(.headline)
                                     .foregroundStyle(.gray)
                                 Spacer()
-                                Text("XAVware")
+                                Text(vm.company?.name ?? "")
                             } //: HStack
                             
                             HStack {
@@ -49,7 +73,7 @@ struct SettingsView: View {
                                     .font(.headline)
                                     .foregroundStyle(.gray)
                                 Spacer()
-                                Text("7.00 %")
+                                Text("\(vm.company?.taxRate ?? 0 * 100) %")
                             } //: HStack
                         } //: VStack
                     } //: VStack
@@ -57,7 +81,9 @@ struct SettingsView: View {
                     .frame(maxWidth: 360, maxHeight: 140)
                     .background(Color("Purple050"))
                     .modifier(GlowingOutlineMod())
-                    
+//                    .onReceive(vm.$company) { newValue in
+//                        guard let company = newValue else { return }
+//                    }
                     
                     Spacer()
                 } //: VStack
@@ -66,7 +92,7 @@ struct SettingsView: View {
         } //: VStack
         .padding()
     }
-    
+     
 }
 
 //struct SettingsView_Previews: PreviewProvider {
@@ -77,8 +103,17 @@ struct SettingsView: View {
 
 
 #Preview {
-    ResponsiveView { props in
-        RootView(uiProperties: props, currentDisplay: .settings)
-            .environment(\.realm, DepartmentEntity.previewRealm)
-    }
+    SettingsView()
+//    ResponsiveView { props in
+//        RootView(uiProperties: props, currentDisplay: .settings)
+            .environment(\.realm, DepartmentEntity.previewRealm) 
+//            .onAppear { 
+//                let realm = try! Realm()
+//                try! realm.write {
+//                    realm.deleteAll()
+//                    realm.add(CompanyEntity(name: "Preview Co", taxRate: 0.06))
+//                    
+//                }
+//            }
+//    }
 }

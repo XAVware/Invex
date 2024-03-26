@@ -8,157 +8,90 @@
 import SwiftUI
 import RealmSwift
 
-//@MainActor class OnboardingViewModel: ObservableObject {
-//    var navCounter: Int = 0
-//    private let lastPageInt: Int
-//    @Published var currentOnboardingState: OnboardingState = .start
-//    
-//    enum OnboardingState: Int, CaseIterable {
-//        case start = 0
-//        case setPasscode = 1
-//        case department = 2
-//        case item = 3
-//    }
-//    
-//    init() {
-//        // Iterate through OnboardingState enum to figure out how many pages there are. This allows the overall workflow (welcome page, categories, admin) to be reorganized or edited via integer value in enum.
-//        var pageInt: Int = 0
-//        for navState in OnboardingState.allCases {
-//            let pageNum = navState.rawValue
-//            if pageNum > pageInt {
-//                pageInt = pageNum
-//            }
-//        }
-//        lastPageInt = pageInt
-//    }
-//    
-//    func nextTapped() {
-//
-//    }
-//    
-//    
-//}
 
 enum OnboardingState: Int {
-    case start
-    case setPasscode
-    case department
-    case item
-}
-
-@MainActor class OnboardingViewModel: ObservableObject {
-    @Published var currentDisplay: OnboardingState = .start
+    case start = 0
+    case setPasscode = 1
+    case department = 2
+    case item = 3
     
-//    func saveCompany(name: String, tax: String) {
-//        guard let taxRate = Double(tax) else {
-//            print("Please enter a valid tax rate percentage.")
-//            return
-//        }
-//        
-//        let company = CompanyEntity(name: name, taxRate: taxRate)
-//        do {
-//            let realm = try Realm()
-//            try realm.write {
-//                realm.add(company)
-//            }
-//            currentDisplay = .setPasscode
-//        } catch {
-//            print("Error saving company: \(error.localizedDescription)")
-//        }
-//    }
-
+    var viewTitle: String {
+        return switch self {
+        case .start: "Welcome to InveX!"
+        case .setPasscode: "Set a passcode"
+        case .department: "Add a department"
+        case .item: "Add an item"
+        }
+    }
+    
 }
+
 
 struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.verticalSizeClass) var vSize
     @State var currentDisplay: OnboardingState = .start
-    
-//    @State var companyName: String = ""
-//    @State var taxRate: String = ""
-    
-//    @State var passcodeHash: String = ""
-    
+
     var body: some View {
-        
-        VStack {
-            switch currentDisplay {
-            case .start:
-                VStack(spacing: 24) {
-                    LogoView()
-                        .scaleEffect(1.0)
-                        .padding(.top)
+            VStack(spacing: 0) {
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    if currentDisplay != .start {
+                        Button {
+                            guard let prevPage = OnboardingState(rawValue: currentDisplay.rawValue - 1) else { return }
+                            
+                            currentDisplay = prevPage
+                        } label: {
+                            Image(systemName: "chevron.left")
+                            Spacer()
+                            Text("Back")
+                        }
+                        .padding(.horizontal, 12)
+                        .modifier(SecondaryButtonMod())
+                    } else {
+                        LogoView()
+                    }
                     
-                    Text("Welcome to Invex! Let's get you set up.")
-                        .font(.largeTitle)
-                        .padding(.vertical)
+                    Text(currentDisplay.viewTitle)
+                        .modifier(TitleMod())
+                } //: VStack
+                .frame(maxWidth: .infinity)
+                
+                
+                switch currentDisplay {
+                case .start:
+                    Text("Start by telling us a little bit about your business.")
+                        .font(.title2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     
                     CompanyDetailView(company: nil, showTitles: false) {
                         currentDisplay = .setPasscode
                     }
                     
-                } //: VStack
-                .frame(maxWidth: 480)
-                
-            case .setPasscode:
-                VStack(spacing: 24) {
-                    Text("Create your admin passcode")
-                        .font(.largeTitle)
-                        .padding(.vertical)
-                    
+                case .setPasscode:
+                    Spacer()
                     ChangePasscodeView(passHash: nil) {
                         currentDisplay = .department
                     }
+                    Spacer()
+                case .department:
                     
-                    Button {
-                        currentDisplay = .start
-                    } label: {
-                        Image(systemName: "chevron.left")
-                        Text("Back")
-                            .underline()
-                    }
-                    
-                    
-                } //: VStack
-                .frame(maxWidth: 480)
-                
-            case .department:
-                VStack(spacing: 24) {
                     DepartmentDetailView(department: nil, showTitles: false) {
                         currentDisplay = .item
                     }
                     
-                    Button {
-                        currentDisplay = .setPasscode
-                    } label: {
-                        Image(systemName: "chevron.left")
-                        Text("Back")
-                            .underline()
-                    }
-                } //: VStack
-                
-            case .item:
-                VStack(spacing: 24) {
-                    AddItemView(item: nil) {
+                    
+                case .item:
+                    AddItemView(item: nil, showTitles: false) {
                         dismiss()
                     }
                     
-                    Button {
-                        currentDisplay = .department
-                    } label: {
-                        Image(systemName: "chevron.left")
-                        Text("Back")
-                            .underline()
-                    }
-                } //: VStack
-            } //: Switch
+                } //: Switch
+                
+            } //: VStack
+            .padding(.horizontal)
+            .padding(.top)
             
-            
-        } //: VStack
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color("Purple050").opacity(0.5))
-        
-        
     } //: Body
     
     

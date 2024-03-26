@@ -68,7 +68,6 @@ struct ItemTableView: View {
                     showingDetailView = true
                 } label: {
                     Image(systemName: "plus")
-                    
                     Text("Add Item")
                 }
                 .padding(12)
@@ -147,12 +146,12 @@ struct ItemTableView: View {
                 .shadow(color: Color.gray.opacity(0.5), radius: 2)
  
         )
-//        .sheet(isPresented: $showingDetailView, onDismiss: {
-//            selectedItem = nil
-//        }) {
-//            AddItemView(selectedItem: selectedItem)
-//            .ignoresSafeArea(.keyboard)
-//        }
+        .sheet(isPresented: $showingDetailView, content: {
+            AddItemView(item: selectedItem) {
+                selectedItem = nil
+            }
+            .ignoresSafeArea(.keyboard)
+        })
     } //: List View
     
     
@@ -219,14 +218,14 @@ struct ItemTableView: View {
             }
         } //: Geometry Reader
     }
-
+ 
 }
 
 
-//#Preview {
-//    ItemTableView(department: .constant(nil), style: .list, onSelect: { item in
-//        
-//    })
-//    .padding()
-//    .environment(\.realm, DepartmentEntity.previewRealm)
-//}
+#Preview {
+    ItemTableView(department: .constant(nil), style: .list, onSelect: { item in
+
+    })
+    .padding()
+    .environment(\.realm, DepartmentEntity.previewRealm)
+}

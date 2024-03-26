@@ -48,7 +48,7 @@ struct InventoryXApp: SwiftUI.App {
             }
             .onAppear {
 //                UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
-                resetApp()
+//                resetApp()
             }
         }
     } //: Body

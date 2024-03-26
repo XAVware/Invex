@@ -17,7 +17,7 @@ import RealmSwift
         try realm.write {
             realm.add(company)
         }
-
+        
     }
 }
 
@@ -69,58 +69,52 @@ struct CompanyDetailView: View {
     }
     
     var body: some View {
-        VStack(spacing: 24) {
-            if showTitles {
-                VStack(alignment: .leading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "xmark")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24)
-                            .foregroundStyle(.black)
-                    }
+        ScrollView {
+            VStack(spacing: 24) {
+                if showTitles {
+                    VStack(alignment: .leading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24)
+                                .foregroundStyle(.black)
+                        }
+                        
+                        Text("Edit company info")
+                            .modifier(TitleMod())
+                        
+                    } //: VStack
+                    .frame(maxWidth: 720)
+                }
+                
+                VStack {
+                    ThemeTextField(boundTo: $companyName,
+                                   placeholder: "Company Name",
+                                   title: "Business Name:",
+                                   subtitle: nil,
+                                   type: .text)
                     
-                    Text("Edit company info")
-                        .font(.largeTitle)
-                        .fontWeight(.semibold)
-                        .fontDesign(.rounded)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    
+                    ThemeTextField(boundTo: $taxRate,
+                                   placeholder: "0",
+                                   title: "Tax Rate:",
+                                   subtitle: "If you want us to calculate the tax on your sales, enter a tax rate here.",
+                                   type: .percentage)
                 } //: VStack
-                .frame(maxWidth: 720)
-            }
-            
-            ThemeTextField(boundTo: $companyName,
-                           placeholder: "Company Name",
-                           title: "Business Name:",
-                           subtitle: nil,
-                           type: .text,
-                           layout: .vertical)
-
-            Divider()
-            
-            ThemeTextField(boundTo: $taxRate,
-                           placeholder: "0",
-                           title: "Tax Rate:",
-                           subtitle: "If you want us to calculate the tax on your sales, enter a tax rate here.",
-                           type: .percentage,
-                           layout: .horizontal)
-            .frame(height: 96)
-            
-            Spacer()
-            
-            Button {
-                continueTapped()
-            } label: {
-                Text("Continue")
-            }
-            .modifier(PrimaryButtonMod())
-        } //: VStack
-        .padding()
-        .frame(maxWidth: 720)
+                
+                Button {
+                    continueTapped()
+                } label: {
+                    Text("Continue")
+                }
+                .modifier(PrimaryButtonMod())
+                .padding(.vertical)
+            } //: VStack
+            .frame(maxWidth: 720)
+            .padding()
+        }
     }
 }
 

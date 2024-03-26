@@ -167,7 +167,7 @@ struct CartView: View {
                         Spacer()
                     } //: Scroll
                     .frame(maxWidth: uiProperties.width)
-                    .frame(height: uiProperties.height * 0.75)
+                    .frame(height: uiProperties.height * 0.65)
                     Spacer()
                 }
                 

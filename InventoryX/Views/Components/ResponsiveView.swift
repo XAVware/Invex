@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// https://www.ios-resolution.com/
+
 struct ResponsiveView<Content:View>: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
@@ -33,6 +35,8 @@ struct ResponsiveView<Content:View>: View {
         }
     }
 }
+
+
 
 struct CustomFontSize {
     let small: CGFloat
