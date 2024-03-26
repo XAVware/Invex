@@ -23,30 +23,33 @@ struct InventoryXApp: SwiftUI.App {
     let migrator: RealmMigrator = RealmMigrator()
 //    let db: DataService = DataService.shared
     
+    func resetApp() {
+        UserDefaults.standard.removeObject(forKey: "passcode")
+        let realm = try! Realm()
+        try! realm.write { realm.deleteAll() }
+        
+    }
+    
+    func addSampleData() {
+        
+        let drinks = DepartmentEntity(name: "Drinks", restockNum: 12)
+        drinks.items.append(objectsIn: ItemEntity.drinkArray)
+        drinks.items.append(objectsIn: ItemEntity.foodArray)
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(drinks)
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             ResponsiveView { props in
                 RootView(uiProperties: props)
             }
-//                    .onAppear {
-//                        UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
-//                    }
-//                    .task {
-//                        do {
-//                            UserDefaults.standard.removeObject(forKey: "passcode")
-//                            try await DataService.resetRealm()
-//                            let realm = try await Realm()
-//                            try await realm.asyncWrite { realm.deleteAll() }
-//                            let drinks = DepartmentEntity(name: "Drinks", restockNum: 12)
-//                            drinks.items.append(objectsIn: ItemEntity.drinkArray)
-//                            drinks.items.append(objectsIn: ItemEntity.foodArray)
-//                            try await DataService.addDepartment(dept: drinks)
-//                        } catch {
-//                            print(error)
-//                        }
-//                    }
-
-            
+            .onAppear {
+//                UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+                resetApp()
+            }
         }
     } //: Body
 }

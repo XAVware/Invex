@@ -11,9 +11,9 @@ import RealmSwift
 
 
 
-class AddDepartmentViewModel: ObservableObject {
+class DepartmentDetailViewModel: ObservableObject {
     
-    func saveDepartment(name: String, threshold: String, hasTax: Bool, markup: String) async throws {
+    func saveDepartment(name: String, threshold: String, hasTax: Bool, markup: String) throws {
         // Make sure `threshold` was entered as a number
         guard let threshold = Int(threshold) else { throw AppError.numericThresholdRequired }
         
@@ -21,8 +21,8 @@ class AddDepartmentViewModel: ObservableObject {
         
         do {
 //            try await DataService.addDepartment(dept: department)
-            let realm = try await Realm()
-            try await realm.asyncWrite { realm.add(department) }
+            let realm = try Realm()
+            try realm.write { realm.add(department) }
             print("Department saved successfully")
         } catch {
             print(error.localizedDescription)
@@ -32,28 +32,57 @@ class AddDepartmentViewModel: ObservableObject {
     
 }
 
-struct AddDepartmentView: View {
+struct DepartmentDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var vm: AddDepartmentViewModel = AddDepartmentViewModel()
+    @StateObject var vm: DepartmentDetailViewModel = DepartmentDetailViewModel()
+
+    @State private var name: String = ""
+    @State private var restockThreshold: String = ""
+    @State private var hasTax: Bool = false
+    @State private var markup: String = ""
     
-    @State var department: DepartmentEntity?
+    let department: DepartmentEntity?
     
+    /// Used to hide the back button and title while onboarding.
+    @State var showTitles: Bool
     
-    @State var name: String = ""
-    @State var restockThreshold: String = ""
-    @State var hasTax: Bool = false
-    @State var markup: String = ""
+    /// Used in onboarding view to execute additional logic.
+    let onSuccess: (() -> Void)?
     
-    @State var isEditing: Bool = false
+    @State var detailState: DetailViewType
     
-    @State var isOnboarding: Bool = false
-    let completion: (() -> Void)?
-    
-    func setup(forDepartment department: DepartmentEntity?) {
+    init(department: DepartmentEntity?, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         if let dept = department {
+            self.detailState = .modify
             self.name = dept.name
+            self.restockThreshold = String(describing: dept.restockNumber)
+//            self.hasTax = dept.hasTax
+//            self.markup = dept.markup
+            detailState = .modify
         } else {
-            self.isEditing = true
+            detailState = .create
+        }
+        self.department = department
+        self.showTitles = showTitles
+        self.onSuccess = onSuccess
+    }
+    
+    private func continueTapped() {
+        switch detailState {
+        case .create:
+            do {
+                try vm.saveDepartment(name: name, threshold: restockThreshold, hasTax: hasTax, markup: markup)
+                if showTitles {
+                    dismiss()
+                }
+                onSuccess?()
+            } catch {
+                print("Error while saving company: \(error.localizedDescription)")
+            }
+        case .view:
+            return
+        case .modify:
+            return
         }
     }
     
@@ -61,7 +90,7 @@ struct AddDepartmentView: View {
         VStack(alignment: .center, spacing: 32) {
             
             VStack(alignment: .leading) {
-                if !isOnboarding {
+                if showTitles {
                     Button {
                         dismiss()
                     } label: {
@@ -79,13 +108,13 @@ struct AddDepartmentView: View {
                     .fontDesign(.rounded)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                if isOnboarding {
-                    Text("You will be able to quickly search for your items by their department.")
-                        .font(.title3)
-                        .fontWeight(.regular)
-                        .fontDesign(.rounded)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
+//                if isOnboarding {
+//                    Text("You will be able to quickly search for your items by their department.")
+//                        .font(.title3)
+//                        .fontWeight(.regular)
+//                        .fontDesign(.rounded)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                }
                 
             } //: VStack
             .frame(maxWidth: 720)
@@ -130,20 +159,10 @@ struct AddDepartmentView: View {
             Spacer()
             
             Button {
-                Task {
-                    do {
-                        try await vm.saveDepartment(name: name, threshold: restockThreshold, hasTax: hasTax, markup: markup)
-                        if !isOnboarding {
-                            dismiss()
-                        } else {
-                            completion?()
-                        }
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                }
+                continueTapped()
+                
             } label: {
-                Text(isOnboarding ? "Continue" : "Save Department")
+                Text("Continue")
             }
             .modifier(PrimaryButtonMod())
             
@@ -161,16 +180,16 @@ struct AddDepartmentView: View {
         .padding()
         .toolbar(.hidden, for: .navigationBar)
         .background(Color("Purple050").opacity(0.2))
-        .onAppear {
-            setup(forDepartment: department)
-            
-        }
+//        .onAppear {
+//            setup(forDepartment: department)
+//            
+//        }
         
     }
 }
 
 #Preview {
-    AddDepartmentView(department: nil) {}
+    DepartmentDetailView(department: nil) {}
 }
 
 

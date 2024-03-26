@@ -11,7 +11,8 @@ import RealmSwift
 
 @MainActor class AddItemViewModel: ObservableObject {
     
-    func saveItem(dept: DepartmentEntity, name: String, att: String, qty: String, price: String, cost: String) {
+    func saveItem(dept: DepartmentEntity?, name: String, att: String, qty: String, price: String, cost: String) throws {
+        guard let dept = dept else { return }
         guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
         guard let thawedDept = dept.thaw() else { return }
         
@@ -52,24 +53,65 @@ enum DetailViewType { case create, view, modify }
 struct AddItemView: View {
     @StateObject var vm: AddItemViewModel = AddItemViewModel()
     @Environment(\.dismiss) var dismiss
-    
+        
+    @State private var selectedDepartment: DepartmentEntity?
+    @State private var itemName: String = ""
+    @State private var attribute: String = ""
+    @State private var quantity: String = ""
+    @State private var retailPrice: String = ""
+    @State private var unitCost: String = ""
+
     let selectedItem: ItemEntity?
     
-    @State var selectedDepartment: DepartmentEntity?
-    @State var itemName: String = ""
-    @State var attribute: String = ""
-    @State var quantity: String = ""
-    @State var retailPrice: String = ""
-    @State var unitCost: String = ""
+    /// Used to hide the back button and title while onboarding.
+    @State var showTitles: Bool
     
-    @State var isOnboarding: Bool = false
-    let completion: (() -> Void)?
+    /// Used in onboarding view to execute additional logic.
+    let onSuccess: (() -> Void)?
+    
+    @State var detailState: DetailViewType
+    
+    init(item: ItemEntity?, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
+        if let item = item {
+            self.selectedDepartment = item.department.first
+            self.itemName = item.name
+//            self.attribute = item.attribute
+            self.quantity = String(describing: item.onHandQty)
+            self.retailPrice = String(describing: item.retailPrice)
+            self.unitCost = String(describing: item.avgCostPer)
+            detailState = .modify
+        } else {
+            detailState = .create
+        }
+        self.selectedItem = item
+        self.showTitles = showTitles
+        self.onSuccess = onSuccess
+    }
+    
+    private func continueTapped() {
+        switch detailState {
+        case .create:
+            do {
+                try vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
+                if showTitles {
+                    dismiss()
+                }
+                onSuccess?()
+            } catch {
+                print("Error while saving company: \(error.localizedDescription)")
+            }
+        case .view:
+            return
+        case .modify:
+            return
+        }
+    }
     
     var body: some View {
         
         VStack(spacing: 32) {
             VStack(alignment: .leading) {
-                if !isOnboarding {
+                if showTitles {
                     Button {
                         dismiss()
                     } label: {
@@ -174,16 +216,18 @@ struct AddItemView: View {
             
             Button {
                 guard let dept = selectedDepartment else { return }
-                Task {
-                    vm.saveItem(dept: dept, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
+                do {
+                    try vm.saveItem(dept: dept, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
                     
-                    if !isOnboarding {
+                    if showTitles {
                         dismiss()
-                    } else {
-                        completion?()
                     }
+                    onSuccess?()
                     
                 }
+                catch {
+                   print(error.localizedDescription)
+               }
             } label: {
                 Text("Save Item")
             }
@@ -206,9 +250,9 @@ struct AddItemView: View {
     } //: Body
 }
 
-struct AddItemView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddItemView(selectedItem: nil) {}
-        //            .frame(width: 400)
-    }
-}
+//struct AddItemView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddItemView(selectedItem: nil) {}
+//        //            .frame(width: 400)
+//    }
+//}

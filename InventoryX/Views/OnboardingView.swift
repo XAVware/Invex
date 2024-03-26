@@ -49,44 +49,39 @@ enum OnboardingState: Int {
 @MainActor class OnboardingViewModel: ObservableObject {
     @Published var currentDisplay: OnboardingState = .start
     
-    func saveCompany(name: String, tax: String) {
-        guard let taxRate = Double(tax) else {
-            print("Please enter a valid tax rate percentage.")
-            return
-        }
-        
-        let company = CompanyEntity(name: name, taxRate: taxRate)
-        do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(company)
-            }
-            currentDisplay = .setPasscode
-        } catch {
-            print("Error saving company: \(error.localizedDescription)")
-        }
-    }
-    
-    func savePasscode(passcodeHash: String) {
-        
-    }
+//    func saveCompany(name: String, tax: String) {
+//        guard let taxRate = Double(tax) else {
+//            print("Please enter a valid tax rate percentage.")
+//            return
+//        }
+//        
+//        let company = CompanyEntity(name: name, taxRate: taxRate)
+//        do {
+//            let realm = try Realm()
+//            try realm.write {
+//                realm.add(company)
+//            }
+//            currentDisplay = .setPasscode
+//        } catch {
+//            print("Error saving company: \(error.localizedDescription)")
+//        }
+//    }
+
 }
 
 struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var vm: OnboardingViewModel = OnboardingViewModel()
+    @State var currentDisplay: OnboardingState = .start
     
+//    @State var companyName: String = ""
+//    @State var taxRate: String = ""
     
-    
-    @State var companyName: String = ""
-    @State var taxRate: String = ""
-    
-    @State var passcodeHash: String = ""
+//    @State var passcodeHash: String = ""
     
     var body: some View {
         
         VStack {
-            switch vm.currentDisplay {
+            switch currentDisplay {
             case .start:
                 VStack(spacing: 24) {
                     LogoView()
@@ -98,56 +93,63 @@ struct OnboardingView: View {
                         .padding(.vertical)
                     
                     CompanyDetailView(company: nil, showTitles: false) {
-                        vm.currentDisplay = .setPasscode
+                        currentDisplay = .setPasscode
                     }
                     
                 } //: VStack
                 .frame(maxWidth: 480)
                 
             case .setPasscode:
-                VStack(alignment: .center) {
-                    VStack(spacing: 24) {
-                        Text(passcodeHash.isEmpty ? "Enter Passcode" : "Re-enter passcode")
-                            .font(.largeTitle)
-                            .fontWeight(.semibold)
-                        
-                        Text("Enter a 4-digit passcode to be used to unlock the app.")
-                            .font(.subheadline)
-                            .multilineTextAlignment(.center)
-                    } //: VStack
+                VStack(spacing: 24) {
+                    Text("Create your admin passcode")
+                        .font(.largeTitle)
+                        .padding(.vertical)
                     
-                    PasscodeView() { hash in
-                        if passcodeHash.isEmpty {
-                            print("Setting first passcode to: \(hash)")
-                            passcodeHash = hash
-                        } else {
-                            guard passcodeHash == hash else {
-                                passcodeHash = ""
-                                return
-                            }
-                            
-                            print("Passcodes match")
-                            
-                            AuthService.shared.savePasscode(hash: passcodeHash)
-                            vm.currentDisplay = .department
-                        }
+                    ChangePasscodeView(passHash: nil) {
+                        currentDisplay = .department
                     }
-                    .padding(.vertical)
-                    .frame(maxWidth: 360, maxHeight: 540, alignment: .center)
+                    
+                    Button {
+                        currentDisplay = .start
+                    } label: {
+                        Image(systemName: "chevron.left")
+                        Text("Back")
+                            .underline()
+                    }
                     
                     
                 } //: VStack
+                .frame(maxWidth: 480)
                 
             case .department:
-                AddDepartmentView(isOnboarding: true) {
-                    vm.currentDisplay = .item
-                }
+                VStack(spacing: 24) {
+                    DepartmentDetailView(department: nil, showTitles: false) {
+                        currentDisplay = .item
+                    }
+                    
+                    Button {
+                        currentDisplay = .setPasscode
+                    } label: {
+                        Image(systemName: "chevron.left")
+                        Text("Back")
+                            .underline()
+                    }
+                } //: VStack
                 
             case .item:
-                AddItemView(selectedItem: nil, isOnboarding: true) {
-                    dismiss()
-                }
-                
+                VStack(spacing: 24) {
+                    AddItemView(item: nil) {
+                        dismiss()
+                    }
+                    
+                    Button {
+                        currentDisplay = .department
+                    } label: {
+                        Image(systemName: "chevron.left")
+                        Text("Back")
+                            .underline()
+                    }
+                } //: VStack
             } //: Switch
             
             
@@ -156,6 +158,7 @@ struct OnboardingView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color("Purple050").opacity(0.5))
         
+        
     } //: Body
     
     
@@ -163,9 +166,5 @@ struct OnboardingView: View {
 
 #Preview {
     OnboardingView()
-//    CompanyDetailView()
         .environment(\.realm, DepartmentEntity.previewRealm)
 }
-
-
-

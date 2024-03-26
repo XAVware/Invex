@@ -64,7 +64,7 @@ struct ToolbarView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .shadow(radius: 2)
                 .sheet(isPresented: $showAddDepartment) {
-                    AddDepartmentView() {}
+                    DepartmentDetailView(department: nil)
                         .ignoresSafeArea(.keyboard)
                 }
                 

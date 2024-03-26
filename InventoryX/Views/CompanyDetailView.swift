@@ -43,6 +43,7 @@ struct CompanyDetailView: View {
             detailState = .modify
             companyName = company.name
             taxRate = String(describing: company.taxRate)
+            detailState = .modify
         } else {
             detailState = .create
         }

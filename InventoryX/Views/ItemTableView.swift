@@ -147,14 +147,12 @@ struct ItemTableView: View {
                 .shadow(color: Color.gray.opacity(0.5), radius: 2)
  
         )
-        .sheet(isPresented: $showingDetailView, onDismiss: {
-            selectedItem = nil
-        }) {
-            AddItemView(selectedItem: selectedItem) {
-                
-            }
-            .ignoresSafeArea(.keyboard)
-        }
+//        .sheet(isPresented: $showingDetailView, onDismiss: {
+//            selectedItem = nil
+//        }) {
+//            AddItemView(selectedItem: selectedItem)
+//            .ignoresSafeArea(.keyboard)
+//        }
     } //: List View
     
     
@@ -225,10 +223,10 @@ struct ItemTableView: View {
 }
 
 
-#Preview {
-    ItemTableView(department: .constant(nil), style: .list, onSelect: { item in
-        
-    })
-    .padding()
-    .environment(\.realm, DepartmentEntity.previewRealm)
-}
+//#Preview {
+//    ItemTableView(department: .constant(nil), style: .list, onSelect: { item in
+//        
+//    })
+//    .padding()
+//    .environment(\.realm, DepartmentEntity.previewRealm)
+//}
