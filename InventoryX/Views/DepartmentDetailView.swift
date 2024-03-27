@@ -8,9 +8,6 @@
 import SwiftUI
 import RealmSwift
 
-
-
-
 class DepartmentDetailViewModel: ObservableObject {
     
     func saveDepartment(name: String, threshold: String, markup: String) throws {

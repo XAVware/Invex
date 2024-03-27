@@ -150,4 +150,6 @@ struct ThemeTextField: View {
                    title: "Restock Threshold:",
                    subtitle: "This is the number that you want to restock the items in the department at. This will help you quickly find items that need to be restocked.",
                    type: .integer)
+    .padding()
+    
 }

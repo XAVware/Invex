@@ -69,18 +69,19 @@ struct MenuView: View {
         
     }
     
+    // TODO: Move this into Display State
     enum MenuButton: String, CaseIterable {
         /// The icon name is assigned to the enum because it appears in compact menu state and open. Whereas the title only displays while open.
         case makeASale      = "cart.fill"
         case inventoryList  = "tray.full.fill"
-        case salesHistory   = "chart.xyaxis.line"
+//        case salesHistory   = "chart.xyaxis.line"
         case settings       = "gearshape"
         
         var title: String {
             return switch self {
             case .makeASale:        "Sale"
             case .inventoryList:    "Inventory"
-            case .salesHistory:     "Sales"
+//            case .salesHistory:     "Sales"
             case .settings:         "Settings"
             }
         }
@@ -89,14 +90,12 @@ struct MenuView: View {
             return switch self {
             case .makeASale:        .makeASale
             case .inventoryList:    .inventoryList
-            case .salesHistory:     .salesHistory
+//            case .salesHistory:     .salesHistory
             case .settings:         .settings
                 
             }
         }
         
-        // TODO: Can i add the button's destination here? Like:
-        // var destination: some View { ... }
         
     }
     

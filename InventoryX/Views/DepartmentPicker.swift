@@ -142,6 +142,5 @@ struct DepartmentPicker: View {
 #Preview {
     DepartmentPicker(selectedDepartment: .constant(nil), style: .dropdown)
         .padding()
-        .environmentObject(MakeASaleViewModel())
         .environment(\.realm, DepartmentEntity.previewRealm)
 }

@@ -90,19 +90,17 @@ struct CompanyDetailView: View {
                     .frame(maxWidth: 720)
                 }
                 
-                VStack {
-                    ThemeTextField(boundTo: $companyName,
-                                   placeholder: "Company Name",
-                                   title: "Business Name:",
-                                   subtitle: nil,
-                                   type: .text)
-                    
-                    ThemeTextField(boundTo: $taxRate,
-                                   placeholder: "0",
-                                   title: "Tax Rate:",
-                                   subtitle: "If you want us to calculate the tax on your sales, enter a tax rate here.",
-                                   type: .percentage)
-                } //: VStack
+                ThemeTextField(boundTo: $companyName,
+                               placeholder: "Company Name",
+                               title: "Business Name:",
+                               subtitle: nil,
+                               type: .text)
+                
+                ThemeTextField(boundTo: $taxRate,
+                               placeholder: "0",
+                               title: "Tax Rate:",
+                               subtitle: "If you want us to calculate the tax on your sales, enter a tax rate here.",
+                               type: .percentage)
                 
                 Button {
                     continueTapped()
