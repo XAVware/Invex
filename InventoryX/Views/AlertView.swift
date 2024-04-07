@@ -29,7 +29,7 @@ struct AlertView: View {
     private var alertPadding: Int {
         return 8 * lineCount
     }
-
+    
     private func close() {
         withAnimation(.easeIn(duration: 0.1)) {
             opacity = 0

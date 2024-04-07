@@ -33,10 +33,10 @@ import SwiftUI
 //}
 
 struct ChangePasscodeView: View {
-//    @StateObject var vm: ChangePasscodeViewModel
+    //    @StateObject var vm: ChangePasscodeViewModel
     @State var passcodeHash: String = ""
     
-//    let currentHash: String?
+    //    let currentHash: String?
     
     
     /// Used in onboarding view to execute additional logic.
@@ -53,11 +53,11 @@ struct ChangePasscodeView: View {
             self.detailType = .create
         }
         self.passcodeHash = currentHash
-//        print("Set detail type to \(detailType)")
-
+        //        print("Set detail type to \(detailType)")
+        
         self.onSuccess = onSuccess
         // If current hash is not nil, ask them to enter their current passcode before they can reset it.
-//        self._vm = StateObject(wrappedValue: ChangePasscodeViewModel(passcodeHash: currentHash, onSuccess: onSuccess))
+        //        self._vm = StateObject(wrappedValue: ChangePasscodeViewModel(passcodeHash: currentHash, onSuccess: onSuccess))
     }
     
     func passcodeSubmitted(hash: String) throws {

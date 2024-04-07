@@ -96,7 +96,7 @@ struct ThemeTextField: View {
                     .fontWeight(.light)
                     .foregroundStyle(.gray)
                     .lineLimit(3)
-//                    .frame(minHeight: 24, idealHeight: 32, maxHeight: 72)
+                //                    .frame(minHeight: 24, idealHeight: 32, maxHeight: 72)
             }
         } //: VStack
         .frame(minWidth: 140, maxWidth: 480, alignment: .leading)
@@ -112,7 +112,7 @@ struct ThemeTextField: View {
                 // Overlay highlight
                 ZStack {
                     Rectangle()
-                        .fill(Color("Purple800").opacity(0.9))
+                        .fill(.accent.opacity(0.9))
                         .opacity(0.8)
                         .frame(width: 48)
                     

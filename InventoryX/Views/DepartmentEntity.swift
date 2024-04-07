@@ -41,10 +41,10 @@ extension DepartmentEntity {
             realm = try Realm(configuration: config)
             let realmObjects = realm.objects(DepartmentEntity.self)
             if realmObjects.count != 0 {
-//                let realm = try Realm()
-//                try realm.write {
-//                    realm.deleteAll()
-//                }
+                //                let realm = try Realm()
+                //                try realm.write {
+                //                    realm.deleteAll()
+                //                }
                 return realm
             } else {
                 try realm.write {

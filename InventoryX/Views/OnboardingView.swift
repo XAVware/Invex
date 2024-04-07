@@ -31,7 +31,7 @@ struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.verticalSizeClass) var vSize
     @State var currentDisplay: OnboardingState = .start
-
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -77,12 +77,11 @@ struct OnboardingView: View {
                         currentDisplay = .department
                     }
                     Spacer()
-                case .department:
                     
+                case .department:
                     DepartmentDetailView(department: DepartmentEntity(), showTitles: false) {
                         currentDisplay = .item
                     }
-                    
                     
                 case .item:
                     AddItemView(item: ItemEntity(), showTitles: false) {
@@ -94,7 +93,7 @@ struct OnboardingView: View {
             } //: VStack
             .padding(.horizontal)
             .padding(.top)
-        }
+        } //: ScrollView
     } //: Body
     
     

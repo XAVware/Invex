@@ -58,7 +58,7 @@ import Algorithms
         let newSale = SaleEntity(timestamp: Date(), total: self.total)
         do {
             let realm = try Realm()
-            try realm.write { 
+            try realm.write {
                 realm.add(newSale)
             }
             
@@ -85,8 +85,8 @@ struct PointOfSaleView: View {
                 VStack(spacing: 6) {
                     ToolbarView(menuState: $menuState, cartState: $cartState, display: $display)
                         .padding()
-                
-                
+                    
+                    
                     VStack(spacing: 24) {
                         DepartmentPicker(selectedDepartment: $selectedDept, style: .scrolling)
                         
@@ -100,7 +100,7 @@ struct PointOfSaleView: View {
                 } //: VStack
             }
             
-
+            
             ResponsiveView { properties in
                 CartViewNew(cartState: $cartState, menuState: $menuState, uiProperties: properties)
                     .environmentObject(vm)
@@ -109,7 +109,7 @@ struct PointOfSaleView: View {
             .padding()
             .frame(maxWidth: cartState == .confirming ? .infinity : 300)
             .background(Color("Purple050").opacity(0.5))
-                
+            
         } //: HStack
     }
 }
@@ -214,19 +214,19 @@ struct CartViewNew: View {
                                             Text("Qty: \(vm.cartItems.filter { $0._id == item._id }.count)")
                                         } //: VStack
                                         
-//                                        Text(item.retailPrice?.formatAsCurrencyString() ?? "Error")
+                                        //                                        Text(item.retailPrice?.formatAsCurrencyString() ?? "Error")
                                         Text(item.retailPrice.formatAsCurrencyString())
                                             .frame(maxWidth: .infinity)
                                         
-//                                        Text(item.cartItemSubtotal.formatAsCurrencyString())
-//                                            .frame(maxWidth: .infinity, alignment: .trailing)
+                                        //                                        Text(item.cartItemSubtotal.formatAsCurrencyString())
+                                        //                                            .frame(maxWidth: .infinity, alignment: .trailing)
                                         
                                     } //: HStack
                                     .font(.callout)
                                     .foregroundStyle(.black)
                                     .frame(height: 30)
                                     .padding(.vertical, 12)
-
+                                    
                                     Divider().opacity(0.4)
                                 } //: ForEach
                             } //: VStack
@@ -249,7 +249,7 @@ struct CartViewNew: View {
                     .frame(maxWidth: uiProperties.width, idealHeight: uiProperties.height * 0.7, maxHeight: 800)
                     .environmentObject(vm)
                 }
-            
+                
                 VStack(alignment: cartState == .confirming ? .center : .leading, spacing: 16) {
                     VStack(spacing: uiProperties.height * 0.006) {
                         
@@ -321,7 +321,7 @@ struct SaleItemView: View {
                 Text(item.name)
                     .font(.subheadline)
                 Spacer()
-
+                
                 Text(item.retailPrice.formatAsCurrencyString())
                     .font(.subheadline)
             } //: HStack
@@ -331,7 +331,7 @@ struct SaleItemView: View {
             } onDecrement: {
                 vm.removeItemFromCart(item)
             }
-//            .frame(maxWidth: uiProperties.width)
+            //            .frame(maxWidth: uiProperties.width)
         } //: VStack
     }
 }

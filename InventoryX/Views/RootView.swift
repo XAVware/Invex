@@ -41,7 +41,7 @@ struct RootView: View {
     @State var selectedItem: ItemEntity?
     
     @State var showingOnboarding: Bool = false
-
+    
     /// Conditions required for menu to display.
     var shouldShowMenu: Bool {
         let c1: Bool = uiProperties.horizontalSizeClass == .regular && cartState != .confirming
@@ -60,7 +60,7 @@ struct RootView: View {
             case .makeASale:
                 PointOfSaleView(menuState: $menuState, cartState: $cartState, display: $currentDisplay)
                     .environmentObject(posVM)
-
+                
             case .inventoryList:
                 VStack {
                     HStack {
@@ -89,7 +89,7 @@ struct RootView: View {
                 
             case .departments:
                 DepartmentsView()
-
+                
             case .settings:
                 SettingsView()
             }

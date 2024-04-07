@@ -38,51 +38,20 @@ struct ToolbarView: View {
                 toggleMenu()
             } label: {
                 Image(systemName: menuState == MenuState.open ? "chevron.backward.2" : "line.3.horizontal")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                    .foregroundStyle(Color("Purple800"))
             }
             
-            
-//            if display == .inventoryList {
-//                
-//                Button {
-//                    showAddDepartment = true
-//                } label: {
-//                    Image(systemName: "plus")
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 12)
-//                        .foregroundStyle(Theme.primaryColor)
-//                    
-//                    Text("Add Department")
-//                        .foregroundStyle(.black)
-//                }
-//                .padding(8)
-//                .background(Color("Purple050"))
-//                .clipShape(RoundedRectangle(cornerRadius: 6))
-//                .shadow(radius: 2)
-//                .sheet(isPresented: $showAddDepartment) {
-//                    DepartmentDetailView(department: nil)
-//                        .ignoresSafeArea(.keyboard)
-//                }
-//                
-//                
-//            }
             Spacer()
+            
             if display == .makeASale {
                 Button {
                     toggleCart()
                 } label: {
                     Image(systemName: "cart")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                        .foregroundStyle(Color("Purple800"))
                 }
-            } //: HStack
-        }
+            }
+        } //: HStack
+        .font(.title)
+        .fontDesign(.rounded)
     } //: Toolbar
 }
 

@@ -25,10 +25,10 @@ struct ItemTableView: View {
     @Binding var department: DepartmentEntity?
     @State var style: TableViewStyle
     let onSelect: ((ItemEntity) -> Void)
-
+    
     
     // TODO: Check if computed property is efficient here
-        // -- This should not be done. Should probably pass the items into this view.
+    // -- This should not be done. Should probably pass the items into this view.
     // Can probably update a variable on change of department
     var itemArr: Array<ItemEntity> {
         if let dept = department { return Array(dept.items) }
@@ -66,7 +66,7 @@ struct ItemTableView: View {
                             .font(.body)
                             .fontWeight(.semibold)
                             .fontDesign(.rounded)
-
+                        
                     } //: HStack
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .frame(height: 64)
@@ -82,23 +82,23 @@ struct ItemTableView: View {
                     
                     Text(item.name)
                         .frame(maxWidth: .infinity)
-                                        
+                    
                     Text(item.onHandQty.description)
                         .frame(maxWidth: .infinity)
                     
                     Text(item.retailPrice.formatAsCurrencyString())
                         .frame(maxWidth: .infinity)
-
+                    
                 } //: HStack
                 .background(.white.opacity(0.01))
                 .frame(height: 64)
                 .onTapGesture {
                     selectedItem = item
                 }
-
+                
                 Divider().opacity(0.4)
             } //: For Each
-                
+            
         } //: VStack
         .modifier(TableStyleMod())
         .sheet(item: $selectedItem) { item in
@@ -119,7 +119,7 @@ struct ItemTableView: View {
         
         // Divide by button width and round down to get how many buttons can fit in the available space.
         var rowCellCount = Int(floor(availWidth / minButtonWidth))
-                
+        
         // Get the number of interior column gaps (spacing) that would be required to display this number of buttons by subtracting 1 from the number of buttons. Get how much space the column gaps will consume by multiplying the gap count by the grid spacing.
         let totalGapSpace = (rowCellCount - 1) * Int(gridSpacing)
         
@@ -131,10 +131,10 @@ struct ItemTableView: View {
         }
         
         let finalColumnCount = rowCellCount
-
+        
         gridColumns = Array(repeating: GridItem(.flexible(minimum: minButtonWidth, maximum: .infinity), spacing: gridSpacing), count: finalColumnCount)
     }
-
+    
     @State var gridColumns: [GridItem] = [GridItem(.flexible())]
     
     private var gridView: some View {
@@ -148,7 +148,7 @@ struct ItemTableView: View {
                             Text(item.name)
                                 .font(.headline)
                                 .frame(maxWidth: .infinity)
-//                            Spacer()
+                            //                            Spacer()
                             Text(item.retailPrice.formatAsCurrencyString())
                                 .font(.subheadline)
                                 .frame(maxWidth: .infinity)
@@ -159,7 +159,7 @@ struct ItemTableView: View {
                     } //: VStack
                     .modifier(ItemGridButtonMod())
                 } //: ForEach
-
+                
             } //: LazyVGrid
             .padding(horPadding)
             .onAppear {
@@ -170,13 +170,13 @@ struct ItemTableView: View {
             }
         } //: Geometry Reader
     }
- 
+    
 }
 
 
 #Preview {
     ItemTableView(department: .constant(nil), style: .list, onSelect: { item in
-
+        
     })
     .padding()
     .environment(\.realm, DepartmentEntity.previewRealm)

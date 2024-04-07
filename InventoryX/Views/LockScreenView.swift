@@ -31,16 +31,16 @@ struct LockScreenView: View {
                         .multilineTextAlignment(.center)
                 }
                 
-//                PasscodeView() { hash in
-//                    print("passcode entered and hashed: \(hash)")
-//                    guard AuthService.shared.checkPasscode(hash: hash) else {
-//                        print("Passcodes don't match")
-//                        return
-//                    }
-//                    dismiss()
-//                }
-//                .padding(.vertical)
-//                .frame(maxWidth: 360, maxHeight: 540, alignment: .center)
+                //                PasscodeView() { hash in
+                //                    print("passcode entered and hashed: \(hash)")
+                //                    guard AuthService.shared.checkPasscode(hash: hash) else {
+                //                        print("Passcodes don't match")
+                //                        return
+                //                    }
+                //                    dismiss()
+                //                }
+                //                .padding(.vertical)
+                //                .frame(maxWidth: 360, maxHeight: 540, alignment: .center)
             } //: VStack
             
         } //: HStack

@@ -9,7 +9,7 @@ import SwiftUI
 import RealmSwift
 
 @MainActor class SettingsViewModel: ObservableObject {
-//    @Published var company: CompanyEntity?
+    //    @Published var company: CompanyEntity?
     @Published var companyName: String = ""
     @Published var taxRateStr: String = ""
     
@@ -26,7 +26,7 @@ import RealmSwift
             } else {
                 
             }
-//            self.company = realm.objects(CompanyEntity.self).first
+            //            self.company = realm.objects(CompanyEntity.self).first
         } catch {
             LogService(self).error("Settings VM err")
         }
@@ -55,7 +55,7 @@ struct SettingsView: View {
                             Spacer()
                             Image(systemName: "pencil")
                         } //: HStack
-//                        .padding()
+                        //                        .padding()
                         .frame(maxWidth: 360, maxHeight: 70)
                         .background(Color("Purple050"))
                         
@@ -63,7 +63,7 @@ struct SettingsView: View {
                         .fontWeight(.semibold)
                         .fontDesign(.rounded)
                         .foregroundStyle(Color("Purple800"))
-//                        .modifier(GlowingOutlineMod())
+                        //                        .modifier(GlowingOutlineMod())
                         
                         VStack(spacing: 12) {
                             HStack {
@@ -84,7 +84,7 @@ struct SettingsView: View {
                                 
                                 Text("\(vm.taxRateStr) %")
                                 
-//                                Text("\(vm.company?.taxRate ?? 0 * 100) %")
+                                //                                Text("\(vm.company?.taxRate ?? 0 * 100) %")
                             } //: HStack
                         } //: VStack
                         
@@ -189,22 +189,22 @@ struct SettingsView: View {
         .padding()
         
     }
-
+    
 }
 
 
 #Preview {
     SettingsView()
-//    ResponsiveView { props in
-//        RootView(uiProperties: props, currentDisplay: .settings)
-            .environment(\.realm, DepartmentEntity.previewRealm) 
-//            .onAppear { 
-//                let realm = try! Realm()
-//                try! realm.write {
-//                    realm.deleteAll()
-//                    realm.add(CompanyEntity(name: "Preview Co", taxRate: 0.06))
-//                    
-//                }
-//            }
-//    }
+    //    ResponsiveView { props in
+    //        RootView(uiProperties: props, currentDisplay: .settings)
+        .environment(\.realm, DepartmentEntity.previewRealm) 
+    //            .onAppear {
+    //                let realm = try! Realm()
+    //                try! realm.write {
+    //                    realm.deleteAll()
+    //                    realm.add(CompanyEntity(name: "Preview Co", taxRate: 0.06))
+    //
+    //                }
+    //            }
+    //    }
 }

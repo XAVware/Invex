@@ -14,7 +14,7 @@ struct PrimaryButtonMod: ViewModifier {
             .foregroundStyle(.white)
             .frame(minWidth: 140, idealWidth: 360, maxWidth: 420, minHeight: 36, idealHeight: 48, maxHeight: 54)
             .background(.ultraThinMaterial)
-            .background(Theme.primaryColor)
+            .background(.accent)
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .shadow(color: Color.gray.opacity(0.15), radius: 4, x: 0, y: 0)
     }

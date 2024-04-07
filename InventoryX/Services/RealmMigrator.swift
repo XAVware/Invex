@@ -19,8 +19,8 @@ class RealmMigrator {
                 migration.enumerateObjects(ofType: DepartmentEntity.className()) { oldObject, newObject in }
                 migration.enumerateObjects(ofType: ItemEntity.className()) { (oldObject, newObject) in }
                 migration.enumerateObjects(ofType: SaleEntity.className()) { oldObject, newObject in }
-                migration.enumerateObjects(ofType: SaleItemEntity.className()) { oldObject, newObject in }
-//                migration.enumerateObjects(ofType: UserEntity.className()) { oldObject, newObject in }
+                //                migration.enumerateObjects(ofType: SaleItemEntity.className()) { oldObject, newObject in }
+                //                migration.enumerateObjects(ofType: UserEntity.className()) { oldObject, newObject in }
             }
         })
         

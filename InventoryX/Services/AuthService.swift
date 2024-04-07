@@ -14,10 +14,9 @@ class AuthService {
     @Published var isLocked: Bool = false
     
     static let shared = AuthService()
-        
+    
     init() {
         self.exists = UserDefaults.standard.object(forKey: "passcode") != nil
-        
         print("Passcode exists: \(exists)")
     }
     
@@ -34,7 +33,6 @@ class AuthService {
     
     func checkPasscode(hash: String) -> Bool {
         let savedPasscode = getCurrentPasscode()
-        
         return savedPasscode == hash
     }
     

@@ -11,7 +11,6 @@ struct SecondaryButtonMod: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.callout)
-//            .fontWeight(.regular)
             .foregroundStyle(.white)
             .frame(minWidth: 64,
                    idealWidth: 72,
@@ -20,7 +19,7 @@ struct SecondaryButtonMod: ViewModifier {
                    idealHeight: 32,
                    maxHeight: 36)
             .background(.ultraThinMaterial)
-            .background(Theme.primaryColor.opacity(0.9))
+            .background(.accent.opacity(0.9))
             .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }

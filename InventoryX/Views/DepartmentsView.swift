@@ -33,7 +33,7 @@ struct DepartmentsView: View {
             .padding()
             .font(.title)
             .fontDesign(.rounded)
-                        
+            
             VStack {
                 HStack(spacing: 0) {
                     ForEach(columnData) { header in
@@ -84,10 +84,6 @@ struct DepartmentsView: View {
             Spacer()
         } //: VStack - Departments List
     } //: Body
-    
-    
-    
-    
 }
 
 #Preview {

@@ -12,14 +12,16 @@ struct LogoView: View {
     var body: some View {
         HStack(spacing: 0) {
             Text("Inve")
-                .modifier(TextMod(.title, .semibold, Theme.logoColor))
+                .font(.title)
+                .fontWeight(.semibold)
                 .offset(y: -2)
             
             Text("X")
-                .modifier(TextMod(.largeTitle, .semibold, Theme.logoColor))
+                .font(.largeTitle)
+                .fontWeight(.semibold)
                 .italic()
                 .offset(x: -2)
         } //: HStack
-        .foregroundColor(Theme.logoColor)
+        .foregroundStyle(.accent)
     } //: Body
 }

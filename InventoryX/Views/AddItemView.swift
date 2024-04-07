@@ -39,7 +39,7 @@ import RealmSwift
         guard let qty = Int(qty) else { return }
         guard let price = Double(price) else { return }
         guard let cost = Double(cost) else { return }
-
+        
         if let existingItem = item.thaw() {
             let realm = try Realm()
             try realm.write {
@@ -86,7 +86,7 @@ struct AddItemView: View {
     
     private enum Focus { case name, attribute, price, onHandQty, unitCost }
     @FocusState private var focus: Focus?
-        
+    
     init(item: ItemEntity, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         self.selectedItem = item
         self.showTitles = showTitles
@@ -99,7 +99,7 @@ struct AddItemView: View {
             if detailType == .modify {
                 try vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
                 finish()
-
+                
             } else {
                 // Item was nil when passed to view. User is creating a new item.
                 try vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)

@@ -33,7 +33,7 @@ struct ThemeFieldMod: ViewModifier {
     private var highlight: some View {
         ZStack {
             RoundedCorner(radius: 6, corners: overlaySide == .leading ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight])
-                .fill(Color("Purple800").opacity(0.9))
+                .fill(.accent.opacity(0.9))
                 .opacity(0.8)
                 .frame(width: 42)
             Text(overlayText)

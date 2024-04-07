@@ -111,7 +111,7 @@ struct DepartmentPicker: View {
                 } label: {
                     Text(department.name)
                 }
-                    .tag(department as DepartmentEntity?)
+                .tag(department as DepartmentEntity?)
             }
         } label: {
             HStack {
@@ -137,7 +137,7 @@ struct DepartmentPicker: View {
                 } label: {
                     Text(department.name)
                 }
-                    .tag(department as DepartmentEntity?)
+                .tag(department as DepartmentEntity?)
             }
         } label: {
             Text("Department")
