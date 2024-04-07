@@ -28,6 +28,7 @@ struct ItemTableView: View {
 
     
     // TODO: Check if computed property is efficient here
+        // -- This should not be done. Should probably pass the items into this view.
     // Can probably update a variable on change of department
     var itemArr: Array<ItemEntity> {
         if let dept = department { return Array(dept.items) }
@@ -47,7 +48,6 @@ struct ItemTableView: View {
     
     
     // MARK: - LIST VIEW STYLE
-    
     @State var sortBy: String = "name"
     @State var isAscending: Bool = true
     @State var columnData: [ColumnHeaderModel] = [ColumnHeaderModel(headerText: "Item Name", sortDescriptor: "name"),
@@ -55,7 +55,6 @@ struct ItemTableView: View {
                                                   ColumnHeaderModel(headerText: "Retail Price", sortDescriptor: "retailPrice")]
     
     @State var selectedItem: ItemEntity?
-    @State var showingDetailView: Bool = false
     
     private var listView: some View {
         VStack {
@@ -65,7 +64,7 @@ struct ItemTableView: View {
                 Spacer()
                 
                 Button {
-                    showingDetailView = true
+                    selectedItem = ItemEntity()
                 } label: {
                     Image(systemName: "plus")
                     Text("Add Item")
@@ -74,7 +73,7 @@ struct ItemTableView: View {
                 .frame(height: 56)
                 .foregroundStyle(.black)
                 .modifier(GlowingOutlineMod())
-                    
+
             } //: HStack
             .padding(.horizontal, 4)
             .frame(height: 64)
@@ -130,12 +129,7 @@ struct ItemTableView: View {
                 .onTapGesture {
                     selectedItem = item
                 }
-                .onChange(of: selectedItem) { newValue in
-                    if selectedItem != nil {
-                        showingDetailView = true
-                    }
-                }
-                
+
                 Divider().opacity(0.4)
             } //: For Each
                 
@@ -146,11 +140,11 @@ struct ItemTableView: View {
                 .shadow(color: Color.gray.opacity(0.5), radius: 2)
  
         )
-        .sheet(isPresented: $showingDetailView, content: {
-            AddItemView(item: selectedItem) {
-                selectedItem = nil
-            }
-            .ignoresSafeArea(.keyboard)
+        .padding(4)
+        .sheet(item: $selectedItem, onDismiss: {
+            selectedItem = nil
+        }, content: { item in
+            AddItemView(item: item)
         })
     } //: List View
     

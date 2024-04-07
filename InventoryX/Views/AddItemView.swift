@@ -16,38 +16,50 @@ import RealmSwift
         guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
         guard let thawedDept = dept.thaw() else { return }
         
-        let newItem = ItemEntity(name: name, retailPrice: Double(price) ?? 1.0, avgCostPer: Double(cost) ?? 0.5, onHandQty: Int(qty) ?? 10)
+        let newItem = ItemEntity(name: name, 
+                                 retailPrice: Double(price) ?? 0,
+                                 avgCostPer: Double(cost) ?? 0,
+                                 onHandQty: Int(qty) ?? 0)
         do {
-            //            try await DataService.add(newItem, to: dept)
             
             let realm = try Realm()
             try realm.write {
                 thawedDept.items.append(newItem)
             }
-            
-            //            let realm = try await Realm()
-            //            try await realm.asyncWrite {
-            //                thawedDept.items.append(newItem)
-            //            }
-            
-            //            if let thawedDepartment = department.thaw() {
-            //                try await realm.asyncWrite {
-            //                    thawedDepartment.items.append(item)
-            //                    
-            //                }
-            //            } else {
-            //                LogService(self).error("Error thawing department")
-            //            }
-            
+            LogService(self).info("Finished saving new item.")
         } catch {
             LogService(self).error("Error saving item to Realm: \(error.localizedDescription)")
         }
     } //: Save Item
     
     
+    func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) throws {
+        LogService(self).info("Item exists. Updating...")
+        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
+        guard let qty = Int(qty) else { return }
+        guard let price = Double(price) else { return }
+        guard let cost = Double(cost) else { return }
+
+        if let existingItem = item.thaw() {
+            let realm = try Realm()
+            try realm.write {
+                existingItem.name = name
+                //                existingItem.attribute = att
+                existingItem.onHandQty = qty
+                existingItem.retailPrice = price
+                existingItem.avgCostPer = cost
+            }
+            
+            LogService(self).info("Finished updating item.")
+        } else {
+            LogService(self).error("Error thawing item.")
+        }
+    }
+    
+    
 }
 
-enum DetailViewType { case create, view, modify }
+enum DetailViewType { case create, modify }
 
 // TODO: Error is thrown briefly from the department dropdown after an item was successfully added, therefore changing the department
 struct AddItemView: View {
@@ -61,7 +73,7 @@ struct AddItemView: View {
     @State private var retailPrice: String = ""
     @State private var unitCost: String = ""
     
-    let selectedItem: ItemEntity?
+    let selectedItem: ItemEntity
     
     /// Used to hide the back button and title while onboarding.
     @State var showTitles: Bool
@@ -69,46 +81,44 @@ struct AddItemView: View {
     /// Used in onboarding view to execute additional logic.
     let onSuccess: (() -> Void)?
     
-    @State var detailState: DetailViewType
-    
-    init(item: ItemEntity?, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
-        if let item = item {
-            self.selectedDepartment = item.department.first
-            self.itemName = item.name
-            //            self.attribute = item.attribute
-            self.quantity = String(describing: item.onHandQty)
-            self.retailPrice = String(describing: item.retailPrice)
-            self.unitCost = String(describing: item.avgCostPer)
-            detailState = .modify
-        } else {
-            detailState = .create
-        }
+    let detailType: DetailViewType
+        
+    init(item: ItemEntity, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         self.selectedItem = item
         self.showTitles = showTitles
         self.onSuccess = onSuccess
+        self.detailType = item.department.first == nil ? .create : .modify
     }
     
     private func continueTapped() {
-        switch detailState {
-        case .create:
-            do {
-                try vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
-                if showTitles {
+        do {
+            if detailType == .modify {
+                try vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
+                if let onSuccess = onSuccess {
+                    // On success is only used by onboarding view which we don't want to dismiss.
+                    onSuccess()
+                } else {
                     dismiss()
                 }
-                onSuccess?()
-            } catch {
-                print("Error while saving company: \(error.localizedDescription)")
+
+            } else {
+                // Item was nil when passed to view. User is creating a new item.
+                try vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
+                if let onSuccess = onSuccess {
+                    // On success is only used by onboarding view which we don't want to dismiss.
+                    onSuccess()
+                } else {
+                    dismiss()
+                }
             }
-        case .view:
-            return
-        case .modify:
-            return
+            
+        } catch {
+            LogService(self).error("Error while saving item: \(error.localizedDescription)")
         }
+        
     }
     
     var body: some View {
-        ScrollView {
             VStack(alignment: .center, spacing: 36) {
                 if showTitles {
                     VStack(alignment: .leading) {
@@ -125,67 +135,56 @@ struct AddItemView: View {
                             .modifier(TitleMod())
                         
                     } //: VStack
-                    
                 }
-                if selectedItem == nil && showTitles == true {
+                
                     DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
+                
+                VStack(alignment: .leading, spacing: 16) {
+                    ThemeTextField(boundTo: $itemName,
+                                   placeholder: "i.e. Gatorade",
+                                   title: "Item Name:",
+                                   subtitle: nil,
+                                   type: .text)
+                    
+                    ThemeTextField(boundTo: $attribute,
+                                   placeholder: "i.e. Blue",
+                                   title: "Attribute:",
+                                   subtitle: nil,
+                                   type: .text)
+                    
+                    ThemeTextField(boundTo: $quantity,
+                                   placeholder: "24",
+                                   title: "On-hand quantity:",
+                                   subtitle: nil,
+                                   type: .integer)
+                    .keyboardType(.numberPad)
+                    
+                    ThemeTextField(boundTo: $retailPrice,
+                                   placeholder: "$ 2.00",
+                                   title: "Retail Price:",
+                                   subtitle: nil,
+                                   type: .price)
+                    .keyboardType(.numberPad)
+                    //                .onChange(of: retailPrice) { _ in
+                    //                    let formattedPrice = retailPrice.replacingOccurrences( of:"[^0-9.]", with: "", options: .regularExpression)
+                    //                    guard let price = Double(formattedPrice) else {
+                    //                        print("Err")
+                    //                        return
+                    //                    }
+                    //                    retailPrice = price.formatAsCurrencyString()
+                    //                }
+                    
+                    ThemeTextField(boundTo: $unitCost,
+                                   placeholder: "$ 1.00",
+                                   title: "Unit Cost:",
+                                   subtitle: nil,
+                                   type: .price)
+                    .keyboardType(.numberPad)
                 }
-                
-                ThemeTextField(boundTo: $itemName,
-                               placeholder: "i.e. Gatorade",
-                               title: "Item Name:",
-                               subtitle: nil,
-                               type: .text)
-                
-                ThemeTextField(boundTo: $attribute,
-                               placeholder: "i.e. Blue",
-                               title: "Attribute:",
-                               subtitle: nil,
-                               type: .text)
-                
-                ThemeTextField(boundTo: $quantity,
-                               placeholder: "24",
-                               title: "On-hand quantity:",
-                               subtitle: nil,
-                               type: .integer)
-                
-                ThemeTextField(boundTo: $retailPrice,
-                               placeholder: "$ 2.00",
-                               title: "Retail Price:",
-                               subtitle: nil,
-                               type: .price)
-                //                .onChange(of: retailPrice) { _ in
-                //                    let formattedPrice = retailPrice.replacingOccurrences( of:"[^0-9.]", with: "", options: .regularExpression)
-                //                    guard let price = Double(formattedPrice) else {
-                //                        print("Err")
-                //                        return
-                //                    }
-                //                    retailPrice = price.formatAsCurrencyString()
-                //                }
-                
-                ThemeTextField(boundTo: $unitCost,
-                               placeholder: "$ 1.00",
-                               title: "Unit Cost:",
-                               subtitle: nil,
-                               type: .price)
-                
-                
-                Spacer()
+//                Spacer()
                 
                 Button {
-                    guard let dept = selectedDepartment else { return }
-                    do {
-                        try vm.saveItem(dept: dept, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
-                        
-                        if showTitles {
-                            dismiss()
-                        }
-                        onSuccess?()
-                        
-                    }
-                    catch {
-                        print(error.localizedDescription)
-                    }
+                    continueTapped()
                 } label: {
                     Text("Save Item")
                 }
@@ -197,19 +196,20 @@ struct AddItemView: View {
             .frame(maxWidth: 720)
             .padding()
             .toolbar(.hidden, for: .navigationBar)
-            //        .background(Color("Purple050").opacity(0.3))
             .onAppear {
-                if let item = selectedItem {
-                    itemName = item.name
-                    quantity = String(describing: item.onHandQty!)
-                    retailPrice = String(describing: item.retailPrice!)
-                    unitCost = String(describing: item.avgCostPer!)
+                if let dept = selectedItem.department.first {
+                    print("Items department is \(dept)")
+                    self.selectedDepartment = dept
+                    self.itemName = selectedItem.name
+        //            self.attribute = item.attribute
+                    self.quantity = String(describing: selectedItem.onHandQty!)
+                    self.retailPrice = String(describing: selectedItem.retailPrice!)
+                    self.unitCost = String(describing: selectedItem.avgCostPer!)
                 }
             }
-        }
     } //: Body
 }
 
 #Preview {
-    AddItemView(item: nil)
+    AddItemView(item: ItemEntity())
 }

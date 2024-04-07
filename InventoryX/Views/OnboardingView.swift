@@ -33,7 +33,8 @@ struct OnboardingView: View {
     @State var currentDisplay: OnboardingState = .start
 
     var body: some View {
-            VStack(spacing: 0) {
+        ScrollView {
+            VStack(spacing: 16) {
                 
                 VStack(alignment: .leading, spacing: 16) {
                     if currentDisplay != .start {
@@ -67,22 +68,24 @@ struct OnboardingView: View {
                     CompanyDetailView(company: nil, showTitles: false) {
                         currentDisplay = .setPasscode
                     }
+                    .padding(.vertical)
+                    .frame(maxHeight: .infinity)
                     
                 case .setPasscode:
                     Spacer()
-                    ChangePasscodeView(passHash: nil) {
+                    ChangePasscodeView() {
                         currentDisplay = .department
                     }
                     Spacer()
                 case .department:
                     
-                    DepartmentDetailView(department: nil, showTitles: false) {
+                    DepartmentDetailView(department: DepartmentEntity(), showTitles: false) {
                         currentDisplay = .item
                     }
                     
                     
                 case .item:
-                    AddItemView(item: nil, showTitles: false) {
+                    AddItemView(item: ItemEntity(), showTitles: false) {
                         dismiss()
                     }
                     
@@ -91,7 +94,7 @@ struct OnboardingView: View {
             } //: VStack
             .padding(.horizontal)
             .padding(.top)
-            
+        }
     } //: Body
     
     

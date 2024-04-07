@@ -41,8 +41,11 @@ struct RootView: View {
     
     @State var showingOnboarding: Bool = false
 
+    /// Conditions required for menu to display.
     var shouldShowMenu: Bool {
-        return uiProperties.horizontalSizeClass == .regular && cartState != .confirming 
+        let c1: Bool = uiProperties.horizontalSizeClass == .regular && cartState != .confirming
+        let c2: Bool = uiProperties.width > 840 || menuState == .open
+        return c1 && c2
     }
     
     var body: some View {
@@ -64,6 +67,9 @@ struct RootView: View {
                 .onAppear {
                     selectedDepartment = nil
                 }
+                
+            case .departments:
+                DepartmentsView()
 
             case .settings:
                 SettingsView()
@@ -75,8 +81,12 @@ struct RootView: View {
         }
         .fullScreenCover(isPresented: $showingOnboarding) {
             OnboardingView()
-                .ignoresSafeArea(.all)
+//                .ignoresSafeArea(.all)
         }
+//        .onAppear {
+//            let realm = try! Realm()
+//            print(realm.objects(ItemEntity.self))
+//        }
         
     } //: Body
     

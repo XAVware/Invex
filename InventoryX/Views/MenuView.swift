@@ -19,16 +19,15 @@ struct MenuView: View {
         VStack(spacing: 16) {
             Spacer()
             
-            ForEach(MenuButton.allCases, id: \.self) { data in
-//                if data == MenuButton.lock { Spacer() }
+            ForEach(DisplayState.allCases, id: \.self) { data in
                 Button {
-                    display = data.display
+                    display = data
                 } label: {
                     MenuButtonLabel(menuState: $menuState, buttonData: data)
-                        .foregroundStyle(data.display == display ? .white : Color("Purple200"))
+                        .foregroundStyle(data == display ? .white : Color("Purple200"))
                 }
                 .overlay(
-                    data.display == display ?
+                    data == display ?
                     HStack {
                         Spacer()
                         RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
@@ -69,55 +68,25 @@ struct MenuView: View {
         
     }
     
-    // TODO: Move this into Display State
-    enum MenuButton: String, CaseIterable {
-        /// The icon name is assigned to the enum because it appears in compact menu state and open. Whereas the title only displays while open.
-        case makeASale      = "cart.fill"
-        case inventoryList  = "tray.full.fill"
-//        case salesHistory   = "chart.xyaxis.line"
-        case settings       = "gearshape"
-        
-        var title: String {
-            return switch self {
-            case .makeASale:        "Sale"
-            case .inventoryList:    "Inventory"
-//            case .salesHistory:     "Sales"
-            case .settings:         "Settings"
-            }
-        }
-        
-        var display: DisplayState {
-            return switch self {
-            case .makeASale:        .makeASale
-            case .inventoryList:    .inventoryList
-//            case .salesHistory:     .salesHistory
-            case .settings:         .settings
-                
-            }
-        }
-        
-        
-    }
-    
     struct MenuButtonLabel: View {
         @Binding var menuState: MenuState
-        let buttonData: MenuButton
+        let buttonData: DisplayState
         
-        init(menuState: Binding<MenuState>, buttonData: MenuButton) {
+        init(menuState: Binding<MenuState>, buttonData: DisplayState) {
             self._menuState = menuState
             self.buttonData = buttonData
         }
         
         var body: some View {
             HStack(spacing: 16) {
-                Image(systemName: buttonData.rawValue)
+                Image(systemName: buttonData.menuIconName)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
                     .padding(.horizontal, 8)
                 
                 if menuState == .open {
-                    Text(buttonData.title)
+                    Text(buttonData.menuButtonText)
                         .font(.headline)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }

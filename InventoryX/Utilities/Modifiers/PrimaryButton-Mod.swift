@@ -12,11 +12,11 @@ struct PrimaryButtonMod: ViewModifier {
         content
             .font(.headline)
             .foregroundStyle(.white)
-            .frame(minWidth: 140, idealWidth: 420, maxWidth: .infinity, minHeight: 36, idealHeight: 48, maxHeight: 54)
+            .frame(minWidth: 140, idealWidth: 360, maxWidth: 420, minHeight: 36, idealHeight: 48, maxHeight: 54)
             .background(.ultraThinMaterial)
             .background(Theme.primaryColor)
             .clipShape(RoundedRectangle(cornerRadius: 8))
-            .shadow(color: Color.gray.opacity(0.20), radius: 4, x: 0, y: 0)
+            .shadow(color: Color.gray.opacity(0.15), radius: 4, x: 0, y: 0)
     }
 }
 

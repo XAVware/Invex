@@ -9,9 +9,9 @@ import SwiftUI
 import RealmSwift
 
 struct DepartmentsView: View {    
-    @State var selectedDepartment: DepartmentEntity?
+    @State var department: DepartmentEntity?
     
-    @State var showAddDepartment: Bool = false
+    @State var showDepartmentsView: Bool = false
     
     var body: some View {
         HStack {
@@ -26,26 +26,33 @@ struct DepartmentsView: View {
                         
                         
                         Button {
-                            showAddDepartment = true
+                            showDepartmentsView = true
                         } label: {
                             Image(systemName: "plus")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 12)
-                                .foregroundStyle(.white)
+                                .foregroundStyle(Theme.primaryColor)
                             
+                            Text("Add Department")
+                                .foregroundStyle(.black)
                         }
-                        .padding(6)
-                        .background(Color("Purple800"))
-                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                        .padding(8)
+                        .background(Color("Purple050"))
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
                         .shadow(radius: 2)
+                        .sheet(item: $department, onDismiss: {
+                            department = nil
+                        }, content: { dept in
+                            DepartmentDetailView(department: dept)
+                        })
                     } //: HStack
                     
                     Spacer()
                     
                 } //: HStack
                 
-                DepartmentPicker(selectedDepartment: $selectedDepartment, style: .list)
+                DepartmentPicker(selectedDepartment: $department, style: .list)
                 
                 Spacer()
             } //: VStack - Departments List

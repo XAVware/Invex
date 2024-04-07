@@ -13,6 +13,7 @@ class DepartmentEntity: Object, ObjectKeyIdentifiable {
     @Persisted var name: String
     @Persisted var restockNumber: Int
     @Persisted var items: RealmSwift.List<ItemEntity>
+    @Persisted var defMarkup: Double
     
     convenience init(name: String, restockNum: Int = 10) {
         self.init()

@@ -45,31 +45,31 @@ struct ToolbarView: View {
             }
             
             
-            if display == .inventoryList {
-                
-                Button {
-                    showAddDepartment = true
-                } label: {
-                    Image(systemName: "plus")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 12)
-                        .foregroundStyle(Theme.primaryColor)
-                    
-                    Text("Add Department")
-                        .foregroundStyle(.black)
-                }
-                .padding(8)
-                .background(Color("Purple050"))
-                .clipShape(RoundedRectangle(cornerRadius: 6))
-                .shadow(radius: 2)
-                .sheet(isPresented: $showAddDepartment) {
-                    DepartmentDetailView(department: nil)
-                        .ignoresSafeArea(.keyboard)
-                }
-                
-                
-            }
+//            if display == .inventoryList {
+//                
+//                Button {
+//                    showAddDepartment = true
+//                } label: {
+//                    Image(systemName: "plus")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(width: 12)
+//                        .foregroundStyle(Theme.primaryColor)
+//                    
+//                    Text("Add Department")
+//                        .foregroundStyle(.black)
+//                }
+//                .padding(8)
+//                .background(Color("Purple050"))
+//                .clipShape(RoundedRectangle(cornerRadius: 6))
+//                .shadow(radius: 2)
+//                .sheet(isPresented: $showAddDepartment) {
+//                    DepartmentDetailView(department: nil)
+//                        .ignoresSafeArea(.keyboard)
+//                }
+//                
+//                
+//            }
             Spacer()
             if display == .makeASale {
                 Button {

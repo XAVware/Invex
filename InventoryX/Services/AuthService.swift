@@ -33,8 +33,12 @@ class AuthService {
     }
     
     func checkPasscode(hash: String) -> Bool {
-        let savedPasscode = UserDefaults.standard.value(forKey: "passcode") as? String
+        let savedPasscode = getCurrentPasscode()
         
         return savedPasscode == hash
+    }
+    
+    func getCurrentPasscode() -> String? {
+        return UserDefaults.standard.value(forKey: "passcode") as? String
     }
 }

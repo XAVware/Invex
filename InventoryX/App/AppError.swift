@@ -12,6 +12,7 @@ enum AppError: Error {
     case numericThresholdRequired
     case invalidTaxPercentage
     case passcodesDoNotMatch
+    case invalidMarkup
     
     var localizedDescription: String {
         switch self {
@@ -19,6 +20,7 @@ enum AppError: Error {
         case .numericThresholdRequired:     "Please enter a valid number for the restock threshold"
         case .invalidTaxPercentage:         "Please enter a valid tax rate percentage"
         case .passcodesDoNotMatch:          "The passcodes you entered do not match"
+        case .invalidMarkup:                "Please enter a valid markup."
         }
     }
 }

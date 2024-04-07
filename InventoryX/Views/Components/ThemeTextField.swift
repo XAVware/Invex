@@ -37,26 +37,10 @@ struct ThemeTextField: View {
             default: .center
             }
         }
-        
-//        var prefWidth: CGFloat {
-//            return switch self {
-//            case .text:
-//                    .infinity
-//            case .integer:
-//                140
-//            case .price:
-//                140
-//            case .percentage:
-//                140
-//            }
-//        }
     }
     
-    enum LayoutOption {
-        case vertical
-        case horizontal
-    }
-    
+    private enum Focus { case text }
+    @FocusState private var focus: Focus?
     
     @Binding var boundTo: String
     let placeholder: String
@@ -83,12 +67,23 @@ struct ThemeTextField: View {
                 labels
                 Spacer()
                 field
+                    .focused($focus, equals: .text)
+                    .onTapGesture {
+                        self.focus = .text
+                    }
             } //: HStack
+            .frame(maxHeight: 140)
             
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .trailing, spacing: 16) {
                 labels
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 field
+                    .focused($focus, equals: .text)
+                    .onTapGesture {
+                        self.focus = .text
+                    }
             } //: VStack
+            .frame(maxHeight: 140)
         }
     } //: Body
     
@@ -101,6 +96,7 @@ struct ThemeTextField: View {
                     .fontWeight(.light)
                     .foregroundStyle(.gray)
                     .lineLimit(3)
+//                    .frame(minHeight: 24, idealHeight: 32, maxHeight: 72)
             }
         } //: VStack
         .frame(minWidth: 140, maxWidth: 480, alignment: .leading)

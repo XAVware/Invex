@@ -8,37 +8,45 @@
 import SwiftUI
 import RealmSwift
 
-class DepartmentDetailViewModel: ObservableObject {
+@MainActor class DepartmentDetailViewModel: ObservableObject {
     
     func saveDepartment(name: String, threshold: String, markup: String) throws {
         // Make sure `threshold` was entered as a number
         guard let threshold = Int(threshold) else { throw AppError.numericThresholdRequired }
         
         let department = DepartmentEntity(name: name, restockNum: threshold)
-        
-        do {
-            //            try await DataService.addDepartment(dept: department)
-            let realm = try Realm()
-            try realm.write { realm.add(department) }
-            print("Department saved successfully")
-        } catch {
-            print(error.localizedDescription)
+        let realm = try Realm()
+        try realm.write {
+            realm.add(department)
         }
-        
+        LogService(self).info("New department saved successfully")
+    }
+    
+    
+    func updateDepartment(dept: DepartmentEntity, newName: String, thresh: String, markup: String) throws {
+        guard let thresh = Int(thresh) else { throw AppError.numericThresholdRequired }
+        guard let markup = Double(markup) else { throw AppError.invalidMarkup }
+        let realm = try Realm()
+        try realm.write {
+            dept.name = newName
+            dept.restockNumber = thresh
+            dept.defMarkup = markup
+        }
+        LogService(self).info("Existing department successfully updated.")
     }
     
 }
 
 struct DepartmentDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @Environment(\.horizontalSizeClass) var hSize
     @StateObject var vm: DepartmentDetailViewModel = DepartmentDetailViewModel()
+    @StateObject var uiFeedback = UIFeedbackService.shared
     
     @State private var name: String = ""
     @State private var restockThreshold: String = ""
     @State private var markup: String = ""
     
-    let department: DepartmentEntity?
+    let department: DepartmentEntity
     
     /// Used to hide the back button and title while onboarding.
     @State var showTitles: Bool
@@ -46,86 +54,76 @@ struct DepartmentDetailView: View {
     /// Used in onboarding view to execute additional logic.
     let onSuccess: (() -> Void)?
     
-    @State var detailState: DetailViewType
+    let detailType: DetailViewType
     
-    init(department: DepartmentEntity?, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
-        if let dept = department {
-            self.detailState = .modify
-            self.name = dept.name
-            self.restockThreshold = String(describing: dept.restockNumber)
-            //            self.markup = dept.markup
-            detailState = .modify
-        } else {
-            detailState = .create
-        }
+    private enum Focus { case name, threshold, markup }
+    @FocusState private var focus: Focus?
+    
+    init(department: DepartmentEntity, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         self.department = department
         self.showTitles = showTitles
         self.onSuccess = onSuccess
+        self.detailType = department.name.isEmpty ? .create : .modify
     }
     
+    // TODO: Move logic into VM.
+    /// When the view is initialized, `detailType` is determined by whether a department was passed to the view or not. If it was, the department exists and should be modified otherwise the user is adding a department
     private func continueTapped() {
-        switch detailState {
-        case .create:
-            do {
+        do {
+            if detailType == .modify {
+                try vm.updateDepartment(dept: department, newName: name, thresh: restockThreshold, markup: markup)
+            } else {
                 try vm.saveDepartment(name: name, threshold: restockThreshold, markup: markup)
-                if showTitles {
-                    dismiss()
-                }
-                onSuccess?()
-            } catch {
-                print("Error while saving company: \(error.localizedDescription)")
             }
-        case .view:
-            return
-        case .modify:
-            return
+            
+            finish()
+        } catch {
+            print("Error while saving department: \(error.localizedDescription)")
+        }
+    }
+    
+    private func finish() {
+        if let onSuccess = onSuccess {
+            // On success is only used by onboarding view which we don't want to dismiss.
+            onSuccess()
+        } else {
+            dismiss()
         }
     }
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 32) {
-                VStack(alignment: .leading) {
-                    if showTitles {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: "xmark")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24)
-                                .foregroundStyle(.black)
-                        }
-                        Text("Add a department")
-                            .modifier(TitleMod())
-                    }
-                } //: VStack
+            VStack(spacing: 24) {
+                header
                 
-                VStack(alignment: .leading, spacing: 32) {
+                VStack(alignment: .leading, spacing: 24) {
                     ThemeTextField(boundTo: $name,
                                    placeholder: "i.e. Clothing",
                                    title: "Department Name:",
                                    subtitle: nil,
                                    type: .text)
+                    .focused($focus, equals: .name)
                     
                     ThemeTextField(boundTo: $restockThreshold,
                                    placeholder: "0",
                                    title: "Restock Threshold:",
                                    subtitle: "This will help you quickly find items that need to be restocked.",
                                    type: .integer)
+                    .keyboardType(.numberPad)
+                    .focused($focus, equals: .threshold)
                     
                     ThemeTextField(boundTo: $markup,
                                    placeholder: "0",
                                    title: "Default markup:",
                                    subtitle: "When an item is added to this department it will be marked up by this percentage by default.",
                                    type: .percentage)
+                    .keyboardType(.numberPad)
+                    .focused($focus, equals: .markup)
                 } //: VStack
-                
-                Spacer()
+                .padding(.vertical, 24)
                 
                 Button {
                     continueTapped()
-                    
                 } label: {
                     Text("Continue")
                 }
@@ -135,19 +133,39 @@ struct DepartmentDetailView: View {
             } //: VStack
             .frame(maxWidth: 720)
             .padding()
-            .toolbar(.hidden, for: .navigationBar)
-            //        .background(Color("Purple050").opacity(0.2))
-            //        .onAppear {
-            //            setup(forDepartment: department)
-            //
-            //        }
-        }
-    }
+            .background(Color("Purple050").opacity(0.15))
+            .onAppear {
+                self.name = self.department.name
+                self.restockThreshold = String(describing: self.department.restockNumber)
+            }
+        } //: ScrollView
+        .overlay(uiFeedback.alert != nil ? AlertView(alert: uiFeedback.alert!) : nil, alignment: .top)
+    } //: Body
     
+    @ViewBuilder private var header: some View {
+        if showTitles {
+            VStack(alignment: .leading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24)
+                        .foregroundStyle(.black)
+                }
+                
+                Text(detailType == .modify ? "Edit company info" : "Add department")
+                    .modifier(TitleMod())
+                
+            } //: VStack
+            .frame(maxWidth: 720)
+        }
+    } //: Header
 }
 
 #Preview {
-    DepartmentDetailView(department: nil)
+    DepartmentDetailView(department: DepartmentEntity())
 }
 
 

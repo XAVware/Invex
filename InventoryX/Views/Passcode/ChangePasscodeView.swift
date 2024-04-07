@@ -8,58 +8,95 @@
 import SwiftUI
 
 
-@MainActor class ChangePasscodeViewModel: ObservableObject {
-    @Published var passcodeHash: String
-    let onSuccess: (() -> Void)?
-    
-    init(passcodeHash: String?, onSuccess: (() -> Void)?) {
-        self.passcodeHash = passcodeHash ?? ""
-        self.onSuccess = onSuccess
-    }
-    
-    func passcodeSubmitted(hash: String) throws {
-        if passcodeHash.isEmpty {
-            passcodeHash = hash
-        } else {
-            guard passcodeHash == hash else {
-                passcodeHash = ""
-                throw AppError.passcodesDoNotMatch
-            }
-                        
-            AuthService.shared.savePasscode(hash: passcodeHash)
-            onSuccess?()
-        }
-    }
-}
+//@MainActor class ChangePasscodeViewModel: ObservableObject {
+//    @Published var passcodeHash: String
+//    let onSuccess: (() -> Void)?
+//    
+//    init(passcodeHash: String?, onSuccess: (() -> Void)?) {
+//        self.passcodeHash = passcodeHash ?? ""
+//        self.onSuccess = onSuccess
+//    }
+//    
+//    func passcodeSubmitted(hash: String) throws {
+//        if passcodeHash.isEmpty {
+//            passcodeHash = hash
+//        } else {
+//            guard passcodeHash == hash else {
+//                passcodeHash = ""
+//                throw AppError.passcodesDoNotMatch
+//            }
+//                        
+//            AuthService.shared.savePasscode(hash: passcodeHash)
+//            onSuccess?()
+//        }
+//    }
+//}
 
 struct ChangePasscodeView: View {
-    @StateObject var vm: ChangePasscodeViewModel
+//    @StateObject var vm: ChangePasscodeViewModel
     @State var passcodeHash: String = ""
     
-    let currentHash: String?
+//    let currentHash: String?
     
     
     /// Used in onboarding view to execute additional logic.
     let onSuccess: (() -> Void)?
     
-    init(passHash: String?, onSuccess: (() -> Void)? = nil) {
-        self.currentHash = passHash
+    @State var detailType: DetailViewType
+    
+    init(onSuccess: (() -> Void)? = nil) {
+        let currentHash = AuthService.shared.getCurrentPasscode() ?? ""
+        
+        if !currentHash.isEmpty {
+            self.detailType = .modify
+        } else {
+            self.detailType = .create
+        }
+        self.passcodeHash = currentHash
+//        print("Set detail type to \(detailType)")
+
         self.onSuccess = onSuccess
         // If current hash is not nil, ask them to enter their current passcode before they can reset it.
-        self._vm = StateObject(wrappedValue: ChangePasscodeViewModel(passcodeHash: passHash, onSuccess: onSuccess))
+//        self._vm = StateObject(wrappedValue: ChangePasscodeViewModel(passcodeHash: currentHash, onSuccess: onSuccess))
+    }
+    
+    func passcodeSubmitted(hash: String) throws {
+        if detailType == .modify {
+            print("Modifying...")
+            guard passcodeHash == hash else {
+                throw AppError.passcodesDoNotMatch
+            }
+            print("Codes match. Changing to create")
+            passcodeHash = ""
+            detailType = .create
+        } else {
+            print("Creating...")
+            if passcodeHash.isEmpty {
+                print("Setting first hash")
+                passcodeHash = hash
+            } else {
+                guard passcodeHash == hash else {
+                    passcodeHash = ""
+                    throw AppError.passcodesDoNotMatch
+                }
+                print("Hashes match. Saving")
+                AuthService.shared.savePasscode(hash: passcodeHash)
+                onSuccess?()
+            }
+        }
     }
     
     var body: some View {
-            ViewThatFits {
-                verLayout
-                horLayout
-            }
+        ViewThatFits {
+            verLayout
+            horLayout
+        }
     }
     
     private var verLayout: some View {
         VStack {
             VStack(spacing: 16) {
-                Text(vm.passcodeHash.isEmpty ? "Enter Passcode" : "Re-enter passcode")
+                Text(passcodeHash.isEmpty ? "Enter Passcode" : "Re-enter passcode")
                     .font(.title)
                     .fontWeight(.semibold)
                 
@@ -84,7 +121,7 @@ struct ChangePasscodeView: View {
     private var horLayout: some View {
         HStack(alignment: .center, spacing: 16) {
             VStack(spacing: 16) {
-                Text(vm.passcodeHash.isEmpty ? "Enter Passcode" : "Re-enter passcode")
+                Text(passcodeHash.isEmpty ? "Enter Passcode" : "Re-enter passcode")
                     .font(.title)
                     .fontWeight(.semibold)
                 
@@ -122,12 +159,13 @@ struct ChangePasscodeView: View {
     } //: Circle Indicator
     
     @State private var passcode = ""
+    
     private func verifyPasscode() {
         guard passcode.count == 4 else { return }
         
         do {
             let hash = AuthService.shared.hashString(passcode)
-            try vm.passcodeSubmitted(hash: hash)
+            try passcodeSubmitted(hash: hash)
         } catch {
             print(error.localizedDescription)
         }
@@ -140,6 +178,6 @@ struct ChangePasscodeView: View {
 
 
 
-#Preview {
-    ChangePasscodeView(passHash: "")
-}
+//#Preview {
+//    ChangePasscodeView(passHash: "")
+//}

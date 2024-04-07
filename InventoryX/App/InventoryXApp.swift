@@ -19,19 +19,10 @@ import RealmSwift
 
 @main
 struct InventoryXApp: SwiftUI.App {
-    /// Initialize DataService immediately at launch since it is required for first screen.
     let migrator: RealmMigrator = RealmMigrator()
-//    let db: DataService = DataService.shared
-    
-    func resetApp() {
-        UserDefaults.standard.removeObject(forKey: "passcode")
-        let realm = try! Realm()
-        try! realm.write { realm.deleteAll() }
-        
-    }
+
     
     func addSampleData() {
-        
         let drinks = DepartmentEntity(name: "Drinks", restockNum: 12)
         drinks.items.append(objectsIn: ItemEntity.drinkArray)
         drinks.items.append(objectsIn: ItemEntity.foodArray)
@@ -48,7 +39,9 @@ struct InventoryXApp: SwiftUI.App {
             }
             .onAppear {
 //                UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
-//                resetApp()
+//                UserDefaults.standard.removeObject(forKey: "passcode")
+//                let realm = try! Realm()
+//                try! realm.write { realm.deleteAll() }
             }
         }
     } //: Body
