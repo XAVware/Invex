@@ -13,9 +13,6 @@ import RealmSwift
 ///
 /// The goal of this project was to create a simple Point-of-Sale app to help cash-run businesses keep track of their inventory and track sales.
 ///
-///
-/// ---- MODELS ----
-/// Every relative object has two model structs/classes. If it is named with 'Entity' it is used to persist data to Realm. If it is named with 'Model' it is meant to use locally as needed.
 
 @main
 struct InventoryXApp: SwiftUI.App {

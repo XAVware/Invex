@@ -126,6 +126,29 @@ struct SettingsView: View {
                         ChangePasscodeView()
                     })
                     
+                    Button {
+                        UserDefaults.standard.removeObject(forKey: "passcode")
+                        let realm = try! Realm()
+                        try! realm.write { realm.deleteAll() }
+                    } label: {
+                        HStack(spacing: 16) {
+                            Image(systemName: "trash")
+                            Text("Delete Account")
+                            Spacer()
+                        } //: HStack
+                        .padding()
+                        .frame(maxWidth: 360, maxHeight: 70)
+                        .background(Color("Purple050"))
+                    }
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .fontDesign(.rounded)
+                    .foregroundStyle(Color("Purple800"))
+                    .modifier(GlowingOutlineMod())
+                    .sheet(isPresented: $showPasscodeView, content: {
+                        ChangePasscodeView()
+                    })
+                    
                     
                     Link(destination: URL(string: "https://drive.google.com/file/d/1cYNlzO-RS9K3cc_4Oi0n56RfPR-7Y7Mp/view?usp=sharing")!, label: {
                         HStack(spacing: 16) {

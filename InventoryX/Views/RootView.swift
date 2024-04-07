@@ -81,6 +81,7 @@ struct RootView: View {
         }
         .fullScreenCover(isPresented: $showingOnboarding) {
             OnboardingView()
+                .padding()
 //                .ignoresSafeArea(.all)
         }
 //        .onAppear {
