@@ -8,72 +8,95 @@
 import SwiftUI
 import RealmSwift
 
-struct DepartmentsView: View {    
-    @State var department: DepartmentEntity?
+struct DepartmentsView: View {
+    @ObservedResults(DepartmentEntity.self) var departments
+    @State var selectedDepartment: DepartmentEntity?
     
-    @State var showDepartmentsView: Bool = false
+    @State var columnData: [ColumnHeaderModel] = [
+        ColumnHeaderModel(headerText: "Department Name", sortDescriptor: "dept"),
+        ColumnHeaderModel(headerText: "No. Items", sortDescriptor: "name"),
+        ColumnHeaderModel(headerText: "Default Markup %", sortDescriptor: "onHandQty"),
+        ColumnHeaderModel(headerText: "Restock Threshold", sortDescriptor: "retailPrice")
+    ]
     
     var body: some View {
-        HStack {
+        VStack {
+            HStack(spacing: 0) {
+                Text("Departments")
+                Spacer()
+                Button {
+                    selectedDepartment = DepartmentEntity()
+                } label: {
+                    Image(systemName: "plus")
+                }
+            } //: HStack
+            .padding()
+            .font(.title)
+            .fontDesign(.rounded)
+                        
             VStack {
-                HStack(alignment: .bottom) {
-                    HStack(spacing: 0) {
-                        
-                        Text("Departments")
-                            .font(.title)
-                            .fontDesign(.rounded)
-                            .padding(.horizontal)
-                        
-                        
-                        Button {
-                            showDepartmentsView = true
-                        } label: {
-                            Image(systemName: "plus")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 12)
-                                .foregroundStyle(Theme.primaryColor)
+                HStack(spacing: 0) {
+                    ForEach(columnData) { header in
+                        HStack {
+                            Text(header.headerText)
+                                .font(.body)
+                                .fontWeight(.semibold)
+                                .fontDesign(.rounded)
                             
-                            Text("Add Department")
-                                .foregroundStyle(.black)
-                        }
-                        .padding(8)
-                        .background(Color("Purple050"))
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
-                        .shadow(radius: 2)
-                        .sheet(item: $department, onDismiss: {
-                            department = nil
-                        }, content: { dept in
-                            DepartmentDetailView(department: dept)
-                        })
-                    } //: HStack
-                    
-                    Spacer()
-                    
+                        } //: HStack
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 64)
+                        .background(Color("Purple050").opacity(0.5))
+                    }
                 } //: HStack
                 
-                DepartmentPicker(selectedDepartment: $department, style: .list)
+                ForEach(departments) { dept in
+                    HStack(spacing: 0) {
+                        
+                        Text(dept.name)
+                            .frame(maxWidth: .infinity)
+                        
+                        Text(dept.items.count.description)
+                            .frame(maxWidth: .infinity)
+                        
+                        Text(dept.defMarkup.description)
+                            .frame(maxWidth: .infinity)
+                        
+                        Text(dept.restockNumber.description)
+                            .frame(maxWidth: .infinity)
+                        
+                    } //: HStack
+                    .background(.white.opacity(0.01))
+                    .frame(height: 64)
+                    .onTapGesture {
+                        selectedDepartment = dept
+                    }
+                    
+                    Divider().opacity(0.4)
+                } //: For Each
                 
-                Spacer()
-            } //: VStack - Departments List
-            .frame(maxWidth: 420)
+            } //: VStack
+            .modifier(TableStyleMod())
+            .sheet(item: $selectedDepartment) { dept in
+                DepartmentDetailView(department: dept)
+            }
+            
             Spacer()
-        } //: HStack
-        .padding()
-        
-        
-    }
+        } //: VStack - Departments List
+    } //: Body
+    
+    
+    
+    
 }
 
 #Preview {
     ResponsiveView { props in
         NavigationStack {
             DepartmentsView()
-            //            AddDepartmentView(department: DepartmentEntity())
                 .environment(\.realm, DepartmentEntity.previewRealm)
         }
     }
-    //    DepartmentsView()
 }
 
 

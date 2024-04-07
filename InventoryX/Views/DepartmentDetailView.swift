@@ -135,10 +135,15 @@ struct DepartmentDetailView: View {
             } //: VStack
             .frame(maxWidth: 720)
             .padding()
-            .background(Color("Purple050").opacity(0.15))
             .onAppear {
-                self.name = self.department.name
-                self.restockThreshold = String(describing: self.department.restockNumber)
+                name = department.name
+                if department.restockNumber != 0 {
+                    restockThreshold = String(describing: department.restockNumber)
+                }
+                
+                if department.defMarkup != 0 {
+                    markup = String(describing: department.defMarkup)
+                }
             }
         } //: ScrollView
         .overlay(uiFeedback.alert != nil ? AlertView(alert: uiFeedback.alert!) : nil, alignment: .top)
@@ -157,7 +162,7 @@ struct DepartmentDetailView: View {
                         .foregroundStyle(.black)
                 }
                 
-                Text(detailType == .modify ? "Edit company info" : "Add department")
+                Text(detailType == .modify ? "Edit department" : "Add department")
                     .modifier(TitleMod())
                 
             } //: VStack

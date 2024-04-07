@@ -48,73 +48,38 @@ struct ItemTableView: View {
     
     
     // MARK: - LIST VIEW STYLE
-    @State var sortBy: String = "name"
-    @State var isAscending: Bool = true
-    @State var columnData: [ColumnHeaderModel] = [ColumnHeaderModel(headerText: "Item Name", sortDescriptor: "name"),
-                                                  ColumnHeaderModel(headerText: "On-Hand", sortDescriptor: "onHandQty"),
-                                                  ColumnHeaderModel(headerText: "Retail Price", sortDescriptor: "retailPrice")]
+    @State var columnData: [ColumnHeaderModel] = [
+        ColumnHeaderModel(headerText: "Department", sortDescriptor: "dept"),
+        ColumnHeaderModel(headerText: "Item Name", sortDescriptor: "name"),
+        ColumnHeaderModel(headerText: "On-Hand", sortDescriptor: "onHandQty"),
+        ColumnHeaderModel(headerText: "Retail Price", sortDescriptor: "retailPrice")
+    ]
     
     @State var selectedItem: ItemEntity?
     
     private var listView: some View {
         VStack {
-            HStack {
-                DepartmentPicker(selectedDepartment: $department, style: .dropdown)
-                    
-                Spacer()
-                
-                Button {
-                    selectedItem = ItemEntity()
-                } label: {
-                    Image(systemName: "plus")
-                    Text("Add Item")
-                }
-                .padding(12)
-                .frame(height: 56)
-                .foregroundStyle(.black)
-                .modifier(GlowingOutlineMod())
-
-            } //: HStack
-            .padding(.horizontal, 4)
-            .frame(height: 64)
-            .background(Color("Purple050").opacity(0.5))
-            
             HStack(spacing: 0) {
-                
                 ForEach(columnData) { header in
                     HStack {
                         Text(header.headerText)
                             .font(.body)
                             .fontWeight(.semibold)
                             .fontDesign(.rounded)
-                        
-                        if sortBy == header.sortDescriptor {
-                            Image(systemName: "arrow.up")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 12)
-                                .rotationEffect(Angle(degrees: isAscending ? 0 : 180))
-                        }
+
                     } //: HStack
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .onTapGesture {
-                        if sortBy == header.sortDescriptor {
-                            isAscending.toggle()
-                        } else {
-                            sortBy = header.sortDescriptor
-                            isAscending = true
-                        }
-                    }
-                    
+                    .frame(height: 64)
+                    .background(Color("Purple050").opacity(0.5))
                 }
                 
             } //: HStack
-            .frame(height: 50)
-            
-            Divider().opacity(0.4)
             
             ForEach(itemArr) { item in
                 HStack(spacing: 0) {
+                    Text(item.department.thaw()?.first?.name ?? "")
+                        .frame(maxWidth: .infinity)
+                    
                     Text(item.name)
                         .frame(maxWidth: .infinity)
                                         
@@ -125,6 +90,7 @@ struct ItemTableView: View {
                         .frame(maxWidth: .infinity)
 
                 } //: HStack
+                .background(.white.opacity(0.01))
                 .frame(height: 64)
                 .onTapGesture {
                     selectedItem = item
@@ -134,18 +100,10 @@ struct ItemTableView: View {
             } //: For Each
                 
         } //: VStack
-        .overlay(
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(Color.gray.opacity(0.5))
-                .shadow(color: Color.gray.opacity(0.5), radius: 2)
- 
-        )
-        .padding(4)
-        .sheet(item: $selectedItem, onDismiss: {
-            selectedItem = nil
-        }, content: { item in
+        .modifier(TableStyleMod())
+        .sheet(item: $selectedItem) { item in
             AddItemView(item: item)
-        })
+        }
     } //: List View
     
     

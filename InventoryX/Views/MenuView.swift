@@ -24,7 +24,7 @@ struct MenuView: View {
                     display = data
                 } label: {
                     MenuButtonLabel(menuState: $menuState, buttonData: data)
-                        .foregroundStyle(data == display ? .white : Color("Purple200"))
+                        .foregroundStyle(data == display ? .white : Color("Purple050").opacity(0.5))
                 }
                 .overlay(
                     data == display ?
@@ -57,7 +57,7 @@ struct MenuView: View {
                     }
                 } //: HStack
                 .padding()
-                .foregroundStyle(Color("Purple200"))
+                .foregroundStyle(Color("Purple050").opacity(0.5))
             }
             
         } //: VStack

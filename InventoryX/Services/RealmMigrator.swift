@@ -11,7 +11,7 @@ import RealmSwift
 /// Class used for easier Realm migration.
 ///The schemaVersion was previously included in @main but was moved here so all Realm versioning can be handled in one place.
 class RealmMigrator {
-    let currentSchemaVersion: UInt64 = 54
+    let currentSchemaVersion: UInt64 = 55
     
     init() {
         let config = Realm.Configuration(schemaVersion: currentSchemaVersion, migrationBlock: { migration, oldSchemaVersion in

@@ -10,7 +10,7 @@ import SwiftUI
 import RealmSwift
 
 struct DepartmentPicker: View {
-    enum DepartmentPickerStyle { case scrolling, list, dropdown }
+    enum DepartmentPickerStyle { case scrolling, list, dropdown, columnHeaderBtn }
     @ObservedResults(DepartmentEntity.self) var departments
     /// When `selectedDepartment` is nil, the app displays all items in the view.
     @Binding var selectedDepartment: DepartmentEntity?
@@ -29,6 +29,14 @@ struct DepartmentPicker: View {
             
         case .dropdown:
             dropDownStyle
+                .onAppear {
+                    if let dept = departments.first {
+                        selectedDepartment = dept
+                    }
+                }
+            
+        case .columnHeaderBtn:
+            columnHeaderStyle
                 .onAppear {
                     if let dept = departments.first {
                         selectedDepartment = dept
@@ -119,28 +127,33 @@ struct DepartmentPicker: View {
         .frame(height: 56)
         .foregroundStyle(.black)
         .modifier(GlowingOutlineMod())
-//        Picker(selection: $selectedDepartment) {
-//            Text("Select Department       ")
-//                .tag(nil as DepartmentEntity?)
-//            
-//            ForEach(departments) { department in
-//                Text(department.name)
-//                    .tag(department as DepartmentEntity?)
-//            }
-//        } label: {
-//            Text("Department")
-//                
-//        }
-//        .tint(.black.opacity(0.8))
-//        .pickerStyle(.menu)
-//        .frame(minWidth: 190, maxWidth: 280, alignment: .trailing)
-
+    } //: Drop Down Style
+    
+    private var columnHeaderStyle: some View {
+        Menu {
+            ForEach(departments) { department in
+                Button {
+                    selectedDepartment = department
+                } label: {
+                    Text(department.name)
+                }
+                    .tag(department as DepartmentEntity?)
+            }
+        } label: {
+            Text("Department")
+                .padding(.horizontal)
+            Image(systemName: "ellipsis")
+        }
+        .padding()
+        .frame(minWidth: 190, maxWidth: .infinity)
+        .frame(height: 56)
+        .foregroundStyle(.black)
     } //: Drop Down Style
 }
 
 
 #Preview {
-    DepartmentPicker(selectedDepartment: .constant(nil), style: .dropdown)
+    DepartmentPicker(selectedDepartment: .constant(nil), style: .columnHeaderBtn)
         .padding()
         .environment(\.realm, DepartmentEntity.previewRealm)
 }

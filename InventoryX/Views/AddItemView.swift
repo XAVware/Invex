@@ -219,9 +219,9 @@ struct AddItemView: View {
                     self.selectedDepartment = dept
                     self.itemName = selectedItem.name
                     //            self.attribute = item.attribute
-                    self.quantity = String(describing: selectedItem.onHandQty!)
-                    self.retailPrice = String(describing: selectedItem.retailPrice!)
-                    self.unitCost = String(describing: selectedItem.avgCostPer!)
+                    self.quantity = String(describing: selectedItem.onHandQty)
+                    self.retailPrice = String(describing: selectedItem.retailPrice)
+                    self.unitCost = String(describing: selectedItem.avgCostPer)
                 }
             }
         } //: ScrollView

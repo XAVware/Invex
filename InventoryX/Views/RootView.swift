@@ -38,6 +38,7 @@ struct RootView: View {
     @State var cartState: CartState = .sidebar
     
     @State var selectedDepartment: DepartmentEntity?
+    @State var selectedItem: ItemEntity?
     
     @State var showingOnboarding: Bool = false
 
@@ -61,12 +62,30 @@ struct RootView: View {
                     .environmentObject(posVM)
 
             case .inventoryList:
-                ItemTableView(department: $selectedDepartment, style: .list) { item in
-                    // Display item in view/edit item view.
-                }
-                .onAppear {
-                    selectedDepartment = nil
-                }
+                VStack {
+                    HStack {
+                        Text("Inventory List")
+                        Spacer()
+                        Button {
+                            selectedItem = ItemEntity()
+                        } label: {
+                            Image(systemName: "plus")
+                        }
+                    } //: HStack
+                    .padding()
+                    .font(.title)
+                    .fontDesign(.rounded)
+                    
+                    ItemTableView(department: $selectedDepartment, style: .list) { item in
+                        self.selectedItem = item
+                    }
+                    .onAppear {
+                        selectedDepartment = nil
+                    }
+                    .sheet(item: $selectedItem) { item in
+                        AddItemView(item: item)
+                    }
+                } //: VStack
                 
             case .departments:
                 DepartmentsView()
@@ -81,13 +100,7 @@ struct RootView: View {
         }
         .fullScreenCover(isPresented: $showingOnboarding) {
             OnboardingView()
-                .padding()
-//                .ignoresSafeArea(.all)
         }
-//        .onAppear {
-//            let realm = try! Realm()
-//            print(realm.objects(ItemEntity.self))
-//        }
         
     } //: Body
     

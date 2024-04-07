@@ -12,12 +12,13 @@ class ItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted(originProperty: "items") var department: LinkingObjects<DepartmentEntity>
     
-    @Persisted var name: String!
-    @Persisted var retailPrice: Double!
-    @Persisted var avgCostPer: Double!
-    @Persisted var onHandQty: Int!
+    @Persisted var name: String
+    @Persisted var attribute: String
+    @Persisted var retailPrice: Double
+    @Persisted var avgCostPer: Double
+    @Persisted var onHandQty: Int
     
-    convenience init(name: String, retailPrice: Double, avgCostPer: Double, onHandQty: Int) {
+    convenience init(name: String, attribute: String = "", retailPrice: Double, avgCostPer: Double, onHandQty: Int = 0) {
         self.init()
         self.name = name
         self.retailPrice = retailPrice
@@ -40,27 +41,27 @@ extension ItemEntity {
     static let frozenArray = [item7]
 }
 
-class InventoryItemModel {
-    let id: ObjectId
-    let name: String?
-    var retailPrice: Double?
-    var avgCostPer: Double?
-    var onHandQty: Int?
-    
-    var qtyInCart: Int?
-    
-    var cartItemSubtotal: Double {
-        guard let price = retailPrice, let qty = qtyInCart else { return -1.0 }
-        return price * Double(qty)
-    }
-    
-    
-    init(id: ObjectId, name: String?, retailPrice: Double? = nil, avgCostPer: Double? = nil, onHandQty: Int? = nil, qtyInCart: Int? = nil) {
-        self.id = id
-        self.name = name
-        self.retailPrice = retailPrice
-        self.avgCostPer = avgCostPer
-        self.onHandQty = onHandQty
-        self.qtyInCart = qtyInCart
-    }
-}
+//class InventoryItemModel {
+//    let id: ObjectId
+//    let name: String?
+//    var retailPrice: Double?
+//    var avgCostPer: Double?
+//    var onHandQty: Int?
+//    
+//    var qtyInCart: Int?
+//    
+//    var cartItemSubtotal: Double {
+//        guard let price = retailPrice, let qty = qtyInCart else { return -1.0 }
+//        return price * Double(qty)
+//    }
+//    
+//    
+//    init(id: ObjectId, name: String?, retailPrice: Double? = nil, avgCostPer: Double? = nil, onHandQty: Int? = nil, qtyInCart: Int? = nil) {
+//        self.id = id
+//        self.name = name
+//        self.retailPrice = retailPrice
+//        self.avgCostPer = avgCostPer
+//        self.onHandQty = onHandQty
+//        self.qtyInCart = qtyInCart
+//    }
+//}
