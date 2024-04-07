@@ -72,13 +72,15 @@ struct DepartmentDetailView: View {
         do {
             if detailType == .modify {
                 try vm.updateDepartment(dept: department, newName: name, thresh: restockThreshold, markup: markup)
+                LogService(self).info("Department udpated.")
             } else {
                 try vm.saveDepartment(name: name, threshold: restockThreshold, markup: markup)
+                LogService(self).info("Department created.")
             }
             
             finish()
         } catch {
-            print("Error while saving department: \(error.localizedDescription)")
+            LogService(self).error("Error while saving department: \(error.localizedDescription)")
         }
     }
     

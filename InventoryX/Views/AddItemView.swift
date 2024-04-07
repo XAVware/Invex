@@ -64,6 +64,7 @@ enum DetailViewType { case create, modify }
 // TODO: Error is thrown briefly from the department dropdown after an item was successfully added, therefore changing the department
 struct AddItemView: View {
     @StateObject var vm: AddItemViewModel = AddItemViewModel()
+    @StateObject var uiFeedback = UIFeedbackService.shared
     @Environment(\.dismiss) var dismiss
     
     @State private var selectedDepartment: DepartmentEntity?
@@ -82,6 +83,9 @@ struct AddItemView: View {
     let onSuccess: (() -> Void)?
     
     let detailType: DetailViewType
+    
+    private enum Focus { case name, attribute, price, onHandQty, unitCost }
+    @FocusState private var focus: Focus?
         
     init(item: ItemEntity, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         self.selectedItem = item
@@ -94,22 +98,12 @@ struct AddItemView: View {
         do {
             if detailType == .modify {
                 try vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
-                if let onSuccess = onSuccess {
-                    // On success is only used by onboarding view which we don't want to dismiss.
-                    onSuccess()
-                } else {
-                    dismiss()
-                }
+                finish()
 
             } else {
                 // Item was nil when passed to view. User is creating a new item.
                 try vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
-                if let onSuccess = onSuccess {
-                    // On success is only used by onboarding view which we don't want to dismiss.
-                    onSuccess()
-                } else {
-                    dismiss()
-                }
+                finish()
             }
             
         } catch {
@@ -118,39 +112,57 @@ struct AddItemView: View {
         
     }
     
-    var body: some View {
-            VStack(alignment: .center, spacing: 36) {
-                if showTitles {
-                    VStack(alignment: .leading) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: "xmark")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24)
-                                .foregroundStyle(.black)
-                        }
-                        Text("Add an item")
-                            .modifier(TitleMod())
-                        
-                    } //: VStack
+    private func finish() {
+        if let onSuccess = onSuccess {
+            // On success is only used by onboarding view which we don't want to dismiss.
+            onSuccess()
+        } else {
+            dismiss()
+        }
+    }
+    
+    @ViewBuilder private var header: some View {
+        if showTitles {
+            VStack(alignment: .leading) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24)
+                        .foregroundStyle(.black)
                 }
                 
-                    DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
+                Text(detailType == .modify ? "Edit item" : "Add item")
+                    .modifier(TitleMod())
                 
-                VStack(alignment: .leading, spacing: 16) {
+            } //: VStack
+            .frame(maxWidth: 720)
+        }
+    } //: Header
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .center, spacing: 24) {
+                header
+                
+                VStack(alignment: .leading, spacing: 24) {
+                    DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
+                    
                     ThemeTextField(boundTo: $itemName,
                                    placeholder: "i.e. Gatorade",
                                    title: "Item Name:",
                                    subtitle: nil,
                                    type: .text)
+                    .focused($focus, equals: .name)
                     
                     ThemeTextField(boundTo: $attribute,
                                    placeholder: "i.e. Blue",
                                    title: "Attribute:",
                                    subtitle: nil,
                                    type: .text)
+                    .focused($focus, equals: .attribute)
                     
                     ThemeTextField(boundTo: $quantity,
                                    placeholder: "24",
@@ -158,6 +170,7 @@ struct AddItemView: View {
                                    subtitle: nil,
                                    type: .integer)
                     .keyboardType(.numberPad)
+                    .focused($focus, equals: .onHandQty)
                     
                     ThemeTextField(boundTo: $retailPrice,
                                    placeholder: "$ 2.00",
@@ -165,6 +178,7 @@ struct AddItemView: View {
                                    subtitle: nil,
                                    type: .price)
                     .keyboardType(.numberPad)
+                    .focused($focus, equals: .price)
                     //                .onChange(of: retailPrice) { _ in
                     //                    let formattedPrice = retailPrice.replacingOccurrences( of:"[^0-9.]", with: "", options: .regularExpression)
                     //                    guard let price = Double(formattedPrice) else {
@@ -180,8 +194,8 @@ struct AddItemView: View {
                                    subtitle: nil,
                                    type: .price)
                     .keyboardType(.numberPad)
+                    .focused($focus, equals: .unitCost)
                 }
-//                Spacer()
                 
                 Button {
                     continueTapped()
@@ -195,18 +209,22 @@ struct AddItemView: View {
             } //: VStack
             .frame(maxWidth: 720)
             .padding()
-            .toolbar(.hidden, for: .navigationBar)
+            .background(Color("Purple050").opacity(0.15))
+            .overlay(uiFeedback.alert != nil ? AlertView(alert: uiFeedback.alert!) : nil, alignment: .top)
+            .onTapGesture {
+                self.focus = nil
+            }
             .onAppear {
                 if let dept = selectedItem.department.first {
-                    print("Items department is \(dept)")
                     self.selectedDepartment = dept
                     self.itemName = selectedItem.name
-        //            self.attribute = item.attribute
+                    //            self.attribute = item.attribute
                     self.quantity = String(describing: selectedItem.onHandQty!)
                     self.retailPrice = String(describing: selectedItem.retailPrice!)
                     self.unitCost = String(describing: selectedItem.avgCostPer!)
                 }
             }
+        } //: ScrollView
     } //: Body
 }
 
