@@ -20,7 +20,7 @@ import RealmSwift
         try realm.write {
             realm.add(department)
         }
-        LogService(self).info("New department saved successfully")
+//        LogService(self).info("New department saved successfully")
     }
     
     
@@ -34,7 +34,7 @@ import RealmSwift
             dept.restockNumber = thresh
             dept.defMarkup = markup
         }
-        LogService(self).info("Existing department successfully updated.")
+//        LogService(self).info("Existing department successfully updated.")
     }
     
 }
@@ -44,9 +44,9 @@ struct DepartmentDetailView: View {
     @StateObject var vm: DepartmentDetailViewModel = DepartmentDetailViewModel()
     @StateObject var uiFeedback = UIFeedbackService.shared
     
-    @State private var name: String = ""
-    @State private var restockThreshold: String = ""
-    @State private var markup: String = ""
+    @State private var name: String = "Food"
+    @State private var restockThreshold: String = "10"
+    @State private var markup: String = "50"
     
     let department: DepartmentEntity
     
@@ -71,6 +71,7 @@ struct DepartmentDetailView: View {
     // TODO: Move logic into VM.
     /// When the view is initialized, `detailType` is determined by whether a department was passed to the view or not. If it was, the department exists and should be modified otherwise the user is adding a department
     private func continueTapped() {
+        focus = nil
         do {
             if detailType == .modify {
                 try vm.updateDepartment(dept: department, newName: name, thresh: restockThreshold, markup: markup)
@@ -129,8 +130,9 @@ struct DepartmentDetailView: View {
                 Button {
                     continueTapped()
                 } label: {
+                    Spacer()
                     Text("Continue")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    Spacer()
                 }
                 .modifier(PrimaryButtonMod())
                 

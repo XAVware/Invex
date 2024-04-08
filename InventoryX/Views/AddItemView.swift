@@ -50,8 +50,9 @@ import RealmSwift
                 existingItem.avgCostPer = cost
             }
             
-            LogService(self).info("Finished updating item.")
+//            LogService(self).info("Finished updating item.")
         } else {
+            
             LogService(self).error("Error thawing item.")
         }
     }
@@ -68,11 +69,11 @@ struct AddItemView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var selectedDepartment: DepartmentEntity?
-    @State private var itemName: String = ""
-    @State private var attribute: String = ""
-    @State private var quantity: String = ""
-    @State private var retailPrice: String = ""
-    @State private var unitCost: String = ""
+    @State private var itemName: String = "Lays"
+    @State private var attribute: String = "Small"
+    @State private var quantity: String = "24"
+    @State private var retailPrice: String = "2"
+    @State private var unitCost: String = "1"
     
     let selectedItem: ItemEntity
     
@@ -95,6 +96,7 @@ struct AddItemView: View {
     }
     
     private func continueTapped() {
+        focus = nil
         do {
             if detailType == .modify {
                 try vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
@@ -200,8 +202,9 @@ struct AddItemView: View {
                 Button {
                     continueTapped()
                 } label: {
+                    Spacer()
                     Text("Save Item")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    Spacer()
                 }
                 .modifier(PrimaryButtonMod())
                 

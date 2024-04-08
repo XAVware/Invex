@@ -101,8 +101,8 @@ struct SalesHistoryView: View {
                     .padding(.bottom)
                 
                 Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatAsCurrencyString())")
-//                    .modifier(TextMod(.title3, .semibold, .black))
-                
+                    .font(.title3)
+                    .fontWeight(.semibold)
                 
                 Chart {
                     ForEach(getGroupedSales()) { group in
@@ -146,7 +146,8 @@ struct SalesHistoryView: View {
                         }
                     } header: {
                         Text("Sales")
-//                            .modifier(TextMod(.largeTitle, .semibold, .black))
+                            .font(.largeTitle)
+                            .fontWeight(.semibold)
                             .padding(.bottom, 8)
                             .textCase(nil)
                     }
@@ -189,7 +190,8 @@ struct SalesHistoryView: View {
             Spacer()
             
             Text("Sales History")
-//                .modifier(TextMod(.title3, .semibold, .black))
+                .font(.title3)
+                .fontWeight(.semibold)
             
             Spacer()
             
@@ -201,9 +203,7 @@ struct SalesHistoryView: View {
             } label: {
                 Text("Range")
             }
-//            .tint()
         } //: HStack
-//        .modifier(TextMod(.body, .light, .accent))
         .frame(height: toolbarHeight)
         .padding(.horizontal)
     } //: Header Toolbar

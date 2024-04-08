@@ -73,7 +73,7 @@ struct OnboardingView: View {
                     
                 case .setPasscode:
                     Spacer()
-                    ChangePasscodeView() {
+                    PasscodeView(processes: [.set], showTitles: false) {
                         currentDisplay = .department
                     }
                     Spacer()

@@ -13,7 +13,16 @@ import RealmSwift
     @Published var companyName: String = ""
     @Published var taxRateStr: String = ""
     
+    @Published var passHash: String
     init() {
+        
+        if let currentPassHash = AuthService.shared.getCurrentPasscode()  {
+            passHash = currentPassHash
+        } else {
+            print("Current passcode hash is nil")
+            passHash = ""
+            
+        }
         fetchCompanyData()
     }
     
@@ -58,11 +67,10 @@ struct SettingsView: View {
                         //                        .padding()
                         .frame(maxWidth: 360, maxHeight: 70)
                         .background(Color("Purple050"))
-                        
                         .font(.title3)
                         .fontWeight(.semibold)
                         .fontDesign(.rounded)
-                        .foregroundStyle(Color("Purple800"))
+                        .foregroundStyle(.accent)
                         //                        .modifier(GlowingOutlineMod())
                         
                         VStack(spacing: 12) {
@@ -120,16 +128,27 @@ struct SettingsView: View {
                     .font(.title3)
                     .fontWeight(.semibold)
                     .fontDesign(.rounded)
-                    .foregroundStyle(Color("Purple800"))
+                    .foregroundStyle(.accent)
                     .modifier(GlowingOutlineMod())
-                    .sheet(isPresented: $showPasscodeView, content: {
-                        ChangePasscodeView()
-                    })
+                    .sheet(isPresented: $showPasscodeView) {
+                        PasscodeView(processes: [.confirm, .set]) {
+                            showPasscodeView = false
+                        }
+                    }
                     
                     Button {
-                        UserDefaults.standard.removeObject(forKey: "passcode")
-                        let realm = try! Realm()
-                        try! realm.write { realm.deleteAll() }
+                        Task {
+                            do {
+                                let realm = try await Realm()
+                                try await realm.asyncWrite {
+                                    realm.deleteAll()
+                                }
+                                AuthService.shared.deleteAll()
+                                
+                            } catch {
+                                print("Error deleting account: \(error.localizedDescription)")
+                            }
+                        }
                     } label: {
                         HStack(spacing: 16) {
                             Image(systemName: "trash")
@@ -143,11 +162,8 @@ struct SettingsView: View {
                     .font(.title3)
                     .fontWeight(.semibold)
                     .fontDesign(.rounded)
-                    .foregroundStyle(Color("Purple800"))
+                    .foregroundStyle(.accent)
                     .modifier(GlowingOutlineMod())
-                    .sheet(isPresented: $showPasscodeView, content: {
-                        ChangePasscodeView()
-                    })
                     
                     
                     Link(destination: URL(string: "https://drive.google.com/file/d/1cYNlzO-RS9K3cc_4Oi0n56RfPR-7Y7Mp/view?usp=sharing")!, label: {
@@ -163,7 +179,7 @@ struct SettingsView: View {
                     .font(.title3)
                     .fontWeight(.semibold)
                     .fontDesign(.rounded)
-                    .foregroundStyle(Color("Purple800"))
+                    .foregroundStyle(.accent)
                     .modifier(GlowingOutlineMod())
                     
                     Link(destination: URL(string: "https://drive.google.com/file/d/1ITsWigHuvCGupSyLpJTeYl9k7T-y161S/view?usp=sharing")!, label: {
@@ -179,7 +195,7 @@ struct SettingsView: View {
                     .font(.title3)
                     .fontWeight(.semibold)
                     .fontDesign(.rounded)
-                    .foregroundStyle(Color("Purple800"))
+                    .foregroundStyle(.accent)
                     .modifier(GlowingOutlineMod())
                     
                 } //: HStack

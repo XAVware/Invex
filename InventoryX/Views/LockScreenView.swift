@@ -13,38 +13,31 @@ struct LockScreenView: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Spacer()
+//                Spacer()
                 DateTimeLabel()
+                    .padding(.top, 48)
                 Spacer()
             } //: VStack
-            
-            Spacer()
+            .frame(maxWidth: 420)
+//            Spacer()
             
             VStack(alignment: .center) {
-                VStack(spacing: 24) {
-                    Text("Enter Passcode")
-                        .font(.largeTitle)
-                        .fontWeight(.heavy)
-                    
-                    Text("Enter passcode to unlock")
-                        .font(.subheadline)
-                        .multilineTextAlignment(.center)
-                }
+                Spacer()
+                Text("Enter Passcode")
+                    .font(.largeTitle)
+                    .fontWeight(.heavy)
                 
-                //                PasscodeView() { hash in
-                //                    print("passcode entered and hashed: \(hash)")
-                //                    guard AuthService.shared.checkPasscode(hash: hash) else {
-                //                        print("Passcodes don't match")
-                //                        return
-                //                    }
-                //                    dismiss()
-                //                }
-                //                .padding(.vertical)
-                //                .frame(maxWidth: 360, maxHeight: 540, alignment: .center)
+                PasscodeView(processes: [.confirm], showTitles: false, onSuccess: {
+                    dismiss()
+                })
+                .frame(minHeight: 550, maxHeight: 600)
+
             } //: VStack
             
+//            .frame(maxWidth: 360, maxHeight: 540, alignment: .center)
+            
         } //: HStack
-        .frame(maxWidth: 800)
+        .frame(maxWidth: .infinity)
     }
 }
 

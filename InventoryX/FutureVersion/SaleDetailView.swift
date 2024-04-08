@@ -21,7 +21,8 @@ struct SaleDetailView: View {
     var body: some View {
         VStack(spacing: 16) {
             Text("Sale Details")
-//                .modifier(TextMod(.largeTitle, .semibold, .black))
+                .font(.largeTitle)
+                .fontWeight(.semibold)
                 .frame(maxWidth: .infinity)
                 .padding(.top)
             
@@ -30,29 +31,30 @@ struct SaleDetailView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text("Cashier:")
-//                        .modifier(TextMod(.title2, .semibold, .gray))
                     
                     Text(sale.cashierName)
-//                        .modifier(TextMod(.title2, .regular, .black))
                 } //: VStack
+                .font(.title2)
+                .fontWeight(.semibold)
+                
                 Spacer()
                     
                 VStack(alignment: .leading) {
                     Text("Timestamp:")
-//                        .modifier(TextMod(.title2, .semibold, .gray))
-                    
                     Text(sale.timestamp.formatted(date: .abbreviated, time: .shortened))
-//                        .modifier(TextMod(.title2, .regular, .black))
                 }
+                .font(.title2)
+                .fontWeight(.semibold)
             } //: HStack
             .padding()
             
             HStack(spacing: 16) {
                 Text("Total:")
-//                    .modifier(TextMod(.title, .semibold, .gray))
+                    .font(.title)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.gray)
                 
                 Text(sale.total.formatAsCurrencyString())
-//                    .modifier(TextMod(.title, .regular, .black))
             } //: HStack
             
             VStack(spacing: 0) {
@@ -71,7 +73,6 @@ struct SaleDetailView: View {
                 } //: HStack
                 .frame(height: 50)
                 .padding(.horizontal)
-//                .modifier(TextMod(.body, .regular, .black))
                 .background(Color("Purple050").opacity(0.6))
                 
                 ScrollView(.vertical, showsIndicators: false) {
@@ -98,11 +99,8 @@ struct SaleDetailView: View {
                         .frame(height: 50)
                         .padding(.horizontal)
                         .background(Color("Purple050").opacity(0.6))
-//                        .modifier(TextMod(.body, .regular, .black))
                         
                     }
-//                    ForEach(sale.items.indices, id: \.self) { index in
-//                    } //: ForEach
                 } //: ScrollView
             } //: VStack
             .padding(.top)
@@ -127,11 +125,10 @@ struct SaleDetailView: View {
 }
 
 
-//struct SaleDetailView_Previews: PreviewProvider {
-//    @State static var sale: SaleEntity = SaleEntity.todaySale1
-//    static var previews: some View {
-//        SaleDetailView(sale: sale)
-//            .previewDevice(PreviewDevice(rawValue: "iPad Pro (11-inch) (4th generation)"))
-//            .previewInterfaceOrientation(.landscapeLeft)
-//    }
-//}
+
+struct SaleDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        SaleDetailView(sale: SaleEntity.todaySale1)
+
+    }
+}

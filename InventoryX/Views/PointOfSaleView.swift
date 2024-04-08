@@ -214,12 +214,11 @@ struct CartViewNew: View {
                                             Text("Qty: \(vm.cartItems.filter { $0._id == item._id }.count)")
                                         } //: VStack
                                         
-                                        //                                        Text(item.retailPrice?.formatAsCurrencyString() ?? "Error")
                                         Text(item.retailPrice.formatAsCurrencyString())
                                             .frame(maxWidth: .infinity)
                                         
-                                        //                                        Text(item.cartItemSubtotal.formatAsCurrencyString())
-                                        //                                            .frame(maxWidth: .infinity, alignment: .trailing)
+//                                        Text(item.cartItemSubtotal.formatAsCurrencyString())
+//                                            .frame(maxWidth: .infinity, alignment: .trailing)
                                         
                                     } //: HStack
                                     .font(.callout)
@@ -290,7 +289,9 @@ struct CartViewNew: View {
                     Button {
                         continueTapped()
                     } label: {
+                        Spacer()
                         Text("Checkout")
+                        Spacer()
                     }
                     .modifier(PrimaryButtonMod())
                     .frame(maxWidth: uiProperties.width)

@@ -50,7 +50,7 @@
 		94C7625C2BA8A9F800A61F7D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C7625B2BA8A9F800A61F7D /* AuthService.swift */; };
 		94C7625E2BA8BEDB00A61F7D /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C7625D2BA8BEDB00A61F7D /* LogService.swift */; };
 		94D3F1052A1C6A1C00AF4393 /* DepartmentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */; };
-		94EA1CE32BB2763300BD0388 /* ChangePasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EA1CE22BB2763300BD0388 /* ChangePasscodeView.swift */; };
+		94EA1CE32BB2763300BD0388 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EA1CE22BB2763300BD0388 /* PasscodeView.swift */; };
 		94ECB3922BB3955F00A507AF /* PointOfSaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ECB3912BB3955F00A507AF /* PointOfSaleView.swift */; };
 		94F624462BAF1B1E0069C81E /* SalesHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F624452BAF1B1E0069C81E /* SalesHistoryView.swift */; };
 		94F624492BB12B040069C81E /* CompanyEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F624482BB12B040069C81E /* CompanyEntity.swift */; };
@@ -105,7 +105,7 @@
 		94C7625B2BA8A9F800A61F7D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		94C7625D2BA8BEDB00A61F7D /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentEntity.swift; sourceTree = "<group>"; };
-		94EA1CE22BB2763300BD0388 /* ChangePasscodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasscodeView.swift; sourceTree = "<group>"; };
+		94EA1CE22BB2763300BD0388 /* PasscodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
 		94ECB3912BB3955F00A507AF /* PointOfSaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointOfSaleView.swift; sourceTree = "<group>"; };
 		94F624452BAF1B1E0069C81E /* SalesHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesHistoryView.swift; sourceTree = "<group>"; };
 		94F624482BB12B040069C81E /* CompanyEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyEntity.swift; sourceTree = "<group>"; };
@@ -197,10 +197,10 @@
 			isa = PBXGroup;
 			children = (
 				94F6244A2BB12B860069C81E /* Components */,
-				94341C152BA629F000334505 /* Passcode */,
 				94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */,
 				948688682BB6B0CC0030C8C6 /* AlertView.swift */,
 				94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */,
+				94EA1CE22BB2763300BD0388 /* PasscodeView.swift */,
 				9421930F2BB23C92001D720D /* CompanyDetailView.swift */,
 				9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */,
 				945DF5AE2BAB64AE002014F6 /* DepartmentsView.swift */,
@@ -214,15 +214,6 @@
 				948861572BACB0E300580F38 /* ToolbarView.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		94341C152BA629F000334505 /* Passcode */ = {
-			isa = PBXGroup;
-			children = (
-				94EA1CE22BB2763300BD0388 /* ChangePasscodeView.swift */,
-				94341C172BA629F000334505 /* NumberPadView.swift */,
-			);
-			path = Passcode;
 			sourceTree = "<group>";
 		};
 		9453BEC52BB4D9FD007C63A4 /* FutureVersion */ = {
@@ -258,6 +249,7 @@
 		94F6244A2BB12B860069C81E /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				94341C172BA629F000334505 /* NumberPadView.swift */,
 				946524722BA803D000F24CDD /* DateTimeLabel.swift */,
 				80F6026529FFFD8A004C759D /* DepartmentPicker.swift */,
 				802EDC092A02166D0048A9A8 /* LogoView.swift */,
@@ -380,7 +372,7 @@
 				80DBB97F29F70EE000497695 /* OnboardingView.swift in Sources */,
 				9490BAE02BB32044003C925A /* SecondaryButton-Mod.swift in Sources */,
 				94ECB3922BB3955F00A507AF /* PointOfSaleView.swift in Sources */,
-				94EA1CE32BB2763300BD0388 /* ChangePasscodeView.swift in Sources */,
+				94EA1CE32BB2763300BD0388 /* PasscodeView.swift in Sources */,
 				942193102BB23C92001D720D /* CompanyDetailView.swift in Sources */,
 				94341C1B2BA629F000334505 /* NumberPadView.swift in Sources */,
 				9488615B2BACC40A00580F38 /* DepartmentDetailView.swift in Sources */,

@@ -23,6 +23,7 @@ class RootViewModel: ObservableObject {
     func configureSubscribers() {
         service.$exists
             .sink { [weak self] exists in
+                print("Company subscription received")
                 self?.companyExists = exists
             }
             .store(in: &cancellables)

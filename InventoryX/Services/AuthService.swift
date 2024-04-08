@@ -11,13 +11,15 @@ import CryptoKit
 class AuthService {
     @Published var exists: Bool
     @Published var passHash: String = ""
-    @Published var isLocked: Bool = false
     
     static let shared = AuthService()
     
     init() {
         self.exists = UserDefaults.standard.object(forKey: "passcode") != nil
-        print("Passcode exists: \(exists)")
+        
+        if self.exists {
+            self.passHash = getCurrentPasscode() ?? ""
+        }
     }
     
     func hashString(_ str: String) -> String {
@@ -27,8 +29,10 @@ class AuthService {
         return hash
     }
     
-    func savePasscode(hash: String) {
+    func savePasscode(hash: String) async {
         UserDefaults.standard.setValue(hash, forKey: "passcode")
+        self.passHash = hash
+        debugPrint("Passcode saved successfully")
     }
     
     func checkPasscode(hash: String) -> Bool {
@@ -38,5 +42,11 @@ class AuthService {
     
     func getCurrentPasscode() -> String? {
         return UserDefaults.standard.value(forKey: "passcode") as? String
+    }
+    
+    func deleteAll() {
+        UserDefaults.standard.removeObject(forKey: "passcode")
+        self.passHash = ""
+        self.exists = false
     }
 }

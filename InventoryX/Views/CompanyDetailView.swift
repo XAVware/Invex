@@ -41,8 +41,8 @@ struct CompanyDetailView: View {
     @StateObject var uiFeedback = UIFeedbackService.shared
     let company: CompanyEntity?
     
-    @State private var companyName: String = ""
-    @State private var taxRate: String = ""
+    @State private var companyName: String = "XAVware"
+    @State private var taxRate: String = "7"
     
     /// Used to hide the back button and title while onboarding.
     @State var showTitles: Bool
@@ -65,6 +65,7 @@ struct CompanyDetailView: View {
     }
     
     private func continueTapped() {
+        focus = nil
         do {
             try vm.saveCompany(name: companyName, tax: taxRate)
             finish()
@@ -114,7 +115,9 @@ struct CompanyDetailView: View {
                 Button {
                     continueTapped()
                 } label: {
+                    Spacer()
                     Text("Continue")
+                    Spacer()
                 }
                 .modifier(PrimaryButtonMod())
                 
