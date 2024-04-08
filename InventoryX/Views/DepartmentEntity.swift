@@ -15,10 +15,11 @@ class DepartmentEntity: Object, ObjectKeyIdentifiable {
     @Persisted var items: RealmSwift.List<ItemEntity>
     @Persisted var defMarkup: Double
     
-    convenience init(name: String, restockNum: Int = 10) {
+    convenience init(name: String, restockNum: Int = 10, defMarkup: Double = 0.0) {
         self.init()
         self.name = name
         self.restockNumber = restockNum
+        self.defMarkup = defMarkup
     }
     
     

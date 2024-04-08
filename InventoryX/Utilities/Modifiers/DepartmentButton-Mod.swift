@@ -13,11 +13,11 @@ struct DepartmentButtonMod: ViewModifier {
         content
             .font(.headline)
             .fontWeight(isSelected ? .semibold : .regular)
-            .foregroundStyle(Color("Purple900"))
+            .foregroundStyle(.accent)
             .opacity(isSelected ? 1.0 : 0.9)
             .padding(.horizontal)
             .padding(.vertical, 8)
-            .overlay(isSelected ? Rectangle().fill(Color("Purple900")).frame(height: 3) : nil, alignment: .bottom)
+            .overlay(isSelected ? Rectangle().fill(.accent).frame(height: 3) : nil, alignment: .bottom)
     }
 }
 

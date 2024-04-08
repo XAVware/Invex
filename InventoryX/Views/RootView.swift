@@ -92,7 +92,10 @@ struct RootView: View {
                 
             case .settings:
                 SettingsView()
+                
             }
+            
+        
             
         } //: HStack
         .onReceive(vm.$companyExists) { exists in

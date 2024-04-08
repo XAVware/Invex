@@ -22,10 +22,12 @@ struct DateTimeLabel: View {
     var body: some View {
         VStack {
             Text("\(Date.now.formatted(date: .omitted, time: .shortened))")
-                .modifier(TextMod(.system(size: 84), .bold))
+                .font(.system(size: 84))
+                .fontWeight(.bold)
             
             Text(dateString)
-                .modifier(TextMod(.largeTitle, .semibold))
+                .font(.largeTitle)
+                .fontWeight(.semibold)
         }
     }
 }

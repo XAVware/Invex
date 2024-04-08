@@ -10,7 +10,7 @@ import SwiftUI
 enum DisplayState: CaseIterable {
     case makeASale
     case inventoryList
-    //    case salesHistory
+//    case salesHistory
     case departments
     case settings
     
@@ -19,7 +19,7 @@ enum DisplayState: CaseIterable {
         case .makeASale:        "Sale"
         case .inventoryList:    "Inventory"
         case .departments:      "Departments"
-            //        case .salesHistory:     "Sales"
+//        case .salesHistory:     "Sales"
         case .settings:         "Settings"
         }
     }
@@ -29,7 +29,7 @@ enum DisplayState: CaseIterable {
         case .makeASale:        "cart.fill"
         case .inventoryList:    "tray.full.fill"
         case .departments:      "building.2.fill"
-            //        case .salesHistory:     "chart.xyaxis.line"
+//        case .salesHistory:     "chart.xyaxis.line"
         case .settings:         "gearshape"
         }
     }

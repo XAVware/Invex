@@ -44,7 +44,7 @@ import RealmSwift
             let realm = try Realm()
             try realm.write {
                 existingItem.name = name
-                //                existingItem.attribute = att
+                existingItem.attribute = att
                 existingItem.onHandQty = qty
                 existingItem.retailPrice = price
                 existingItem.avgCostPer = cost
@@ -201,6 +201,7 @@ struct AddItemView: View {
                     continueTapped()
                 } label: {
                     Text("Save Item")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .modifier(PrimaryButtonMod())
                 
@@ -209,7 +210,6 @@ struct AddItemView: View {
             } //: VStack
             .frame(maxWidth: 720)
             .padding()
-            .background(Color("Purple050").opacity(0.15))
             .overlay(uiFeedback.alert != nil ? AlertView(alert: uiFeedback.alert!) : nil, alignment: .top)
             .onTapGesture {
                 self.focus = nil

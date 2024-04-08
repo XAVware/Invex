@@ -46,7 +46,7 @@ struct DepartmentPicker: View {
     } //: Body
     
     private var scrollStyle: some View {
-        ScrollView(.horizontal) {
+        ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
                 Button {
                     selectedDepartment = nil
@@ -84,7 +84,6 @@ struct DepartmentPicker: View {
                                 .font(.subheadline)
                                 .fontDesign(.rounded)
                                 .foregroundStyle(.gray)
-                            
                         } //: VStack
                         
                         Spacer()

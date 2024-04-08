@@ -13,8 +13,9 @@ import RealmSwift
     func saveDepartment(name: String, threshold: String, markup: String) throws {
         // Make sure `threshold` was entered as a number
         guard let threshold = Int(threshold) else { throw AppError.numericThresholdRequired }
+        guard let markup = Double(markup) else { return }
         
-        let department = DepartmentEntity(name: name, restockNum: threshold)
+        let department = DepartmentEntity(name: name, restockNum: threshold, defMarkup: markup)
         let realm = try Realm()
         try realm.write {
             realm.add(department)
@@ -26,6 +27,7 @@ import RealmSwift
     func updateDepartment(dept: DepartmentEntity, newName: String, thresh: String, markup: String) throws {
         guard let thresh = Int(thresh) else { throw AppError.numericThresholdRequired }
         guard let markup = Double(markup) else { throw AppError.invalidMarkup }
+        guard let dept = dept.thaw() else { return }
         let realm = try Realm()
         try realm.write {
             dept.name = newName
@@ -128,6 +130,7 @@ struct DepartmentDetailView: View {
                     continueTapped()
                 } label: {
                     Text("Continue")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .modifier(PrimaryButtonMod())
                 

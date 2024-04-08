@@ -57,7 +57,6 @@
 		94F6244C2BB12D710069C81E /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F6244B2BB12D710069C81E /* String+Ext.swift */; };
 		94F6244E2BB12DAA0069C81E /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F6244D2BB12DAA0069C81E /* Double+Ext.swift */; };
 		94F624502BB12DC20069C81E /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F6244F2BB12DC20069C81E /* View+Ext.swift */; };
-		94F624522BB12E370069C81E /* Text-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F624512BB12E370069C81E /* Text-Mod.swift */; };
 		94F624552BB12EEB0069C81E /* ItemGridButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F624542BB12EEB0069C81E /* ItemGridButton-Mod.swift */; };
 		94F624572BB12F860069C81E /* ThemeField-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F624562BB12F860069C81E /* ThemeField-Mod.swift */; };
 		94F624592BB12FB90069C81E /* Title-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F624582BB12FB90069C81E /* Title-Mod.swift */; };
@@ -113,7 +112,6 @@
 		94F6244B2BB12D710069C81E /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		94F6244D2BB12DAA0069C81E /* Double+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
 		94F6244F2BB12DC20069C81E /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
-		94F624512BB12E370069C81E /* Text-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text-Mod.swift"; sourceTree = "<group>"; };
 		94F624542BB12EEB0069C81E /* ItemGridButton-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ItemGridButton-Mod.swift"; sourceTree = "<group>"; };
 		94F624562BB12F860069C81E /* ThemeField-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeField-Mod.swift"; sourceTree = "<group>"; };
 		94F624582BB12FB90069C81E /* Title-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Title-Mod.swift"; sourceTree = "<group>"; };
@@ -289,7 +287,6 @@
 				94341C112BA5897000334505 /* PrimaryButton-Mod.swift */,
 				9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */,
 				9486886C2BC33C5B0030C8C6 /* TableStyle-Mod.swift */,
-				94F624512BB12E370069C81E /* Text-Mod.swift */,
 				94F624562BB12F860069C81E /* ThemeField-Mod.swift */,
 				94F624582BB12FB90069C81E /* Title-Mod.swift */,
 			);
@@ -409,7 +406,6 @@
 				94F624462BAF1B1E0069C81E /* SalesHistoryView.swift in Sources */,
 				9465246F2BA7E55C00F24CDD /* DepartmentButton-Mod.swift in Sources */,
 				944F8CE72A2AA94E007AD864 /* SaleDetailView.swift in Sources */,
-				94F624522BB12E370069C81E /* Text-Mod.swift in Sources */,
 				80F6026629FFFD8A004C759D /* DepartmentPicker.swift in Sources */,
 				802EDC0A2A02166D0048A9A8 /* LogoView.swift in Sources */,
 				9465244F2BA658EE00F24CDD /* ResponsiveView.swift in Sources */,

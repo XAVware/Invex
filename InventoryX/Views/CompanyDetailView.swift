@@ -122,7 +122,6 @@ struct CompanyDetailView: View {
             } //: VStack
             .frame(maxWidth: 720)
             .padding()
-            .background(Color("Purple050").opacity(0.15))
             .onTapGesture {
                 self.focus = nil
             }
