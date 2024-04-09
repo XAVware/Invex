@@ -7,7 +7,19 @@
 
 import SwiftUI
 
-enum MenuState { case open, compact, closed }
+enum MenuState { 
+    case open
+    case compact
+    case closed
+    
+    var idealWidth: CGFloat {
+        switch self {
+        case .open:     return 280
+        case .compact:  return 72
+        case .closed:   return 0
+        }
+    }
+}
 
 struct MenuView: View {
     @Binding var display: DisplayState
@@ -15,27 +27,57 @@ struct MenuView: View {
     
     @State var showingLockScreen: Bool = false
     
+    func toggleMenu() {
+        withAnimation(.smooth) {
+            menuState = switch menuState {
+            case .open: MenuState.compact
+            case .compact: MenuState.open
+            case .closed: MenuState.open
+            }
+        }
+    }
+    
+    
+    
     var body: some View {
         VStack(spacing: 16) {
+            
+            Button {
+                toggleMenu()
+            } label: {
+                if menuState == .open {
+                    LogoView().foregroundStyle(Color("Purple050").opacity(1))
+                    Spacer()
+                }
+                Image(systemName: menuState == MenuState.open ? "chevron.backward.2" : "line.3.horizontal")
+            }
+            .font(.title)
+            .fontDesign(.rounded)
+            .foregroundStyle(Color("Purple050").opacity(0.8))
+            .padding()
+            
             Spacer()
             
             ForEach(DisplayState.allCases, id: \.self) { data in
                 Button {
                     display = data
                 } label: {
-                    MenuButtonLabel(menuState: $menuState, buttonData: data)
-                        .foregroundStyle(data == display ? .white : Color("Purple050").opacity(0.5))
-                }
-                .overlay(
-                    data == display ?
-                    HStack {
-                        Spacer()
+                    HStack(spacing: 16) {
+                        if menuState == .open {
+                            Text(data.menuButtonText)
+                            Spacer()
+                        }
+                        
+                        Image(systemName: data.menuIconName)
                         RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
                             .fill(.white)
                             .frame(width: 6)
-                    } //: HStack
-                    : nil
-                )
+                            .opacity(data == display ? 1 : 0)
+                            .offset(x: 3)
+                    }
+                    .modifier(MenuButtonMod(isSelected: data == display))
+                }
+
             } //: For Each
             
             Spacer()
@@ -44,58 +86,38 @@ struct MenuView: View {
                 showingLockScreen = true
             } label: {
                 HStack(spacing: 16) {
-                    Image(systemName: "lock")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
-                        .padding(.horizontal, 8)
-                    
                     if menuState == .open {
                         Text("Lock")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Spacer()
                     }
+                    Image(systemName: "lock")
+                    RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
+                        .fill(.white)
+                        .frame(width: 6)
+                        .opacity(0)
+                        .offset(x: 3)
                 } //: HStack
-                .padding()
-                .foregroundStyle(Color("Purple050").opacity(0.5))
+                .modifier(MenuButtonMod(isSelected: false))
             }
             
         } //: VStack
+        .frame(width: menuState.idealWidth)
+        .background(.accent)
         .fullScreenCover(isPresented: $showingLockScreen) {
             LockScreenView()
         }
-        .background(Color("Purple800"))
         
     }
-    
-    struct MenuButtonLabel: View {
-        @Binding var menuState: MenuState
-        let buttonData: DisplayState
-        
-        init(menuState: Binding<MenuState>, buttonData: DisplayState) {
-            self._menuState = menuState
-            self.buttonData = buttonData
-        }
-        
-        var body: some View {
-            HStack(spacing: 16) {
-                Image(systemName: buttonData.menuIconName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                    .padding(.horizontal, 8)
-                
-                if menuState == .open {
-                    Text(buttonData.menuButtonText)
-                        .font(.headline)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            } //: HStack
-            .padding()
-        }
-    }
+   
 }
 
+//#Preview {
+//    MenuView(display: .constant(.makeASale), menuState: .constant(.compact))
+//}
+
 #Preview {
-    MenuView(display: .constant(.makeASale), menuState: .constant(.compact))
+    ResponsiveView { props in
+        RootView(uiProperties: props)
+            .environment(\.realm, DepartmentEntity.previewRealm)
+    }
 }
