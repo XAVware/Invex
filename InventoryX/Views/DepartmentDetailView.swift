@@ -20,7 +20,7 @@ import RealmSwift
         try realm.write {
             realm.add(department)
         }
-//        LogService(self).info("New department saved successfully")
+//        LogService(String(describing: self)).info("New department saved successfully")
     }
     
     
@@ -34,7 +34,7 @@ import RealmSwift
             dept.restockNumber = thresh
             dept.defMarkup = markup
         }
-//        LogService(self).info("Existing department successfully updated.")
+//        LogService(String(describing: self)).info("Existing department successfully updated.")
     }
     
 }
@@ -44,9 +44,9 @@ struct DepartmentDetailView: View {
     @StateObject var vm: DepartmentDetailViewModel = DepartmentDetailViewModel()
     @StateObject var uiFeedback = UIFeedbackService.shared
     
-    @State private var name: String = "Food"
-    @State private var restockThreshold: String = "10"
-    @State private var markup: String = "50"
+    @State private var name: String = ""
+    @State private var restockThreshold: String = ""
+    @State private var markup: String = ""
     
     let department: DepartmentEntity
     
@@ -57,6 +57,8 @@ struct DepartmentDetailView: View {
     let onSuccess: (() -> Void)?
     
     let detailType: DetailViewType
+    
+    @State var errorMessage: String = ""
     
     private enum Focus { case name, threshold, markup }
     @FocusState private var focus: Focus?
@@ -75,15 +77,17 @@ struct DepartmentDetailView: View {
         do {
             if detailType == .modify {
                 try vm.updateDepartment(dept: department, newName: name, thresh: restockThreshold, markup: markup)
-                LogService(self).info("Department udpated.")
             } else {
                 try vm.saveDepartment(name: name, threshold: restockThreshold, markup: markup)
-                LogService(self).info("Department created.")
             }
             
             finish()
+        } catch let error as AppError {
+//            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
+            errorMessage = error.localizedDescription
         } catch {
-            LogService(self).error("Error while saving department: \(error.localizedDescription)")
+//            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
+            errorMessage = error.localizedDescription
         }
     }
     
@@ -100,6 +104,9 @@ struct DepartmentDetailView: View {
         ScrollView {
             VStack(spacing: 24) {
                 header
+                
+                Text(errorMessage)
+                    .foregroundStyle(.red)
                 
                 VStack(alignment: .leading, spacing: 24) {
                     ThemeTextField(boundTo: $name,
@@ -126,6 +133,11 @@ struct DepartmentDetailView: View {
                     .focused($focus, equals: .markup)
                 } //: VStack
                 .padding(.vertical, 24)
+                .onChange(of: focus) { newValue in
+                    guard !markup.isEmpty else { return }
+                    guard let markup = Double(markup) else { return }
+                    self.markup = markup.toPercentageString()
+                }
                 
                 Button {
                     continueTapped()
@@ -151,7 +163,6 @@ struct DepartmentDetailView: View {
                 }
             }
         } //: ScrollView
-        .overlay(uiFeedback.alert != nil ? AlertView(alert: uiFeedback.alert!) : nil, alignment: .top)
     } //: Body
     
     @ViewBuilder private var header: some View {

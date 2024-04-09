@@ -41,8 +41,8 @@ struct CompanyDetailView: View {
     @StateObject var uiFeedback = UIFeedbackService.shared
     let company: CompanyEntity?
     
-    @State private var companyName: String = "XAVware"
-    @State private var taxRate: String = "7"
+    @State private var companyName: String = ""
+    @State private var taxRate: String = ""
     
     /// Used to hide the back button and title while onboarding.
     @State var showTitles: Bool
@@ -53,10 +53,12 @@ struct CompanyDetailView: View {
     private enum Focus { case name, taxRate }
     @FocusState private var focus: Focus?
     
+    @State var errorMessage: String = ""
+    
     init(company: CompanyEntity?, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         if let company = company {
             self.companyName = company.name
-            self.taxRate = String(format: "%.2f%", Double(company.taxRate))
+            self.taxRate = company.formattedTaxRate
         }
         
         self.company = company
@@ -69,8 +71,12 @@ struct CompanyDetailView: View {
         do {
             try vm.saveCompany(name: companyName, tax: taxRate)
             finish()
+        } catch let error as AppError {
+//            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
+            errorMessage = error.localizedDescription
         } catch {
-            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
+//            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
+            errorMessage = error.localizedDescription
         }
     }
     
@@ -87,6 +93,9 @@ struct CompanyDetailView: View {
         ScrollView {
             VStack(spacing: 24) {
                 header
+                
+                Text(errorMessage)
+                    .foregroundStyle(.red)
                 
                 VStack(alignment: .leading, spacing: 24) {
                     ThemeTextField(boundTo: $companyName,
@@ -109,7 +118,8 @@ struct CompanyDetailView: View {
                 .padding(.vertical, 24)
                 .onChange(of: focus) { newValue in
                     guard !taxRate.isEmpty else { return }
-                    taxRate = String(format: "%.2f%", Double(taxRate) ?? -1)
+                    guard let tax = Double(taxRate) else { return }
+                    self.taxRate = tax.toPercentageString()
                 }
                 
                 Button {
@@ -128,7 +138,6 @@ struct CompanyDetailView: View {
             .onTapGesture {
                 self.focus = nil
             }
-            .overlay(uiFeedback.alert != nil ? AlertView(alert: uiFeedback.alert!) : nil, alignment: .top)
         } //: ScrollView
     } //: Body
     

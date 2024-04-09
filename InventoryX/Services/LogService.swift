@@ -9,20 +9,20 @@ import OSLog
 
 @available(iOS 14.0, *)
 class LogService {
-    let sender: String
+    let senderName: String
     
     lazy var logger = {
         let bundleId = Bundle.main.bundleIdentifier ?? "Nil Bundle ID"
-        return Logger(subsystem: bundleId, category: self.sender)
+        return Logger(subsystem: bundleId, category: self.senderName)
     }()
     
     /// LogService should always receive ``self`` as the `sender` parameter. It is fed to the Logger to track the class or struct that needs to log a message.
-    init(_ sender: Any) {
-        self.sender = String(describing: sender)
+    init(_ senderName: String = "") {
+        self.senderName = String(describing: senderName)
     }
     
     deinit {
-        print("Deinitializing Logger for \(sender)")
+        print("Deinitializing Logger for \(senderName)")
     }
     
     func debug(_ message: String) {
@@ -62,15 +62,15 @@ class LogService {
     }
     
     /// This function should only be used to preview different logs. All functions will run before class is deinitialized.
-    func testLogs() {
-        self.debug("Logging a debug message")
-        self.error("Logging a error message")
-        self.fault("Logging a fault message")
-        self.info("Logging a info message")
-        self.notice("Logging a notice message")
-        self.trace("Logging a trace message")
-        self.warning("Logging a warning message")
-        self.critical("Logging a critical message")
-    }
+//    func testLogs() {
+//        self.debug("Logging a debug message")
+//        self.error("Logging a error message")
+//        self.fault("Logging a fault message")
+//        self.info("Logging a info message")
+//        self.notice("Logging a notice message")
+//        self.trace("Logging a trace message")
+//        self.warning("Logging a warning message")
+//        self.critical("Logging a critical message")
+//    }
 }
 

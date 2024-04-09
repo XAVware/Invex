@@ -93,6 +93,8 @@ struct OnboardingView: View {
             } //: VStack
             .padding(.horizontal)
             .padding(.top)
+            .overlay(AlertView())
+            
         } //: ScrollView
     } //: Body
     

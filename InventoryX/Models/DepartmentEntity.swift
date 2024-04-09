@@ -22,6 +22,10 @@ class DepartmentEntity: Object, ObjectKeyIdentifiable {
         self.defMarkup = defMarkup
     }
     
+    var formattedMarkup: String {
+        return defMarkup.toPercentageString()
+    }
+    
     
 }
 

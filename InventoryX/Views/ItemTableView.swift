@@ -103,6 +103,7 @@ struct ItemTableView: View {
         .modifier(TableStyleMod())
         .sheet(item: $selectedItem) { item in
             AddItemView(item: item)
+                .overlay(AlertView())
         }
     } //: List View
     

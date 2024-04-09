@@ -79,6 +79,7 @@ struct DepartmentsView: View {
             .modifier(TableStyleMod())
             .sheet(item: $selectedDepartment) { dept in
                 DepartmentDetailView(department: dept)
+                    .overlay(AlertView())
             }
             
             Spacer()

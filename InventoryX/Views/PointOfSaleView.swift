@@ -47,10 +47,10 @@ import Algorithms
                         invItem.onHandQty = newOnHandQty
                     }
                 } catch {
-                    LogService(self).error("Error adjusting inventory quantities: \(error.localizedDescription)")
+                    LogService(String(describing: self)).error("Error adjusting inventory quantities: \(error.localizedDescription)")
                 }
             } else {
-                LogService(self).error("Unable to thaw item: \(item)")
+                LogService(String(describing: self)).error("Unable to thaw item: \(item)")
             }
         }
         
@@ -65,7 +65,7 @@ import Algorithms
             cartItems.removeAll()
             completion()
         } catch {
-            LogService(self).error("Error saving sale: \(error.localizedDescription)")
+            LogService(String(describing: self)).error("Error saving sale: \(error.localizedDescription)")
         }
     }
 }

@@ -12,8 +12,15 @@ extension Double {
         let formatter = NumberFormatter()
         formatter.numberStyle = .currency
         formatter.minimumFractionDigits = 2
-        
         let nsnum = NSNumber(floatLiteral: self)
         return formatter.string(from: nsnum) ?? "$$$"
+    }
+    
+    func toPercentageString() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
+        return formatter.string(from: NSNumber(value: self)) ?? ""
     }
 }

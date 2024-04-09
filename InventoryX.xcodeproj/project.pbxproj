@@ -46,7 +46,6 @@
 		94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */; };
 		94B3DE932A47C2CB00BBCB3A /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */; };
 		94B7EAC92BACDDEF00895FF7 /* ItemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7EAC82BACDDEF00895FF7 /* ItemTableView.swift */; };
-		94C7625A2BA8999B00A61F7D /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C762592BA8999B00A61F7D /* DataService.swift */; };
 		94C7625C2BA8A9F800A61F7D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C7625B2BA8A9F800A61F7D /* AuthService.swift */; };
 		94C7625E2BA8BEDB00A61F7D /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C7625D2BA8BEDB00A61F7D /* LogService.swift */; };
 		94D3F1052A1C6A1C00AF4393 /* DepartmentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */; };
@@ -101,7 +100,6 @@
 		94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		94B7EAC82BACDDEF00895FF7 /* ItemTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableView.swift; sourceTree = "<group>"; };
-		94C762592BA8999B00A61F7D /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		94C7625B2BA8A9F800A61F7D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		94C7625D2BA8BEDB00A61F7D /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentEntity.swift; sourceTree = "<group>"; };
@@ -136,6 +134,7 @@
 			children = (
 				948688662BB6B0B70030C8C6 /* AlertModel.swift */,
 				94F624482BB12B040069C81E /* CompanyEntity.swift */,
+				94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */,
 				80FFBD092A1D2F2700992440 /* ItemEntity.swift */,
 				80FFBD072A1D013A00992440 /* SaleEntity.swift */,
 				9486886A2BB6B1650030C8C6 /* UIFeedbackService.swift */,
@@ -199,7 +198,6 @@
 				94F6244A2BB12B860069C81E /* Components */,
 				94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */,
 				948688682BB6B0CC0030C8C6 /* AlertView.swift */,
-				94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */,
 				94EA1CE22BB2763300BD0388 /* PasscodeView.swift */,
 				9421930F2BB23C92001D720D /* CompanyDetailView.swift */,
 				9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */,
@@ -230,7 +228,6 @@
 			isa = PBXGroup;
 			children = (
 				94C7625B2BA8A9F800A61F7D /* AuthService.swift */,
-				94C762592BA8999B00A61F7D /* DataService.swift */,
 				94C7625D2BA8BEDB00A61F7D /* LogService.swift */,
 				94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */,
 			);
@@ -378,7 +375,6 @@
 				9488615B2BACC40A00580F38 /* DepartmentDetailView.swift in Sources */,
 				80FFBD0A2A1D2F2700992440 /* ItemEntity.swift in Sources */,
 				9486886D2BC33C5B0030C8C6 /* TableStyle-Mod.swift in Sources */,
-				94C7625A2BA8999B00A61F7D /* DataService.swift in Sources */,
 				94341C102BA5895500334505 /* UIColor+Ext.swift in Sources */,
 				94860BA02BB14EDF00B1138A /* GlowingOutline-Mod.swift in Sources */,
 				94C7625C2BA8A9F800A61F7D /* AuthService.swift in Sources */,

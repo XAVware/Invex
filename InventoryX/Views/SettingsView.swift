@@ -37,7 +37,7 @@ import RealmSwift
             }
             //            self.company = realm.objects(CompanyEntity.self).first
         } catch {
-            LogService(self).error("Settings VM err")
+            LogService(String(describing: self)).error("Settings VM err")
         }
     }
 }

@@ -21,20 +21,19 @@ import RealmSwift
                                  avgCostPer: Double(cost) ?? 0,
                                  onHandQty: Int(qty) ?? 0)
         do {
-            
             let realm = try Realm()
             try realm.write {
                 thawedDept.items.append(newItem)
             }
-            LogService(self).info("Finished saving new item.")
         } catch {
-            LogService(self).error("Error saving item to Realm: \(error.localizedDescription)")
+            LogService(String(describing: self)).error("Error saving item to Realm: \(error.localizedDescription)")
         }
     } //: Save Item
     
     
     func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) throws {
-        LogService(self).info("Item exists. Updating...")
+        let price = price.replacingOccurrences(of: "$", with: "")
+        let cost = cost.replacingOccurrences(of: "$", with: "")
         guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
         guard let qty = Int(qty) else { return }
         guard let price = Double(price) else { return }
@@ -47,13 +46,11 @@ import RealmSwift
                 existingItem.attribute = att
                 existingItem.onHandQty = qty
                 existingItem.retailPrice = price
-                existingItem.avgCostPer = cost
+                existingItem.unitCost = cost
             }
             
-//            LogService(self).info("Finished updating item.")
         } else {
-            
-            LogService(self).error("Error thawing item.")
+            LogService(String(describing: self)).error("Error thawing item.")
         }
     }
     
@@ -62,18 +59,17 @@ import RealmSwift
 
 enum DetailViewType { case create, modify }
 
-// TODO: Error is thrown briefly from the department dropdown after an item was successfully added, therefore changing the department
 struct AddItemView: View {
     @StateObject var vm: AddItemViewModel = AddItemViewModel()
     @StateObject var uiFeedback = UIFeedbackService.shared
     @Environment(\.dismiss) var dismiss
     
     @State private var selectedDepartment: DepartmentEntity?
-    @State private var itemName: String = "Lays"
-    @State private var attribute: String = "Small"
-    @State private var quantity: String = "24"
-    @State private var retailPrice: String = "2"
-    @State private var unitCost: String = "1"
+    @State private var itemName: String = ""
+    @State private var attribute: String = ""
+    @State private var quantity: String = ""
+    @State private var retailPrice: String = ""
+    @State private var unitCost: String = ""
     
     let selectedItem: ItemEntity
     
@@ -87,6 +83,8 @@ struct AddItemView: View {
     
     private enum Focus { case name, attribute, price, onHandQty, unitCost }
     @FocusState private var focus: Focus?
+    
+    @State var errorMessage: String = ""
     
     init(item: ItemEntity, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         self.selectedItem = item
@@ -108,8 +106,12 @@ struct AddItemView: View {
                 finish()
             }
             
+        } catch let error as AppError {
+//            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
+            errorMessage = error.localizedDescription
         } catch {
-            LogService(self).error("Error while saving item: \(error.localizedDescription)")
+//            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
+            errorMessage = error.localizedDescription
         }
         
     }
@@ -149,6 +151,9 @@ struct AddItemView: View {
             VStack(alignment: .center, spacing: 24) {
                 header
                 
+                Text(errorMessage)
+                    .foregroundStyle(.red)
+                
                 VStack(alignment: .leading, spacing: 24) {
                     DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
                     
@@ -181,14 +186,6 @@ struct AddItemView: View {
                                    type: .price)
                     .keyboardType(.numberPad)
                     .focused($focus, equals: .price)
-                    //                .onChange(of: retailPrice) { _ in
-                    //                    let formattedPrice = retailPrice.replacingOccurrences( of:"[^0-9.]", with: "", options: .regularExpression)
-                    //                    guard let price = Double(formattedPrice) else {
-                    //                        print("Err")
-                    //                        return
-                    //                    }
-                    //                    retailPrice = price.formatAsCurrencyString()
-                    //                }
                     
                     ThemeTextField(boundTo: $unitCost,
                                    placeholder: "$ 1.00",
@@ -197,6 +194,19 @@ struct AddItemView: View {
                                    type: .price)
                     .keyboardType(.numberPad)
                     .focused($focus, equals: .unitCost)
+                }
+                .onChange(of: focus) { newValue in
+                    if !retailPrice.isEmpty {
+                        if let price = Double(retailPrice) {
+                            self.retailPrice = price.formatAsCurrencyString()
+                        }
+                    }
+                    
+                    if !unitCost.isEmpty {
+                        if let cost = Double(unitCost) {
+                            self.unitCost = cost.formatAsCurrencyString()
+                        }
+                    }
                 }
                 
                 Button {
@@ -213,7 +223,6 @@ struct AddItemView: View {
             } //: VStack
             .frame(maxWidth: 720)
             .padding()
-            .overlay(uiFeedback.alert != nil ? AlertView(alert: uiFeedback.alert!) : nil, alignment: .top)
             .onTapGesture {
                 self.focus = nil
             }
@@ -224,7 +233,7 @@ struct AddItemView: View {
                     //            self.attribute = item.attribute
                     self.quantity = String(describing: selectedItem.onHandQty)
                     self.retailPrice = String(describing: selectedItem.retailPrice)
-                    self.unitCost = String(describing: selectedItem.avgCostPer)
+                    self.unitCost = String(describing: selectedItem.unitCost)
                 }
             }
         } //: ScrollView

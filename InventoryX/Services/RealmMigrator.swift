@@ -9,9 +9,9 @@ import SwiftUI
 import RealmSwift
 
 /// Class used for easier Realm migration.
-///The schemaVersion was previously included in @main but was moved here so all Realm versioning can be handled in one place.
+/// The schemaVersion was previously included in @main but was moved here so all Realm versioning can be handled in one place.
 class RealmMigrator {
-    let currentSchemaVersion: UInt64 = 55
+    let currentSchemaVersion: UInt64 = 56
     
     init() {
         let config = Realm.Configuration(schemaVersion: currentSchemaVersion, migrationBlock: { migration, oldSchemaVersion in
@@ -27,7 +27,7 @@ class RealmMigrator {
         do {
             _ = try Realm(configuration: config)
         } catch {
-            LogService(self).error("Error initializing Realm:\n \(error.localizedDescription)")
+            LogService(String(describing: self)).error("Error initializing Realm:\n \(error.localizedDescription)")
             
         }
     }

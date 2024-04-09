@@ -15,15 +15,27 @@ class ItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted var name: String
     @Persisted var attribute: String
     @Persisted var retailPrice: Double
-    @Persisted var avgCostPer: Double
+    @Persisted var unitCost: Double
     @Persisted var onHandQty: Int
     
     convenience init(name: String, attribute: String = "", retailPrice: Double, avgCostPer: Double, onHandQty: Int = 0) {
         self.init()
         self.name = name
         self.retailPrice = retailPrice
-        self.avgCostPer = avgCostPer
+        self.unitCost = avgCostPer
         self.onHandQty = onHandQty
+    }
+    
+    var formattedPrice: String {
+        return self.retailPrice.formatAsCurrencyString()
+    }
+    
+    var formattedQty: String {
+        return String(describing: self.onHandQty)
+    }
+    
+    var formattedUnitCost: String {
+        return self.unitCost.formatAsCurrencyString()
     }
 }
 
