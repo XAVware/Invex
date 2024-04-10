@@ -12,6 +12,17 @@ enum CartState {
     case hidden
     case sidebar
     case confirming
+    
+    var idealWidth: CGFloat {
+        switch self {
+        case .hidden:
+            return 0
+        case .sidebar:
+            return 280
+        case .confirming:
+            return .infinity
+        }
+    }
 }
 
 struct CartView: View {
@@ -20,7 +31,7 @@ struct CartView: View {
     @Binding var cartState: CartState
     @Binding var menuState: MenuState
     
-    @State var origWidth: CGFloat = 0
+//    @State var origWidth: CGFloat = 0
     
     let uiProperties: LayoutProperties
     
@@ -34,161 +45,203 @@ struct CartView: View {
                 cartState = .sidebar
             }
         }
+        print("Cart width is now: \(uiProperties.width)")
     }
     
-    var columns: [GridItem] {
-        var colCount = 1
-        if uiProperties.width > 600 {
-            colCount = 2
-        }
-        return Array(repeating: GridItem(.flexible(minimum: 300, maximum: .infinity), spacing: 16), count: colCount)
-    }
+//    var columns: [GridItem] {
+//        var colCount = 1
+//        if uiProperties.width > 600 {
+//            colCount = 2
+//        }
+//        return Array(repeating: GridItem(.flexible(minimum: 300, maximum: .infinity), spacing: 16), count: colCount)
+//    }
     
     var body: some View {
-        VStack(alignment: .center, spacing: 0) {
+        VStack(alignment: .center, spacing: cartState == .confirming ? 24 : 0) {
             Text(cartState == .confirming ? "Order Summary" : "Cart")
                 .font(cartState == .confirming ? .largeTitle : .title2)
                 .fontWeight(cartState == .confirming ? .bold : .regular)
                 .fontDesign(cartState == .confirming ? .rounded : .default)
-                .frame(maxWidth: .infinity)
-                .frame(height: uiProperties.height * 0.05)
             
-            LazyVGrid(columns: columns) {
-                if cartState == .confirming {
-                    // MARK: - CONFIRMATION VIEW
-                    VStack(spacing: 16) {
-                        HStack {
+            if cartState == .confirming {
+                ViewThatFits {
+                    // For larger screens
+                    HStack {
+                        Spacer()
+                        confirmationView
+                            .frame(minWidth: 320, idealWidth: 420, maxWidth: 480)
+                        Spacer()
+                        receiptTotalsView
+                            .frame(maxWidth: cartState == .confirming ? 420 : uiProperties.width)
+                        Spacer()
+                    } //: HStack
+                    
+                    // For smaller screens
+                    VStack {
+                        confirmationView
+                        receiptTotalsView
+                    } //: VStack
+                } //: ViewThatFits
+            } else {
+                cartSidebarView
+                receiptTotalsView
+            }
+            
+            //            LazyVGrid(columns: columns) {
+            //
+            //                if cartState == .confirming {
+            //                    confirmationView
+            //                } else {
+            //                    GeometryReader { geo in
+            //                        cartSidebarView
+            //                            .frame(height: 800)
+            //                    }
+            ////                        .frame(maxWidth: uiProperties.width, idealHeight: uiProperties.height * 0.7, maxHeight: 800)
+            //                        .environmentObject(vm)
+            //                }
+            //                
+            //                receiptTotalsView
+            //            } //: Lazy V Grid
+            //            .frame(width: uiProperties.width, height: uiProperties.height)
+        } //: VStack
+        .opacity(uiProperties.width < 150 ? 0 : 1)
+        
+    } //: Body
+    
+    private var confirmationView: some View {
+        VStack(spacing: 16) {
+            HStack {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Sale #123456")
+                        .font(.headline)
+                    Text("Company Name")
+                        .font(.subheadline)
+                } //: VStack
+                
+                Spacer()
+                
+                VStack(alignment: .trailing, spacing: 6) {
+                    Text(Date().formatted(date: .long, time: .omitted))
+                    Text(Date().formatted(date: .omitted, time: .shortened))
+                } //: VStack
+            } //: HStack
+            
+            Text("Receipt: (\(vm.cartItemCount) Items)")
+                .font(.title3)
+                .fontWeight(.semibold)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical)
+            //                HStack {
+            //                    Text("Item")
+            //                    Spacer()
+            //                    Text("Price")
+            //                    Spacer()
+            //                    Text("Subtotal")
+            //                } //: HStack
+            //                .font(.callout)
+            //                .foregroundStyle(.black)
+            
+            //                Divider().opacity(0.4)
+            
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 16) {
+                    ForEach(vm.uniqueItems) { item in
+                        let itemQty = vm.cartItems.filter { $0._id == item._id }.count
+                        let itemSubtotal: Double = Double(itemQty) * item.retailPrice
+                        HStack(spacing: 0) {
                             VStack(alignment: .leading) {
-                                Text("Sale #123456")
+                                Text(item.name)
                                     .font(.headline)
-                                Text("Company Name")
+                                Spacer()
+                                Text("Qty: \(itemQty)")
                                     .font(.subheadline)
                             } //: VStack
                             
                             Spacer()
                             
                             VStack(alignment: .trailing) {
-                                Text(Date().formatted(date: .long, time: .omitted))
-                                Text(Date().formatted(date: .omitted, time: .shortened))
+                                Text("\(item.retailPrice.formatAsCurrencyString()) / unit")
+                                    .font(.caption)
+                                Spacer()
+                                Text(itemSubtotal.formatAsCurrencyString())
+                                    .font(.subheadline)
                             } //: VStack
                         } //: HStack
-                        
-                        HStack {
-                            Text("Item")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Text("Price")
-                                .frame(maxWidth: .infinity)
-                            
-                            Text("Subtotal")
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                        } //: HStack
-                        .font(.callout)
                         .foregroundStyle(.black)
+                        .padding(.vertical, 8)
                         
                         Divider().opacity(0.4)
-                        
-                        ScrollView(.vertical, showsIndicators: false) {
-                            VStack {
-                                ForEach(vm.uniqueItems) { item in
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(item.name)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                            Text("Qty: \(vm.cartItems.filter { $0._id == item._id }.count)")
-                                        } //: VStack
-                                        
-                                        Text(item.retailPrice.formatAsCurrencyString())
-                                            .frame(maxWidth: .infinity)
-                                        
-//                                        Text(item.cartItemSubtotal.formatAsCurrencyString())
-//                                            .frame(maxWidth: .infinity, alignment: .trailing)
-                                        
-                                    } //: HStack
-                                    .font(.callout)
-                                    .foregroundStyle(.black)
-                                    .frame(height: 30)
-                                    .padding(.vertical, 12)
-                                    
-                                    Divider().opacity(0.4)
-                                } //: ForEach
-                            } //: VStack
-                            Spacer()
-                        } //: ScrollView
-                        .frame(minHeight: 400, idealHeight: uiProperties.height * 0.65, maxHeight: 800)
-                        Spacer()
-                    } //: VStack
-                    .padding()
-                    .modifier(GlowingOutlineMod())
-                } else {
-                    // MARK: - CART VIEW
-                    ScrollView {
-                        ForEach(vm.uniqueItems) { item in
-                            SaleItemRowView(item: item, viewType: .cart)
-                            Divider().opacity(0.6).padding()
-                        } //: ForEach
-                        Spacer()
-                    } //: Scroll
-                    .frame(maxWidth: uiProperties.width, idealHeight: uiProperties.height * 0.7, maxHeight: 800)
-                    .environmentObject(vm)
+                    } //: ForEach
+                } //: VStack
+                Spacer()
+            } //: ScrollView
+            .frame(minHeight: 400, idealHeight: uiProperties.height * 0.65, maxHeight: 600)
+            Spacer()
+        } //: VStack
+        .padding()
+        .background(.white.opacity(0.6))
+        .modifier(GlowingOutlineMod())
+    } //: Confirmation View
+    
+    private var cartSidebarView: some View {
+        ScrollView {
+            ForEach(vm.uniqueItems) { item in
+                SaleItemRowView(item: item, viewType: .cart)
+                Divider().opacity(0.6).padding()
+            } //: ForEach
+            Spacer()
+        } //: Scroll
+    } //: Cart Sidebar View
+    
+    private var receiptTotalsView: some View {
+        VStack(alignment: cartState == .confirming ? .center : .leading, spacing: 16) {
+            VStack(spacing: uiProperties.width * 0.02) {
+                
+                HStack {
+                    Text("Subtotal:")
+                    Spacer()
+                    Text("\(vm.cartSubtotal.formatAsCurrencyString())")
+                } //: HStack
+                .font(cartState == .confirming ? .title3 : .subheadline)
+                .fontWeight(.regular)
+                
+                HStack {
+                    Text("Tax:")
+                    Spacer()
+                    Text("\(vm.taxAmount.formatAsCurrencyString())")
+                } //: HStack
+                .font(cartState == .confirming ? .title3 : .subheadline)
+                .fontWeight(.regular)
+                
+                if cartState == .confirming {
+                    Divider()
                 }
                 
-                VStack(alignment: cartState == .confirming ? .center : .leading, spacing: 16) {
-                    VStack(spacing: uiProperties.width * 0.015) {
-                        
-                        HStack {
-                            Text("Subtotal:")
-                            Spacer()
-                            Text("\(vm.cartSubtotal.formatAsCurrencyString())")
-                        } //: HStack
-                        .font(cartState == .confirming ? .title3 : .subheadline)
-                        .fontWeight(.regular)
-                        
-                        HStack {
-                            Text("Tax:")
-                            Spacer()
-                            Text("\(vm.taxAmount.formatAsCurrencyString())")
-                        } //: HStack
-                        .font(cartState == .confirming ? .title3 : .subheadline)
-                        .fontWeight(.regular)
-                        
-                        if cartState == .confirming {
-                            Divider()
-                        }
-                        
-                        HStack {
-                            Text("Total:")
-                            Spacer()
-                            Text(vm.total.formatAsCurrencyString())
-                        } //: HStack
-                        .font(cartState == .confirming ? .title2 : .subheadline)
-                        .fontWeight(.semibold)
-                        
-                    } //: VStack
-                    .padding(cartState == .confirming ? 16 : 0)
-//                    .frame(maxWidth: cartState == .confirming ? 420 : uiProperties.width)
-                    .background(Color("Purple050").opacity(cartState == .confirming ? 0.8 : 0.0))
-                    .clipShape(RoundedRectangle(cornerRadius: cartState == .confirming ? 8 : 0))
-                    
-                    Button {
-                        continueTapped()
-                    } label: {
-                        Spacer()
-                        Text("Checkout")
-                        Spacer()
-                    }
-                    .modifier(PrimaryButtonMod())
-                    .frame(maxWidth: uiProperties.width)
-                } //: VStack
-//                .frame(height: uiProperties.height * 0.25)
-            } //: Lazy V Grid
-            .frame(width: uiProperties.width, height: uiProperties.height)
-            .opacity(uiProperties.width < 240 ? 0 : 1)
+                HStack {
+                    Text("Total:")
+                    Spacer()
+                    Text(vm.total.formatAsCurrencyString())
+                } //: HStack
+                .font(cartState == .confirming ? .title2 : .subheadline)
+                .fontWeight(.semibold)
+                
+            } //: VStack
+            .padding(cartState == .confirming ? 16 : 8)
+            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
+            .clipShape(RoundedRectangle(cornerRadius: cartState == .confirming ? 8 : 0))
+            
+            
+            Button {
+                continueTapped()
+            } label: {
+                Spacer()
+                Text("Checkout")
+                Spacer()
+            }
+            .modifier(PrimaryButtonMod())
+            
         } //: VStack
-        
-    } //: Body
-    
-    
+    } //: Receipt Totals View
 }
 
 //#Preview {

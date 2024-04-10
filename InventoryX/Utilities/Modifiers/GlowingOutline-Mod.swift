@@ -10,16 +10,15 @@ import SwiftUI
 struct GlowingOutlineMod: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .background(.ultraThinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
                     .stroke(lineWidth: 0.5)
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(.gray.opacity(0.8))
                     .shadow(color: Color("Purple050"), radius: 4, x: 3, y: 3)
                     .shadow(color: Color("Purple050"), radius: 4, x: -3, y: -3)
             )
             .clipShape(RoundedRectangle(cornerRadius: 6))
-            .shadow(color: Color.gray.opacity(0.25), radius: 4, x: 0, y: 0)
+            .shadow(color: Color.gray.opacity(0.2), radius: 4, x: 0, y: 0)
     }
 }

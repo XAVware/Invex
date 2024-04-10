@@ -24,6 +24,8 @@ import Algorithms
     var taxAmount: Double { cartSubtotal * 0.07 }
     var total: Double { cartSubtotal + taxAmount }
     
+    var cartItemCount: Int { cartItems.count }
+    
     func addItemToCart(_ item: ItemEntity) {
         cartItems.append(item)
     }
@@ -75,69 +77,52 @@ struct PointOfSaleView: View {
     
     @Binding var menuState: MenuState
     @Binding var cartState: CartState
-    
+    let uiProperties: LayoutProperties
     @State var selectedDept: DepartmentEntity?
     
     
-    @State var cartWidth: CGFloat = 360
+//    @State var cartWidth: CGFloat = 280
     
     func toggleCart() {
+        
         withAnimation(.smooth) {
-            switch cartState {
-            case .hidden:
-                cartState = .sidebar
-                cartWidth = 360
-            case .sidebar:
-                cartState = .hidden
-                cartWidth = 0
-            case .confirming:
+            if uiProperties.width < 680 {
+                print("Small Screen")
                 cartState = .confirming
-                cartWidth = .infinity
+            } else {
+                
+                switch cartState {
+                case .hidden:
+                    cartState = .sidebar
+                case .sidebar:
+                    cartState = .hidden
+                case .confirming:
+                    cartState = .confirming
+                }
             }
         }
-        
-        print("Cart state is now: \(cartState)")
     }
-    
-    
-    
-//    func toggleMenu() {
-//        withAnimation(.smooth) {
-//            menuState = switch menuState {
-//            case .open: MenuState.compact
-//            case .compact: MenuState.open
-//            case .closed: MenuState.open
-//            }
-//        }
-//    }
-    
-    
     
     
     var body: some View {
         HStack {
             if cartState != .confirming {
                 VStack(spacing: 6) {
+                    // MARK: - TOOLBAR
                     HStack(spacing: 32) {
-//                        Button {
-//                            toggleMenu()
-//                        } label: {
-//                            Image(systemName: menuState == MenuState.open ? "chevron.backward.2" : "line.3.horizontal")
-//                        }
-                        
                         Spacer()
                         Button {
                             toggleCart()
                         } label: {
                             Image(systemName: "cart")
                         }
-                        
                     } //: HStack
                     .font(.title)
                     .padding()
                     .fontDesign(.rounded)
                     
                     
+                    // MARK: - ITEM PANE
                     VStack(spacing: 24) {
                         DepartmentPicker(selectedDepartment: $selectedDept, style: .scrolling)
                         
@@ -149,27 +134,103 @@ struct PointOfSaleView: View {
                     } //: VStack
                     .padding(.horizontal)
                 } //: VStack
-            }
-            
-            
-            ResponsiveView { properties in
-                CartView(cartState: $cartState, menuState: $menuState, uiProperties: properties)
+            } else {
+    
+                // MARK: - CART CONFIRMATION VIEW
+                CartView(cartState: $cartState, menuState: $menuState, uiProperties: uiProperties)
+                    .frame(maxWidth: cartState.idealWidth)
+                    .padding()
+                    .background(Color("Purple050").opacity(0.5))
                     .environmentObject(vm)
-                
             }
-            .padding()
-            .frame(width: cartWidth)
-//            .frame(maxWidth: cartState == .confirming ? .infinity : 300)
-            .background(Color("Purple050").opacity(0.5))
+            
+            // Sidebar for larger screens
+            if uiProperties.width > 680 && cartState != .confirming {
+                ResponsiveView { properties in
+                    CartView(cartState: $cartState, menuState: $menuState, uiProperties: properties)
+                        .environmentObject(vm)
+                }
+                .frame(maxWidth: cartState.idealWidth)
+                .padding()
+                .background(Color("Purple050").opacity(0.5))
+            }
+            
+            /// Make the view disappear entirely when width is 0, otherwise it shows slightly from content.
+            /// If the cart is confirmation, it should take up the entire screen width.
+//            if cartState == .confirming {
+//                ResponsiveView { properties in
+//                    CartView(cartState: $cartState, menuState: $menuState, uiProperties: properties)
+//                        .environmentObject(vm)
+//                }
+//                .frame(maxWidth: cartState.idealWidth)
+//                .padding()
+//                .background(Color("Purple050").opacity(0.5))
+//            } else if cartState != .hidden {
+//                
+//            }
+            
+            
+            
+//            if cartState != .hidden {
+//                // Cart does not show when view width is less than ~width of vertical iPhone 15
+//                if uiProperties.width < 680 {
+////                    if cartState != .hidden {
+//                        ResponsiveView { properties in
+//                            CartView(cartState: $cartState, menuState: $menuState, uiProperties: properties)
+//                                .environmentObject(vm)
+//                        }
+//                        .frame(maxWidth: cartState.idealWidth)
+//                        .padding()
+//                        .background(Color("Purple050").opacity(0.5))
+////                    }
+//                } else {
+//                    if cartState != .confirming {
+//                        ResponsiveView { properties in
+//                            CartView(cartState: $cartState, menuState: $menuState, uiProperties: properties)
+//                                .environmentObject(vm)
+//                        }
+//                        .frame(maxWidth: cartState.idealWidth)
+//                        .padding()
+//                        .background(Color("Purple050").opacity(0.5))
+//                    }
+//                    
+//                }
+//                
+//            }
+//            if uiProperties.width < 680 {
+//                if cartState != .hidden {
+//                    ResponsiveView { properties in
+//                        CartView(cartState: $cartState, menuState: $menuState, uiProperties: properties)
+//                            .environmentObject(vm)
+//                    }
+//                    .frame(maxWidth: cartState.idealWidth)
+//                    .padding()
+//                    .background(Color("Purple050").opacity(0.5))
+//                }
+//            } else {
+//                if cartState != .hidden && cartState != .confirming {
+//                    ResponsiveView { properties in
+//                        CartView(cartState: $cartState, menuState: $menuState, uiProperties: properties)
+//                            .environmentObject(vm)
+//                    }
+//                    .frame(maxWidth: cartState.idealWidth)
+//                    .padding()
+//                    .background(Color("Purple050").opacity(0.5))
+//                }
+//                
+//            }
+            
             
         } //: HStack
     }
 }
 
 #Preview {
-    PointOfSaleView(menuState: .constant(.compact), cartState: .constant(.sidebar))
-        .environment(\.realm, DepartmentEntity.previewRealm)
-        .environmentObject(PointOfSaleViewModel())
+    ResponsiveView { props in
+        PointOfSaleView(menuState: .constant(.compact), cartState: .constant(.sidebar), uiProperties: props)
+            .environment(\.realm, DepartmentEntity.previewRealm)
+            .environmentObject(PointOfSaleViewModel())
+    }
 }
 
 

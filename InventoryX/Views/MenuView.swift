@@ -26,7 +26,7 @@ struct MenuView: View {
     @Binding var menuState: MenuState
     
     @State var showingLockScreen: Bool = false
-    
+        
     func toggleMenu() {
         withAnimation(.smooth) {
             menuState = switch menuState {
@@ -36,7 +36,6 @@ struct MenuView: View {
             }
         }
     }
-    
     
     
     var body: some View {
@@ -108,7 +107,7 @@ struct MenuView: View {
         }
         
     }
-   
+    
 }
 
 //#Preview {

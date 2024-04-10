@@ -131,12 +131,14 @@ struct ItemTableView: View {
             rowCellCount = rowCellCount - 1
         }
         
-        let finalColumnCount = rowCellCount
+        // Minimum column count
+        let finalColumnCount = max(rowCellCount, 2)
+        print("Columns: \(finalColumnCount)")
         
         gridColumns = Array(repeating: GridItem(.flexible(minimum: minButtonWidth, maximum: .infinity), spacing: gridSpacing), count: finalColumnCount)
     }
     
-    @State var gridColumns: [GridItem] = [GridItem(.flexible())]
+    @State var gridColumns: [GridItem] = [GridItem(.flexible(minimum: 120, maximum: 160))]
     
     private var gridView: some View {
         GeometryReader { geo in
@@ -145,20 +147,28 @@ struct ItemTableView: View {
                     Button {
                         onSelect(item)
                     } label: {
-                        VStack(spacing: 8) {
+                        VStack(alignment: .leading, spacing: 8) {
                             Text(item.name)
                                 .font(.headline)
-                                .frame(maxWidth: .infinity)
-                            //                            Spacer()
+//                                .fontWeight(.semibold)
+//                                .frame(maxWidth: .infinity)
+                            Spacer()
+                            if item.attribute.count > 1 {
+                                Text(item.attribute)
+                                
+                            }
+                            Spacer()
                             Text(item.retailPrice.formatAsCurrencyString())
-                                .font(.subheadline)
-                                .frame(maxWidth: .infinity)
+                                .font(.headline)
+                                .foregroundStyle(.black)
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .padding(12)
-                        .frame(minWidth: minButtonWidth, maxWidth: .infinity)
-                        .foregroundStyle(.black)
+//                        .frame(minWidth: 120, maxWidth: .infinity)
+                        .foregroundStyle(.accent.opacity(0.8))
                     } //: VStack
                     .modifier(ItemGridButtonMod())
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 } //: ForEach
                 
             } //: LazyVGrid
@@ -176,7 +186,7 @@ struct ItemTableView: View {
 
 
 #Preview {
-    ItemTableView(department: .constant(nil), style: .list, onSelect: { item in
+    ItemTableView(department: .constant(nil), style: .grid, onSelect: { item in
         
     })
     .padding()

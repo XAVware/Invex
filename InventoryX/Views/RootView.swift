@@ -43,6 +43,7 @@ struct RootView: View {
     
     /// Conditions required for menu to display.
     var shouldShowMenu: Bool {
+        guard menuState != .open else { return true }
         let condition1: Bool = uiProperties.horizontalSizeClass == .regular && cartState != .confirming
         let condition2: Bool = uiProperties.width > 840 || menuState == .open
         return condition1 && condition2
@@ -50,13 +51,24 @@ struct RootView: View {
     
     var body: some View {
         HStack(spacing: 0) {
+            
             if shouldShowMenu {
                 MenuView(display: $currentDisplay, menuState: $menuState)
+                    .onAppear {
+                        if uiProperties.width < 680 {
+                            print("Main width: \(uiProperties.width)")
+                            menuState = .closed
+                            cartState = .hidden
+                        } else {
+                            menuState = .compact
+                            cartState = .sidebar
+                        }
+                    }
             }
             
             switch currentDisplay {
-            case .makeASale:
-                PointOfSaleView(menuState: $menuState, cartState: $cartState)
+            case .makeASale: 
+                PointOfSaleView(menuState: $menuState, cartState: $cartState, uiProperties: uiProperties)
                     .environmentObject(posVM)
                 
             case .inventoryList:    InventoryListView()
@@ -70,8 +82,24 @@ struct RootView: View {
         .fullScreenCover(isPresented: $showingOnboarding) {
             OnboardingView()
         }
+        .overlay(uiProperties.width < 680 ? smallViewMenuBtn : nil, alignment: .topLeading)
         
     } //: Body
+    
+    /// Only visible when screen width is less than 680
+    private var smallViewMenuBtn: some View {
+        Button {
+            withAnimation(.smooth) {
+                menuState = menuState == .closed ? .open : .closed
+            }
+        } label: {
+            Image(systemName: "line.3.horizontal")
+        }
+        .font(.title)
+        .fontDesign(.rounded)
+        .foregroundStyle(.accent)
+        .padding()
+    }
     
 }
 

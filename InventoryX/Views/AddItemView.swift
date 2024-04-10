@@ -32,6 +32,7 @@ import RealmSwift
     
     
     func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) throws {
+        print("First price: \(price)")
         let price = price.replacingOccurrences(of: "$", with: "")
         let cost = cost.replacingOccurrences(of: "$", with: "")
         guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
@@ -39,6 +40,7 @@ import RealmSwift
         guard let price = Double(price) else { return }
         guard let cost = Double(cost) else { return }
         
+        print("Price: \(price)")
         if let existingItem = item.thaw() {
             let realm = try Realm()
             try realm.write {
@@ -230,7 +232,7 @@ struct AddItemView: View {
                 if let dept = selectedItem.department.first {
                     self.selectedDepartment = dept
                     self.itemName = selectedItem.name
-                    //            self.attribute = item.attribute
+                    self.attribute = selectedItem.attribute
                     self.quantity = String(describing: selectedItem.onHandQty)
                     self.retailPrice = String(describing: selectedItem.retailPrice)
                     self.unitCost = String(describing: selectedItem.unitCost)

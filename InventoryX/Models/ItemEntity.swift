@@ -47,7 +47,7 @@ extension ItemEntity {
     static let item2 = ItemEntity(name: "Skittles", retailPrice: 1.50, avgCostPer: 0.50, onHandQty: 15)
     static let item3 = ItemEntity(name: "Starburst", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
     static let item4 = ItemEntity(name: "Water", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 4)
-    static let item5 = ItemEntity(name: "Gatorade", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
+    static let item5 = ItemEntity(name: "Gatorade", attribute: "Blue", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
     static let item6 = ItemEntity(name: "Energy Drink", retailPrice: 3.00, avgCostPer: 0.50, onHandQty: 7)
     static let item7 = ItemEntity(name: "Ice Pop", retailPrice: 0.50, avgCostPer: 0.50, onHandQty: 13)
     
