@@ -7,16 +7,20 @@
 
 import SwiftUI
 
-enum MenuState { 
+
+// TODO: Pass UI width to closed state to determine if it should be shown as a compact sidebar or disappear entirely
+enum MenuState: Equatable {
     case open
     case compact
     case closed
+//    case closed(CGFloat)
     
     var idealWidth: CGFloat {
         switch self {
         case .open:     return 280
-        case .compact:  return 72
-        case .closed:   return 0
+        case .compact:  return 64
+        case .closed: return 0
+//        case .closed(let viewWidth):   return viewWidth > 840 ? 64 : 0
         }
     }
 }
@@ -24,36 +28,28 @@ enum MenuState {
 struct MenuView: View {
     @Binding var display: DisplayState
     @Binding var menuState: MenuState
+    let toggleMenu: (() -> Void)
     
     @State var showingLockScreen: Bool = false
         
-    func toggleMenu() {
-        withAnimation(.smooth) {
-            menuState = switch menuState {
-            case .open: MenuState.compact
-            case .compact: MenuState.open
-            case .closed: MenuState.open
-            }
-        }
-    }
+    
     
     
     var body: some View {
         VStack(spacing: 16) {
-            
-            Button {
-                toggleMenu()
-            } label: {
-                if menuState == .open {
-                    LogoView().foregroundStyle(Color("Purple050").opacity(1))
+            if menuState == .open || menuState == .compact {
+                Button {
+                    toggleMenu()
+                } label: {
                     Spacer()
+                    Image(systemName: "line.3.horizontal")
                 }
-                Image(systemName: menuState == MenuState.open ? "chevron.backward.2" : "line.3.horizontal")
+                .font(.title)
+                .fontDesign(.rounded)
+                .foregroundStyle(Color("Purple050").opacity(0.8))
+                .padding()
+//                .animation(nil, value: true)
             }
-            .font(.title)
-            .fontDesign(.rounded)
-            .foregroundStyle(Color("Purple050").opacity(0.8))
-            .padding()
             
             Spacer()
             

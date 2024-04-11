@@ -92,10 +92,10 @@ struct PointOfSaleView: View {
             } else {
                 
                 switch cartState {
-                case .hidden:
+                case .closed:
                     cartState = .sidebar
                 case .sidebar:
-                    cartState = .hidden
+                    cartState = .closed
                 case .confirming:
                     cartState = .confirming
                 }
@@ -140,12 +140,13 @@ struct PointOfSaleView: View {
                 CartView(cartState: $cartState, menuState: $menuState, uiProperties: uiProperties)
                     .frame(maxWidth: cartState.idealWidth)
                     .padding()
-                    .background(Color("Purple050").opacity(0.5))
+                    .background(Color("Purple050").opacity(0.25))
                     .environmentObject(vm)
             }
             
             // Sidebar for larger screens
-            if uiProperties.width > 680 && cartState != .confirming {
+//            if uiProperties.width > 680 && cartState != .confirming {
+            if uiProperties.width > 680 && cartState == .sidebar {
                 ResponsiveView { properties in
                     CartView(cartState: $cartState, menuState: $menuState, uiProperties: properties)
                         .environmentObject(vm)
@@ -222,12 +223,13 @@ struct PointOfSaleView: View {
             
             
         } //: HStack
+        
     }
 }
 
 #Preview {
     ResponsiveView { props in
-        PointOfSaleView(menuState: .constant(.compact), cartState: .constant(.sidebar), uiProperties: props)
+        PointOfSaleView(menuState: .constant(.open), cartState: .constant(.sidebar), uiProperties: props)
             .environment(\.realm, DepartmentEntity.previewRealm)
             .environmentObject(PointOfSaleViewModel())
     }

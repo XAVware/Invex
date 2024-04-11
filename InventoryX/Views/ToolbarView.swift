@@ -17,28 +17,34 @@ struct ToolbarView: View {
     
     func toggleCart() {
         withAnimation(.smooth) {
-            cartState = cartState == .hidden ? .sidebar : .hidden
+            cartState = cartState == .closed ? .sidebar : .closed
         }
     }
     
-    func toggleMenu() {
-        withAnimation(.smooth) {
-            menuState = switch menuState {
-            case .open: MenuState.compact
-            case .compact: MenuState.open
-            case .closed: MenuState.open
-            }
-        }
-    }
+//    func toggleMenu() {
+//        withAnimation(.smooth) {
+//            
+//            menuState = switch menuState {
+//            case .open: MenuState.compact
+//            case .compact: MenuState.open
+//            case .closed: MenuState.open
+//            }
+////            menuState = switch menuState {
+////            case .open: MenuState.compact
+////            case .compact: MenuState.open
+////            case .closed: MenuState.open
+////            }
+//        }
+//    }
     
     // TODO: Make this more dynamic.
     var body: some View {
         HStack(spacing: 32) {
-            Button {
-                toggleMenu()
-            } label: {
-                Image(systemName: menuState == MenuState.open ? "chevron.backward.2" : "line.3.horizontal")
-            }
+//            Button {
+//                toggleMenu()
+//            } label: {
+//                Image(systemName: menuState == MenuState.open ? "chevron.backward.2" : "line.3.horizontal")
+//            }
             
             Spacer()
             
@@ -56,6 +62,6 @@ struct ToolbarView: View {
 }
 
 #Preview {
-    ToolbarView(menuState: .constant(.compact), cartState: .constant(.sidebar), display: .constant(.makeASale))
+    ToolbarView(menuState: .constant(.open), cartState: .constant(.sidebar), display: .constant(.makeASale))
         .padding()
 }

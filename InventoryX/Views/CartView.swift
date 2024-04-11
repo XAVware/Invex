@@ -9,13 +9,13 @@ import SwiftUI
 
 
 enum CartState {
-    case hidden
+    case closed
     case sidebar
     case confirming
     
     var idealWidth: CGFloat {
         switch self {
-        case .hidden:
+        case .closed:
             return 0
         case .sidebar:
             return 280
@@ -30,19 +30,25 @@ struct CartView: View {
     
     @Binding var cartState: CartState
     @Binding var menuState: MenuState
-    
-//    @State var origWidth: CGFloat = 0
-    
+        
     let uiProperties: LayoutProperties
     
     func continueTapped() {
+        
         switch cartState {
-        case .hidden:   return
+        case .closed:   return
         case .sidebar:  cartState = .confirming
         case .confirming:
             vm.finalizeSale {
                 /// Once the sale saves successfully, return the cart to its original state.
                 cartState = .sidebar
+                menuState = .compact
+            }
+        }
+        
+        if cartState == .confirming {
+            withAnimation(.interpolatingSpring) {
+                menuState = .closed
             }
         }
         print("Cart width is now: \(uiProperties.width)")
@@ -240,6 +246,19 @@ struct CartView: View {
             }
             .modifier(PrimaryButtonMod())
             
+            if cartState == .confirming {
+                Button {
+                    if uiProperties.width < 640 {
+                        cartState = .closed
+                    } else {
+                        cartState = .sidebar
+                    }
+                } label: {
+                    Spacer()
+                    Text("Cancel Sale")
+                    Spacer()
+                }
+            }
         } //: VStack
     } //: Receipt Totals View
 }

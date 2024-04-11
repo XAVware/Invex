@@ -9,6 +9,9 @@ import SwiftUI
 
 // https://www.ios-resolution.com/
 
+
+/// Passing properties into a view using a const/let causes the view to be re-initialized every time the view's width changes.
+
 struct ResponsiveView<Content:View>: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
