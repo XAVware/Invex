@@ -25,6 +25,8 @@ enum CartState {
     }
 }
 
+/// Changing the opacity based on screenwidth improves the animation when hiding the cart.
+
 struct CartView: View {
     @EnvironmentObject var vm: PointOfSaleViewModel
     
@@ -39,8 +41,10 @@ struct CartView: View {
         case .closed:   return
         case .sidebar:  cartState = .confirming
         case .confirming:
+            guard !vm.cartItems.isEmpty else { return }
             vm.finalizeSale {
                 /// Once the sale saves successfully, return the cart to its original state.
+                // TODO: This probably won't work for smaller screens. Menu shouldn't be compact.
                 cartState = .sidebar
                 menuState = .compact
             }
@@ -54,27 +58,31 @@ struct CartView: View {
         print("Cart width is now: \(uiProperties.width)")
     }
     
-//    var columns: [GridItem] {
-//        var colCount = 1
-//        if uiProperties.width > 600 {
-//            colCount = 2
-//        }
-//        return Array(repeating: GridItem(.flexible(minimum: 300, maximum: .infinity), spacing: 16), count: colCount)
-//    }
-    
+    var receiptMaxHeight: CGFloat {
+        if uiProperties.height < 440 {
+            return 300
+        } else {
+            return 600
+        }
+    }
+
     var body: some View {
         VStack(alignment: .center, spacing: cartState == .confirming ? 24 : 0) {
-            Text(cartState == .confirming ? "Order Summary" : "Cart")
-                .font(cartState == .confirming ? .largeTitle : .title2)
-                .fontWeight(cartState == .confirming ? .bold : .regular)
+            Text(cartState == .confirming ? "Sale #\(vm.calcNextSaleNumber())" : "Cart")
+                .font(.title2)
+                .fontWeight(.regular)
                 .fontDesign(cartState == .confirming ? .rounded : .default)
             
+            /// Try to display the cart components horizontally first. If the screen
+            /// is not wide enough, display them vertically.
             if cartState == .confirming {
                 ViewThatFits {
                     // For larger screens
                     HStack {
                         Spacer()
                         confirmationView
+                            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
+                            .modifier(GlowingOutlineMod())
                             .frame(minWidth: 320, idealWidth: 420, maxWidth: 480)
                         Spacer()
                         receiptTotalsView
@@ -85,30 +93,17 @@ struct CartView: View {
                     // For smaller screens
                     VStack {
                         confirmationView
+                            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
+                            .modifier(GlowingOutlineMod())
                         receiptTotalsView
                     } //: VStack
                 } //: ViewThatFits
             } else {
+                /// When the cartState is not confirming, it is either closed or
+                /// a sidebar which will always be stacked vertically.
                 cartSidebarView
                 receiptTotalsView
             }
-            
-            //            LazyVGrid(columns: columns) {
-            //
-            //                if cartState == .confirming {
-            //                    confirmationView
-            //                } else {
-            //                    GeometryReader { geo in
-            //                        cartSidebarView
-            //                            .frame(height: 800)
-            //                    }
-            ////                        .frame(maxWidth: uiProperties.width, idealHeight: uiProperties.height * 0.7, maxHeight: 800)
-            //                        .environmentObject(vm)
-            //                }
-            //                
-            //                receiptTotalsView
-            //            } //: Lazy V Grid
-            //            .frame(width: uiProperties.width, height: uiProperties.height)
         } //: VStack
         .opacity(uiProperties.width < 150 ? 0 : 1)
         
@@ -117,38 +112,13 @@ struct CartView: View {
     private var confirmationView: some View {
         VStack(spacing: 16) {
             HStack {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Sale #123456")
-                        .font(.headline)
-                    Text("Company Name")
-                        .font(.subheadline)
-                } //: VStack
-                
+                Text("Sales Receipt")
                 Spacer()
-                
-                VStack(alignment: .trailing, spacing: 6) {
-                    Text(Date().formatted(date: .long, time: .omitted))
-                    Text(Date().formatted(date: .omitted, time: .shortened))
-                } //: VStack
+                Text(Date().formatted(date: .numeric, time: .shortened))
             } //: HStack
             
-            Text("Receipt: (\(vm.cartItemCount) Items)")
-                .font(.title3)
-                .fontWeight(.semibold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical)
-            //                HStack {
-            //                    Text("Item")
-            //                    Spacer()
-            //                    Text("Price")
-            //                    Spacer()
-            //                    Text("Subtotal")
-            //                } //: HStack
-            //                .font(.callout)
-            //                .foregroundStyle(.black)
-            
-            //                Divider().opacity(0.4)
-            
+            Text("\(vm.fetchCompanyName())")
+
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 16) {
                     ForEach(vm.uniqueItems) { item in
@@ -157,23 +127,18 @@ struct CartView: View {
                         HStack(spacing: 0) {
                             VStack(alignment: .leading) {
                                 Text(item.name)
-                                    .font(.headline)
                                 Spacer()
                                 Text("Qty: \(itemQty)")
-                                    .font(.subheadline)
                             } //: VStack
                             
                             Spacer()
                             
                             VStack(alignment: .trailing) {
                                 Text("\(item.retailPrice.formatAsCurrencyString()) / unit")
-                                    .font(.caption)
                                 Spacer()
                                 Text(itemSubtotal.formatAsCurrencyString())
-                                    .font(.subheadline)
                             } //: VStack
                         } //: HStack
-                        .foregroundStyle(.black)
                         .padding(.vertical, 8)
                         
                         Divider().opacity(0.4)
@@ -181,12 +146,11 @@ struct CartView: View {
                 } //: VStack
                 Spacer()
             } //: ScrollView
-            .frame(minHeight: 400, idealHeight: uiProperties.height * 0.65, maxHeight: 600)
+            .frame(minHeight: 240, maxHeight: receiptMaxHeight)
             Spacer()
         } //: VStack
+        .font(.subheadline)
         .padding()
-        .background(.white.opacity(0.6))
-        .modifier(GlowingOutlineMod())
     } //: Confirmation View
     
     private var cartSidebarView: some View {
@@ -208,16 +172,12 @@ struct CartView: View {
                     Spacer()
                     Text("\(vm.cartSubtotal.formatAsCurrencyString())")
                 } //: HStack
-                .font(cartState == .confirming ? .title3 : .subheadline)
-                .fontWeight(.regular)
                 
                 HStack {
                     Text("Tax:")
                     Spacer()
                     Text("\(vm.taxAmount.formatAsCurrencyString())")
                 } //: HStack
-                .font(cartState == .confirming ? .title3 : .subheadline)
-                .fontWeight(.regular)
                 
                 if cartState == .confirming {
                     Divider()
@@ -228,10 +188,10 @@ struct CartView: View {
                     Spacer()
                     Text(vm.total.formatAsCurrencyString())
                 } //: HStack
-                .font(cartState == .confirming ? .title2 : .subheadline)
                 .fontWeight(.semibold)
                 
             } //: VStack
+            .font(.subheadline)
             .padding(cartState == .confirming ? 16 : 8)
             .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
             .clipShape(RoundedRectangle(cornerRadius: cartState == .confirming ? 8 : 0))
@@ -258,25 +218,18 @@ struct CartView: View {
                     Text("Cancel Sale")
                     Spacer()
                 }
+                .padding(.vertical, 8)
             }
         } //: VStack
     } //: Receipt Totals View
 }
 
-//#Preview {
-//    ResponsiveView { props in
-//        CartView(cartState: .constant(.sidebar), menuState: .constant(.compact), uiProperties: props)
-//            .environmentObject(PointOfSaleViewModel())
-//    }
-//}
-
 #Preview {
     ResponsiveView { props in
-        RootView(uiProperties: props)
-            .environment(\.realm, DepartmentEntity.previewRealm)
+        CartView(cartState: .constant(.sidebar), menuState: .constant(.compact), uiProperties: props)
+            .environmentObject(PointOfSaleViewModel())
     }
 }
-
 
 
 struct SaleItemRowView: View {
@@ -302,7 +255,6 @@ struct SaleItemRowView: View {
             } onDecrement: {
                 vm.removeItemFromCart(item)
             }
-            //            .frame(maxWidth: uiProperties.width)
         } //: VStack
     }
 }

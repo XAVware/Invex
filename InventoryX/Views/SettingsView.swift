@@ -9,13 +9,12 @@ import SwiftUI
 import RealmSwift
 
 @MainActor class SettingsViewModel: ObservableObject {
-    //    @Published var company: CompanyEntity?
     @Published var companyName: String = ""
     @Published var taxRateStr: String = ""
     
     @Published var passHash: String
+    
     init() {
-        
         if let currentPassHash = AuthService.shared.getCurrentPasscode()  {
             passHash = currentPassHash
         } else {
@@ -32,10 +31,7 @@ import RealmSwift
             if let result = realm.objects(CompanyEntity.self).first {
                 self.companyName = result.name
                 self.taxRateStr = String(format: "%.2f%", Double(result.taxRate))
-            } else {
-                
             }
-            //            self.company = realm.objects(CompanyEntity.self).first
         } catch {
             LogService(String(describing: self)).error("Settings VM err")
         }
@@ -111,7 +107,6 @@ struct SettingsView: View {
                     })
                     
                     Spacer()
-                    
                     
                     Button {
                         showPasscodeView = true

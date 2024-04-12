@@ -13,14 +13,14 @@ enum MenuState: Equatable {
     case open
     case compact
     case closed
-//    case closed(CGFloat)
+    //    case closed(CGFloat)
     
     var idealWidth: CGFloat {
         switch self {
         case .open:     return 280
         case .compact:  return 64
         case .closed: return 0
-//        case .closed(let viewWidth):   return viewWidth > 840 ? 64 : 0
+            //        case .closed(let viewWidth):   return viewWidth > 840 ? 64 : 0
         }
     }
 }
@@ -31,24 +31,26 @@ struct MenuView: View {
     let toggleMenu: (() -> Void)
     
     @State var showingLockScreen: Bool = false
-        
-    
-    
     
     var body: some View {
         VStack(spacing: 16) {
+            /// Don't show this button when the menu is closed because the menu button is
+            /// being overlayed. Placing the menu button in an HStack with a Spacer
+            /// improves the animation when changing state.
             if menuState == .open || menuState == .compact {
-                Button {
-                    toggleMenu()
-                } label: {
+                HStack {
                     Spacer()
-                    Image(systemName: "line.3.horizontal")
-                }
-                .font(.title)
-                .fontDesign(.rounded)
-                .foregroundStyle(Color("Purple050").opacity(0.8))
-                .padding()
-//                .animation(nil, value: true)
+                    
+                    Button {
+                        toggleMenu()
+                    } label: {
+                        Image(systemName: "line.3.horizontal")
+                    }
+                    .font(.title)
+                    .fontDesign(.rounded)
+                    .foregroundStyle(Color("Purple050").opacity(0.8))
+                    .padding()
+                } //: HStack
             }
             
             Spacer()
@@ -72,7 +74,7 @@ struct MenuView: View {
                     }
                     .modifier(MenuButtonMod(isSelected: data == display))
                 }
-
+                
             } //: For Each
             
             Spacer()
@@ -106,13 +108,7 @@ struct MenuView: View {
     
 }
 
-//#Preview {
-//    MenuView(display: .constant(.makeASale), menuState: .constant(.compact))
-//}
-
 #Preview {
-    ResponsiveView { props in
-        RootView(uiProperties: props)
-            .environment(\.realm, DepartmentEntity.previewRealm)
-    }
+    MenuView(display: .constant(.makeASale), menuState: .constant(.compact)) { }
 }
+
