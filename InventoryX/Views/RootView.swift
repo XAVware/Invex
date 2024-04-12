@@ -135,16 +135,16 @@ struct RootView: View {
                 }
             }
             .background(.accent.opacity(0.0001))
-            .onTapGesture(coordinateSpace: .global) { location in
-                // TODO: Might not need this. Will probably work without checking if location is greater than menu width.
-                if menuState == .open {
-                    withAnimation(.interpolatingSpring) {
-                        menuState = .closed
-                    }
-                }
-                print("Tapped at \(location)")
-            }
-            
+//            .onTapGesture(coordinateSpace: .global) { location in
+//                // TODO: Might not need this. Will probably work without checking if location is greater than menu width.
+//                if menuState == .open {
+//                    withAnimation(.interpolatingSpring) {
+//                        menuState = .closed
+//                    }
+//                }
+//                print("Tapped at \(location)")
+//            }
+//            
         } //: HStack
         .overlay(smallViewMenuBtn, alignment: .topLeading)
         .onChange(of: menuState) { newValue in

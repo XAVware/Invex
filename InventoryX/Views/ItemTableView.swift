@@ -22,9 +22,12 @@ enum TableViewStyle: String, CaseIterable {
 // TODO: Fix odd button animation when screen size changes
 struct ItemTableView: View {
     @ObservedResults(ItemEntity.self) var allItems
+    @ObservedResults(DepartmentEntity.self) var allDepartments
     @Binding var department: DepartmentEntity?
     @State var style: TableViewStyle
+    let uiProperties: LayoutProperties
     let onSelect: ((ItemEntity) -> Void)
+    
     
     
     // TODO: Check if computed property is efficient here
@@ -48,63 +51,170 @@ struct ItemTableView: View {
     
     
     // MARK: - LIST VIEW STYLE
-    @State var columnData: [ColumnHeaderModel] = [
-        ColumnHeaderModel(headerText: "Department", sortDescriptor: "dept"),
-        ColumnHeaderModel(headerText: "Item Name", sortDescriptor: "name"),
-        ColumnHeaderModel(headerText: "On-Hand", sortDescriptor: "onHandQty"),
-        ColumnHeaderModel(headerText: "Retail Price", sortDescriptor: "retailPrice")
-    ]
+//    @State var columnData: [ColumnHeaderModel] = [
+//        ColumnHeaderModel(headerText: "Department", sortDescriptor: "dept"),
+//        ColumnHeaderModel(headerText: "Item Name", sortDescriptor: "name"),
+//        ColumnHeaderModel(headerText: "On-Hand", sortDescriptor: "onHandQty"),
+//        ColumnHeaderModel(headerText: "Retail Price", sortDescriptor: "retailPrice")
+//    ]
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    private var isCompact: Bool { horizontalSizeClass == .compact }
+
     
     @State var selectedItem: ItemEntity?
     
-    private var listView: some View {
-        VStack {
-            HStack(spacing: 0) {
-                ForEach(columnData) { header in
-                    HStack {
-                        Text(header.headerText)
-                            .font(.body)
-                            .fontWeight(.semibold)
-                            .fontDesign(.rounded)
-                        
-                    } //: HStack
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .frame(height: 64)
-                    .background(Color("Purple050").opacity(0.5))
+    struct QuantityContainer: View {
+        let item: ItemEntity
+        var body: some View {
+            if item.onHandQty < item.department.first?.restockNumber ?? .max {
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 12, height: 12)
+                        .padding(.leading, 8)
+//                        .foregroundStyle(.accent.opacity(0.5))
+                        .foregroundStyle(Color("Gold").opacity(0.25))
+                    
+                    Text(String(describing: item.onHandQty))
+                        .frame(maxWidth: .infinity, alignment: .center)
+                    
+                    Spacer()
+                        .frame(width: 12)
                 }
-                
-            } //: HStack
-            
-            ForEach(itemArr) { item in
-                HStack(spacing: 0) {
-                    Text(item.department.thaw()?.first?.name ?? "")
-                        .frame(maxWidth: .infinity)
-                    
-                    Text(item.name)
-                        .frame(maxWidth: .infinity)
-                    
-                    Text(item.onHandQty.description)
-                        .frame(maxWidth: .infinity)
-                    
-                    Text(item.retailPrice.formatAsCurrencyString())
-                        .frame(maxWidth: .infinity)
-                    
-                } //: HStack
-                .background(.white.opacity(0.01))
-                .frame(height: 64)
-                .onTapGesture {
-                    selectedItem = item
-                }
-                
-                Divider().opacity(0.4)
-            } //: For Each
-            
-        } //: VStack
-        .modifier(TableStyleMod())
-        .sheet(item: $selectedItem) { item in
-            AddItemView(item: item)
-                .overlay(AlertView())
+                .frame(width: 72, height: 32)
+//                .background(Color("Gold").opacity(0.25))
+//                .clipShape(RoundedRectangle(cornerRadius: 8))
+            } else {
+                Text(String(describing: item.onHandQty))
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
         }
+    }
+    
+    struct RowButtonPanel: View {
+        let item: ItemEntity
+        let onTap: ((ItemEntity) -> Void)
+        var body: some View {
+            HStack(spacing: 16) {
+                Button {
+                    onTap(item)
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                }
+            } //: HStack
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+    
+    @State var selectedRow: ItemEntity.ID?
+    private var listView: some View {
+//        ScrollView(.horizontal) {
+        
+            Table(of: ItemEntity.self, selection: $selectedRow) {
+                
+                
+                TableColumn("Item Name", value: \.name)
+                TableColumn("Department") { item in
+                    if let department = item.department.first {
+                        Text(department.name)
+                    } else {
+                        Text("No department")
+                    }
+                }
+
+                
+                TableColumn("On hand qty") {
+                    QuantityContainer(item: $0)
+                }
+                .width(min: 54, ideal: 80, max: 89)
+                
+                TableColumn("Price", value: \.formattedPrice)
+                TableColumn("Cost", value: \.formattedUnitCost)
+                
+                TableColumn("") { item in
+                    RowButtonPanel(item: item) {
+                        self.selectedItem = $0
+                    }
+//                    .frame(height: 64)
+                }
+                .width(min: 72, ideal: 72, max: 72)
+                
+            } rows: {
+                ForEach(allItems) { item in
+                    TableRow(item)
+                }
+            }
+            .frame(maxWidth: uiProperties.width, maxHeight: uiProperties.height)
+            .modifier(TableStyleMod())
+            .sheet(item: $selectedItem, onDismiss: {
+                selectedItem = nil
+                selectedRow = nil
+            }) { item in
+                AddItemView(item: item)
+                    .overlay(AlertView())
+            }
+            .onChange(of: selectedRow) { newValue in
+                guard let newValue = newValue else { return }
+                if let item = allItems.first(where: { $0.id == newValue}) {
+                    self.selectedItem = item
+                } else {
+                    print("No item found")
+                }
+//                print(newValue)
+            }
+            
+            
+//        }
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        
+//        VStack {
+//            HStack(spacing: 0) {
+//                ForEach(columnData) { header in
+//                    HStack {
+//                        Text(header.headerText)
+//                            .font(.body)
+//                            .fontWeight(.semibold)
+//                            .fontDesign(.rounded)
+//                        
+//                    } //: HStack
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                    .frame(height: 64)
+//                    .background(Color("Purple050").opacity(0.5))
+//                }
+//                
+//            } //: HStack
+//            
+//            ForEach(itemArr) { item in
+//                HStack(spacing: 0) {
+//                    Text(item.department.thaw()?.first?.name ?? "")
+//                        .frame(maxWidth: .infinity)
+//                    
+//                    Text(item.name)
+//                        .frame(maxWidth: .infinity)
+//                    
+//                    Text(item.onHandQty.description)
+//                        .frame(maxWidth: .infinity)
+//                    
+//                    Text(item.retailPrice.formatAsCurrencyString())
+//                        .frame(maxWidth: .infinity)
+//                    
+//                } //: HStack
+//                .background(.white.opacity(0.01))
+//                .frame(height: 64)
+//                .onTapGesture {
+//                    selectedItem = item
+//                }
+//                
+//                Divider().opacity(0.4)
+//            } //: For Each
+//            
+//        } //: VStack
+//        .modifier(TableStyleMod())
+//        .sheet(item: $selectedItem) { item in
+//            AddItemView(item: item)
+//                .overlay(AlertView())
+//        }
     } //: List View
     
     
@@ -186,9 +296,11 @@ struct ItemTableView: View {
 
 
 #Preview {
-    ItemTableView(department: .constant(nil), style: .grid, onSelect: { item in
-        
-    })
-    .padding()
-    .environment(\.realm, DepartmentEntity.previewRealm)
+    ResponsiveView { props in
+        ItemTableView(department: .constant(nil), style: .list, uiProperties: props, onSelect: { item in
+            
+        })
+        .padding()
+        .environment(\.realm, DepartmentEntity.previewRealm)
+    }
 }

@@ -37,6 +37,15 @@ class ItemEntity: Object, ObjectKeyIdentifiable {
     var formattedUnitCost: String {
         return self.unitCost.formatAsCurrencyString()
     }
+    
+    var showWarning: Bool {
+        guard let dept = self.department.first else { return true }
+        return self.onHandQty < dept.restockNumber
+    }
+    
+    var invId: UUID {
+        return UUID()
+    }
 }
 
 

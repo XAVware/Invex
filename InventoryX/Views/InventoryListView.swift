@@ -26,14 +26,16 @@ struct InventoryListView: View {
             .font(.title)
             .fontDesign(.rounded)
             
-            ItemTableView(department: $selectedDepartment, style: .list) { item in
-                self.selectedItem = item
-            }
-            .onAppear {
-                selectedDepartment = nil
-            }
-            .sheet(item: $selectedItem) { item in
-                AddItemView(item: item)
+            ResponsiveView { props in
+                ItemTableView(department: $selectedDepartment, style: .list, uiProperties: props) { item in
+                    self.selectedItem = item
+                }
+                .onAppear {
+                    selectedDepartment = nil
+                }
+                .sheet(item: $selectedItem) { item in
+                    AddItemView(item: item)
+                }
             }
         } //: VStack
     }
