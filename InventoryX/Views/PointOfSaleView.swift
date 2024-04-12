@@ -202,12 +202,8 @@ struct PointOfSaleView: View {
                 .padding()
                 .background(Color("Purple050").opacity(0.5))
             }
-            
-            
-            
         } //: HStack
-        
-    }
+    } //: Body
 }
 
 #Preview {

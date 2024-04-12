@@ -143,22 +143,17 @@ struct CompanyDetailView: View {
     
     @ViewBuilder private var header: some View {
         if showTitles {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 8) {
                 Button {
                     dismiss()
                 } label: {
                     Image(systemName: "xmark")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24)
-                        .foregroundStyle(.black)
                 }
                 
                 Text("Edit company info")
-                    .modifier(TitleMod())
                 
             } //: VStack
-            .frame(maxWidth: 720)
+            .modifier(TitleMod())
         }
     } //: Header
 }

@@ -167,21 +167,17 @@ struct DepartmentDetailView: View {
     
     @ViewBuilder private var header: some View {
         if showTitles {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 8) {
                 Button {
                     dismiss()
                 } label: {
                     Image(systemName: "xmark")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24)
-                        .foregroundStyle(.black)
                 }
                 
                 Text(detailType == .modify ? "Edit department" : "Add department")
-                    .modifier(TitleMod())
                 
             } //: VStack
+            .modifier(TitleMod())
             .frame(maxWidth: 720)
         }
     } //: Header

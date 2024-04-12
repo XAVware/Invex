@@ -43,7 +43,6 @@
 		948688692BB6B0CC0030C8C6 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948688682BB6B0CC0030C8C6 /* AlertView.swift */; };
 		9486886B2BB6B1650030C8C6 /* UIFeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9486886A2BB6B1650030C8C6 /* UIFeedbackService.swift */; };
 		9486886D2BC33C5B0030C8C6 /* TableStyle-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9486886C2BC33C5B0030C8C6 /* TableStyle-Mod.swift */; };
-		948861582BACB0E300580F38 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948861572BACB0E300580F38 /* ToolbarView.swift */; };
 		9488615B2BACC40A00580F38 /* DepartmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */; };
 		9490BAE02BB32044003C925A /* SecondaryButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */; };
 		94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */; };
@@ -100,7 +99,6 @@
 		948688682BB6B0CC0030C8C6 /* AlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		9486886A2BB6B1650030C8C6 /* UIFeedbackService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFeedbackService.swift; sourceTree = "<group>"; };
 		9486886C2BC33C5B0030C8C6 /* TableStyle-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableStyle-Mod.swift"; sourceTree = "<group>"; };
-		948861572BACB0E300580F38 /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
 		9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentDetailView.swift; sourceTree = "<group>"; };
 		9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SecondaryButton-Mod.swift"; sourceTree = "<group>"; };
 		94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
@@ -217,7 +215,6 @@
 				94ECB3912BB3955F00A507AF /* PointOfSaleView.swift */,
 				945DF5A82BAA5CAC002014F6 /* RootView.swift */,
 				944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */,
-				948861572BACB0E300580F38 /* ToolbarView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -392,7 +389,6 @@
 				94B7EAC92BACDDEF00895FF7 /* ItemTableView.swift in Sources */,
 				9486886B2BB6B1650030C8C6 /* UIFeedbackService.swift in Sources */,
 				94B3DE932A47C2CB00BBCB3A /* AddItemView.swift in Sources */,
-				948861582BACB0E300580F38 /* ToolbarView.swift in Sources */,
 				80FFBD082A1D013A00992440 /* SaleEntity.swift in Sources */,
 				802EDC0729FB79E40048A9A8 /* DisplayState.swift in Sources */,
 				946524732BA803D000F24CDD /* DateTimeLabel.swift in Sources */,

@@ -88,6 +88,7 @@ struct AddItemView: View {
     
     @State var errorMessage: String = ""
     
+    // TODO: Display and update/save attribute
     init(item: ItemEntity, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         self.selectedItem = item
         self.showTitles = showTitles
@@ -98,13 +99,16 @@ struct AddItemView: View {
     private func continueTapped() {
         focus = nil
         do {
+            let price = retailPrice.replacingOccurrences(of: "$", with: "")
+            let cost = retailPrice.replacingOccurrences(of: "$", with: "")
+            
             if detailType == .modify {
-                try vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
+                try vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
                 finish()
                 
             } else {
                 // Item was nil when passed to view. User is creating a new item.
-                try vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: retailPrice, cost: unitCost)
+                try vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
                 finish()
             }
             
@@ -126,27 +130,6 @@ struct AddItemView: View {
             dismiss()
         }
     }
-    
-    @ViewBuilder private var header: some View {
-        if showTitles {
-            VStack(alignment: .leading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24)
-                        .foregroundStyle(.black)
-                }
-                
-                Text(detailType == .modify ? "Edit item" : "Add item")
-                    .modifier(TitleMod())
-                
-            } //: VStack
-            .frame(maxWidth: 720)
-        }
-    } //: Header
     
     var body: some View {
         ScrollView {
@@ -196,7 +179,7 @@ struct AddItemView: View {
                                    type: .price)
                     .keyboardType(.numberPad)
                     .focused($focus, equals: .unitCost)
-                }
+                } //: VStack
                 .onChange(of: focus) { newValue in
                     if !retailPrice.isEmpty {
                         if let price = Double(retailPrice) {
@@ -208,6 +191,10 @@ struct AddItemView: View {
                         if let cost = Double(unitCost) {
                             self.unitCost = cost.formatAsCurrencyString()
                         }
+                    }
+                    
+                    if let qty = Int(quantity) {
+                        self.quantity = String(describing: qty)
                     }
                 }
                 
@@ -229,17 +216,48 @@ struct AddItemView: View {
                 self.focus = nil
             }
             .onAppear {
+                // TODO: Don't default to first department.
                 if let dept = selectedItem.department.first {
-                    self.selectedDepartment = dept
-                    self.itemName = selectedItem.name
-                    self.attribute = selectedItem.attribute
-                    self.quantity = String(describing: selectedItem.onHandQty)
-                    self.retailPrice = String(describing: selectedItem.retailPrice)
-                    self.unitCost = String(describing: selectedItem.unitCost)
+                    selectedDepartment = dept
+                }
+                
+                itemName = selectedItem.name
+                attribute = selectedItem.attribute
+                
+                if selectedItem.onHandQty > 0 {
+                    quantity = String(describing: selectedItem.onHandQty)
+                }
+                
+                if selectedItem.retailPrice > 0 {
+                    retailPrice = selectedItem.retailPrice.formatAsCurrencyString()
+                }
+                
+                if selectedItem.unitCost > 0 {
+                    unitCost = selectedItem.unitCost.formatAsCurrencyString()
                 }
             }
         } //: ScrollView
     } //: Body
+    
+    func formatPrices() {
+        
+    }
+    
+    @ViewBuilder private var header: some View {
+        if showTitles {
+            VStack(alignment: .leading, spacing: 8) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                }
+                
+                Text(detailType == .modify ? "Edit item" : "Add item")
+                
+            } //: VStack
+            .modifier(TitleMod())
+        }
+    } //: Header
 }
 
 #Preview {
