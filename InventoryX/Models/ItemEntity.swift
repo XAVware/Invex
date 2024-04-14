@@ -18,7 +18,7 @@ class ItemEntity: Object, ObjectKeyIdentifiable {
     @Persisted var unitCost: Double
     @Persisted var onHandQty: Int
     
-    convenience init(name: String, attribute: String = "", retailPrice: Double, avgCostPer: Double, onHandQty: Int = 0) {
+    convenience init(name: String, attribute: String, retailPrice: Double, avgCostPer: Double, onHandQty: Int = 0) {
         self.init()
         self.name = name
         self.retailPrice = retailPrice
@@ -43,22 +43,31 @@ class ItemEntity: Object, ObjectKeyIdentifiable {
         return self.onHandQty < dept.restockNumber
     }
     
-    var invId: UUID {
-        return UUID()
+    var restockWarning: String {
+        guard let dept = department.first else { return "" }
+        return onHandQty < dept.restockNumber ? "⚠️" : ""
     }
+    
+    var departmentName: String {
+        return department.first?.name ?? ""
+    }
+    
+//    var invId: UUID {
+//        return UUID()
+//    }
 }
 
 
 
 
 extension ItemEntity {
-    static let item1 = ItemEntity(name: "Lays", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
-    static let item2 = ItemEntity(name: "Skittles", retailPrice: 1.50, avgCostPer: 0.50, onHandQty: 15)
-    static let item3 = ItemEntity(name: "Starburst", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
-    static let item4 = ItemEntity(name: "Water", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 4)
-    static let item5 = ItemEntity(name: "Gatorade", attribute: "Blue", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
-    static let item6 = ItemEntity(name: "Energy Drink", retailPrice: 3.00, avgCostPer: 0.50, onHandQty: 7)
-    static let item7 = ItemEntity(name: "Ice Pop", retailPrice: 0.50, avgCostPer: 0.50, onHandQty: 13)
+    static let item1 = ItemEntity(name: "Layszz",         attribute: "Small", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
+    static let item2 = ItemEntity(name: "Skittles",     attribute: "Original", retailPrice: 1.50, avgCostPer: 0.50, onHandQty: 15)
+    static let item3 = ItemEntity(name: "Starburst",    attribute: "", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
+    static let item4 = ItemEntity(name: "Water",        attribute: "Large", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 4)
+    static let item5 = ItemEntity(name: "Gatorade",     attribute: "Blue", retailPrice: 1.00, avgCostPer: 0.50, onHandQty: 10)
+    static let item6 = ItemEntity(name: "Energy Drink", attribute: "Sugar Free", retailPrice: 3.00, avgCostPer: 0.50, onHandQty: 7)
+    static let item7 = ItemEntity(name: "Ice Pop",      attribute: "Rainbow", retailPrice: 0.50, avgCostPer: 0.50, onHandQty: 13)
     
     static let foodArray = [item1, item2, item3]
     static let drinkArray = [item4, item5, item6]

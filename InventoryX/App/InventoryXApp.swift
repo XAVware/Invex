@@ -29,6 +29,7 @@ struct InventoryXApp: SwiftUI.App {
                 RootView(uiProperties: props)
             }
             .onAppear {
+//                addSampleData()
                 //                UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
                 //                UserDefaults.standard.removeObject(forKey: "passcode")
                 //                let realm = try! Realm()

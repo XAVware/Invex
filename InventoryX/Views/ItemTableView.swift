@@ -20,12 +20,13 @@ enum TableViewStyle: String, CaseIterable {
 }
 
 // TODO: Fix odd button animation when screen size changes
+// TODO: Is it okay for this view to re-initialize every time uiProperties changes?
 struct ItemTableView: View {
     @ObservedResults(ItemEntity.self) var allItems
     @ObservedResults(DepartmentEntity.self) var allDepartments
     @Binding var department: DepartmentEntity?
     @State var style: TableViewStyle
-    let uiProperties: LayoutProperties
+//    let uiProperties: LayoutProperties
     let onSelect: ((ItemEntity) -> Void)
     
     
@@ -51,70 +52,23 @@ struct ItemTableView: View {
     
     
     // MARK: - LIST VIEW STYLE
-//    @State var columnData: [ColumnHeaderModel] = [
-//        ColumnHeaderModel(headerText: "Department", sortDescriptor: "dept"),
-//        ColumnHeaderModel(headerText: "Item Name", sortDescriptor: "name"),
-//        ColumnHeaderModel(headerText: "On-Hand", sortDescriptor: "onHandQty"),
-//        ColumnHeaderModel(headerText: "Retail Price", sortDescriptor: "retailPrice")
-//    ]
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     private var isCompact: Bool { horizontalSizeClass == .compact }
 
-    
+    @State var selectedRow: ItemEntity.ID?
     @State var selectedItem: ItemEntity?
     
-    struct QuantityContainer: View {
-        let item: ItemEntity
-        var body: some View {
-            if item.onHandQty < item.department.first?.restockNumber ?? .max {
-                HStack {
-                    Image(systemName: "exclamationmark.triangle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 12, height: 12)
-                        .padding(.leading, 8)
-//                        .foregroundStyle(.accent.opacity(0.5))
-                        .foregroundStyle(Color("Gold").opacity(0.25))
-                    
-                    Text(String(describing: item.onHandQty))
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    
-                    Spacer()
-                        .frame(width: 12)
-                }
-                .frame(width: 72, height: 32)
-//                .background(Color("Gold").opacity(0.25))
-//                .clipShape(RoundedRectangle(cornerRadius: 8))
-            } else {
-                Text(String(describing: item.onHandQty))
-                    .frame(maxWidth: .infinity, alignment: .center)
-            }
-        }
-    }
-    
-    struct RowButtonPanel: View {
-        let item: ItemEntity
-        let onTap: ((ItemEntity) -> Void)
-        var body: some View {
-            HStack(spacing: 16) {
-                Button {
-                    onTap(item)
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                }
-            } //: HStack
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-    }
-    
-    @State var selectedRow: ItemEntity.ID?
     private var listView: some View {
-//        ScrollView(.horizontal) {
-        
+        VStack {
             Table(of: ItemEntity.self, selection: $selectedRow) {
+                TableColumn("Item Name") { item in
+                    if isCompact {
+                        Text(item.name)
+                    } else {
+                        Text(item.name)
+                    }
+                }
                 
-                
-                TableColumn("Item Name", value: \.name)
                 TableColumn("Department") { item in
                     if let department = item.department.first {
                         Text(department.name)
@@ -122,21 +76,34 @@ struct ItemTableView: View {
                         Text("No department")
                     }
                 }
-
                 
-                TableColumn("On hand qty") {
-                    QuantityContainer(item: $0)
+                
+                TableColumn("On hand qty") { item in
+                    HStack {
+                        Text((item.onHandQty < item.department.first?.restockNumber ?? .max) ? "⚠️" : "")
+                            .frame(maxWidth: .infinity)
+                        Text(String(describing: item.onHandQty))
+                            .frame(maxWidth: .infinity)
+                        Spacer()
+                            .frame(maxWidth: .infinity)
+                    } //: HStack
                 }
-                .width(min: 54, ideal: 80, max: 89)
+                .width(min: 54, ideal: 80, max: 90)
                 
                 TableColumn("Price", value: \.formattedPrice)
+                
                 TableColumn("Cost", value: \.formattedUnitCost)
                 
                 TableColumn("") { item in
-                    RowButtonPanel(item: item) {
-                        self.selectedItem = $0
-                    }
-//                    .frame(height: 64)
+                    HStack(spacing: 16) {
+                        Button {
+                            self.selectedItem = item
+                        } label: {
+                            Image(systemName: "chevron.right")
+                                .opacity(0.8)
+                        }
+                    } //: HStack
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .width(min: 72, ideal: 72, max: 72)
                 
@@ -145,7 +112,6 @@ struct ItemTableView: View {
                     TableRow(item)
                 }
             }
-            .frame(maxWidth: uiProperties.width, maxHeight: uiProperties.height)
             .modifier(TableStyleMod())
             .sheet(item: $selectedItem, onDismiss: {
                 selectedItem = nil
@@ -158,63 +124,10 @@ struct ItemTableView: View {
                 guard let newValue = newValue else { return }
                 if let item = allItems.first(where: { $0.id == newValue}) {
                     self.selectedItem = item
-                } else {
-                    print("No item found")
                 }
-//                print(newValue)
             }
-            
-            
-//        }
-//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } //: VStack
         
-//        VStack {
-//            HStack(spacing: 0) {
-//                ForEach(columnData) { header in
-//                    HStack {
-//                        Text(header.headerText)
-//                            .font(.body)
-//                            .fontWeight(.semibold)
-//                            .fontDesign(.rounded)
-//                        
-//                    } //: HStack
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                    .frame(height: 64)
-//                    .background(Color("Purple050").opacity(0.5))
-//                }
-//                
-//            } //: HStack
-//            
-//            ForEach(itemArr) { item in
-//                HStack(spacing: 0) {
-//                    Text(item.department.thaw()?.first?.name ?? "")
-//                        .frame(maxWidth: .infinity)
-//                    
-//                    Text(item.name)
-//                        .frame(maxWidth: .infinity)
-//                    
-//                    Text(item.onHandQty.description)
-//                        .frame(maxWidth: .infinity)
-//                    
-//                    Text(item.retailPrice.formatAsCurrencyString())
-//                        .frame(maxWidth: .infinity)
-//                    
-//                } //: HStack
-//                .background(.white.opacity(0.01))
-//                .frame(height: 64)
-//                .onTapGesture {
-//                    selectedItem = item
-//                }
-//                
-//                Divider().opacity(0.4)
-//            } //: For Each
-//            
-//        } //: VStack
-//        .modifier(TableStyleMod())
-//        .sheet(item: $selectedItem) { item in
-//            AddItemView(item: item)
-//                .overlay(AlertView())
-//        }
     } //: List View
     
     
@@ -243,8 +156,6 @@ struct ItemTableView: View {
         
         // Minimum column count
         let finalColumnCount = max(rowCellCount, 2)
-        print("Columns: \(finalColumnCount)")
-        
         gridColumns = Array(repeating: GridItem(.flexible(minimum: minButtonWidth, maximum: .infinity), spacing: gridSpacing), count: finalColumnCount)
     }
     
@@ -257,27 +168,29 @@ struct ItemTableView: View {
                     Button {
                         onSelect(item)
                     } label: {
-                        VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 0) {
                             Text(item.name)
                                 .font(.headline)
-//                                .fontWeight(.semibold)
-//                                .frame(maxWidth: .infinity)
+                                .foregroundStyle(.black)
                             Spacer()
-                            if item.attribute.count > 1 {
-                                Text(item.attribute)
-                                
-                            }
+                            Text(item.attribute)
+                                .font(.subheadline)
+                                .foregroundStyle(.black)
+                                .opacity(0.8)
                             Spacer()
                             Text(item.retailPrice.formatAsCurrencyString())
                                 .font(.headline)
-                                .foregroundStyle(.black)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .foregroundStyle(.accent.opacity(0.8))
                         }
-                        .padding(12)
-//                        .frame(minWidth: 120, maxWidth: .infinity)
-                        .foregroundStyle(.accent.opacity(0.8))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 6)
                     } //: VStack
-                    .modifier(ItemGridButtonMod())
+                    .background(.ultraThinMaterial)
+                    .background(Color("Purple050").opacity(0.5))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .shadow(color: Color("Purple800").opacity(0.12), radius: 3, x: 2, y: 2)
+                    .shadow(color: Color("Purple200").opacity(0.12), radius: 3, x: -2, y: -2)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 } //: ForEach
                 
@@ -297,7 +210,7 @@ struct ItemTableView: View {
 
 #Preview {
     ResponsiveView { props in
-        ItemTableView(department: .constant(nil), style: .list, uiProperties: props, onSelect: { item in
+        ItemTableView(department: .constant(nil), style: .list, onSelect: { item in
             
         })
         .padding()

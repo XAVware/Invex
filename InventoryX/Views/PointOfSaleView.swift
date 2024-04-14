@@ -172,12 +172,10 @@ struct PointOfSaleView: View {
                     VStack(spacing: 24) {
                         DepartmentPicker(selectedDepartment: $selectedDept, style: .scrolling)
                         
-                        ResponsiveView { props in
-                            ItemTableView(department: $selectedDept, style: .grid, uiProperties: props) { item in
-                                vm.addItemToCart(item)
-                            }
-                            .padding(2)
+                        ItemTableView(department: $selectedDept, style: .grid) { item in
+                            vm.addItemToCart(item)
                         }
+                        .padding(2)
                         
                     } //: VStack
                     .padding(.horizontal)

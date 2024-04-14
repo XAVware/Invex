@@ -17,6 +17,7 @@ import RealmSwift
         guard let thawedDept = dept.thaw() else { return }
         
         let newItem = ItemEntity(name: name, 
+                                 attribute: att,
                                  retailPrice: Double(price) ?? 0,
                                  avgCostPer: Double(cost) ?? 0,
                                  onHandQty: Int(qty) ?? 0)
@@ -32,7 +33,6 @@ import RealmSwift
     
     
     func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) throws {
-        print("First price: \(price)")
         let price = price.replacingOccurrences(of: "$", with: "")
         let cost = cost.replacingOccurrences(of: "$", with: "")
         guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
@@ -40,7 +40,6 @@ import RealmSwift
         guard let price = Double(price) else { return }
         guard let cost = Double(cost) else { return }
         
-        print("Price: \(price)")
         if let existingItem = item.thaw() {
             let realm = try Realm()
             try realm.write {
@@ -62,9 +61,9 @@ import RealmSwift
 enum DetailViewType { case create, modify }
 
 struct AddItemView: View {
-    @StateObject var vm: AddItemViewModel = AddItemViewModel()
-    @StateObject var uiFeedback = UIFeedbackService.shared
     @Environment(\.dismiss) var dismiss
+    @StateObject var vm: AddItemViewModel = AddItemViewModel()
+//    @StateObject var uiFeedback = UIFeedbackService.shared
     
     @State private var selectedDepartment: DepartmentEntity?
     @State private var itemName: String = ""
@@ -88,11 +87,14 @@ struct AddItemView: View {
     
     @State var errorMessage: String = ""
     
+    @State var showDeleteConfirmation: Bool = false
+    
     // TODO: Display and update/save attribute
     init(item: ItemEntity, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         self.selectedItem = item
         self.showTitles = showTitles
         self.onSuccess = onSuccess
+        /// Detail type is set based on whether or not the item had a department when initially passed to view.
         self.detailType = item.department.first == nil ? .create : .modify
     }
     
@@ -134,14 +136,29 @@ struct AddItemView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .center, spacing: 24) {
-                header
+                // MARK: - HEADER
+                if showTitles {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
+                        .font(.title)
+                        
+                        Text(detailType == .modify ? "Edit item" : "Add item")
+                            .font(.largeTitle)
+                        
+                    } //: VStack
+                    .fontDesign(.rounded)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+//                    .modifier(TitleMod())
+                }
                 
-                Text(errorMessage)
-                    .foregroundStyle(.red)
-                
-                VStack(alignment: .leading, spacing: 24) {
+                // MARK: - FORM FIELDS
+                VStack(alignment: .center, spacing: 24) {
                     DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
-                    
+                    Divider()
                     ThemeTextField(boundTo: $itemName,
                                    placeholder: "i.e. Gatorade",
                                    title: "Item Name:",
@@ -198,6 +215,9 @@ struct AddItemView: View {
                     }
                 }
                 
+                Text(errorMessage)
+                    .foregroundStyle(.red)
+                
                 Button {
                     continueTapped()
                 } label: {
@@ -206,6 +226,7 @@ struct AddItemView: View {
                     Spacer()
                 }
                 .modifier(PrimaryButtonMod())
+                
                 
                 Spacer()
                 
@@ -237,27 +258,41 @@ struct AddItemView: View {
                 }
             }
         } //: ScrollView
+        .navigationTitle(detailType == .modify ? "Edit item" : "Add item")
+        .navigationBarTitleDisplayMode(.large)
+        .overlay(detailType == .modify ? deleteButton : nil, alignment: .topTrailing)
     } //: Body
     
-    func formatPrices() {
-        
-    }
-    
-    @ViewBuilder private var header: some View {
-        if showTitles {
-            VStack(alignment: .leading, spacing: 8) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                }
-                
-                Text(detailType == .modify ? "Edit item" : "Add item")
-                
-            } //: VStack
-            .modifier(TitleMod())
+    private var deleteButton: some View {
+        Menu {
+            Button("Delete item", systemImage: "trash", role: .destructive) {
+                showDeleteConfirmation = true
+            }
+        } label: {
+            Image(systemName: "ellipsis.circle")
         }
-    } //: Header
+        .font(.title)
+        .padding()
+        .foregroundStyle(.primary)
+        .alert("Are you sure? This can't be undone.", isPresented: $showDeleteConfirmation) {
+            Button("Go back", role: .cancel) { }
+            Button("Yes, delete Item", role: .destructive) {
+                let item = self.selectedItem
+                
+                do {
+                    let realm = try Realm()
+                    try realm.write {
+                        realm.delete(self.selectedItem)
+                    }
+                    dismiss()
+                } catch {
+                    print("Error deleting account: \(error.localizedDescription)")
+                }
+            }
+        }
+
+    } //: Delete Button
+    
 }
 
 #Preview {

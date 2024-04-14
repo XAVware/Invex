@@ -18,7 +18,7 @@ enum CartState {
         case .closed:
             return 0
         case .sidebar:
-            return 280
+            return 240
         case .confirming:
             return .infinity
         }
@@ -98,6 +98,7 @@ struct CartView: View {
                         receiptTotalsView
                     } //: VStack
                 } //: ViewThatFits
+                
             } else {
                 /// When the cartState is not confirming, it is either closed or
                 /// a sidebar which will always be stacked vertically.
@@ -243,10 +244,8 @@ struct SaleItemRowView: View {
         VStack(alignment: .leading, spacing: 24) {
             HStack {
                 Text(item.name)
-                    .font(.subheadline)
                 Spacer()
-                
-                Text(item.retailPrice.formatAsCurrencyString())
+               Text(item.retailPrice.formatAsCurrencyString())
                     .font(.subheadline)
             } //: HStack
             

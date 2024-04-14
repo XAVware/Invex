@@ -43,6 +43,8 @@ struct SettingsView: View {
     
     @State var showingCompanyDetail: Bool = false
     @State var showPasscodeView: Bool = false
+    @State var showDeleteConfirmation: Bool = false
+    
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -87,8 +89,6 @@ struct SettingsView: View {
                                 Spacer()
                                 
                                 Text("\(vm.taxRateStr) %")
-                                
-                                //                                Text("\(vm.company?.taxRate ?? 0 * 100) %")
                             } //: HStack
                         } //: VStack
                         
@@ -100,11 +100,7 @@ struct SettingsView: View {
                     .onTapGesture {
                         showingCompanyDetail = true
                     }
-                    .sheet(isPresented: $showingCompanyDetail, onDismiss: {
-                        vm.fetchCompanyData()
-                    }, content: {
-                        CompanyDetailView(company: CompanyEntity(name: vm.companyName, taxRate: Double(vm.taxRateStr) ?? 0.0))
-                    })
+                    
                     
                     Spacer()
                     
@@ -132,18 +128,7 @@ struct SettingsView: View {
                     }
                     
                     Button {
-                        Task {
-                            do {
-                                let realm = try await Realm()
-                                try await realm.asyncWrite {
-                                    realm.deleteAll()
-                                }
-                                AuthService.shared.deleteAll()
-                                
-                            } catch {
-                                print("Error deleting account: \(error.localizedDescription)")
-                            }
-                        }
+                        showDeleteConfirmation = true
                     } label: {
                         HStack(spacing: 16) {
                             Image(systemName: "trash")
@@ -196,10 +181,32 @@ struct SettingsView: View {
                 } //: HStack
             } //: VStack
             .padding()
-        }
+            .alert("Are you sure?", isPresented: $showDeleteConfirmation, actions: {
+                Button("Go back", role: .cancel) { }
+                Button("Yes, delete account", role: .destructive) {
+                    Task {
+                        do {
+                            let realm = try await Realm()
+                            try await realm.asyncWrite {
+                                realm.deleteAll()
+                            }
+                            AuthService.shared.deleteAll()
+                            
+                        } catch {
+                            print("Error deleting account: \(error.localizedDescription)")
+                        }
+                    }
+                }
+            })
+            .sheet(isPresented: $showingCompanyDetail, onDismiss: {
+                vm.fetchCompanyData()
+            }, content: {
+                CompanyDetailView(company: CompanyEntity(name: vm.companyName, taxRate: Double(vm.taxRateStr) ?? 0.0))
+            })
+        } //: HStack
         .padding()
         
-    }
+    } //: Body
     
 }
 

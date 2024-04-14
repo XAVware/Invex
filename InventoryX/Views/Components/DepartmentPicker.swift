@@ -113,19 +113,39 @@ struct DepartmentPicker: View {
                 .tag(department as DepartmentEntity?)
             }
         } label: {
-            HStack {
-                Spacer()
-                Text(selectedDepartment?.name ?? "Select Department")
+            HStack(spacing: 12) {
+                ZStack {
+                    Rectangle()
+                        .fill(.accent.opacity(0.9))
+                        .opacity(0.8)
+                        .frame(width: 48)
+                    
+                    Image(systemName: "building.2.fill")
+                        .foregroundStyle(Color("Purple050"))
+                        .font(.subheadline)
+                        .fontDesign(.rounded)
+                } //: ZStack
+                Spacer(minLength: 12)
+                Text(selectedDepartment?.name ?? "Department")
                 Spacer()
                 Image(systemName: "chevron.up.chevron.down")
-                
+                    .padding(.trailing)
             }
         }
-        .padding()
-        .frame(minWidth: 190, maxWidth: 220, alignment: .trailing)
-        .frame(height: 56)
-        .foregroundStyle(.black)
-        .modifier(GlowingOutlineMod())
+        .background(.white.opacity(0.95))
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(lineWidth: 0.5)
+                .foregroundStyle(.gray)
+                .shadow(color: Color("Purple050"), radius: 4, x: 3, y: 3)
+                .shadow(color: Color("Purple050"), radius: 4, x: -3, y: -3)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 6))
+        .shadow(color: Color.gray.opacity(0.20), radius: 4, x: 0, y: 0)
+        .frame(minWidth: 190, maxWidth: 256, alignment: .trailing)
+        .frame(height: 48)
+//        .foregroundStyle(.black)
+//        .modifier(GlowingOutlineMod())
     } //: Drop Down Style
     
     private var columnHeaderStyle: some View {
@@ -152,7 +172,7 @@ struct DepartmentPicker: View {
 
 
 #Preview {
-    DepartmentPicker(selectedDepartment: .constant(nil), style: .columnHeaderBtn)
+    DepartmentPicker(selectedDepartment: .constant(nil), style: .dropdown)
         .padding()
         .environment(\.realm, DepartmentEntity.previewRealm)
 }

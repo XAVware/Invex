@@ -10,12 +10,28 @@ import RealmSwift
 
 @MainActor class CompanyDetailViewModel: ObservableObject {
     
-    /// Company data saves differently than departments and items. Since there can only be one company there's no need to track create/modify states. When the save button is tapped, check if a company exists, if yes then `modify/update` otherwise `create`.
+    /// Company data saves differently than departments and items. Since there can 
+    /// only be one company there's no need to track create/modify states. When the
+    /// save button is tapped, check if a company exists, if yes then `modify/update`
+    /// otherwise `create`.
     func saveCompany(name: String, tax: String) throws {
         guard let taxRate = Double(tax) else { throw AppError.invalidTaxPercentage }
         // Confirm name is valid after whitespace is removed.
         let company = CompanyEntity(name: name, taxRate: taxRate)
         let realm = try Realm()
+        
+        try realm.write {
+            if let company = realm.objects(CompanyEntity.self).first {
+                // Company exists, update record
+                debugPrint("Company already exists, updating the record.")
+                company.name = name
+                company.taxRate = taxRate
+            } else {
+                // Company doesn't exist. Create record
+                debugPrint("Creating company record.")
+                realm.add(company)
+            }
+        }
         
         if let company = realm.objects(CompanyEntity.self).first {
             // Company exists, update record
@@ -92,11 +108,22 @@ struct CompanyDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                header
+                // MARK: - HEADER
+                if showTitles {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
+                        
+                        Text("Edit company info")
+                        
+                    } //: VStack
+                    .modifier(TitleMod())
+                }
                 
-                Text(errorMessage)
-                    .foregroundStyle(.red)
-                
+                // MARK: - FORM FIELDS
                 VStack(alignment: .leading, spacing: 24) {
                     ThemeTextField(boundTo: $companyName,
                                    placeholder: "Company Name",
@@ -122,6 +149,9 @@ struct CompanyDetailView: View {
                     self.taxRate = tax.toPercentageString()
                 }
                 
+                Text(errorMessage)
+                    .foregroundStyle(.red)
+                
                 Button {
                     continueTapped()
                 } label: {
@@ -141,21 +171,6 @@ struct CompanyDetailView: View {
         } //: ScrollView
     } //: Body
     
-    @ViewBuilder private var header: some View {
-        if showTitles {
-            VStack(alignment: .leading, spacing: 8) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                }
-                
-                Text("Edit company info")
-                
-            } //: VStack
-            .modifier(TitleMod())
-        }
-    } //: Header
 }
 
 

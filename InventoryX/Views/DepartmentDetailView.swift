@@ -103,11 +103,24 @@ struct DepartmentDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                header
+                // MARK: - HEADER
+                if showTitles {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
+                        
+                        Text(detailType == .modify ? "Edit department" : "Add department")
+                        
+                    } //: VStack
+                    .modifier(TitleMod())
+                    .frame(maxWidth: 720)
+                }
                 
-                Text(errorMessage)
-                    .foregroundStyle(.red)
-                
+
+                // MARK: - FORM FIELDS
                 VStack(alignment: .leading, spacing: 24) {
                     ThemeTextField(boundTo: $name,
                                    placeholder: "i.e. Clothing",
@@ -139,6 +152,9 @@ struct DepartmentDetailView: View {
                     self.markup = markup.toPercentageString()
                 }
                 
+                Text(errorMessage)
+                    .foregroundStyle(.red)
+                
                 Button {
                     continueTapped()
                 } label: {
@@ -165,22 +181,6 @@ struct DepartmentDetailView: View {
         } //: ScrollView
     } //: Body
     
-    @ViewBuilder private var header: some View {
-        if showTitles {
-            VStack(alignment: .leading, spacing: 8) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                }
-                
-                Text(detailType == .modify ? "Edit department" : "Add department")
-                
-            } //: VStack
-            .modifier(TitleMod())
-            .frame(maxWidth: 720)
-        }
-    } //: Header
 }
 
 #Preview {

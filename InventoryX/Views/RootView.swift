@@ -27,7 +27,7 @@ class RootViewModel: ObservableObject {
     private let service = AuthService.shared
     private var cancellables = Set<AnyCancellable>()
     
-    @Published var companyExists: Bool = false
+    @Published var companyExists: Bool = false 
     
     init() {
         configureSubscribers()
@@ -42,9 +42,18 @@ class RootViewModel: ObservableObject {
     }
 }
 
-/// PointOfSaleViewModel is initialized in the root so a user's cart is not lost when they switch screens.
+// Use cmd + M for long initializer formatting
+
+/// PointOfSaleViewModel is initialized in the root so a user's cart is not lost when 
+/// they switch screens.
 ///
 /// Menu shouldn't be open while cart is a sidebar and vice versa.
+///
+/// Future features:
+///     - Try to find pattern in pricing/percentage data added by user and change 
+///     pickers/sliders to behave accordingly
+///         -> i.e. if all prices end in 0, price pickers should not default to increments
+///         less than 0.1
 
 struct RootView: View {
     let uiProperties: LayoutProperties
@@ -110,8 +119,8 @@ struct RootView: View {
         }
     }
     
-    /// Don't show the menu when `cartState == .confirming`
     var body: some View {
+        /// Don't show the menu when `cartState == .confirming`. The menu can be compact when the width is over 840
         HStack(spacing: 0) {
             if cartState != .confirming {
                 if shouldShowMenu || uiProperties.width > 840 {
@@ -129,22 +138,30 @@ struct RootView: View {
                     PointOfSaleView(menuState: $menuState, cartState: $cartState, uiProperties: uiProperties)
                         .environmentObject(posVM)
                     
-                case .inventoryList:    InventoryListView()
-                case .departments:      DepartmentsView()
-                case .settings:         SettingsView()
+                case .inventoryList:
+                    ResponsiveView { props in
+                        InventoryListView(uiProperties: props)
+                    }
+                    .padding(.top)
+                    
+                case .departments:      
+                    DepartmentsView()
+                        .padding(.top)
+                    
+                case .settings:         
+                    SettingsView()
+                        .padding(.top)
                 }
             }
+            
             .background(.accent.opacity(0.0001))
-//            .onTapGesture(coordinateSpace: .global) { location in
-//                // TODO: Might not need this. Will probably work without checking if location is greater than menu width.
-//                if menuState == .open {
-//                    withAnimation(.interpolatingSpring) {
-//                        menuState = .closed
-//                    }
-//                }
-//                print("Tapped at \(location)")
-//            }
-//            
+            .onTapGesture(coordinateSpace: .global) { location in
+                if menuState == .open {
+                    withAnimation(.interpolatingSpring) {
+                        menuState = .closed
+                    }
+                }
+            }
         } //: HStack
         .overlay(smallViewMenuBtn, alignment: .topLeading)
         .onChange(of: menuState) { newValue in
@@ -157,6 +174,7 @@ struct RootView: View {
             }
         }
         .onChange(of: currentDisplay) { _ in
+            guard menuState == .open else { return }
             withAnimation(.interpolatingSpring) {
                 menuState = .closed
             }
@@ -164,9 +182,9 @@ struct RootView: View {
         .onReceive(vm.$companyExists) { exists in
             showingOnboarding = !exists
         }
-        .fullScreenCover(isPresented: $showingOnboarding) {
-            OnboardingView()
-        }
+//        .fullScreenCover(isPresented: $showingOnboarding) {
+//            OnboardingView()
+//        }
         
     } //: Body
     
@@ -181,9 +199,9 @@ struct RootView: View {
                 Image(systemName: "line.3.horizontal")
             }
             .font(.title)
-            .fontDesign(.rounded)
-            .foregroundStyle(.accent)
             .padding()
+            .fontDesign(.rounded)
+            
         }
     }
     
