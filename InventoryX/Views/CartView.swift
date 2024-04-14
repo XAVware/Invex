@@ -107,6 +107,9 @@ struct CartView: View {
             }
         } //: VStack
         .opacity(uiProperties.width < 150 ? 0 : 1)
+        .onAppear {
+            vm.fetchCompany()
+        }
         
     } //: Body
     
@@ -118,7 +121,7 @@ struct CartView: View {
                 Text(Date().formatted(date: .numeric, time: .shortened))
             } //: HStack
             
-            Text("\(vm.fetchCompanyName())")
+            Text("\(vm.companyName)")
 
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 16) {
@@ -175,7 +178,7 @@ struct CartView: View {
                 } //: HStack
                 
                 HStack {
-                    Text("Tax:")
+                    Text("Tax: (\(vm.taxRate.toPercentageString())%)")
                     Spacer()
                     Text("\(vm.taxAmount.formatAsCurrencyString())")
                 } //: HStack

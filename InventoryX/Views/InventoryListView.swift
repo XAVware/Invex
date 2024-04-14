@@ -58,7 +58,9 @@ struct InventoryListView: View {
         .sheet(item: $selectedItem, onDismiss: {
             selectedItem = nil
             selectedRow = nil
-            
+            let origDept = selectedDepartment
+            selectedDepartment = nil
+            selectedDepartment = origDept
         }) { item in
             AddItemView(item: item)
                 .overlay(AlertView())
@@ -322,15 +324,17 @@ struct InventoryListView: View {
                 .width(max: 36)
                 
             } rows: {
-                if let dept = selectedDepartment {
-                    ForEach(dept.items) { item in
-                        TableRow(item)
-                    }
-                } else {
+//                if let dept = selectedDepartment {
+//                    ForEach(dept.items) { item in
+//                        TableRow(item)
+//                    }
+//                } else {
                     ForEach(allItems) { item in
                         TableRow(item)
                     }
-                }
+//                }
+                
+                
 //                if selectedDepartment == nil {
 //                    ForEach(allItems) { item in
 //                        TableRow(item)

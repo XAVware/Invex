@@ -151,9 +151,11 @@ struct RootView: View {
                 case .settings:         
                     SettingsView()
                         .padding(.top)
+                    
+                case .salesHistory:
+                    SalesHistoryView()
                 }
             }
-            
             .background(.accent.opacity(0.0001))
             .onTapGesture(coordinateSpace: .global) { location in
                 if menuState == .open {

@@ -18,7 +18,7 @@ struct SalesHistoryView: View {
     
     @State var selectedDateRange: DateRanges = DateRanges.today
     @State var isShowingDetail: Bool = false
-    @State var selectedSale: SaleEntity?
+//    @State var selectedSale: SaleEntity?
     
     @ObservedResults(SaleEntity.self) var allSales
 
@@ -93,88 +93,116 @@ struct SalesHistoryView: View {
         
     }
     
+    @State var selectedSale: SaleEntity?
+    
     var body: some View {
-        GeometryReader { geo in
-            VStack {
-                headerToolbar
-                    .frame(height: toolbarHeight)
-                    .padding(.bottom)
-                
-                Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatAsCurrencyString())")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                
-                Chart {
-                    ForEach(getGroupedSales()) { group in
-                        BarMark(x: .value("Hour", group.label),
-                                y: .value("Value", group.total))
-                        .foregroundStyle(.accent)
-                        .cornerRadius(8)
-                    }
+        NavigationSplitView(columnVisibility: .constant(.doubleColumn)) {
+            List(allSales) { sale in
+                HStack {
+                    Text("\(sale.timestamp.formatted(date: .numeric, time: .shortened))")
+                    Spacer()
+                    Text(sale.total.formatAsCurrencyString())
+                    Text("\(sale.items.count)")
+                } //: HStack
+                .onTapGesture {
+                    selectedSale = sale
+                    print(sale.items.count)
                 }
+            }
+            .toolbar(.hidden, for: .navigationBar)
+        } detail: {
+            if let sale = self.selectedSale {
+                SaleDetailView(sale: sale)
+            }
+        }
+        .navigationSplitViewStyle(.balanced)
+
+    }
+    
+    
+    
+//    var body: some View {
+//        GeometryReader { geo in
+//            VStack {
+//                headerToolbar
+//                    .frame(height: toolbarHeight)
+//                    .padding(.bottom)
+//                
+//                Text("Income \(selectedDateRange.rawValue): \(rangeTotal.formatAsCurrencyString())")
+//                    .font(.title3)
+//                    .fontWeight(.semibold)
+//                
+//                Chart {
+//                    ForEach(getGroupedSales()) { group in
+//                        BarMark(x: .value("Hour", group.label),
+//                                y: .value("Value", group.total))
+//                        .foregroundStyle(.accent)
+//                        .cornerRadius(8)
+//                    }
+//                }
 //                .chartXAxis {
 //                    AxisMarks(values: .stride(by: .hour, count: 4)) { _ in
 //                        AxisValueLabel(format: .dateTime.hour(.twoDigits(amPM: .abbreviated)))
 //                    }
 //                }
-                .chartYAxis {
-                    let totals = getGroupedSales().map { $0.total }
-                    let min = totals.min() ?? 0.0
-                    let maxTotal = totals.max() ?? 0.0
-                    let maxMark = 20 * ceil(maxTotal / 20)
-                    let costsStride = Array(stride(from: min, through: maxMark, by: 20))
-                    AxisMarks(position: .leading, values: costsStride) { axis in
-                        let value = costsStride[axis.index]
-                        AxisValueLabel(value.formatAsCurrencyString(), centered: false)
-                    }
-                }
-                .frame(maxWidth: 0.4 * geo.size.width, maxHeight: 0.3 * geo.size.height)
+//                .chartYAxis {
+//                    let totals = getGroupedSales().map { $0.total }
+//                    let min = totals.min() ?? 0.0
+//                    let maxTotal = totals.max() ?? 0.0
+//                    let maxMark = 20 * ceil(maxTotal / 20)
+//                    let costsStride = Array(stride(from: min, through: maxMark, by: 20))
+//                    AxisMarks(position: .leading, values: costsStride) { axis in
+//                        let value = costsStride[axis.index]
+//                        AxisValueLabel(value.formatAsCurrencyString(), centered: false)
+//                    }
+//                }
+//                .frame(maxWidth: 0.4 * geo.size.width, maxHeight: 0.3 * geo.size.height)
                                 
-                List {
-                    Section {
-                        ForEach(rangeSales, id: \.self) { sale in
-                            HStack {
-                                Text("\(sale.timestamp.formatted(date: .numeric, time: .shortened))")
-                                Spacer()
-                                Text(sale.total.formatAsCurrencyString())
-                                Text("\(sale.items.count)")
-                            } //: HStack
-                            .onTapGesture {
-                                selectedSale = sale
-                                print(sale.items.count)
-                            }
-                        }
-                    } header: {
-                        Text("Sales")
-                            .font(.largeTitle)
-                            .fontWeight(.semibold)
-                            .padding(.bottom, 8)
-                            .textCase(nil)
-                    }
-                    .listRowBackground(Color.clear)
-                } //: List
-                .scrollContentBackground(.hidden)
-                .frame(maxWidth: 0.6 * geo.size.width)
-                .background(Color("Purple050"))
-                .cornerRadius(15)
-                
-            } //: VStack
-            .padding()
-            .background(Color("Purple050"))
-            .onAppear {
-                updateSales(newRange: selectedDateRange)
-            }
-            .sheet(item: $selectedSale, onDismiss: {
-                selectedSale = nil
-            }, content: { sale in
-                SaleDetailView(sale: sale)
-            })
-            .onChange(of: selectedDateRange) { newValue in
-                updateSales(newRange: newValue)
-            }
-        } //: GeometryReader
-        
-    } //: Body
+//                List {
+//                    Section {
+//                        ForEach(rangeSales, id: \.self) { sale in
+//                            HStack {
+//                                Text("\(sale.timestamp.formatted(date: .numeric, time: .shortened))")
+//                                Spacer()
+//                                Text(sale.total.formatAsCurrencyString())
+//                                Text("\(sale.items.count)")
+//                            } //: HStack
+//                            .onTapGesture {
+//                                selectedSale = sale
+//                                print(sale.items.count)
+//                            }
+//                        }
+//                    } header: {
+//                        Text("Sales")
+//                            .font(.largeTitle)
+//                            .fontWeight(.semibold)
+//                            .padding(.bottom, 8)
+//                            .textCase(nil)
+//                    }
+//                    .listRowBackground(Color.clear)
+//                } //: List
+//                .scrollContentBackground(.hidden)
+//                .frame(maxWidth: 0.6 * geo.size.width)
+//                .background(Color("Purple050"))
+//                .cornerRadius(15)
+//                
+//            } //: VStack
+//            .padding()
+//            .background(Color("Purple050"))
+//            .onAppear {
+//                updateSales(newRange: selectedDateRange)
+//            }
+//            .sheet(item: $selectedSale, onDismiss: {
+//                selectedSale = nil
+//            }, content: { sale in
+//                SaleDetailView(sale: sale)
+//            })
+//            .onChange(of: selectedDateRange) { newValue in
+//                updateSales(newRange: newValue)
+//            }
+//        } //: GeometryReader
+//        
+//    } //: Body
     
     private var headerToolbar: some View {
         HStack(spacing: 24) {

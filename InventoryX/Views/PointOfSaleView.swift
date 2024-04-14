@@ -11,12 +11,14 @@ import Algorithms
 
 @MainActor class PointOfSaleViewModel: ObservableObject {
     @Published var cartItems: Array<ItemEntity> = .init()
+    @Published var companyName: String = ""
+    @Published var taxRate: Double = 0.0
     
     /// Computed array of unique items in the cart. `CartView` uses this to display a section for each item, without re-ordering them. The array of `@Published cartItems` in `PointOfSaleViewModel` can then be queried by the view to find data on each unique item such as the quantity in cart and its subtotal. This allows for re-use of `ItemEntity`. `.uniqued()` requires `Swift Algorithms.`
     var uniqueItems: [ItemEntity] { Array(cartItems.uniqued()) }
     
     var cartSubtotal: Double { cartItems.reduce(0) { $0 + $1.retailPrice } }
-    var taxAmount: Double { cartSubtotal * 0.07 }
+    var taxAmount: Double { cartSubtotal * taxRate / 100 }
     var total: Double { cartSubtotal + taxAmount }
     
     var cartItemCount: Int { cartItems.count }
@@ -31,12 +33,12 @@ import Algorithms
         }
     }
     
-    func fetchCompanyName() -> String {
-        var tempName: String = "Err"
+    func fetchCompany() {
         do {
             let realm = try Realm()
             if let result = realm.objects(CompanyEntity.self).first {
-                tempName = result.name
+                self.companyName = result.name
+                self.taxRate = result.taxRate
             }
             
             //            tempName = result?.name ?? "Err"
@@ -53,7 +55,6 @@ import Algorithms
             LogService(String(describing: self)).error("Settings VM err")
         }
         
-        return tempName
     }
     
     // TODO: Maybe, Only call this when initialized. Then increment stored property.
@@ -88,13 +89,17 @@ import Algorithms
                 LogService(String(describing: self)).error("Unable to thaw item: \(item)")
             }
         }
+
+        let saleItems = cartItems.map( { SaleItemEntity(item: $0) } )
         
         // 2. Save the sale
         let newSale = SaleEntity(timestamp: Date(), total: self.total)
+        
         do {
             let realm = try Realm()
             try realm.write {
                 realm.add(newSale)
+                newSale.items.append(objectsIn: saleItems)
             }
             
             cartItems.removeAll()
@@ -102,6 +107,7 @@ import Algorithms
         } catch {
             LogService(String(describing: self)).error("Error saving sale: \(error.localizedDescription)")
         }
+        
     }
 }
 

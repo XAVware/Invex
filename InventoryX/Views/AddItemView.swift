@@ -277,12 +277,29 @@ struct AddItemView: View {
         .alert("Are you sure? This can't be undone.", isPresented: $showDeleteConfirmation) {
             Button("Go back", role: .cancel) { }
             Button("Yes, delete Item", role: .destructive) {
-                let item = self.selectedItem
+//                let item = self.selectedItem
                 
                 do {
                     let realm = try Realm()
                     try realm.write {
-                        realm.delete(self.selectedItem)
+                        guard let dept = realm.object(ofType: DepartmentEntity.self, forPrimaryKey: selectedDepartment?._id) else {
+                            print("No department found")
+                            return
+                        }
+                        
+                        guard let item = realm.object(ofType: ItemEntity.self, forPrimaryKey: selectedItem._id) else {
+                            print("No item found")
+                            return
+                        }
+                        
+                        if let indexToDelete = dept.items.firstIndex(where: { $0._id == item._id }) {
+                            print("Index found: \(indexToDelete)")
+                            dept.items.remove(at: indexToDelete)
+                            realm.delete(item)
+                        } else {
+                            print("Couldn't delete")
+                        }
+                        
                     }
                     dismiss()
                 } catch {
