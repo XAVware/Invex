@@ -76,6 +76,7 @@ struct DepartmentsView: View {
                         
                     } else {
                         Text("\(dept.items.count.description) Items")
+                        
                     }
                 }
                 

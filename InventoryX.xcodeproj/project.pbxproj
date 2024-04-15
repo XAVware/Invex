@@ -51,6 +51,7 @@
 		94B7EAC92BACDDEF00895FF7 /* ItemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7EAC82BACDDEF00895FF7 /* ItemTableView.swift */; };
 		94C7625C2BA8A9F800A61F7D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C7625B2BA8A9F800A61F7D /* AuthService.swift */; };
 		94C7625E2BA8BEDB00A61F7D /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C7625D2BA8BEDB00A61F7D /* LogService.swift */; };
+		94D1FDB22BCC8D13001DFEA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94D1FDB12BCC8D13001DFEA5 /* LaunchScreen.storyboard */; };
 		94D3F1052A1C6A1C00AF4393 /* DepartmentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */; };
 		94EA1CE32BB2763300BD0388 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EA1CE22BB2763300BD0388 /* PasscodeView.swift */; };
 		94ECB3922BB3955F00A507AF /* PointOfSaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ECB3912BB3955F00A507AF /* PointOfSaleView.swift */; };
@@ -108,6 +109,7 @@
 		94B7EAC82BACDDEF00895FF7 /* ItemTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableView.swift; sourceTree = "<group>"; };
 		94C7625B2BA8A9F800A61F7D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		94C7625D2BA8BEDB00A61F7D /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
+		94D1FDB12BCC8D13001DFEA5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentEntity.swift; sourceTree = "<group>"; };
 		94EA1CE22BB2763300BD0388 /* PasscodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
 		94ECB3912BB3955F00A507AF /* PointOfSaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointOfSaleView.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				80B5EF7029F0C318007D9842 /* InventoryXApp.swift */,
 				802EDC0629FB79E40048A9A8 /* DisplayState.swift */,
 				945D80122BCA61BF002C4269 /* AppStoreListing.rtf */,
+				94D1FDB12BCC8D13001DFEA5 /* LaunchScreen.storyboard */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80B5EF7829F0C319007D9842 /* Preview Assets.xcassets in Resources */,
+				94D1FDB22BCC8D13001DFEA5 /* LaunchScreen.storyboard in Resources */,
 				80B5EF7529F0C319007D9842 /* Assets.xcassets in Resources */,
 				945D80132BCA61BF002C4269 /* AppStoreListing.rtf in Resources */,
 			);
@@ -561,6 +565,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -595,6 +600,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";

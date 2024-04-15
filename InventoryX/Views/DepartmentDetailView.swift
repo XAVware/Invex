@@ -179,7 +179,55 @@ struct DepartmentDetailView: View {
                 }
             }
         } //: ScrollView
+        .overlay(detailType == .modify ? deleteButton : nil, alignment: .topTrailing)
+        
     } //: Body
+    
+    @State var showRemoveItemsAlert: Bool = false
+    @State var showDeleteConfirmation: Bool = false
+    
+    private var deleteButton: some View {
+        Menu {
+            Button("Delete department", systemImage: "trash", role: .destructive) {
+                if !department.items.isEmpty {
+                    showRemoveItemsAlert = true
+                } else {
+                    
+                }
+            }
+        } label: {
+            Image(systemName: "ellipsis.circle")
+        }
+        .font(.title)
+        .padding()
+        .foregroundStyle(.primary)
+        .alert("You must remove the items from this department before you can delete it.", isPresented: $showRemoveItemsAlert) {
+            Button("Okay", role: .cancel) { }
+        }
+        .alert("Are you sure you want to delete this department? This can't be done.", isPresented: $showRemoveItemsAlert) {
+            Button("Go back", role: .cancel) { }
+            Button("Yes, delete Item", role: .destructive) {
+//                let item = self.selectedItem
+                
+                do {
+                    let realm = try Realm()
+                    try realm.write {
+                        guard let dept = realm.object(ofType: DepartmentEntity.self, forPrimaryKey: department._id) else {
+                            print("No department found")
+                            return
+                        }
+                        
+                        realm.delete(dept)
+
+                        
+                    }
+                    dismiss()
+                } catch {
+                    print("Error deleting account: \(error.localizedDescription)")
+                }
+            }
+        }
+    } //: Delete Button
     
 }
 

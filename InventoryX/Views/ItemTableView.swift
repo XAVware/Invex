@@ -198,11 +198,6 @@ struct ItemTableView: View {
             .padding(horPadding)
             .onAppear {
                 recalcColumns(forWidth: geo.size.width)
-                let realm = try! Realm()
-                let sales = realm.objects(SaleEntity.self)
-                sales.forEach { sale in
-                    print(sale.items.first)
-                }
             }
             .onChange(of: geo.size.width) { newValue in
                 recalcColumns(forWidth: newValue)

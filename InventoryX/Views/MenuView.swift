@@ -101,7 +101,9 @@ struct MenuView: View {
         .frame(width: menuState.idealWidth)
         .background(.accent)
         .fullScreenCover(isPresented: $showingLockScreen) {
-            LockScreenView()
+            ResponsiveView { props in
+                LockScreenView(uiProperties: props)
+            }
         }
         
     }
