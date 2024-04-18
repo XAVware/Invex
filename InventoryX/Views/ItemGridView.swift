@@ -21,7 +21,7 @@ enum TableViewStyle: String, CaseIterable {
 
 // TODO: Fix odd button animation when screen size changes
 // TODO: Is it okay for this view to re-initialize every time uiProperties changes?
-struct ItemTableView: View {
+struct ItemGridView: View {
     @ObservedResults(ItemEntity.self) var allItems
     @ObservedResults(DepartmentEntity.self) var allDepartments
     @Binding var department: DepartmentEntity?
@@ -120,7 +120,7 @@ struct ItemTableView: View {
                 AddItemView(item: item)
                     .overlay(AlertView())
             }
-            .onChange(of: selectedRow) { newValue in
+            .onChange(of: selectedRow) { _, newValue in
                 guard let newValue = newValue else { return }
                 if let item = allItems.first(where: { $0.id == newValue}) {
                     self.selectedItem = item
@@ -199,7 +199,7 @@ struct ItemTableView: View {
             .onAppear {
                 recalcColumns(forWidth: geo.size.width)
             }
-            .onChange(of: geo.size.width) { newValue in
+            .onChange(of: geo.size.width) { _, newValue in
                 recalcColumns(forWidth: newValue)
             }
         } //: Geometry Reader
@@ -210,7 +210,7 @@ struct ItemTableView: View {
 
 #Preview {
     ResponsiveView { props in
-        ItemTableView(department: .constant(nil), style: .list, onSelect: { item in
+        ItemGridView(department: .constant(nil), style: .list, onSelect: { item in
             
         })
         .padding()
