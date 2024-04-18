@@ -13,8 +13,8 @@ import SwiftUI
 /// Passing properties into a view using a const/let causes the view to be re-initialized every time the view's width changes.
 
 struct ResponsiveView<Content:View>: View {
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
+//    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+//    @Environment(\.verticalSizeClass) var verticalSizeClass
     
     var content: (LayoutProperties) -> Content
     var body: some View {
@@ -29,8 +29,8 @@ struct ResponsiveView<Content:View>: View {
                     landscape: landScape,
                     dimensValues: dimensValues,
                     customFontSize: customFontSize,
-                    verticalSizeClass: verticalSizeClass,
-                    horizontalSizeClass: horizontalSizeClass,
+//                    verticalSizeClass: verticalSizeClass,
+//                    horizontalSizeClass: horizontalSizeClass,
                     height: height,
                     width: width
                 )
@@ -136,20 +136,20 @@ struct LayoutProperties {
     var landscape: Bool
     var dimensValues: CustomDimensValues
     var customFontSize: CustomFontSize
-    var verticalSizeClass: UserInterfaceSizeClass?
-    var horizontalSizeClass: UserInterfaceSizeClass?
+//    var verticalSizeClass: UserInterfaceSizeClass?
+//    var horizontalSizeClass: UserInterfaceSizeClass?
     var height: CGFloat
     var width: CGFloat
     
 }
 
-func getPreviewLayoutProperties(landscape: Bool, vertSizeClass: UserInterfaceSizeClass, horSizeClass: UserInterfaceSizeClass, height: CGFloat, width: CGFloat) -> LayoutProperties {
+func getPreviewLayoutProperties(landscape: Bool, /*vertSizeClass: UserInterfaceSizeClass, horSizeClass: UserInterfaceSizeClass,*/ height: CGFloat, width: CGFloat) -> LayoutProperties {
     return LayoutProperties(
         landscape: landscape,
         dimensValues: CustomDimensValues(height: height, width: width),
         customFontSize: CustomFontSize(height: height, width: width),
-        verticalSizeClass: vertSizeClass,
-        horizontalSizeClass: horSizeClass,
+//        verticalSizeClass: vertSizeClass,
+//        horizontalSizeClass: horSizeClass,
         height: height,
         width: width
     )

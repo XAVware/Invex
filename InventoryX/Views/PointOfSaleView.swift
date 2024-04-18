@@ -70,43 +70,69 @@ import Algorithms
         return count
     }
     
-    func finalizeSale(completion: @escaping (() -> Void)) {
+    func finalizeSale(completion: @escaping (() -> Void)) async {
         // TODO: 1 & 2 might be able to run at the same time.
         // 1. Update the on-hand quantity for each unique item in the cart
-        uniqueItems.forEach { item in
-            let cartQty = cartItems.filter { $0._id == item._id }.count
-            if let invItem = item.thaw() {
-                let newOnHandQty = invItem.onHandQty - cartQty
-                do {
-                    let realm = try Realm()
-                    try realm.write {
-                        invItem.onHandQty = newOnHandQty
-                    }
-                } catch {
-                    LogService(String(describing: self)).error("Error adjusting inventory quantities: \(error.localizedDescription)")
-                }
-            } else {
-                LogService(String(describing: self)).error("Unable to thaw item: \(item)")
+        for index in 0...uniqueItems.count - 1 {
+            let tempItem = uniqueItems[index]
+            let cartQty = cartItems.filter { $0._id == tempItem._id }.count
+            do {
+                try await RealmActor().adjustStock(for: tempItem, by: cartQty)
+                
+            } catch {
+                debugPrint("Error saving item in sale: \(tempItem)")
             }
         }
+        
+//        await uniqueItems.forEach { item in
+//            let cartQty = cartItems.filter { $0._id == item._id }.count
+//            do {
+//                try await RealmActor().adjustStock(for: item, by: cartQty)
+//            } catch {
+//
+//            }
+//            if let invItem = item.thaw() {
+//                let newOnHandQty = invItem.onHandQty - cartQty
+//                do {
+//                    let realm = try Realm()
+//                    try realm.write {
+//                        invItem.onHandQty = newOnHandQty
+//                    }
+//                } catch {
+//                    LogService(String(describing: self)).error("Error adjusting inventory quantities: \(error.localizedDescription)")
+//                }
+//            } else {
+//                LogService(String(describing: self)).error("Unable to thaw item: \(item)")
+//            }
+//        }
 
+        // 2. Save the sale
+        
+        // Convert ItemEntities to SaleItemEntities so they can be used in the sale.
         let saleItems = cartItems.map( { SaleItemEntity(item: $0) } )
         
-        // 2. Save the sale
-        let newSale = SaleEntity(timestamp: Date(), total: self.total)
-        
         do {
-            let realm = try Realm()
-            try realm.write {
-                realm.add(newSale)
-                newSale.items.append(objectsIn: saleItems)
-            }
-            
+            try await RealmActor().saveSale(items: saleItems, total: self.total)
             cartItems.removeAll()
             completion()
         } catch {
-            LogService(String(describing: self)).error("Error saving sale: \(error.localizedDescription)")
+            
         }
+        
+//        let newSale = SaleEntity(timestamp: Date(), total: self.total)
+//        
+//        do {
+//            let realm = try Realm()
+//            try realm.write {
+//                realm.add(newSale)
+//                newSale.items.append(objectsIn: saleItems)
+//            }
+//            
+//            cartItems.removeAll()
+//            completion()
+//        } catch {
+//            LogService(String(describing: self)).error("Error saving sale: \(error.localizedDescription)")
+//        }
         
     }
 }
@@ -178,10 +204,20 @@ struct PointOfSaleView: View {
                     VStack(spacing: 24) {
                         DepartmentPicker(selectedDepartment: $selectedDept, style: .scrolling)
                         
-                        ItemTableView(department: $selectedDept, style: .grid) { item in
-                            vm.addItemToCart(item)
+                        if let dept = selectedDept {
+                            ItemGridView(items: dept.items) { item in
+                                vm.addItemToCart(item)
+                            }
+                            .padding(2)
+                            
+                        } else {
+                            Spacer()
                         }
-                        .padding(2)
+                        
+//                        ItemGridView(department: $selectedDept) { item in
+//                            vm.addItemToCart(item)
+//                        }
+//                        .padding(2)
                         
                     } //: VStack
                     .padding(.horizontal)

@@ -48,11 +48,13 @@
 		9490BAE02BB32044003C925A /* SecondaryButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */; };
 		94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */; };
 		94B3DE932A47C2CB00BBCB3A /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */; };
-		94B7EAC92BACDDEF00895FF7 /* ItemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7EAC82BACDDEF00895FF7 /* ItemTableView.swift */; };
+		94B7EAC92BACDDEF00895FF7 /* ItemGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7EAC82BACDDEF00895FF7 /* ItemGridView.swift */; };
 		94C7625C2BA8A9F800A61F7D /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C7625B2BA8A9F800A61F7D /* AuthService.swift */; };
 		94C7625E2BA8BEDB00A61F7D /* LogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94C7625D2BA8BEDB00A61F7D /* LogService.swift */; };
 		94D1FDB22BCC8D13001DFEA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94D1FDB12BCC8D13001DFEA5 /* LaunchScreen.storyboard */; };
 		94D3F1052A1C6A1C00AF4393 /* DepartmentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */; };
+		94E8BEAE2BCD90EA00041614 /* RealmActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E8BEAD2BCD90EA00041614 /* RealmActor.swift */; };
+		94E8BEB02BCF720600041614 /* CustomShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E8BEAF2BCF720600041614 /* CustomShape.swift */; };
 		94EA1CE32BB2763300BD0388 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EA1CE22BB2763300BD0388 /* PasscodeView.swift */; };
 		94ECB3922BB3955F00A507AF /* PointOfSaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94ECB3912BB3955F00A507AF /* PointOfSaleView.swift */; };
 		94F624462BAF1B1E0069C81E /* SalesHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F624452BAF1B1E0069C81E /* SalesHistoryView.swift */; };
@@ -106,11 +108,13 @@
 		9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SecondaryButton-Mod.swift"; sourceTree = "<group>"; };
 		94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
-		94B7EAC82BACDDEF00895FF7 /* ItemTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableView.swift; sourceTree = "<group>"; };
+		94B7EAC82BACDDEF00895FF7 /* ItemGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemGridView.swift; sourceTree = "<group>"; };
 		94C7625B2BA8A9F800A61F7D /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		94C7625D2BA8BEDB00A61F7D /* LogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogService.swift; sourceTree = "<group>"; };
 		94D1FDB12BCC8D13001DFEA5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentEntity.swift; sourceTree = "<group>"; };
+		94E8BEAD2BCD90EA00041614 /* RealmActor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmActor.swift; sourceTree = "<group>"; };
+		94E8BEAF2BCF720600041614 /* CustomShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomShape.swift; sourceTree = "<group>"; };
 		94EA1CE22BB2763300BD0388 /* PasscodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
 		94ECB3912BB3955F00A507AF /* PointOfSaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointOfSaleView.swift; sourceTree = "<group>"; };
 		94F624452BAF1B1E0069C81E /* SalesHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesHistoryView.swift; sourceTree = "<group>"; };
@@ -212,7 +216,7 @@
 				9421930F2BB23C92001D720D /* CompanyDetailView.swift */,
 				9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */,
 				945DF5AE2BAB64AE002014F6 /* DepartmentsView.swift */,
-				94B7EAC82BACDDEF00895FF7 /* ItemTableView.swift */,
+				94B7EAC82BACDDEF00895FF7 /* ItemGridView.swift */,
 				9467C40F2BC5995900A7541E /* InventoryListView.swift */,
 				946524702BA8036800F24CDD /* LockScreenView.swift */,
 				945DF5AA2BAA5CF3002014F6 /* MenuView.swift */,
@@ -221,6 +225,7 @@
 				94ECB3912BB3955F00A507AF /* PointOfSaleView.swift */,
 				945DF5A82BAA5CAC002014F6 /* RootView.swift */,
 				944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */,
+				94E8BEAF2BCF720600041614 /* CustomShape.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -241,6 +246,7 @@
 				94C7625B2BA8A9F800A61F7D /* AuthService.swift */,
 				94C7625D2BA8BEDB00A61F7D /* LogService.swift */,
 				94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */,
+				94E8BEAD2BCD90EA00041614 /* RealmActor.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -377,7 +383,9 @@
 			files = (
 				945DF5AF2BAB64AE002014F6 /* DepartmentsView.swift in Sources */,
 				802EDC0229FA32160048A9A8 /* SaleDateManager.swift in Sources */,
+				94E8BEB02BCF720600041614 /* CustomShape.swift in Sources */,
 				94F6244E2BB12DAA0069C81E /* Double+Ext.swift in Sources */,
+				94E8BEAE2BCD90EA00041614 /* RealmActor.swift in Sources */,
 				94F624592BB12FB90069C81E /* Title-Mod.swift in Sources */,
 				948688672BB6B0B70030C8C6 /* AlertModel.swift in Sources */,
 				80DBB97F29F70EE000497695 /* OnboardingView.swift in Sources */,
@@ -394,7 +402,7 @@
 				94341C102BA5895500334505 /* UIColor+Ext.swift in Sources */,
 				94860BA02BB14EDF00B1138A /* GlowingOutline-Mod.swift in Sources */,
 				94C7625C2BA8A9F800A61F7D /* AuthService.swift in Sources */,
-				94B7EAC92BACDDEF00895FF7 /* ItemTableView.swift in Sources */,
+				94B7EAC92BACDDEF00895FF7 /* ItemGridView.swift in Sources */,
 				9486886B2BB6B1650030C8C6 /* UIFeedbackService.swift in Sources */,
 				94B3DE932A47C2CB00BBCB3A /* AddItemView.swift in Sources */,
 				80FFBD082A1D013A00992440 /* SaleEntity.swift in Sources */,
@@ -482,7 +490,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -538,7 +546,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

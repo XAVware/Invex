@@ -229,7 +229,7 @@ struct PasscodeView: View {
             
             NumberPadView(passcode: $passcode)
                 .frame(minWidth: 320, idealWidth: 340, maxWidth: 360)
-                .onChange(of: passcode) { newPasscode in
+                .onChange(of: passcode) { _, newPasscode in
                     passcodeChanged(to: newPasscode)
                 }
         } //: VStack
@@ -252,7 +252,7 @@ struct PasscodeView: View {
             
             NumberPadView(passcode: $passcode)
                 .frame(minWidth: 320, idealWidth: 340, maxWidth: 360)
-                .onChange(of: passcode) { newPasscode in
+                .onChange(of: passcode) { _, newPasscode in
                     passcodeChanged(to: newPasscode)
                 }
         } //: HStack

@@ -28,13 +28,13 @@ struct InventoryXApp: SwiftUI.App {
             ResponsiveView { props in
                 RootView(uiProperties: props)
             }
-            .onAppear {
+//            .onAppear {
 //                addSampleData()
                 //                UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
-                //                UserDefaults.standard.removeObject(forKey: "passcode")
-                //                let realm = try! Realm()
-                //                try! realm.write { realm.deleteAll() }
-            }
+//                                UserDefaults.standard.removeObject(forKey: "passcode")
+//                                let realm = try! Realm()
+//                                try! realm.write { realm.deleteAll() }
+//            }
         }
     } //: Body
 }

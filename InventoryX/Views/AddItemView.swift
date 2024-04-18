@@ -10,50 +10,113 @@ import RealmSwift
 
 
 @MainActor class AddItemViewModel: ObservableObject {
+    @Published var errorMessage: String = ""
     
-    func saveItem(dept: DepartmentEntity?, name: String, att: String, qty: String, price: String, cost: String) throws {
-        guard let dept = dept else { return }
-        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
-        guard let thawedDept = dept.thaw() else { return }
-        
-        let newItem = ItemEntity(name: name, 
-                                 attribute: att,
-                                 retailPrice: Double(price) ?? 0,
-                                 avgCostPer: Double(cost) ?? 0,
-                                 onHandQty: Int(qty) ?? 0)
+    func saveItem(dept: DepartmentEntity?, name: String, att: String, qty: String, price: String, cost: String) async {
         do {
-            let realm = try Realm()
-            try realm.write {
-                thawedDept.items.append(newItem)
-            }
+            try await RealmActor().saveItem(dept: dept, name: name, att: att, qty: qty, price: price, cost: cost)
+            print("Successfully saved item")
         } catch {
-            LogService(String(describing: self)).error("Error saving item to Realm: \(error.localizedDescription)")
+            errorMessage = error.localizedDescription
+            debugPrint(error.localizedDescription)
         }
+//        guard let dept = dept else { return }
+//        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
+//        guard let thawedDept = dept.thaw() else { return }
+//        
+//        let newItem = ItemEntity(name: name,
+//                                 attribute: att,
+//                                 retailPrice: Double(price) ?? 0,
+//                                 avgCostPer: Double(cost) ?? 0,
+//                                 onHandQty: Int(qty) ?? 0)
+//        do {
+//            let realm = try Realm()
+//            try realm.write {
+//                thawedDept.items.append(newItem)
+//            }
+//        } catch {
+//            LogService(String(describing: self)).error("Error saving item to Realm: \(error.localizedDescription)")
+//        }
     } //: Save Item
     
     
-    func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) throws {
-        let price = price.replacingOccurrences(of: "$", with: "")
-        let cost = cost.replacingOccurrences(of: "$", with: "")
-        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
-        guard let qty = Int(qty) else { return }
-        guard let price = Double(price) else { return }
-        guard let cost = Double(cost) else { return }
-        
-        if let existingItem = item.thaw() {
-            let realm = try Realm()
-            try realm.write {
-                existingItem.name = name
-                existingItem.attribute = att
-                existingItem.onHandQty = qty
-                existingItem.retailPrice = price
-                existingItem.unitCost = cost
-            }
-            
-        } else {
-            LogService(String(describing: self)).error("Error thawing item.")
+    func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) async {
+        do {
+            try await RealmActor().updateItem(item: item, name: name, att: att, qty: qty, price: price, cost: cost)
+            debugPrint("Successfully updated item")
+        } catch {
+            errorMessage = error.localizedDescription
+            print(error.localizedDescription)
         }
+        
+        
+//        let price = price.replacingOccurrences(of: "$", with: "")
+//        let cost = cost.replacingOccurrences(of: "$", with: "")
+//        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
+//        guard let qty = Int(qty) else { return }
+//        guard let price = Double(price) else { return }
+//        guard let cost = Double(cost) else { return }
+//        
+//        if let existingItem = item.thaw() {
+//            let realm = try Realm()
+//            try realm.write {
+//                existingItem.name = name
+//                existingItem.attribute = att
+//                existingItem.onHandQty = qty
+//                existingItem.retailPrice = price
+//                existingItem.unitCost = cost
+//            }
+//            
+//        } else {
+//            LogService(String(describing: self)).error("Error thawing item.")
+//        }
     }
+    
+    
+    
+//    func saveItem(dept: DepartmentEntity?, name: String, att: String, qty: String, price: String, cost: String) throws {
+//        guard let dept = dept else { return }
+//        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
+//        guard let thawedDept = dept.thaw() else { return }
+//        
+//        let newItem = ItemEntity(name: name, 
+//                                 attribute: att,
+//                                 retailPrice: Double(price) ?? 0,
+//                                 avgCostPer: Double(cost) ?? 0,
+//                                 onHandQty: Int(qty) ?? 0)
+//        do {
+//            let realm = try Realm()
+//            try realm.write {
+//                thawedDept.items.append(newItem)
+//            }
+//        } catch {
+//            LogService(String(describing: self)).error("Error saving item to Realm: \(error.localizedDescription)")
+//        }
+//    } //: Save Item
+//    
+//    
+//    func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) throws {
+//        let price = price.replacingOccurrences(of: "$", with: "")
+//        let cost = cost.replacingOccurrences(of: "$", with: "")
+//        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
+//        guard let qty = Int(qty) else { return }
+//        guard let price = Double(price) else { return }
+//        guard let cost = Double(cost) else { return }
+//        
+//        if let existingItem = item.thaw() {
+//            let realm = try Realm()
+//            try realm.write {
+//                existingItem.name = name
+//                existingItem.attribute = att
+//                existingItem.onHandQty = qty
+//                existingItem.retailPrice = price
+//                existingItem.unitCost = cost
+//            }
+//            
+//        } else {
+//            LogService(String(describing: self)).error("Error thawing item.")
+//        }
+//    }
     
     
 }
@@ -104,14 +167,17 @@ struct AddItemView: View {
             let price = retailPrice.replacingOccurrences(of: "$", with: "")
             let cost = retailPrice.replacingOccurrences(of: "$", with: "")
             
-            if detailType == .modify {
-                try vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
-                finish()
+            Task {
                 
-            } else {
-                // Item was nil when passed to view. User is creating a new item.
-                try vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
-                finish()
+                if detailType == .modify {
+                    try await vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
+                    finish()
+                    
+                } else {
+                    // Item was nil when passed to view. User is creating a new item.
+                    try await vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
+                    finish()
+                }
             }
             
         } catch let error as AppError {
@@ -197,7 +263,7 @@ struct AddItemView: View {
                     .keyboardType(.numberPad)
                     .focused($focus, equals: .unitCost)
                 } //: VStack
-                .onChange(of: focus) { newValue in
+                .onChange(of: focus) { _, newValue in
                     if !retailPrice.isEmpty {
                         if let price = Double(retailPrice) {
                             self.retailPrice = price.formatAsCurrencyString()

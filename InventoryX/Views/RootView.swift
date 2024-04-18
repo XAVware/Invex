@@ -142,7 +142,7 @@ struct RootView: View {
                     ResponsiveView { props in
                         InventoryListView(uiProperties: props)
                     }
-                    .padding(.top)
+//                    .padding(.top)
                     
                 case .departments:      
                     DepartmentsView()
@@ -166,7 +166,7 @@ struct RootView: View {
             }
         } //: HStack
         .overlay(smallViewMenuBtn, alignment: .topLeading)
-        .onChange(of: menuState) { newValue in
+        .onChange(of: menuState) { _, newValue in
             if newValue == .closed {
                 /// Try to show a compact menu when the menu state is closed. The 
                 /// compact menu should only be displayed when the view is greater than 840
@@ -175,7 +175,7 @@ struct RootView: View {
                 }
             }
         }
-        .onChange(of: currentDisplay) { _ in
+        .onChange(of: currentDisplay) { _, _ in
             guard menuState == .open else { return }
             withAnimation(.interpolatingSpring) {
                 menuState = .closed
@@ -184,9 +184,9 @@ struct RootView: View {
         .onReceive(vm.$companyExists) { exists in
             showingOnboarding = !exists
         }
-//        .fullScreenCover(isPresented: $showingOnboarding) {
-//            OnboardingView()
-//        }
+        .fullScreenCover(isPresented: $showingOnboarding) {
+            OnboardingView()
+        }
         
     } //: Body
     

@@ -109,7 +109,7 @@ struct DepartmentsView: View {
                 DepartmentDetailView(department: dept)
                     .overlay(AlertView())
             }
-            .onChange(of: selectedRow) { newValue in
+            .onChange(of: selectedRow) { _, newValue in
                 guard let newValue = newValue else { return }
                 if let dept = departments.first(where: { $0.id == newValue}) {
                     self.selectedDepartment = dept

@@ -52,34 +52,33 @@ extension DepartmentEntity {
         let config = Realm.Configuration(inMemoryIdentifier: identifier)
         do {
             realm = try Realm(configuration: config)
-//            let realmObjects = realm.objects(DepartmentEntity.self)
-//            print(realmObjects)
-            
-                
-//                print("Deleting preview data")
-//                let realm = try Realm()
-//                try realm.write {
-//                    realm.deleteAll()
-//                }
-//                return realm
-                
-                // MARK: - CREATE PREVIEW DATA
-                print("Creating preview data")
-                try realm.write {
-                    realm.add(company)
+                if realm.isEmpty {
+                    // MARK: - CREATE PREVIEW DATA
+                    print("Creating preview data")
+                    try realm.write {
+                        realm.add(company)
+                        
+                        realm.add(foodCategory)
+                        
+                        foodCategory.items.append(objectsIn: ItemEntity.foodArray)
+                        
+                        
+                        realm.add(drinkCategory)
+                        drinkCategory.items.append(objectsIn: ItemEntity.drinkArray)
+                        
+                        realm.add(frozenCategory)
+                        frozenCategory.items.append(objectsIn: ItemEntity.frozenArray)
+                    }
+                    return realm
+                } else {
+                    print("Deleting preview data")
+                    let realm = try Realm()
+                    try realm.write {
+                        realm.deleteAll()
+                    }
+                    return realm
                     
-                    realm.add(foodCategory)
-                    
-                    foodCategory.items.append(objectsIn: ItemEntity.foodArray)
-                    
-                    
-                    realm.add(drinkCategory)
-                    drinkCategory.items.append(objectsIn: ItemEntity.drinkArray)
-                    
-                    realm.add(frozenCategory)
-                    frozenCategory.items.append(objectsIn: ItemEntity.frozenArray)
                 }
-                return realm
             
             
         } catch {

@@ -42,11 +42,14 @@ struct CartView: View {
         case .sidebar:  cartState = .confirming
         case .confirming:
             guard !vm.cartItems.isEmpty else { return }
-            vm.finalizeSale {
-                /// Once the sale saves successfully, return the cart to its original state.
-                // TODO: This probably won't work for smaller screens. Menu shouldn't be compact.
-                cartState = .sidebar
-                menuState = .compact
+            Task {
+                // TODO: Now that this is asynchronous, can probably get rid of the closure.
+                await vm.finalizeSale {
+                    /// Once the sale saves successfully, return the cart to its original state.
+                    // TODO: This probably won't work for smaller screens. Menu shouldn't be compact.
+                    cartState = .sidebar
+                    menuState = .compact
+                }
             }
         }
         

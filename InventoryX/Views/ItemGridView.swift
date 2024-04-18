@@ -14,37 +14,41 @@ struct ColumnHeaderModel: Identifiable {
     let sortDescriptor: String
 }
 
-enum TableViewStyle: String, CaseIterable {
-    case grid = "square.grid.2x2.fill"
-    case list = "list.dash"
-}
+//enum TableViewStyle: String, CaseIterable {
+//    case grid = "square.grid.2x2.fill"
+//    case list = "list.dash"
+//}
 
 // TODO: Fix odd button animation when screen size changes
 // TODO: Is it okay for this view to re-initialize every time uiProperties changes?
 struct ItemGridView: View {
-    @ObservedResults(ItemEntity.self) var allItems
-    @ObservedResults(DepartmentEntity.self) var allDepartments
-    @Binding var department: DepartmentEntity?
-    @State var style: TableViewStyle
+//    @ObservedResults(ItemEntity.self) var allItems
+//    @ObservedResults(DepartmentEntity.self) var allDepartments
+//    @Binding var department: DepartmentEntity?
+//    @State var style: TableViewStyle
 //    let uiProperties: LayoutProperties
     let onSelect: ((ItemEntity) -> Void)
+    let items: RealmSwift.List<ItemEntity>
     
-    
-    
+    init(items: RealmSwift.List<ItemEntity>, onSelect: @escaping ((ItemEntity) -> Void)) {
+        self.items = items
+        self.onSelect = onSelect
+    }
     // TODO: Check if computed property is efficient here
     // -- This should not be done. Should probably pass the items into this view.
     // Can probably update a variable on change of department
-    var itemArr: Array<ItemEntity> {
-        if let dept = department { return Array(dept.items) }
-        else { return Array(allItems) }
-    }
+//    var itemArr: Array<ItemEntity> {
+//        if let dept = department { return Array(dept.items) }
+//        else { return Array(allItems) }
+//    }
     
     var body: some View {
         VStack {
-            switch style {
-            case .grid: gridView
-            case .list: listView
-            }
+            gridView
+//        case .grid:
+//            switch style {
+//            case .list: listView
+//            }
             Spacer()
         } //: VStack
         
@@ -52,83 +56,83 @@ struct ItemGridView: View {
     
     
     // MARK: - LIST VIEW STYLE
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    private var isCompact: Bool { horizontalSizeClass == .compact }
-
-    @State var selectedRow: ItemEntity.ID?
-    @State var selectedItem: ItemEntity?
-    
-    private var listView: some View {
-        VStack {
-            Table(of: ItemEntity.self, selection: $selectedRow) {
-                TableColumn("Item Name") { item in
-                    if isCompact {
-                        Text(item.name)
-                    } else {
-                        Text(item.name)
-                    }
-                }
-                
-                TableColumn("Department") { item in
-                    if let department = item.department.first {
-                        Text(department.name)
-                    } else {
-                        Text("No department")
-                    }
-                }
-                
-                
-                TableColumn("On hand qty") { item in
-                    HStack {
-                        Text((item.onHandQty < item.department.first?.restockNumber ?? .max) ? "⚠️" : "")
-                            .frame(maxWidth: .infinity)
-                        Text(String(describing: item.onHandQty))
-                            .frame(maxWidth: .infinity)
-                        Spacer()
-                            .frame(maxWidth: .infinity)
-                    } //: HStack
-                }
-                .width(min: 54, ideal: 80, max: 90)
-                
-                TableColumn("Price", value: \.formattedPrice)
-                
-                TableColumn("Cost", value: \.formattedUnitCost)
-                
-                TableColumn("") { item in
-                    HStack(spacing: 16) {
-                        Button {
-                            self.selectedItem = item
-                        } label: {
-                            Image(systemName: "chevron.right")
-                                .opacity(0.8)
-                        }
-                    } //: HStack
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-                .width(min: 72, ideal: 72, max: 72)
-                
-            } rows: {
-                ForEach(allItems) { item in
-                    TableRow(item)
-                }
-            }
-            .modifier(TableStyleMod())
-            .sheet(item: $selectedItem, onDismiss: {
-                selectedItem = nil
-                selectedRow = nil
-            }) { item in
-                AddItemView(item: item)
-                    .overlay(AlertView())
-            }
-            .onChange(of: selectedRow) { _, newValue in
-                guard let newValue = newValue else { return }
-                if let item = allItems.first(where: { $0.id == newValue}) {
-                    self.selectedItem = item
-                }
-            }
-        } //: VStack
-        
-    } //: List View
+//    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+//    private var isCompact: Bool { horizontalSizeClass == .compact }
+//
+//    @State var selectedRow: ItemEntity.ID?
+//    @State var selectedItem: ItemEntity?
+//    
+//    private var listView: some View {
+//        VStack {
+//            Table(of: ItemEntity.self, selection: $selectedRow) {
+//                TableColumn("Item Name") { item in
+//                    if isCompact {
+//                        Text(item.name)
+//                    } else {
+//                        Text(item.name)
+//                    }
+//                }
+//                
+//                TableColumn("Department") { item in
+//                    if let department = item.department.first {
+//                        Text(department.name)
+//                    } else {
+//                        Text("No department")
+//                    }
+//                }
+//                
+//                
+//                TableColumn("On hand qty") { item in
+//                    HStack {
+//                        Text((item.onHandQty < item.department.first?.restockNumber ?? .max) ? "⚠️" : "")
+//                            .frame(maxWidth: .infinity)
+//                        Text(String(describing: item.onHandQty))
+//                            .frame(maxWidth: .infinity)
+//                        Spacer()
+//                            .frame(maxWidth: .infinity)
+//                    } //: HStack
+//                }
+//                .width(min: 54, ideal: 80, max: 90)
+//                
+//                TableColumn("Price", value: \.formattedPrice)
+//                
+//                TableColumn("Cost", value: \.formattedUnitCost)
+//                
+//                TableColumn("") { item in
+//                    HStack(spacing: 16) {
+//                        Button {
+//                            self.selectedItem = item
+//                        } label: {
+//                            Image(systemName: "chevron.right")
+//                                .opacity(0.8)
+//                        }
+//                    } //: HStack
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                }
+//                .width(min: 72, ideal: 72, max: 72)
+//                
+//            } rows: {
+//                ForEach(allItems) { item in
+//                    TableRow(item)
+//                }
+//            }
+//            .modifier(TableStyleMod())
+//            .sheet(item: $selectedItem, onDismiss: {
+//                selectedItem = nil
+//                selectedRow = nil
+//            }) { item in
+//                AddItemView(item: item)
+//                    .overlay(AlertView())
+//            }
+//            .onChange(of: selectedRow) { _, newValue in
+//                guard let newValue = newValue else { return }
+//                if let item = allItems.first(where: { $0.id == newValue}) {
+//                    self.selectedItem = item
+//                }
+//            }
+//        } //: VStack
+//        
+//    } //: List View
     
     
     // MARK: - GRID VIEW STYLE
@@ -164,7 +168,7 @@ struct ItemGridView: View {
     private var gridView: some View {
         GeometryReader { geo in
             LazyVGrid(columns: gridColumns, alignment: .leading, spacing: gridSpacing) {
-                ForEach(itemArr) { item in
+                ForEach(items) { item in
                     Button {
                         onSelect(item)
                     } label: {
@@ -208,12 +212,12 @@ struct ItemGridView: View {
 }
 
 
-#Preview {
-    ResponsiveView { props in
-        ItemGridView(department: .constant(nil), style: .list, onSelect: { item in
-            
-        })
-        .padding()
-        .environment(\.realm, DepartmentEntity.previewRealm)
-    }
-}
+//#Preview {
+//    ResponsiveView { props in
+//        ItemGridView(department: .constant(nil), onSelect: { item in
+//            
+//        })
+//        .padding()
+//        .environment(\.realm, DepartmentEntity.previewRealm)
+//    }
+//}
