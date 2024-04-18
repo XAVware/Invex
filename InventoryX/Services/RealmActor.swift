@@ -8,6 +8,7 @@
 import Foundation
 import RealmSwift
 
+
 /// TODO: Should be:
 /// 1. detailViewSubmitted() should pass the current Object to the view model.
 /// 2. View model should do validation of form field types before passing the cleaned data to RealmActor.
