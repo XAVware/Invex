@@ -1,45 +1,19 @@
 //
-//  InventoryListView.swift
+//  NavExperiment.swift
 //  InventoryX
 //
-//  Created by Ryan Smetana on 4/9/24.
+//  Created by Ryan Smetana on 4/18/24.
 //
 
 import SwiftUI
 import RealmSwift
 
-
-@MainActor class InventoryListViewModel: ObservableObject {
-//    private let realmActor: RealmActor = RealmActor()
-//    @Published var selectedDepartment: DepartmentEntity?
-
-//    func addDepartment() async {
-//        do {
-////            try await RealmActor().addDepartment(name: "Test", restockThresh: 10, markup: 0.5)
-//            print("Department added")
-//        } catch {
-//            print(error)
-//        }
-//    }
+struct NavExperiment: View {
+    @State var colVis: NavigationSplitViewVisibility = .doubleColumn
+    @State var prefCompactCol: NavigationSplitViewColumn = .detail
+    
+    
     @ObservedResults(DepartmentEntity.self) var departments
-    
-    @Published var errorMessage = ""
-    
-    func deleteDepartment(withId id: RealmSwift.ObjectId) async {
-        do {
-            try await RealmActor().deleteDepartment(id: id)
-            debugPrint("Successfully deleted department")
-        } catch {
-            errorMessage = error.localizedDescription
-            print(error.localizedDescription)
-        }
-    }
-
-}
-
-
-
-struct InventoryListView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.layoutDirection) private var layoutDirection
     @StateObject var vm = InventoryListViewModel()
@@ -71,36 +45,178 @@ struct InventoryListView: View {
     let uiProperties: LayoutProperties
     
     var body: some View {
-        VStack {
-            if horizontalSizeClass == .regular {
-                regularView
-            } else {
-                compactView
+        NavigationSplitView(columnVisibility: $colVis, preferredCompactColumn: $prefCompactCol) {
+            menu
+                .navigationSplitViewColumnWidth(280)
+        } content: {
+            VStack {
+                Menu {
+                    ForEach(departments) { dept in
+                        Button {
+                            selectedDepartment = dept
+                        } label: {
+                            Text(dept.name)
+                        }
+                    }
+                } label: {
+                    Text("Department:")
+                        .font(.caption)
+                    
+                    Spacer()
+                    
+                    Text("Select")
+                        .font(.caption2)
+                }
+                .padding(.horizontal)
+                .frame(minWidth: 180, maxWidth: 280, minHeight: 32, idealHeight: 36, maxHeight: 40)
+                .background(.ultraThinMaterial)
+                .clipShape(Capsule())
+                .shadow(radius: 1)
+
+                
+                Spacer()
+            } //: VStack
+            .padding([.vertical, .leading])
+            .padding(.trailing, 2)
+            .background(Color("Purple050").opacity(0.2))
+//            .navigationTitle("Filters")
+            .navigationSplitViewColumnWidth(min: 180, ideal: 240, max: 280)
+            .onAppear {
+                guard let dept = departments.first, !isCompact else { return }
+                selectedDepartment = dept
+            }
+            
+            
+
+        } detail: {
+            VStack(alignment: .leading, spacing: 16) {
+                // MARK: - DEPARTMENT HIGHLIGHT PANE
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("\(selectedDepartment?.name ?? "") Dept.")
+                            .font(.headline)
+                        
+                        Text("\(selectedDepartment?.items.count ?? 0) Items")
+                            .font(.callout)
+                    } //: VStack
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .leading) {
+                        Text("Markup")
+                            .font(.headline)
+                        Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0%")
+                            .font(.callout)
+                    } //: VStack
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .leading) {
+                        Text("Restock")
+                            .font(.headline)
+                        Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0")
+                            .font(.callout)
+                    } //: VStack
+                    
+                    Spacer()
+                    
+                    departmentMenu
+                        .font(.title2)
+                } //: HStack
+                .modifier(PaneOutlineMod())
+                
+                GeometryReader { geo in
+                    // MARK: - REGULAR SIZE TABLE
+                    Table(of: ItemEntity.self) {
+                        
+                        TableColumn("Name") { item in
+                            Text(item.name)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        
+                        TableColumn("Attribute") { item in
+                            Text(item.attribute)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        
+                        TableColumn("Stock") { item in
+                            Text(item.formattedQty)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .width(min: 96)
+                        
+                        TableColumn("Price") { item in
+                            Text(item.formattedPrice)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .width(max: 96)
+                        
+                        TableColumn("Cost") { item in
+                            Text(item.formattedUnitCost)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .width(max: 96)
+                        
+                        TableColumn("") { item in
+                            Text(item.restockWarning)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .width(24)
+                    } rows: {
+                        if let selectedDepartment = selectedDepartment {
+                            ForEach(selectedDepartment.items) {
+                                TableRow($0)
+                            }
+                        } else {
+                            TableRow(ItemEntity())
+                        }
+                    }
+//                    .padding(.vertical, 6)
+                    .background(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(.gray.opacity(0.7), lineWidth: 0.5)
+                    )
+                } //: Geometry Reader
+            } //: VStack
+            .padding()
+            .background(Color("Purple050").opacity(0.2))
+            .navigationTitle("Inventory")
+            .navigationSplitViewColumnWidth(400)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Filters", systemImage: "slider.vertical.3") {
+                        if colVis == .doubleColumn {
+                            colVis = .detailOnly
+                        } else {
+                            colVis = .doubleColumn
+                        }
+                    }
+                } //: Toolbar Item - Filters Button
+                
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Button("Department", systemImage: "plus") {
+                        editingDepartment = DepartmentEntity()
+                    }
+                    .buttonStyle(BorderedButtonStyle())
+                    
+                    Button("Item", systemImage: "plus") {
+                        selectedItem = ItemEntity()
+                    }
+                    .buttonStyle(BorderedButtonStyle())
+                }
             }
         }
-        .sheet(item: $selectedItem) { item in
-            AddItemView(item: item)
-        }
-        .sheet(item: $editingDepartment, onDismiss: {
-            selectedDepartment = vm.departments.first
-        }) { dept in
-            DepartmentDetailView(department: dept)
-        }
+        .navigationSplitViewStyle(.balanced)
         
-    } //: Body
-    
-    func itemTapped(_ item: ItemEntity) {
-        do {
-            let item = try RealmActor().fetchItem(withId: item._id)
-            self.selectedItem = item
-        } catch {
-            print(error.localizedDescription)
-        }
+        
     }
     
-    /// Apple Table documentation: https://developer.apple.com/documentation/SwiftUI/Table
-
-    // TODO: May need to change view to use ResponsiveView and LayoutProperties instead of size class because I'm not using built in navigation.
+//    func getColumns(forWidth width: CGFloat) -> TableColumnContent {
+//        print("Getting columns")
+//    }
+    
     @ViewBuilder private var regularView: some View {
         VStack {
             // MARK: - TOOLBAR
@@ -118,7 +234,7 @@ struct InventoryListView: View {
                         .frame(height: 34)
                 }
 
-                Button("Department", systemImage: "plus") { 
+                Button("Department", systemImage: "plus") {
                     editingDepartment = DepartmentEntity()
                 }
                 .buttonStyle(BorderedButtonStyle())
@@ -133,42 +249,7 @@ struct InventoryListView: View {
             HStack(spacing: 16) {
                 // MARK: - DEPARTMENT LIST PANE
                 if uiProperties.landscape {
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Image(systemName: "building.2.fill")
-                            Text("Departments")
-                                .font(.subheadline)
-                            Spacer()
-                        } //: HStack
-                        
-                        ScrollView {
-                            ForEach(vm.departments) { dept in
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 6)
-                                        .fill(selectedDepartment == dept ? .accent.opacity(0.75) : .clear)
-                                    HStack {
-                                        Text(dept.name)
-                                        Spacer()
-                                        
-                                        Image(systemName: selectedDepartment == dept ? "circle.fill" : "circle")
-                                    } //: HStack
-                                    .foregroundStyle(selectedDepartment == dept ? .white : .black)
-                                    .padding(8)
-                                    .onTapGesture {
-                                        selectedDepartment = dept
-                                    }
-                                } //: ZStack
-                            } //: ForEach
-                            
-                            
-                        } //: Scroll
-                    } //: VStack
-//                    .modifier(PaneOutlineMod())
-                    .frame(minWidth: 120, idealWidth: 160, maxWidth: 220, maxHeight: .infinity)
-                    .onAppear {
-                        guard let dept = vm.departments.first, !isCompact else { return }
-                        selectedDepartment = dept
-                    }
+                    
                 }
                 
                 VStack(alignment: .leading, spacing: 16) {
@@ -213,40 +294,34 @@ struct InventoryListView: View {
                         TableColumn("Name") { item in
                             Text(item.name)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .onTapGesture { itemTapped(item) }
                         }
                         
                         TableColumn("Attribute") { item in
                             Text(item.attribute)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .onTapGesture { itemTapped(item) }
                         }
                         
                         TableColumn("Stock") { item in
                             Text(item.formattedQty)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .onTapGesture { itemTapped(item) }
                         }
                         .width(min: 96)
                         
                         TableColumn("Price") { item in
                             Text(item.formattedPrice)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .onTapGesture { itemTapped(item) }
                         }
                         .width(max: 96)
                         
                         TableColumn("Cost") { item in
                             Text(item.formattedUnitCost)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .onTapGesture { itemTapped(item) }
                         }
                         .width(max: 96)
                         
                         TableColumn("") { item in
                             Text(item.restockWarning)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .onTapGesture { itemTapped(item) }
                         }
                         .width(24)
                     } rows: {
@@ -387,7 +462,7 @@ struct InventoryListView: View {
                     guard let dept = selectedDepartment else { return }
                     Task {
                         await vm.deleteDepartment(withId: dept._id)
-                        selectedDepartment = vm.departments.first
+                        selectedDepartment = departments.first
                     }
                 }
             }
@@ -408,12 +483,66 @@ struct InventoryListView: View {
                 .background(.white)
         }
     }
-
+    
+    @State var display: DisplayState = .inventoryList
+    
+    @ViewBuilder var menu: some View {
+        VStack(spacing: 16) {
+            
+            Spacer()
+            
+            ForEach(DisplayState.allCases, id: \.self) { data in
+                Button {
+                    display = data
+                } label: {
+                    HStack(spacing: 16) {
+                            Text(data.menuButtonText)
+                            Spacer()
+                        
+                        Image(systemName: data.menuIconName)
+                        RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
+                            .fill(.white)
+                            .frame(width: 6)
+                            .opacity(data == display ? 1 : 0)
+                            .offset(x: 3)
+                    }
+                    .modifier(MenuButtonMod(isSelected: data == display))
+                }
+                
+            } //: For Each
+            
+            Spacer()
+            
+            Button {
+//                showingLockScreen = true
+            } label: {
+                HStack(spacing: 16) {
+                        Text("Lock")
+                        Spacer()
+                    Image(systemName: "lock")
+                    RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
+                        .fill(.white)
+                        .frame(width: 6)
+                        .opacity(0)
+                        .offset(x: 3)
+                } //: HStack
+                .modifier(MenuButtonMod(isSelected: false))
+            }
+            
+        } //: VStack
+//        .frame(width: menuState.idealWidth)
+        .background(.accent)
+//        .fullScreenCover(isPresented: $showingLockScreen) {
+//            ResponsiveView { props in
+//                LockScreenView(uiProperties: props)
+//            }
+//        }
+    }
 }
 
 #Preview {
     ResponsiveView { props in
-        InventoryListView(uiProperties: props)
+        NavExperiment(uiProperties: props)
             .environment(\.realm, DepartmentEntity.previewRealm)
     }
 }

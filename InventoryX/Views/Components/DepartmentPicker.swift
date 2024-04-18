@@ -20,28 +20,16 @@ struct DepartmentPicker: View {
         switch style {
         case .scrolling:
             scrollStyle
-                .onAppear {
-                    selectedDepartment = nil
-                }
             
         case .list:         
             listStyle
             
         case .dropdown:
             dropDownStyle
-                .onAppear {
-                    if let dept = departments.first {
-                        selectedDepartment = dept
-                    }
-                }
             
         case .columnHeaderBtn:
             columnHeaderStyle
-                .onAppear {
-                    if let dept = departments.first {
-                        selectedDepartment = dept
-                    }
-                }
+        
         }
     } //: Body
     
@@ -125,7 +113,7 @@ struct DepartmentPicker: View {
                         .font(.subheadline)
                         .fontDesign(.rounded)
                 } //: ZStack
-                Spacer(minLength: 12)
+//                Spacer(minLength: 12)
                 Text(selectedDepartment?.name ?? "Department")
                 Spacer()
                 Image(systemName: "chevron.up.chevron.down")
@@ -143,7 +131,7 @@ struct DepartmentPicker: View {
         .clipShape(RoundedRectangle(cornerRadius: 6))
         .shadow(color: Color.gray.opacity(0.20), radius: 4, x: 0, y: 0)
         .frame(minWidth: 190, maxWidth: 256, alignment: .trailing)
-        .frame(height: 48)
+//        .frame(height: 48)
 //        .foregroundStyle(.black)
 //        .modifier(GlowingOutlineMod())
     } //: Drop Down Style

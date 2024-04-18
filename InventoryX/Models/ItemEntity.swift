@@ -52,9 +52,6 @@ class ItemEntity: Object, ObjectKeyIdentifiable {
         return department.first?.name ?? ""
     }
     
-//    var invId: UUID {
-//        return UUID()
-//    }
 }
 
 

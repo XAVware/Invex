@@ -24,6 +24,7 @@
 		94341C102BA5895500334505 /* UIColor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94341C0F2BA5895500334505 /* UIColor+Ext.swift */; };
 		94341C122BA5897000334505 /* PrimaryButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94341C112BA5897000334505 /* PrimaryButton-Mod.swift */; };
 		94341C1B2BA629F000334505 /* NumberPadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94341C172BA629F000334505 /* NumberPadView.swift */; };
+		9446D0482BD151AB007D1131 /* NavExperiment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9446D0472BD151AB007D1131 /* NavExperiment.swift */; };
 		944F8CE72A2AA94E007AD864 /* SaleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */; };
 		944F8CEB2A2C4AE4007AD864 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */; };
 		9453BEC42BB3C79F007C63A4 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 9453BEC32BB3C79F007C63A4 /* Algorithms */; };
@@ -85,6 +86,7 @@
 		94341C0F2BA5895500334505 /* UIColor+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Ext.swift"; sourceTree = "<group>"; };
 		94341C112BA5897000334505 /* PrimaryButton-Mod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PrimaryButton-Mod.swift"; sourceTree = "<group>"; };
 		94341C172BA629F000334505 /* NumberPadView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberPadView.swift; sourceTree = "<group>"; };
+		9446D0472BD151AB007D1131 /* NavExperiment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavExperiment.swift; sourceTree = "<group>"; };
 		944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleDetailView.swift; sourceTree = "<group>"; };
 		944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		945D80122BCA61BF002C4269 /* AppStoreListing.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = AppStoreListing.rtf; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				945DF5A82BAA5CAC002014F6 /* RootView.swift */,
 				944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */,
 				94E8BEAF2BCF720600041614 /* CustomShape.swift */,
+				9446D0472BD151AB007D1131 /* NavExperiment.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 				945DF5A92BAA5CAC002014F6 /* RootView.swift in Sources */,
 				946524712BA8036800F24CDD /* LockScreenView.swift in Sources */,
 				94C7625E2BA8BEDB00A61F7D /* LogService.swift in Sources */,
+				9446D0482BD151AB007D1131 /* NavExperiment.swift in Sources */,
 				944F8CEB2A2C4AE4007AD864 /* SettingsView.swift in Sources */,
 				9467C3F22BC577E400A7541E /* CartView.swift in Sources */,
 				94F624462BAF1B1E0069C81E /* SalesHistoryView.swift in Sources */,

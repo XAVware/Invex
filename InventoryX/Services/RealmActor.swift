@@ -122,9 +122,7 @@ actor RealmActor {
         guard let dept = dept           else { throw AppError.invalidDepartment }
         guard name.isNotEmpty           else { throw AppError.invalidItemName }
         guard let price = Double(price) else { throw AppError.invalidPrice }
-        
-//        guard let thawedDept = dept.thaw() else { return }
-        
+                
         let cost = Double(cost) ?? 0
         let qty = Int(qty) ?? 0
         

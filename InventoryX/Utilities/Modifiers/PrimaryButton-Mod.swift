@@ -13,7 +13,6 @@ struct PrimaryButtonMod: ViewModifier {
             .font(.headline)
             .foregroundStyle(.white)
             .frame(minWidth: 140, idealWidth: 360, maxWidth: 420, minHeight: 36, idealHeight: 48, maxHeight: 54)
-//            .background(.ultraThinMaterial)
             .background(.accent.opacity(0.75))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .contentShape(RoundedRectangle(cornerRadius: 8))

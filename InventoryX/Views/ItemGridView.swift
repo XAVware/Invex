@@ -22,121 +22,8 @@ struct ColumnHeaderModel: Identifiable {
 // TODO: Fix odd button animation when screen size changes
 // TODO: Is it okay for this view to re-initialize every time uiProperties changes?
 struct ItemGridView: View {
-//    @ObservedResults(ItemEntity.self) var allItems
-//    @ObservedResults(DepartmentEntity.self) var allDepartments
-//    @Binding var department: DepartmentEntity?
-//    @State var style: TableViewStyle
-//    let uiProperties: LayoutProperties
     let onSelect: ((ItemEntity) -> Void)
     let items: RealmSwift.List<ItemEntity>
-    
-    init(items: RealmSwift.List<ItemEntity>, onSelect: @escaping ((ItemEntity) -> Void)) {
-        self.items = items
-        self.onSelect = onSelect
-    }
-    // TODO: Check if computed property is efficient here
-    // -- This should not be done. Should probably pass the items into this view.
-    // Can probably update a variable on change of department
-//    var itemArr: Array<ItemEntity> {
-//        if let dept = department { return Array(dept.items) }
-//        else { return Array(allItems) }
-//    }
-    
-    var body: some View {
-        VStack {
-            gridView
-//        case .grid:
-//            switch style {
-//            case .list: listView
-//            }
-            Spacer()
-        } //: VStack
-        
-    } //: Body
-    
-    
-    // MARK: - LIST VIEW STYLE
-//    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-//    private var isCompact: Bool { horizontalSizeClass == .compact }
-//
-//    @State var selectedRow: ItemEntity.ID?
-//    @State var selectedItem: ItemEntity?
-//    
-//    private var listView: some View {
-//        VStack {
-//            Table(of: ItemEntity.self, selection: $selectedRow) {
-//                TableColumn("Item Name") { item in
-//                    if isCompact {
-//                        Text(item.name)
-//                    } else {
-//                        Text(item.name)
-//                    }
-//                }
-//                
-//                TableColumn("Department") { item in
-//                    if let department = item.department.first {
-//                        Text(department.name)
-//                    } else {
-//                        Text("No department")
-//                    }
-//                }
-//                
-//                
-//                TableColumn("On hand qty") { item in
-//                    HStack {
-//                        Text((item.onHandQty < item.department.first?.restockNumber ?? .max) ? "⚠️" : "")
-//                            .frame(maxWidth: .infinity)
-//                        Text(String(describing: item.onHandQty))
-//                            .frame(maxWidth: .infinity)
-//                        Spacer()
-//                            .frame(maxWidth: .infinity)
-//                    } //: HStack
-//                }
-//                .width(min: 54, ideal: 80, max: 90)
-//                
-//                TableColumn("Price", value: \.formattedPrice)
-//                
-//                TableColumn("Cost", value: \.formattedUnitCost)
-//                
-//                TableColumn("") { item in
-//                    HStack(spacing: 16) {
-//                        Button {
-//                            self.selectedItem = item
-//                        } label: {
-//                            Image(systemName: "chevron.right")
-//                                .opacity(0.8)
-//                        }
-//                    } //: HStack
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                }
-//                .width(min: 72, ideal: 72, max: 72)
-//                
-//            } rows: {
-//                ForEach(allItems) { item in
-//                    TableRow(item)
-//                }
-//            }
-//            .modifier(TableStyleMod())
-//            .sheet(item: $selectedItem, onDismiss: {
-//                selectedItem = nil
-//                selectedRow = nil
-//            }) { item in
-//                AddItemView(item: item)
-//                    .overlay(AlertView())
-//            }
-//            .onChange(of: selectedRow) { _, newValue in
-//                guard let newValue = newValue else { return }
-//                if let item = allItems.first(where: { $0.id == newValue}) {
-//                    self.selectedItem = item
-//                }
-//            }
-//        } //: VStack
-//        
-//    } //: List View
-    
-    
-    // MARK: - GRID VIEW STYLE
-    
     let minButtonWidth: CGFloat = 160
     let gridSpacing: CGFloat = 16
     let horPadding: CGFloat = 0
@@ -165,49 +52,58 @@ struct ItemGridView: View {
     
     @State var gridColumns: [GridItem] = [GridItem(.flexible(minimum: 120, maximum: 160))]
     
-    private var gridView: some View {
-        GeometryReader { geo in
-            LazyVGrid(columns: gridColumns, alignment: .leading, spacing: gridSpacing) {
-                ForEach(items) { item in
-                    Button {
-                        onSelect(item)
-                    } label: {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text(item.name)
-                                .font(.headline)
-                                .foregroundStyle(.black)
-                            Spacer()
-                            Text(item.attribute)
-                                .font(.subheadline)
-                                .foregroundStyle(.black)
-                                .opacity(0.8)
-                            Spacer()
-                            Text(item.retailPrice.formatAsCurrencyString())
-                                .font(.headline)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                                .foregroundStyle(.accent.opacity(0.8))
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                    } //: VStack
-                    .background(.ultraThinMaterial)
-                    .background(Color("Purple050").opacity(0.5))
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .shadow(color: Color("Purple800").opacity(0.12), radius: 3, x: 2, y: 2)
-                    .shadow(color: Color("Purple200").opacity(0.12), radius: 3, x: -2, y: -2)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                } //: ForEach
-                
-            } //: LazyVGrid
-            .padding(horPadding)
-            .onAppear {
-                recalcColumns(forWidth: geo.size.width)
-            }
-            .onChange(of: geo.size.width) { _, newValue in
-                recalcColumns(forWidth: newValue)
-            }
-        } //: Geometry Reader
+    init(items: RealmSwift.List<ItemEntity>, onSelect: @escaping ((ItemEntity) -> Void)) {
+        self.items = items
+        self.onSelect = onSelect
     }
+    
+    var body: some View {
+        VStack {
+            GeometryReader { geo in
+                LazyVGrid(columns: gridColumns, alignment: .leading, spacing: gridSpacing) {
+                    ForEach(items) { item in
+                        Button {
+                            onSelect(item)
+                        } label: {
+                            VStack(alignment: .leading, spacing: 0) {
+                                Text(item.name)
+                                    .font(.headline)
+                                    .foregroundStyle(.black)
+                                Spacer()
+                                Text(item.attribute)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.black)
+                                    .opacity(0.8)
+                                Spacer()
+                                Text(item.retailPrice.formatAsCurrencyString())
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                                    .foregroundStyle(.accent.opacity(0.8))
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                        } //: VStack
+                        .background(.ultraThinMaterial)
+                        .background(Color("Purple050").opacity(0.5))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .shadow(color: Color("Purple800").opacity(0.12), radius: 3, x: 2, y: 2)
+                        .shadow(color: Color("Purple200").opacity(0.12), radius: 3, x: -2, y: -2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    } //: ForEach
+                    
+                } //: LazyVGrid
+                .padding(horPadding)
+                .onAppear {
+                    recalcColumns(forWidth: geo.size.width)
+                }
+                .onChange(of: geo.size.width) { _, newValue in
+                    recalcColumns(forWidth: newValue)
+                }
+            } //: Geometry Reader
+            Spacer()
+        } //: VStack
+        
+    } //: Body
     
 }
 

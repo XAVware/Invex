@@ -20,23 +20,6 @@ import RealmSwift
             errorMessage = error.localizedDescription
             debugPrint(error.localizedDescription)
         }
-//        guard let dept = dept else { return }
-//        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
-//        guard let thawedDept = dept.thaw() else { return }
-//        
-//        let newItem = ItemEntity(name: name,
-//                                 attribute: att,
-//                                 retailPrice: Double(price) ?? 0,
-//                                 avgCostPer: Double(cost) ?? 0,
-//                                 onHandQty: Int(qty) ?? 0)
-//        do {
-//            let realm = try Realm()
-//            try realm.write {
-//                thawedDept.items.append(newItem)
-//            }
-//        } catch {
-//            LogService(String(describing: self)).error("Error saving item to Realm: \(error.localizedDescription)")
-//        }
     } //: Save Item
     
     
@@ -48,77 +31,9 @@ import RealmSwift
             errorMessage = error.localizedDescription
             print(error.localizedDescription)
         }
-        
-        
-//        let price = price.replacingOccurrences(of: "$", with: "")
-//        let cost = cost.replacingOccurrences(of: "$", with: "")
-//        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
-//        guard let qty = Int(qty) else { return }
-//        guard let price = Double(price) else { return }
-//        guard let cost = Double(cost) else { return }
-//        
-//        if let existingItem = item.thaw() {
-//            let realm = try Realm()
-//            try realm.write {
-//                existingItem.name = name
-//                existingItem.attribute = att
-//                existingItem.onHandQty = qty
-//                existingItem.retailPrice = price
-//                existingItem.unitCost = cost
-//            }
-//            
-//        } else {
-//            LogService(String(describing: self)).error("Error thawing item.")
-//        }
     }
     
-    
-    
-//    func saveItem(dept: DepartmentEntity?, name: String, att: String, qty: String, price: String, cost: String) throws {
-//        guard let dept = dept else { return }
-//        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
-//        guard let thawedDept = dept.thaw() else { return }
-//        
-//        let newItem = ItemEntity(name: name, 
-//                                 attribute: att,
-//                                 retailPrice: Double(price) ?? 0,
-//                                 avgCostPer: Double(cost) ?? 0,
-//                                 onHandQty: Int(qty) ?? 0)
-//        do {
-//            let realm = try Realm()
-//            try realm.write {
-//                thawedDept.items.append(newItem)
-//            }
-//        } catch {
-//            LogService(String(describing: self)).error("Error saving item to Realm: \(error.localizedDescription)")
-//        }
-//    } //: Save Item
-//    
-//    
-//    func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) throws {
-//        let price = price.replacingOccurrences(of: "$", with: "")
-//        let cost = cost.replacingOccurrences(of: "$", with: "")
-//        guard name.isNotEmpty, qty.isNotEmpty, price.isNotEmpty else { return }
-//        guard let qty = Int(qty) else { return }
-//        guard let price = Double(price) else { return }
-//        guard let cost = Double(cost) else { return }
-//        
-//        if let existingItem = item.thaw() {
-//            let realm = try Realm()
-//            try realm.write {
-//                existingItem.name = name
-//                existingItem.attribute = att
-//                existingItem.onHandQty = qty
-//                existingItem.retailPrice = price
-//                existingItem.unitCost = cost
-//            }
-//            
-//        } else {
-//            LogService(String(describing: self)).error("Error thawing item.")
-//        }
-//    }
-    
-    
+   
 }
 
 enum DetailViewType { case create, modify }
@@ -163,30 +78,30 @@ struct AddItemView: View {
     
     private func continueTapped() {
         focus = nil
-        do {
+//        do {
             let price = retailPrice.replacingOccurrences(of: "$", with: "")
             let cost = retailPrice.replacingOccurrences(of: "$", with: "")
             
             Task {
                 
                 if detailType == .modify {
-                    try await vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
+                    await vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
                     finish()
                     
                 } else {
                     // Item was nil when passed to view. User is creating a new item.
-                    try await vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
+                    await vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
                     finish()
                 }
             }
             
-        } catch let error as AppError {
-//            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
-            errorMessage = error.localizedDescription
-        } catch {
-//            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
-            errorMessage = error.localizedDescription
-        }
+//        } catch let error as AppError {
+////            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
+//            errorMessage = error.localizedDescription
+//        } catch {
+////            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
+//            errorMessage = error.localizedDescription
+//        }
         
     }
     
@@ -303,11 +218,6 @@ struct AddItemView: View {
                 self.focus = nil
             }
             .onAppear {
-                // TODO: Don't default to first department.
-                if let dept = selectedItem.department.first {
-                    selectedDepartment = dept
-                }
-                
                 itemName = selectedItem.name
                 attribute = selectedItem.attribute
                 
@@ -342,9 +252,7 @@ struct AddItemView: View {
         .foregroundStyle(.primary)
         .alert("Are you sure? This can't be undone.", isPresented: $showDeleteConfirmation) {
             Button("Go back", role: .cancel) { }
-            Button("Yes, delete Item", role: .destructive) {
-//                let item = self.selectedItem
-                
+            Button("Yes, delete Item", role: .destructive) {                
                 do {
                     let realm = try Realm()
                     try realm.write {

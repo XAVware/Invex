@@ -83,9 +83,6 @@ struct RootView: View {
             cartState = .sidebar
         }
         
-        print("Main width: \(uiProperties.width)")
-        print("Menu state initialized to: \(menuState)")
-        print("Cart state initialized to: \(cartState)")
     }
     
     /// Conditions required for menu to display.
@@ -94,8 +91,6 @@ struct RootView: View {
         let c2: Bool = uiProperties.width > 840
         let c3: Bool = menuState == .open
         let shouldShow = (c1 && c2) || c3
-        print("Should show menu: \(shouldShow)")
-        print("Should show overlay button: \(!shouldShow)")
         return shouldShow
     }
 
@@ -142,18 +137,15 @@ struct RootView: View {
                     ResponsiveView { props in
                         InventoryListView(uiProperties: props)
                     }
-//                    .padding(.top)
+                    .padding(.top)
                     
-                case .departments:      
-                    DepartmentsView()
-                        .padding(.top)
-                    
-                case .settings:         
+                case .settings:
                     SettingsView()
                         .padding(.top)
                     
-                case .salesHistory:
-                    SalesHistoryView()
+//                case .salesHistory:
+//                    SalesHistoryView()
+//                }
                 }
             }
             .background(.accent.opacity(0.0001))

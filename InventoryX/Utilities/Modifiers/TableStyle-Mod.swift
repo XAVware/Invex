@@ -24,6 +24,5 @@ struct TableStyleMod: ViewModifier {
                         .shadow(color: Color.gray.opacity(0.2), radius: 2)
                 : nil
             )
-//            .padding(4)
     }
 }

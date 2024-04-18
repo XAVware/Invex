@@ -12,6 +12,9 @@ import RealmSwift
 struct InventoryXApp: SwiftUI.App {
     let migrator: RealmMigrator = RealmMigrator()
     
+    init() {
+        UIColor.classInit
+    }
     
     func addSampleData() {
         let drinks = DepartmentEntity(name: "Drinks", restockNum: 12)
@@ -27,6 +30,7 @@ struct InventoryXApp: SwiftUI.App {
         WindowGroup {
             ResponsiveView { props in
                 RootView(uiProperties: props)
+//                NavExperiment(uiProperties: props)
             }
 //            .onAppear {
 //                addSampleData()
@@ -39,3 +43,15 @@ struct InventoryXApp: SwiftUI.App {
     } //: Body
 }
 
+extension UIColor {
+    static let classInit: Void = {
+        /// After trial and error, as of 4.18.24 Apple is using UIColor.opaqueSeparator as the color of the divider that appears between NavigationSplitViews.
+        let orig = class_getClassMethod(UIColor.self, #selector(getter: opaqueSeparator))
+        let new = class_getClassMethod(UIColor.self, #selector(getter: customDividerColor))
+        method_exchangeImplementations(orig!, new!)
+    }()
+
+    @objc open class var customDividerColor: UIColor {
+        return UIColor(Color.clear)
+    }
+}
