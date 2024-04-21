@@ -30,4 +30,12 @@ enum DisplayState: CaseIterable {
         case .settings:         "gearshape"
         }
     }
+    
+    var contentStackWidth: CGFloat {
+        return switch self {
+        case .makeASale: 64
+        case .inventoryList:    320
+        case .settings: 400
+        }
+    }
 }

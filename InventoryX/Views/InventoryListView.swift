@@ -364,6 +364,7 @@ struct InventoryListView: View {
             })
             
         } //: VStack
+        .padding()
     } //: Compact View
     
     @ViewBuilder private var departmentMenu: some View {

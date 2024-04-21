@@ -48,7 +48,7 @@ struct SettingsView: View {
     let termsOfServiceURL: URL = URL(string: "https://xavware.com/invex/termsOfService")!
     let privacyPolicyURL: URL = URL(string: "https://xavware.com/invex/privacyPolicy")!
     
-    @StateObject var vm: SettingsViewModel = SettingsViewModel()
+    @StateObject var settingsVM: SettingsViewModel = SettingsViewModel()
     
     @State var showingCompanyDetail: Bool = false
     @State var showPasscodeView: Bool = false
@@ -78,9 +78,9 @@ struct SettingsView: View {
                     }
                     .padding(.vertical, 8)
                     .sheet(isPresented: $showingCompanyDetail, onDismiss: {
-                        vm.fetchCompanyData()
+                        settingsVM.fetchCompanyData()
                     }, content: {
-                        CompanyDetailView(company: CompanyEntity(name: vm.companyName, taxRate: Double(vm.taxRateStr) ?? 0.0))
+                        CompanyDetailView(company: CompanyEntity(name: settingsVM.companyName, taxRate: Double(settingsVM.taxRateStr) ?? 0.0))
                     })
                     
                     Divider()
@@ -143,7 +143,7 @@ struct SettingsView: View {
                 Button("Go back", role: .cancel) { }
                 Button("Yes, delete account", role: .destructive) {
                     Task {
-                        await vm.deleteAccount()
+                        await settingsVM.deleteAccount()
                     }
                 }
             }

@@ -39,7 +39,9 @@ struct MenuView: View {
             /// the animation when changing state.
             if menuState == .open || menuState == .compact {
                 HStack {
-                    Spacer()
+                    if menuState == .open {
+                        Spacer()
+                    }
                     
                     Button {
                         toggleMenu()
