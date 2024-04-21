@@ -30,6 +30,7 @@ import RealmSwift
 
 struct InventoryListView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @ObservedResults(ItemEntity.self) var items
 //    @Environment(\.layoutDirection) private var layoutDirection
     @StateObject var vm = InventoryListViewModel()
     private var isCompact: Bool { horizontalSizeClass == .compact }
@@ -172,7 +173,6 @@ struct InventoryListView: View {
                             
                         } //: Scroll
                     } //: VStack
-//                    .modifier(PaneOutlineMod())
                     .frame(minWidth: 120, idealWidth: 160, maxWidth: 220, maxHeight: .infinity)
                     .onAppear {
                         guard let dept = vm.departments.first, !isCompact else { return }
@@ -286,8 +286,28 @@ struct InventoryListView: View {
     }
     
     @ViewBuilder private var compactView: some View {
-//        if let selectedDepartment = selectedDepartment {
-            // Headers for compact size class
+        VStack {
+            // MARK: - TOOLBAR
+            HStack {
+                HStack {
+                    Image(systemName: "shippingbox")
+                    Text("Inventory")
+                        .font(.title)
+                }
+                
+                Spacer()
+
+                Button("Department", systemImage: "plus") {
+                    editingDepartment = DepartmentEntity()
+                }
+                .buttonStyle(BorderedButtonStyle())
+                
+                Button("Item", systemImage: "plus") {
+                    selectedItem = ItemEntity()
+                }
+                .buttonStyle(BorderedButtonStyle())
+
+            } //: HStack
             HStack {
                 ForEach(columnData) { header in
                     Text(header.headerText)
@@ -299,13 +319,12 @@ struct InventoryListView: View {
                 Spacer().frame(width: 24)
                 
             } //: HStack
-            .padding()
+            .padding(8)
             
             ScrollView {
                 VStack {
                     
-                    ForEach(getItems()) { item in
-                        NavigationLink(value: item) {
+                    ForEach(items) { item in
                             HStack {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text(item.name)
@@ -313,7 +332,7 @@ struct InventoryListView: View {
                                     
                                     Text(item.attribute)
                                         .fontWeight(.light)
-                                        .frame(maxWidth: .infinity)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
                                 } //: VStack
                                 
                                 Text(item.formattedQty)
@@ -327,18 +346,16 @@ struct InventoryListView: View {
                                 
                                 Text("⚠️")
                             } //: HStack
-                            .padding()
-                        }
-                        
+                            .frame(height: 64) 
+                        Divider()
                     }
                     .scrollIndicators(.hidden)
                     Spacer()
                 } //: VStack
-                .padding()
+//                .padding()
             } //: ScrollView
-            .modifier(TableStyleMod())
-            .padding()
-//            .navigationTitle(selectedDepartment.name)
+//            .modifier(TableStyleMod())
+            .padding(8)
             .navigationDestination(for: ItemEntity.self, destination: { item in
                 AddItemView(item: item, showTitles: false)
             })
@@ -346,10 +363,8 @@ struct InventoryListView: View {
                 DepartmentDetailView(department: DepartmentEntity())
             })
             
-            
-//        } //: Scroll
-        
-    }
+        } //: VStack
+    } //: Compact View
     
     @ViewBuilder private var departmentMenu: some View {
         if let dept = selectedDepartment {

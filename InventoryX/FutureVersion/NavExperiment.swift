@@ -44,172 +44,200 @@ struct NavExperiment: View {
     
     let uiProperties: LayoutProperties
     
+    
+    /// Open or close the menu depending on the current MenuState. On large
+    /// screens the menu never closes fully, so .compact is considered .closed
+    /// for larger screens. Then, if the view is large enough, always show a
+    /// compact menu instead of hiding it.
+    func toggleMenu() {
+//        var newMenuState: MenuState = (menuState == .closed || menuState == .compact) ? .open : .closed
+//        
+//        if newMenuState == .closed && uiProperties.width > 840 {
+//            newMenuState = .compact
+//        }
+//        
+//        withAnimation(.interpolatingSpring) {
+//            menuState = newMenuState
+//            if menuState == .open {
+//                cartState = .closed
+//            }
+//        }
+    }
+    
     var body: some View {
-        NavigationSplitView(columnVisibility: $colVis, preferredCompactColumn: $prefCompactCol) {
-            menu
-                .navigationSplitViewColumnWidth(280)
-        } content: {
-            VStack {
-                Menu {
-                    ForEach(departments) { dept in
-                        Button {
-                            selectedDepartment = dept
-                        } label: {
-                            Text(dept.name)
-                        }
-                    }
-                } label: {
-                    Text("Department:")
-                        .font(.caption)
-                    
-                    Spacer()
-                    
-                    Text("Select")
-                        .font(.caption2)
+        ZStack {
+            NavigationSplitView(columnVisibility: $colVis, preferredCompactColumn: $prefCompactCol) {
+                menu
+                //                .navigationSplitViewColumnWidth(280)
+            } content: {
+                //            VStack {
+                //                Menu {
+                //                    ForEach(departments) { dept in
+                //                        Button {
+                //                            selectedDepartment = dept
+                //                        } label: {
+                //                            Text(dept.name)
+                //                        }
+                //                    }
+                //                } label: {
+                //                    Text("Department:")
+                //                        .font(.caption)
+                //
+                //                    Spacer()
+                //
+                //                    Text("Select")
+                //                        .font(.caption2)
+                //                }
+                //                .padding(.horizontal)
+                //                .frame(minWidth: 180, maxWidth: 280, minHeight: 32, idealHeight: 36, maxHeight: 40)
+                //                .background(.ultraThinMaterial)
+                //                .clipShape(Capsule())
+                //                .shadow(radius: 1)
+                //
+                //
+                //                Spacer()
+                //            } //: VStack
+                //            .padding([.vertical, .leading])
+                //            .padding(.trailing, 2)
+                //            .background(Color("Purple050").opacity(0.2))
+                ////            .navigationTitle("Filters")
+                //            .navigationSplitViewColumnWidth(min: 180, ideal: 240, max: 280)
+                //            .onAppear {
+                //                guard let dept = departments.first, !isCompact else { return }
+                //                selectedDepartment = dept
+                //            }
+                
+                MenuView(display: $display, menuState: .constant(.compact)) {
+                    toggleMenu()
                 }
-                .padding(.horizontal)
-                .frame(minWidth: 180, maxWidth: 280, minHeight: 32, idealHeight: 36, maxHeight: 40)
-                .background(.ultraThinMaterial)
-                .clipShape(Capsule())
-                .shadow(radius: 1)
-
-                
-                Spacer()
-            } //: VStack
-            .padding([.vertical, .leading])
-            .padding(.trailing, 2)
-            .background(Color("Purple050").opacity(0.2))
-//            .navigationTitle("Filters")
-            .navigationSplitViewColumnWidth(min: 180, ideal: 240, max: 280)
-            .onAppear {
-                guard let dept = departments.first, !isCompact else { return }
-                selectedDepartment = dept
-            }
-            
-            
-
-        } detail: {
-            VStack(alignment: .leading, spacing: 16) {
-                // MARK: - DEPARTMENT HIGHLIGHT PANE
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("\(selectedDepartment?.name ?? "") Dept.")
-                            .font(.headline)
+                .navigationSplitViewColumnWidth(64)
+            } detail: {
+                VStack(alignment: .leading, spacing: 16) {
+                    // MARK: - DEPARTMENT HIGHLIGHT PANE
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("\(selectedDepartment?.name ?? "") Dept.")
+                                .font(.headline)
+                            
+                            Text("\(selectedDepartment?.items.count ?? 0) Items")
+                                .font(.callout)
+                        } //: VStack
                         
-                        Text("\(selectedDepartment?.items.count ?? 0) Items")
-                            .font(.callout)
-                    } //: VStack
+                        Spacer()
+                        
+                        VStack(alignment: .leading) {
+                            Text("Markup")
+                                .font(.headline)
+                            Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0%")
+                                .font(.callout)
+                        } //: VStack
+                        
+                        Spacer()
+                        
+                        VStack(alignment: .leading) {
+                            Text("Restock")
+                                .font(.headline)
+                            Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0")
+                                .font(.callout)
+                        } //: VStack
+                        
+                        Spacer()
+                        
+                        departmentMenu
+                            .font(.title2)
+                    } //: HStack
+                    .modifier(PaneOutlineMod())
                     
-                    Spacer()
-                    
-                    VStack(alignment: .leading) {
-                        Text("Markup")
-                            .font(.headline)
-                        Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0%")
-                            .font(.callout)
-                    } //: VStack
-                    
-                    Spacer()
-                    
-                    VStack(alignment: .leading) {
-                        Text("Restock")
-                            .font(.headline)
-                        Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0")
-                            .font(.callout)
-                    } //: VStack
-                    
-                    Spacer()
-                    
-                    departmentMenu
-                        .font(.title2)
-                } //: HStack
-                .modifier(PaneOutlineMod())
-                
-                GeometryReader { geo in
-                    // MARK: - REGULAR SIZE TABLE
-                    Table(of: ItemEntity.self) {
-                        
-                        TableColumn("Name") { item in
-                            Text(item.name)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        
-                        TableColumn("Attribute") { item in
-                            Text(item.attribute)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        
-                        TableColumn("Stock") { item in
-                            Text(item.formattedQty)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .width(min: 96)
-                        
-                        TableColumn("Price") { item in
-                            Text(item.formattedPrice)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .width(max: 96)
-                        
-                        TableColumn("Cost") { item in
-                            Text(item.formattedUnitCost)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .width(max: 96)
-                        
-                        TableColumn("") { item in
-                            Text(item.restockWarning)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .width(24)
-                    } rows: {
-                        if let selectedDepartment = selectedDepartment {
-                            ForEach(selectedDepartment.items) {
-                                TableRow($0)
+                    GeometryReader { geo in
+                        // MARK: - REGULAR SIZE TABLE
+                        Table(of: ItemEntity.self) {
+                            
+                            TableColumn("Name") { item in
+                                Text(item.name)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
-                        } else {
-                            TableRow(ItemEntity())
+                            
+                            TableColumn("Attribute") { item in
+                                Text(item.attribute)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            
+                            TableColumn("Stock") { item in
+                                Text(item.formattedQty)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .width(min: 96)
+                            
+                            TableColumn("Price") { item in
+                                Text(item.formattedPrice)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .width(max: 96)
+                            
+                            TableColumn("Cost") { item in
+                                Text(item.formattedUnitCost)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .width(max: 96)
+                            
+                            TableColumn("") { item in
+                                Text(item.restockWarning)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .width(24)
+                        } rows: {
+                            if let selectedDepartment = selectedDepartment {
+                                ForEach(selectedDepartment.items) {
+                                    TableRow($0)
+                                }
+                            } else {
+                                TableRow(ItemEntity())
+                            }
                         }
-                    }
-//                    .padding(.vertical, 6)
-                    .background(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(.gray.opacity(0.7), lineWidth: 0.5)
-                    )
-                } //: Geometry Reader
-            } //: VStack
-            .padding()
-            .background(Color("Purple050").opacity(0.2))
-            .navigationTitle("Inventory")
-            .navigationSplitViewColumnWidth(400)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Filters", systemImage: "slider.vertical.3") {
-                        if colVis == .doubleColumn {
-                            colVis = .detailOnly
-                        } else {
-                            colVis = .doubleColumn
+                        //                    .padding(.vertical, 6)
+                        .background(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(.gray.opacity(0.7), lineWidth: 0.5)
+                        )
+                    } //: Geometry Reader
+                } //: VStack
+                .padding()
+                .background(Color("Purple050").opacity(0.2))
+                .navigationTitle("Inventory")
+                .navigationSplitViewColumnWidth(400)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Filters", systemImage: "slider.vertical.3") {
+                            if colVis == .doubleColumn {
+                                colVis = .detailOnly
+                            } else {
+                                colVis = .doubleColumn
+                            }
                         }
-                    }
-                } //: Toolbar Item - Filters Button
-                
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button("Department", systemImage: "plus") {
-                        editingDepartment = DepartmentEntity()
-                    }
-                    .buttonStyle(BorderedButtonStyle())
+                    } //: Toolbar Item - Filters Button
                     
-                    Button("Item", systemImage: "plus") {
-                        selectedItem = ItemEntity()
+                    ToolbarItemGroup(placement: .topBarTrailing) {
+                        Button("Department", systemImage: "plus") {
+                            editingDepartment = DepartmentEntity()
+                        }
+                        .buttonStyle(BorderedButtonStyle())
+                        
+                        Button("Item", systemImage: "plus") {
+                            selectedItem = ItemEntity()
+                        }
+                        .buttonStyle(BorderedButtonStyle())
                     }
-                    .buttonStyle(BorderedButtonStyle())
                 }
             }
+            .navigationSplitViewStyle(.balanced)
+            
+            
+        } //: ZStack
+        .onChange(of: colVis) { oldValue, newValue in
+            print("Column Visibility: \(newValue)")
         }
-        .navigationSplitViewStyle(.balanced)
-        
         
     }
     
