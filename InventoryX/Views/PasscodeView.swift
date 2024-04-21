@@ -168,7 +168,7 @@ struct PasscodeView: View {
             do {
                 try await vm.passcodeSubmitted(code: code)
             } catch let error as AppError {
-                if error == AppError.passcodesDoNotMatch {
+                if error.localizedDescription == AppError.passcodesDoNotMatch.localizedDescription {
                     self.subtitle = error.localizedDescription
                 } else {
                     print("Error submitting passcode: \(error.localizedDescription)")

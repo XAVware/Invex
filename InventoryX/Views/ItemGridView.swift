@@ -14,31 +14,32 @@ struct ColumnHeaderModel: Identifiable {
     let sortDescriptor: String
 }
 
-//enum TableViewStyle: String, CaseIterable {
-//    case grid = "square.grid.2x2.fill"
-//    case list = "list.dash"
-//}
-
 // TODO: Fix odd button animation when screen size changes
 // TODO: Is it okay for this view to re-initialize every time uiProperties changes?
 struct ItemGridView: View {
     let onSelect: ((ItemEntity) -> Void)
-    let items: RealmSwift.List<ItemEntity>
+    let items: Array<ItemEntity>
     let minButtonWidth: CGFloat = 160
     let gridSpacing: CGFloat = 16
     let horPadding: CGFloat = 0
     
     func recalcColumns(forWidth width: CGFloat) {
-        // Take the full available width and subtract any padding that's added to the table in this view. This leaves you with the maximum amount of space the buttons can use. Remember, padding is added to both sides of the table
+        /// Take the full available width and subtract any padding that's added to the table 
+        /// in this view. This leaves you with the maximum amount of space the buttons can use.
+        /// Remember, padding is added to both sides of the table
         let availWidth = width - (horPadding * 2)
         
-        // Divide by button width and round down to get how many buttons can fit in the available space.
+        /// Divide by button width and round down to get how many buttons can fit in the available space.
         var rowCellCount = Int(floor(availWidth / minButtonWidth))
         
-        // Get the number of interior column gaps (spacing) that would be required to display this number of buttons by subtracting 1 from the number of buttons. Get how much space the column gaps will consume by multiplying the gap count by the grid spacing.
+        /// Get the number of interior column gaps (spacing) that would be required to display 
+        /// this number of buttons by subtracting 1 from the number of buttons. Get how much
+        /// space the column gaps will consume by multiplying the gap count by the grid spacing.
         let totalGapSpace = (rowCellCount - 1) * Int(gridSpacing)
         
-        // Get the total amount of space required to display the number of buttons with the requested gridSpacing. If the required amount is more than the available width (including padding), then return 1 less than the original column count.
+        /// Get the total amount of space required to display the number of buttons with the 
+        /// requested gridSpacing. If the required amount is more than the available width
+        /// (including padding), then return 1 less than the original column count.
         let totalSpaceRequired = Int(availWidth) + totalGapSpace
         
         if CGFloat(totalSpaceRequired) > availWidth {
@@ -52,7 +53,7 @@ struct ItemGridView: View {
     
     @State var gridColumns: [GridItem] = [GridItem(.flexible(minimum: 120, maximum: 160))]
     
-    init(items: RealmSwift.List<ItemEntity>, onSelect: @escaping ((ItemEntity) -> Void)) {
+    init(items: Array<ItemEntity>, onSelect: @escaping ((ItemEntity) -> Void)) {
         self.items = items
         self.onSelect = onSelect
     }

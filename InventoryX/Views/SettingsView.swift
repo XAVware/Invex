@@ -18,27 +18,36 @@ import RealmSwift
         if let currentPassHash = AuthService.shared.getCurrentPasscode()  {
             passHash = currentPassHash
         } else {
-            print("Current passcode hash is nil")
             passHash = ""
-            
         }
         fetchCompanyData()
     }
     
     func fetchCompanyData() {
         do {
-            let realm = try Realm()
-            if let result = realm.objects(CompanyEntity.self).first {
-                self.companyName = result.name
-                self.taxRateStr = String(format: "%.2f%", Double(result.taxRate))
+            if let company = try RealmActor().fetchCompany() {
+                self.companyName = company.name
+                self.taxRateStr = String(format: "%.2f%", Double(company.taxRate))
             }
         } catch {
             LogService(String(describing: self)).error("Settings VM err")
         }
     }
+    
+    func deleteAccount() async {
+        do {
+            try await RealmActor().deleteAll()
+            AuthService.shared.deleteAll()
+        } catch {
+            print("Error deleting account: \(error.localizedDescription)")
+        }
+    }
 }
 
 struct SettingsView: View {
+    let termsOfServiceURL: URL = URL(string: "https://xavware.com/invex/termsOfService")!
+    let privacyPolicyURL: URL = URL(string: "https://xavware.com/invex/privacyPolicy")!
+    
     @StateObject var vm: SettingsViewModel = SettingsViewModel()
     
     @State var showingCompanyDetail: Bool = false
@@ -47,180 +56,101 @@ struct SettingsView: View {
     
     
     var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading) {
-                Text("Settings")
-                    .modifier(TitleMod())
+        VStack(alignment: .leading) {
+            Text("Settings")
+                .modifier(TitleMod())
+            
+            
+            VStack {
+                
+                VStack {
+                    
+                    Button {
+                        showingCompanyDetail = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "case")
+                                .frame(width: 24)
+                            Text("Company Info")
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .padding(.vertical, 8)
+                    .sheet(isPresented: $showingCompanyDetail, onDismiss: {
+                        vm.fetchCompanyData()
+                    }, content: {
+                        CompanyDetailView(company: CompanyEntity(name: vm.companyName, taxRate: Double(vm.taxRateStr) ?? 0.0))
+                    })
+                    
+                    Divider()
+                    
+                    Button {
+                        showPasscodeView = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "lock")
+                                .frame(width: 24)
+                            Text("Change Passcode")
+                            Spacer()
+                        } //: HStack
+                        .contentShape(Rectangle())
+                    }
+                    .padding(.vertical, 8)
+                    .sheet(isPresented: $showPasscodeView) {
+                        PasscodeView(processes: [.confirm, .set]) {
+                            showPasscodeView = false
+                        }
+                    }
+                    
+                    Divider()
+                    
+                    Button {
+                        showDeleteConfirmation = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "trash")
+                                .frame(width: 24)
+                            Text("Delete Account")
+                            Spacer()
+                        } //: HStack
+                        .contentShape(Rectangle())
+                    }
+                    .padding(.vertical, 8)
+                } //: VStack
+                .font(.title3)
+                .frame(maxWidth: 360)
+                .foregroundStyle(.black)
+                .modifier(PaneOutlineMod())
                 
                 Spacer()
                 
-                HStack {
-                    VStack {
-                        VStack(alignment: .leading, spacing: 24) {
-                            HStack(spacing: 16) {
-                                Image(systemName: "case.fill")
-                                Text("Company Info")
-                                Spacer()
-                                Image(systemName: "pencil")
-                            } //: HStack
-                            //                        .padding()
-                            .frame(maxWidth: 360, maxHeight: 70)
-                            .background(Color("Purple050"))
-                            .font(.title3)
-                            .fontWeight(.semibold)
-                            .fontDesign(.rounded)
-                            .foregroundStyle(.accent)
-                            //                        .modifier(GlowingOutlineMod())
-                            
-                            VStack(spacing: 12) {
-                                HStack {
-                                    Text("Name:")
-                                        .font(.headline)
-                                        .foregroundStyle(.gray)
-                                    
-                                    Spacer()
-                                    
-                                    Text(vm.companyName)
-                                } //: HStack
-                                
-                                HStack {
-                                    Text("Tax:")
-                                        .font(.headline)
-                                        .foregroundStyle(.gray)
-                                    Spacer()
-                                    
-                                    Text("\(vm.taxRateStr) %")
-                                } //: HStack
-                            } //: VStack
-                            
-                        } //: VStack
-                        .padding()
-                        .frame(maxWidth: 360, maxHeight: 140)
-                        .background(Color("Purple050"))
-                        .modifier(GlowingOutlineMod())
-                        .onTapGesture {
-                            showingCompanyDetail = true
-                        }
-                        
-                        
-                        Spacer()
-                        
-                        NavigationLink {
-                            PasscodeView(processes: [.confirm, .set]) {
-                                showPasscodeView = false
-                            }
-                        } label: {
-                            Text("Change")
-                                .foregroundStyle(.accent)
-                                .frame(height: 64)
-                                .background(.red)
-                        }
-                        
-                        Button {
-                            showPasscodeView = true
-                        } label: {
-                            HStack(spacing: 16) {
-                                Image(systemName: "lock")
-                                Text("Change Passcode")
-                                Spacer()
-                            } //: HStack
-                            .padding()
-                            .frame(maxWidth: 360, maxHeight: 70)
-                            .background(Color("Purple050"))
-                        }
+                VStack {
+                    Link("Terms of Service", destination: termsOfServiceURL)
                         .font(.title3)
-                        .fontWeight(.semibold)
-                        .fontDesign(.rounded)
-                        .foregroundStyle(.accent)
-                        .modifier(GlowingOutlineMod())
-                        .sheet(isPresented: $showPasscodeView) {
-                            PasscodeView(processes: [.confirm, .set]) {
-                                showPasscodeView = false
-                            }
-                        }
-                        
-                        Button {
-                            showDeleteConfirmation = true
-                        } label: {
-                            HStack(spacing: 16) {
-                                Image(systemName: "trash")
-                                Text("Delete Account")
-                                Spacer()
-                            } //: HStack
-                            .padding()
-                            .frame(maxWidth: 360, maxHeight: 70)
-                            .background(Color("Purple050"))
-                        }
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .fontDesign(.rounded)
-                        .foregroundStyle(.accent)
-                        .modifier(GlowingOutlineMod())
-                        
-                        
-                        Link(destination: URL(string: "https://drive.google.com/file/d/1cYNlzO-RS9K3cc_4Oi0n56RfPR-7Y7Mp/view?usp=sharing")!, label: {
-                            HStack(spacing: 16) {
-                                Image(systemName: "lock")
-                                Text("Terms of Service")
-                                Spacer()
-                            } //: HStack
-                            .padding()
-                            .frame(maxWidth: 360, maxHeight: 70)
-                            .background(Color("Purple050"))
-                        })
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .fontDesign(.rounded)
-                        .foregroundStyle(.accent)
-                        .modifier(GlowingOutlineMod())
-                        
-                        Link(destination: URL(string: "https://drive.google.com/file/d/1ITsWigHuvCGupSyLpJTeYl9k7T-y161S/view?usp=sharing")!, label: {
-                            HStack(spacing: 16) {
-                                Image(systemName: "lock")
-                                Text("Privacy Policy")
-                                Spacer()
-                            } //: HStack
-                            .padding()
-                            .frame(maxWidth: 360, maxHeight: 70)
-                            .background(Color("Purple050"))
-                        })
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .fontDesign(.rounded)
-                        .foregroundStyle(.accent)
-                        .modifier(GlowingOutlineMod())
-                        
-                    } //: HStack
+                        .padding(.vertical, 8)
+                    Divider()
+                    Link("Privacy Policy", destination: privacyPolicyURL)
+                        .padding(.vertical, 8)
                 } //: VStack
-                .navigationViewStyle(.columns)
-                .padding()
-                .alert("Are you sure?", isPresented: $showDeleteConfirmation, actions: {
-                    Button("Go back", role: .cancel) { }
-                    Button("Yes, delete account", role: .destructive) {
-                        Task {
-                            do {
-                                let realm = try await Realm()
-                                try await realm.asyncWrite {
-                                    realm.deleteAll()
-                                }
-                                AuthService.shared.deleteAll()
-                                
-                            } catch {
-                                print("Error deleting account: \(error.localizedDescription)")
-                            }
-                        }
-                    }
-                })
-                .sheet(isPresented: $showingCompanyDetail, onDismiss: {
-                    vm.fetchCompanyData()
-                }, content: {
-                    CompanyDetailView(company: CompanyEntity(name: vm.companyName, taxRate: Double(vm.taxRateStr) ?? 0.0))
-                })
-            } //: HStack
+                .font(.title3)
+                .frame(maxWidth: 360)
+                .foregroundStyle(.black)
+                .modifier(PaneOutlineMod())
+            } //: VStack
             .padding()
+            .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
+                Button("Go back", role: .cancel) { }
+                Button("Yes, delete account", role: .destructive) {
+                    Task {
+                        await vm.deleteAccount()
+                    }
+                }
+            }
             
-        }
-        
+        } //: VStack
+        .padding()
+        .background(Color("Purple050").opacity(0.2))
     } //: Body
     
 }

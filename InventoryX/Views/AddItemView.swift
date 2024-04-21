@@ -12,28 +12,57 @@ import RealmSwift
 @MainActor class AddItemViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     
-    func saveItem(dept: DepartmentEntity?, name: String, att: String, qty: String, price: String, cost: String) async {
+    func saveItem(
+        dept: DepartmentEntity?,
+        name: String,
+        att: String,
+        qty: String,
+        price: String,
+        cost: String,
+        completion: @escaping ((Error?) -> Void)
+    ) async {
         do {
             try await RealmActor().saveItem(dept: dept, name: name, att: att, qty: qty, price: price, cost: cost)
-            print("Successfully saved item")
+            completion(nil)
         } catch {
             errorMessage = error.localizedDescription
             debugPrint(error.localizedDescription)
+            completion(error)
         }
     } //: Save Item
     
     
-    func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) async {
+    func updateItem(
+        item: ItemEntity,
+        name: String,
+        att: String,
+        qty: String,
+        price: String,
+        cost: String,
+        completion: @escaping ((Error?) -> Void)
+    ) async {
         do {
             try await RealmActor().updateItem(item: item, name: name, att: att, qty: qty, price: price, cost: cost)
-            debugPrint("Successfully updated item")
+            completion(nil)
         } catch {
+            errorMessage = error.localizedDescription
+            print(error.localizedDescription)
+            completion(error)
+        }
+    }
+    
+    func deleteItem(withId id: ObjectId, completion: @escaping ((Error?) -> Void)) async {
+        do {
+            try await RealmActor().deleteItem(withId: id)
+            completion(nil)
+        } catch {
+            completion(error)
             errorMessage = error.localizedDescription
             print(error.localizedDescription)
         }
     }
     
-   
+    
 }
 
 enum DetailViewType { case create, modify }
@@ -41,7 +70,7 @@ enum DetailViewType { case create, modify }
 struct AddItemView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: AddItemViewModel = AddItemViewModel()
-//    @StateObject var uiFeedback = UIFeedbackService.shared
+    //    @StateObject var uiFeedback = UIFeedbackService.shared
     
     @State private var selectedDepartment: DepartmentEntity?
     @State private var itemName: String = ""
@@ -62,12 +91,9 @@ struct AddItemView: View {
     
     private enum Focus { case name, attribute, price, onHandQty, unitCost }
     @FocusState private var focus: Focus?
-    
-    @State var errorMessage: String = ""
-    
+        
     @State var showDeleteConfirmation: Bool = false
     
-    // TODO: Display and update/save attribute
     init(item: ItemEntity, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         self.selectedItem = item
         self.showTitles = showTitles
@@ -78,31 +104,39 @@ struct AddItemView: View {
     
     private func continueTapped() {
         focus = nil
-//        do {
-            let price = retailPrice.replacingOccurrences(of: "$", with: "")
-            let cost = retailPrice.replacingOccurrences(of: "$", with: "")
-            
-            Task {
-                
-                if detailType == .modify {
-                    await vm.updateItem(item: selectedItem, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
-                    finish()
-                    
-                } else {
-                    // Item was nil when passed to view. User is creating a new item.
-                    await vm.saveItem(dept: selectedDepartment, name: itemName, att: attribute, qty: quantity, price: price, cost: cost)
-                    finish()
-                }
-            }
-            
-//        } catch let error as AppError {
-////            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
-//            errorMessage = error.localizedDescription
-//        } catch {
-////            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
-//            errorMessage = error.localizedDescription
-//        }
+        let price = retailPrice.replacingOccurrences(of: "$", with: "")
+        let cost = retailPrice.replacingOccurrences(of: "$", with: "")
         
+        Task {
+            
+            if detailType == .modify {
+                await vm.updateItem(
+                    item: selectedItem,
+                    name: itemName,
+                    att: attribute,
+                    qty: quantity,
+                    price: price,
+                    cost: cost,
+                    completion: { error in
+                        guard error == nil else { return }
+                        finish()
+                    })
+                
+            } else {
+                // Item was nil when passed to view. User is creating a new item.
+                await vm.saveItem(
+                    dept: selectedDepartment,
+                    name: itemName,
+                    att: attribute,
+                    qty: quantity,
+                    price: price,
+                    cost: cost,
+                    completion: { error in
+                        guard error == nil else { return }
+                        finish()
+                    })
+            }
+        }
     }
     
     private func finish() {
@@ -133,13 +167,18 @@ struct AddItemView: View {
                     } //: VStack
                     .fontDesign(.rounded)
                     .frame(maxWidth: .infinity, alignment: .leading)
-//                    .modifier(TitleMod())
                 }
                 
                 // MARK: - FORM FIELDS
                 VStack(alignment: .center, spacing: 24) {
                     DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
+                        .frame(height: 48)
+                        .onAppear {
+                            self.selectedDepartment = selectedItem.department.first
+                        }
+                    
                     Divider()
+                    
                     ThemeTextField(boundTo: $itemName,
                                    placeholder: "i.e. Gatorade",
                                    title: "Item Name:",
@@ -196,7 +235,7 @@ struct AddItemView: View {
                     }
                 }
                 
-                Text(errorMessage)
+                Text(vm.errorMessage)
                     .foregroundStyle(.red)
                 
                 Button {
@@ -252,36 +291,17 @@ struct AddItemView: View {
         .foregroundStyle(.primary)
         .alert("Are you sure? This can't be undone.", isPresented: $showDeleteConfirmation) {
             Button("Go back", role: .cancel) { }
-            Button("Yes, delete Item", role: .destructive) {                
-                do {
-                    let realm = try Realm()
-                    try realm.write {
-                        guard let dept = realm.object(ofType: DepartmentEntity.self, forPrimaryKey: selectedDepartment?._id) else {
-                            print("No department found")
-                            return
-                        }
-                        
-                        guard let item = realm.object(ofType: ItemEntity.self, forPrimaryKey: selectedItem._id) else {
-                            print("No item found")
-                            return
-                        }
-                        
-                        if let indexToDelete = dept.items.firstIndex(where: { $0._id == item._id }) {
-                            print("Index found: \(indexToDelete)")
-                            dept.items.remove(at: indexToDelete)
-                            realm.delete(item)
-                        } else {
-                            print("Couldn't delete")
-                        }
-                        
+            Button("Yes, delete Item", role: .destructive) {
+                Task {
+                    await vm.deleteItem(withId: selectedItem._id) { error in
+                        guard error == nil else { return }
+                        dismiss()
                     }
-                    dismiss()
-                } catch {
-                    print("Error deleting account: \(error.localizedDescription)")
                 }
+                
             }
         }
-
+        
     } //: Delete Button
     
 }

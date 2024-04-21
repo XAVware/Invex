@@ -10,78 +10,19 @@ import RealmSwift
 
 @MainActor class CompanyDetailViewModel: ObservableObject {
     @Published var errorMessage: String = ""
-    
-    /// Company data saves differently than departments and items. Since there can
-    /// only be one company there's no need to track create/modify states. When the
-    /// save button is tapped, check if a company exists, if yes then `modify/update`
-    /// otherwise `create`.
-    func saveCompany(name: String, tax: String) async {
+
+    func saveCompany(name: String, tax: String, completion: @escaping ((Error?) -> Void)) async {
         do {
             try await RealmActor().saveCompany(name: name, tax: tax)
             debugPrint("Successfully saved company")
+            completion(nil)
         } catch {
             errorMessage = error.localizedDescription
             print(error.localizedDescription)
+            completion(error)
         }
-        
-//        guard let taxRate = Double(tax) else { throw AppError.invalidTaxPercentage }
-//        // Confirm name is valid after whitespace is removed.
-//        let company = CompanyEntity(name: name, taxRate: taxRate)
-//        let realm = try Realm()
-//        
-//        try realm.write {
-//            if let company = realm.objects(CompanyEntity.self).first {
-//                // Company exists, update record
-//                debugPrint("Company already exists, updating the record.")
-//                company.name = name
-//                company.taxRate = taxRate
-//            } else {
-//                // Company doesn't exist. Create record
-//                debugPrint("Creating company record.")
-//                realm.add(company)
-//            }
-//        }
     }
-    
-    /// Company data saves differently than departments and items. Since there can
-    /// only be one company there's no need to track create/modify states. When the
-    /// save button is tapped, check if a company exists, if yes then `modify/update`
-    /// otherwise `create`.
-//    func saveCompany(name: String, tax: String) throws {
-//        guard let taxRate = Double(tax) else { throw AppError.invalidTaxPercentage }
-//        // Confirm name is valid after whitespace is removed.
-//        let company = CompanyEntity(name: name, taxRate: taxRate)
-//        let realm = try Realm()
-//        
-//        try realm.write {
-//            if let company = realm.objects(CompanyEntity.self).first {
-//                // Company exists, update record
-//                debugPrint("Company already exists, updating the record.")
-//                company.name = name
-//                company.taxRate = taxRate
-//            } else {
-//                // Company doesn't exist. Create record
-//                debugPrint("Creating company record.")
-//                realm.add(company)
-//            }
-//        }
-        
-//        if let company = realm.objects(CompanyEntity.self).first {
-//            // Company exists, update record
-//            debugPrint("Company already exists, updating the record.")
-//            try realm.write {
-//                company.name = name
-//                company.taxRate = taxRate
-//            }
-//        } else {
-//            // Company doesn't exist. Create record
-//            debugPrint("Creating company record.")
-//            try realm.write {
-//                realm.add(company)
-//            }
-//        }
-//    }
-    
+
 }
 
 struct CompanyDetailView: View {
@@ -101,9 +42,7 @@ struct CompanyDetailView: View {
     
     private enum Focus { case name, taxRate }
     @FocusState private var focus: Focus?
-    
-    @State var errorMessage: String = ""
-    
+        
     init(company: CompanyEntity?, showTitles: Bool = true, onSuccess: (() -> Void)? = nil) {
         if let company = company {
             self.companyName = company.name
@@ -117,18 +56,12 @@ struct CompanyDetailView: View {
     
     private func continueTapped() {
         focus = nil
-        
-        do {
-            Task {
-                try await vm.saveCompany(name: companyName, tax: taxRate)
+        Task {
+            await vm.saveCompany(name: companyName, tax: taxRate, completion: { error in
+                guard error == nil else { return }
                 finish()
-            }
-        } catch let error as AppError {
-//            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
-            errorMessage = error.localizedDescription
-        } catch {
-//            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
-            errorMessage = error.localizedDescription
+            })
+            finish()
         }
     }
     
@@ -185,7 +118,7 @@ struct CompanyDetailView: View {
                     self.taxRate = tax.toPercentageString()
                 }
                 
-                Text(errorMessage)
+                Text(vm.errorMessage)
                     .foregroundStyle(.red)
                 
                 Button {

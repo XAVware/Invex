@@ -14,7 +14,11 @@ import Algorithms
     @Published var companyName: String = ""
     @Published var taxRate: Double = 0.0
     
-    /// Computed array of unique items in the cart. `CartView` uses this to display a section for each item, without re-ordering them. The array of `@Published cartItems` in `PointOfSaleViewModel` can then be queried by the view to find data on each unique item such as the quantity in cart and its subtotal. This allows for re-use of `ItemEntity`. `.uniqued()` requires `Swift Algorithms.`
+    /// Computed array of unique items in the cart. `CartView` uses this to display a 
+    /// section for each item, without re-ordering them. The array of `@Published cartItems`
+    /// in `PointOfSaleViewModel` can then be queried by the view to find data on each
+    /// unique item such as the quantity in cart and its subtotal. This allows for re-use
+    /// of `ItemEntity`. `.uniqued()` requires `Swift Algorithms.`
     var uniqueItems: [ItemEntity] { Array(cartItems.uniqued()) }
     
     var cartSubtotal: Double { cartItems.reduce(0) { $0 + $1.retailPrice } }
@@ -22,6 +26,8 @@ import Algorithms
     var total: Double { cartSubtotal + taxAmount }
     
     var cartItemCount: Int { cartItems.count }
+    
+    
     
     func addItemToCart(_ item: ItemEntity) {
         cartItems.append(item)
@@ -35,22 +41,12 @@ import Algorithms
     
     func fetchCompany() {
         do {
-            let realm = try Realm()
-            if let result = realm.objects(CompanyEntity.self).first {
-                self.companyName = result.name
-                self.taxRate = result.taxRate
+            guard let company = try RealmActor().fetchCompany() else {
+                print("Error fetching company")
+                return
             }
-            
-            //            tempName = result?.name ?? "Err"
-            //            return result?.name ?? "Err"
-            
-            //            if let result = realm.objects(CompanyEntity.self).first {
-            //                self.companyName = result.name
-            //                self.taxRateStr = String(format: "%.2f%", Double(result.taxRate))
-            //            } else {
-            //
-            //            }
-            //            self.company = realm.objects(CompanyEntity.self).first
+            self.companyName = company.name
+            self.taxRate = company.taxRate
         } catch {
             LogService(String(describing: self)).error("Settings VM err")
         }
@@ -84,31 +80,10 @@ import Algorithms
             }
         }
         
-//        await uniqueItems.forEach { item in
-//            let cartQty = cartItems.filter { $0._id == item._id }.count
-//            do {
-//                try await RealmActor().adjustStock(for: item, by: cartQty)
-//            } catch {
-//
-//            }
-//            if let invItem = item.thaw() {
-//                let newOnHandQty = invItem.onHandQty - cartQty
-//                do {
-//                    let realm = try Realm()
-//                    try realm.write {
-//                        invItem.onHandQty = newOnHandQty
-//                    }
-//                } catch {
-//                    LogService(String(describing: self)).error("Error adjusting inventory quantities: \(error.localizedDescription)")
-//                }
-//            } else {
-//                LogService(String(describing: self)).error("Unable to thaw item: \(item)")
-//            }
-//        }
-
         // 2. Save the sale
         
-        // Convert ItemEntities to SaleItemEntities so they can be used in the sale.
+        /// Convert ItemEntities to SaleItemEntities so they can be used in the sale, without
+        /// risking losing an item record on delete.
         let saleItems = cartItems.map( { SaleItemEntity(item: $0) } )
         
         do {
@@ -119,21 +94,6 @@ import Algorithms
             
         }
         
-//        let newSale = SaleEntity(timestamp: Date(), total: self.total)
-//        
-//        do {
-//            let realm = try Realm()
-//            try realm.write {
-//                realm.add(newSale)
-//                newSale.items.append(objectsIn: saleItems)
-//            }
-//            
-//            cartItems.removeAll()
-//            completion()
-//        } catch {
-//            LogService(String(describing: self)).error("Error saving sale: \(error.localizedDescription)")
-//        }
-        
     }
 }
 
@@ -141,7 +101,7 @@ import Algorithms
 
 struct PointOfSaleView: View {
     @EnvironmentObject var vm: PointOfSaleViewModel
-    
+    @ObservedResults(ItemEntity.self) var items
     @Binding var menuState: MenuState
     @Binding var cartState: CartState
     let uiProperties: LayoutProperties
@@ -181,6 +141,22 @@ struct PointOfSaleView: View {
         }
     }
     
+    func getItems() -> Array<ItemEntity>{
+        if let dept = selectedDept {
+            return Array(dept.items)
+        } else {
+            Task {
+                do {
+                    let items = try RealmActor().fetchAllItems()
+                    return Array(items)
+                } catch {
+                    print(error.localizedDescription)
+                    return Array()
+                }
+            }
+            return Array()
+        }
+    }
     
     var body: some View {
         HStack {
@@ -205,19 +181,17 @@ struct PointOfSaleView: View {
                         DepartmentPicker(selectedDepartment: $selectedDept, style: .scrolling)
                         
                         if let dept = selectedDept {
-                            ItemGridView(items: dept.items) { item in
+                            ItemGridView(items: Array(getItems())) { item in
                                 vm.addItemToCart(item)
                             }
                             .padding(2)
                             
                         } else {
-                            Spacer()
+                            ItemGridView(items: Array(items)) { item in
+                                vm.addItemToCart(item)
+                            }
+                            .padding(2)
                         }
-                        
-//                        ItemGridView(department: $selectedDept) { item in
-//                            vm.addItemToCart(item)
-//                        }
-//                        .padding(2)
                         
                     } //: VStack
                     .padding(.horizontal)
@@ -225,8 +199,9 @@ struct PointOfSaleView: View {
             } else {
                 
                 // MARK: - CART CONFIRMATION VIEW
-                /// Make the view disappear entirely when width is 0, otherwise it shows slightly from content.
-                /// If the cart is confirmation, it should take up the entire screen width and the menu should be hidden
+                /// Make the view disappear entirely when width is 0, otherwise it shows slightly 
+                /// from content. If the cart is confirmation, it should take up the entire screen
+                /// width and the menu should be hidden
                 CartView(cartState: $cartState, menuState: $menuState, uiProperties: uiProperties)
                     .frame(maxWidth: cartState.idealWidth)
                     .padding()

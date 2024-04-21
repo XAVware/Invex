@@ -16,6 +16,7 @@ struct DepartmentPicker: View {
     @Binding var selectedDepartment: DepartmentEntity?
     @State var style: DepartmentPickerStyle
     
+    
     var body: some View {
         switch style {
         case .scrolling:

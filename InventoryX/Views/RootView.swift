@@ -115,7 +115,8 @@ struct RootView: View {
     }
     
     var body: some View {
-        /// Don't show the menu when `cartState == .confirming`. The menu can be compact when the width is over 840
+        /// Don't show the menu when `cartState == .confirming`. The menu can be compact 
+        /// when the width is over 840
         HStack(spacing: 0) {
             if cartState != .confirming {
                 if shouldShowMenu || uiProperties.width > 840 {

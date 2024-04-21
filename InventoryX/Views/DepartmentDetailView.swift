@@ -11,72 +11,48 @@ import RealmSwift
 @MainActor class DepartmentDetailViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     
-    func save(name: String, threshold: String, markup: String) async {
+    func save(name: String, threshold: String, markup: String, completion: @escaping ((Error?) -> Void)) async {
         do {
             try await RealmActor().addDepartment(name: name, restockThresh: threshold, markup: markup)
             debugPrint("Successfully saved department.")
+            completion(nil)
         } catch {
             errorMessage = error.localizedDescription
             print(error)
+            completion(error)
         }
     }
     
-    func deleteDepartment(withId id: RealmSwift.ObjectId) async {
+    func deleteDepartment(withId id: RealmSwift.ObjectId, completion: @escaping ((Error?) -> Void)) async {
         do {
             try await RealmActor().deleteDepartment(id: id)
             debugPrint("Successfully deleted department")
+            completion(nil)
         } catch {
             errorMessage = error.localizedDescription
             print(error.localizedDescription)
+            completion(error)
         }
     }
     
-    func update(department: DepartmentEntity, name: String, threshold: String, markup: String) async {
+    func update(department: DepartmentEntity, name: String, threshold: String, markup: String, completion: @escaping ((Error?) -> Void)) async {
         do {
             try await RealmActor().updateDepartment(dept: department, newName: name, thresh: threshold, markup: markup)
             print("Successfully updated department")
+            completion(nil)
         } catch {
             errorMessage = error.localizedDescription
             print(error.localizedDescription)
+            completion(error)
         }
     }
     
-//    func saveDepartment(name: String, threshold: String, markup: String) throws {
-//        // Make sure `threshold` was entered as a number
-//        guard let threshold = Int(threshold) else { throw AppError.numericThresholdRequired }
-//        guard let markup = Double(markup) else { return }
-//        
-//        let department = DepartmentEntity(name: name, restockNum: threshold, defMarkup: markup)
-//        let realm = try Realm()
-//        try realm.write {
-//            realm.add(department)
-//        }
-////        LogService(String(describing: self)).info("New department saved successfully")
-//    }
-    
-    
-//    func updateDepartment(dept: DepartmentEntity, newName: String, thresh: String, markup: String) throws {
-//        guard let thresh = Int(thresh) else     { throw AppError.numericThresholdRequired }
-//        guard let markup = Double(markup) else  { throw AppError.invalidMarkup }
-//        guard let dept = dept.thaw() else       { throw AppError.thawingDepartmentError }
-//        
-//        let realm = try Realm()
-//        try realm.write {
-//            dept.name = newName
-//            dept.restockNumber = thresh
-//            dept.defMarkup = markup
-//        }
-////        LogService(String(describing: self)).info("Existing department successfully updated.")
-//    }
-    
-
-    
+  
 }
 
 struct DepartmentDetailView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: DepartmentDetailViewModel = DepartmentDetailViewModel()
-    @StateObject var uiFeedback = UIFeedbackService.shared
     
     @State private var name: String = ""
     @State private var restockThreshold: String = ""
@@ -92,7 +68,6 @@ struct DepartmentDetailView: View {
     
     let detailType: DetailViewType
     
-//    @State var errorMessage: String = ""
     
     private enum Focus { case name, threshold, markup }
     @FocusState private var focus: Focus?
@@ -110,28 +85,18 @@ struct DepartmentDetailView: View {
         focus = nil
         Task {
             if detailType == .modify {
-                //            try vm.updateDepartment(dept: department, newName: name, thresh: restockThreshold, markup: markup)
+                await vm.update(department: department, name: name, threshold: restockThreshold, markup: markup) { error in
+                    guard error == nil else { return }
+                    finish()
+                }
             } else {
-                await vm.save(name: name, threshold: restockThreshold, markup: markup)
-                finish()
+                await vm.save(name: name, threshold: restockThreshold, markup: markup, completion: { error in
+                    guard error == nil else { return }
+                    finish()
+                })
             }
         }
         
-//        do {
-//            if detailType == .modify {
-//                try vm.updateDepartment(dept: department, newName: name, thresh: restockThreshold, markup: markup)
-//            } else {
-//                try vm.saveDepartment(name: name, threshold: restockThreshold, markup: markup)
-//            }
-//            
-//            finish()
-//        } catch let error as AppError {
-////            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
-//            errorMessage = error.localizedDescription
-//        } catch {
-////            UIFeedbackService.shared.showAlert(.error, error.localizedDescription)
-//            errorMessage = error.localizedDescription
-//        }
     }
     
     private func finish() {
@@ -251,8 +216,10 @@ struct DepartmentDetailView: View {
             Button("Go back", role: .cancel) { }
             Button("Yes, delete Item", role: .destructive) {
                 Task {
-                    await vm.deleteDepartment(withId: department._id)
-                    dismiss()
+                    await vm.deleteDepartment(withId: department._id) { error in
+                        guard error == nil else { return }
+                        dismiss()
+                    }
                 }
             }
         }

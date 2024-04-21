@@ -29,7 +29,7 @@ enum OnboardingState: Int {
 
 struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
-    @Environment(\.verticalSizeClass) var vSize
+//    @Environment(\.verticalSizeClass) var vSize
     @State var currentDisplay: OnboardingState = .start
     
     var body: some View {

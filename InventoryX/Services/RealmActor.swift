@@ -20,11 +20,19 @@ import RealmSwift
 actor RealmActor {
     deinit {
         print("RealmActor deinitialized")
+        print("-> Lifespan: \(bornTime.timeIntervalSinceNow)")
+    }
+    
+    let bornTime: Date
+    
+    init() {
+        print("RealActor Initialized")
+        bornTime = Date()
     }
     
     @MainActor
-    func fetchCompany() async throws -> CompanyEntity? {
-        let realm = try await Realm()
+    func fetchCompany() throws -> CompanyEntity? {
+        let realm = try Realm()
         return realm.objects(CompanyEntity.self).first
     }
     
@@ -54,7 +62,6 @@ actor RealmActor {
     }
     
     // MARK: - DEPARTMENTS
-    
     /// Fetch all departments
     @MainActor
     func fetchDepartments() async throws -> Results<DepartmentEntity> {
@@ -74,6 +81,7 @@ actor RealmActor {
     }
     
     /// Update an existing department
+    @MainActor
     func updateDepartment(dept: DepartmentEntity, newName: String, thresh: String, markup: String) async throws {
         guard let thresh = Int(thresh)      else { throw AppError.numericThresholdRequired }
         guard let markup = Double(markup)   else { throw AppError.invalidMarkup }
@@ -100,8 +108,15 @@ actor RealmActor {
     }
     
     /// Sales use a SaleEntity model instead of ItemEntity, so there's no risk of losing sale data.
-    func deleteItem() {
+    @MainActor
+    func deleteItem(withId id: ObjectId) async throws {
         // Make sure item is not currently in cart.
+        let realm = try await Realm()
+        guard let item = realm.object(ofType: ItemEntity.self, forPrimaryKey: id) else { throw AppError.noItemFound }
+        
+        try await realm.asyncWrite {
+            realm.delete(item)
+        }
     }
     
     // MARK: - ITEMS
@@ -133,7 +148,7 @@ actor RealmActor {
         }
     } //: Save Item
     
-    
+    @MainActor
     func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) async throws {
         let price = price.replacingOccurrences(of: "$", with: "")
         let cost = cost.replacingOccurrences(of: "$", with: "")
@@ -155,6 +170,21 @@ actor RealmActor {
         
     }
     
+    @MainActor
+    func moveItems(from fromDept: DepartmentEntity, to toDept: DepartmentEntity) async throws {
+        let realm = try await Realm()
+        let itemsToMove = fromDept.items
+        guard itemsToMove.count > 0 else {
+            print("Department has no items to move")
+            return
+        }
+        guard let fromDept = fromDept.thaw(), let toDept = toDept.thaw() else { throw AppError.thawingDepartmentError }
+        try await realm.asyncWrite {
+            toDept.items.append(objectsIn: itemsToMove)
+            fromDept.items.removeAll()
+        }
+    }
+    
     // MARK: - SALES
     func saveSale(items: Array<SaleItemEntity>, total: Double) async throws {
         let newSale = SaleEntity(timestamp: Date(), total: total)
@@ -166,6 +196,7 @@ actor RealmActor {
         }
     }
     
+    @MainActor
     func adjustStock(for item: ItemEntity, by amt: Int) async throws {
         if let invItem = item.thaw() {
             let newOnHandQty = invItem.onHandQty - amt
@@ -176,7 +207,44 @@ actor RealmActor {
             
         }
     }
+    
+    func deleteAll() async throws {
+        let realm = try await Realm()
+        try await realm.asyncWrite {
+            realm.deleteAll()
+        }
+    }
 }
 
 
 
+extension AppError {
+    private func authError(_ origError: Error) -> AppError {
+        if let error = origError as? AppError {
+            return switch error {
+            case .departmentAlreadyExists:      AppError.departmentAlreadyExists
+            case .departmentHasItems:           AppError.departmentHasItems
+            case .departmentDoesNotExist:       AppError.departmentDoesNotExist
+            case .departmentIsNil:              AppError.departmentIsNil
+            case .invalidTaxPercentage:         AppError.invalidTaxPercentage
+            case .invalidMarkup:                AppError.invalidMarkup
+            case .invalidCompanyName:           AppError.invalidCompanyName
+            case .invalidDepartment:            AppError.invalidDepartment
+            case .invalidItemName:              AppError.invalidItemName
+            case .invalidQuantity:              AppError.invalidQuantity
+            case .invalidPrice:                 AppError.invalidPrice
+            case .invalidCost:                  AppError.invalidCost
+            case .numericThresholdRequired:     AppError.numericThresholdRequired
+            case .noPasscodeProcesses:          AppError.noPasscodeProcesses
+            case .noPasscodeFound:              AppError.noPasscodeFound
+            case .noItemFound:                  AppError.noItemFound
+            case .passcodesDoNotMatch:          AppError.passcodesDoNotMatch
+            case .thawingDepartmentError:       AppError.thawingDepartmentError
+            case .thawingItemError:             AppError.thawingItemError
+            default:                            AppError.otherError(origError)
+            }
+        } else {
+            return AppError.otherError(origError)
+        }
+    }
+}

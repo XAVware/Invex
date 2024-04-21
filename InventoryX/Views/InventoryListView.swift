@@ -10,17 +10,6 @@ import RealmSwift
 
 
 @MainActor class InventoryListViewModel: ObservableObject {
-//    private let realmActor: RealmActor = RealmActor()
-//    @Published var selectedDepartment: DepartmentEntity?
-
-//    func addDepartment() async {
-//        do {
-////            try await RealmActor().addDepartment(name: "Test", restockThresh: 10, markup: 0.5)
-//            print("Department added")
-//        } catch {
-//            print(error)
-//        }
-//    }
     @ObservedResults(DepartmentEntity.self) var departments
     
     @Published var errorMessage = ""
@@ -41,12 +30,12 @@ import RealmSwift
 
 struct InventoryListView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.layoutDirection) private var layoutDirection
+//    @Environment(\.layoutDirection) private var layoutDirection
     @StateObject var vm = InventoryListViewModel()
     private var isCompact: Bool { horizontalSizeClass == .compact }
     
     @State var showDepartmentDetail: Bool = false
-    @State var showItemDetail: Bool = false
+//    @State var showItemDetail: Bool = false
     @State var showMoveItems: Bool = false
     
     // For when a user taps edit department.
@@ -62,7 +51,6 @@ struct InventoryListView: View {
     /// Used for small screens
     @State var columnData: [ColumnHeaderModel] = [
         ColumnHeaderModel(headerText: "Item", sortDescriptor: ""),
-        //        ColumnHeaderModel(headerText: "Dept.", sortDescriptor: ""),
         ColumnHeaderModel(headerText: "Stock", sortDescriptor: ""),
         ColumnHeaderModel(headerText: "Price", sortDescriptor: ""),
         ColumnHeaderModel(headerText: "Cost", sortDescriptor: "")
@@ -78,7 +66,9 @@ struct InventoryListView: View {
                 compactView
             }
         }
-        .sheet(item: $selectedItem) { item in
+        .sheet(item: $selectedItem, onDismiss: {
+            vm.departments.realm?.refresh()
+        }) { item in
             AddItemView(item: item)
         }
         .sheet(item: $editingDepartment, onDismiss: {
@@ -86,6 +76,9 @@ struct InventoryListView: View {
         }) { dept in
             DepartmentDetailView(department: dept)
         }
+        .sheet(isPresented: $showMoveItems, content: {
+            MoveItemsView(fromDepartment: self.selectedDepartment)
+        })
         
     } //: Body
     
@@ -98,8 +91,24 @@ struct InventoryListView: View {
         }
     }
     
-    /// Apple Table documentation: https://developer.apple.com/documentation/SwiftUI/Table
-
+    func getItems() -> Array<ItemEntity>{
+        if let dept = selectedDepartment {
+            return Array(dept.items)
+        } else {
+            Task {
+                do {
+                    let items = try RealmActor().fetchAllItems()
+                    return Array(items)
+                } catch {
+                    print(error.localizedDescription)
+                    return Array()
+                }
+            }
+            return Array()
+        }
+    }
+    
+    
     // TODO: May need to change view to use ResponsiveView and LayoutProperties instead of size class because I'm not using built in navigation.
     @ViewBuilder private var regularView: some View {
         VStack {
@@ -250,12 +259,14 @@ struct InventoryListView: View {
                         }
                         .width(24)
                     } rows: {
-                        if let selectedDepartment = selectedDepartment {
-                            ForEach(selectedDepartment.items) {
-                                TableRow($0)
+                        if showMoveItems == false {
+                            if let selectedDepartment = selectedDepartment {
+                                ForEach(selectedDepartment.items) {
+                                    TableRow($0)
+                                }
+                            } else {
+                                TableRow(ItemEntity())
                             }
-                        } else {
-                            TableRow(ItemEntity())
                         }
                     }
                     .padding(.vertical, 6)
@@ -272,23 +283,6 @@ struct InventoryListView: View {
         } //: VStack
         .padding()
         .background(Color("Purple050").opacity(0.2))
-    }
-    
-    func getItems() -> Array<ItemEntity>{
-        if let dept = selectedDepartment {
-            return Array(dept.items)
-        } else {
-            Task {
-                do {
-                    let items = try RealmActor().fetchAllItems()
-                    return Array(items)
-                } catch {
-                    print(error.localizedDescription)
-                    return Array()
-                }
-            }
-            return Array()
-        }
     }
     
     @ViewBuilder private var compactView: some View {
@@ -361,11 +355,12 @@ struct InventoryListView: View {
         if let dept = selectedDepartment {
             Menu {
                 Button("Edit department", systemImage: "pencil") {
-                    showDepartmentDetail = true
+//                    showDepartmentDetail = true
+                    editingDepartment = selectedDepartment
                 }
                 
                 Button("Move items") {
-                    
+                    showMoveItems = true
                 }
                 
                 Button("Delete department", systemImage: "trash", role: .destructive) {
@@ -383,7 +378,7 @@ struct InventoryListView: View {
             }
             .alert("Are you sure you want to delete this department? This can't be done.", isPresented: $showDeleteConfirmation) {
                 Button("Go back", role: .cancel) { }
-                Button("Yes, delete Item", role: .destructive) {
+                Button("Yes, delete department", role: .destructive) {
                     guard let dept = selectedDepartment else { return }
                     Task {
                         await vm.deleteDepartment(withId: dept._id)

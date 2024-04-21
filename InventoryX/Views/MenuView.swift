@@ -35,8 +35,8 @@ struct MenuView: View {
     var body: some View {
         VStack(spacing: 16) {
             /// Don't show this button when the menu is closed because the menu button is
-            /// being overlayed. Placing the menu button in an HStack with a Spacer
-            /// improves the animation when changing state.
+            /// being overlayed. Placing the menu button in an HStack with a Spacer improves
+            /// the animation when changing state.
             if menuState == .open || menuState == .compact {
                 HStack {
                     Spacer()
