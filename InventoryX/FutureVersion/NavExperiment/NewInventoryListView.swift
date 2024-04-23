@@ -9,6 +9,10 @@ import SwiftUI
 import RealmSwift
 
 struct NewInventoryListView: View {
+    @State var colVis: NavigationSplitViewVisibility = .detailOnly
+    @Binding var currentDisplay: DisplayState
+    @State var prefCompactCol: NavigationSplitViewColumn = .detail
+    
     @ObservedResults(DepartmentEntity.self) var departments
     @StateObject var invListVM = InventoryListViewModel()
     @State var selectedDepartment: DepartmentEntity?
@@ -22,80 +26,57 @@ struct NewInventoryListView: View {
     @State var showMoveItems: Bool = false
     
     var body: some View {
-        // MARK: - INVENTORY VIEW
-        VStack(alignment: .leading, spacing: 16) {
-            // DEPARTMENT HIGHLIGHT PANE
-            HStack {
-                VStack(alignment: .leading) {
-                    Text("\(selectedDepartment?.name ?? "") Dept.")
-                        .font(.headline)
+        NavigationSplitView(columnVisibility: $colVis, preferredCompactColumn: $prefCompactCol) {
+            NewMenuView(display: $currentDisplay)
+        } detail: {
+            VStack(alignment: .leading, spacing: 16) {
+                // DEPARTMENT HIGHLIGHT PANE
+                HStack {
+                    VStack(alignment: .leading) {
+                        Text("\(selectedDepartment?.name ?? "") Dept.")
+                            .font(.headline)
+                        
+                        Text("\(selectedDepartment?.items.count ?? 0) Items")
+                            .font(.callout)
+                    } //: VStack
                     
-                    Text("\(selectedDepartment?.items.count ?? 0) Items")
-                        .font(.callout)
-                } //: VStack
+                    Spacer()
+                    
+                    VStack(alignment: .leading) {
+                        Text("Markup")
+                            .font(.headline)
+                        Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0%")
+                            .font(.callout)
+                    } //: VStack
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .leading) {
+                        Text("Restock")
+                            .font(.headline)
+                        Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0")
+                            .font(.callout)
+                    } //: VStack
+                    
+                    Spacer()
+                    
+                    departmentMenu
+                        .font(.title2)
+                } //: HStack
+                .modifier(PaneOutlineMod())
                 
-                Spacer()
-                
-                VStack(alignment: .leading) {
-                    Text("Markup")
-                        .font(.headline)
-                    Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0%")
-                        .font(.callout)
-                } //: VStack
-                
-                Spacer()
-                
-                VStack(alignment: .leading) {
-                    Text("Restock")
-                        .font(.headline)
-                    Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0")
-                        .font(.callout)
-                } //: VStack
-                
-                Spacer()
-                
-                departmentMenu
-                    .font(.title2)
-            } //: HStack
-            .modifier(PaneOutlineMod())
-            
-//                        GeometryReader { geo in
                 // MARK: - REGULAR SIZE TABLE
                 Table(of: ItemEntity.self) {
-                    
-                    TableColumn("Name") { item in
-                        Text(item.name)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    
-                    TableColumn("Attribute") { item in
-                        Text(item.attribute)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    
-                    TableColumn("Stock") { item in
-                        Text(item.formattedQty)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .width(min: 96)
-                    
-                    TableColumn("Price") { item in
-                        Text(item.formattedPrice)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .width(max: 96)
-                    
-                    TableColumn("Cost") { item in
-                        Text(item.formattedUnitCost)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .width(max: 96)
-                    
-                    TableColumn("") { item in
-                        Text(item.restockWarning)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .width(24)
+                    TableColumn("Name", value: \.name)
+                    TableColumn("Attribute", value: \.attribute)
+                    TableColumn("Stock", value: \.formattedQty)
+                        .width(min: 96)
+                    TableColumn("Price", value: \.formattedPrice)
+                        .width(max: 96)
+                    TableColumn("Cost", value: \.formattedUnitCost)
+                        .width(max: 96)
+                    TableColumn("", value: \.restockWarning)
+                        .width(24)
                 } rows: {
                     if let selectedDepartment = selectedDepartment {
                         ForEach(selectedDepartment.items) {
@@ -105,20 +86,23 @@ struct NewInventoryListView: View {
                         TableRow(ItemEntity())
                     }
                 }
-                //                    .padding(.vertical, 6)
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(.gray.opacity(0.7), lineWidth: 0.5)
                 )
-//                        } //: Geometry Reader
-        } //: VStack
-        .padding()
-        .background(Color("Purple050").opacity(0.2))
-        .navigationTitle("Inventory")
-        .navigationSplitViewColumnWidth(400)
-        
+            } //: VStack
+            .padding()
+            .background(Color("Purple050").opacity(0.2))
+            .navigationSplitViewStyle(.balanced)
+            //            .toolbar(.hidden, for: .navigationBar)
+            //            .navigationTitle("Inventory")
+            //            .navigationSplitViewColumnWidth(400)
+            
+            //        .toolbar(.hidden, for: .navigationBar)
+            
+        }
     } //: Body
     
     @ViewBuilder private var departmentMenu: some View {
@@ -159,6 +143,14 @@ struct NewInventoryListView: View {
     } //: Delete Button
 }
 
+//#Preview {
+//    NewInventoryListView()
+//}
+
+
 #Preview {
-    NewInventoryListView()
+    ResponsiveView { props in
+        NavExperiment(uiProperties: props, cartState: CartState.sidebar)
+            .environment(\.realm, DepartmentEntity.previewRealm)
+    }
 }

@@ -83,6 +83,8 @@ struct RootView: View {
             cartState = .sidebar
         }
         
+        
+        
     }
     
     /// Conditions required for menu to display.

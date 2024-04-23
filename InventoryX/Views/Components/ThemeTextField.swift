@@ -90,11 +90,11 @@ struct ThemeTextField: View {
     private var labels: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .foregroundStyle(.black)
+                .foregroundStyle(Color("TextColor"))
             if let sub = subtitle {
                 Text(sub)
                     .fontWeight(.light)
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(Color("GrayTextColor"))
                     .lineLimit(3)
                 //                    .frame(minHeight: 24, idealHeight: 32, maxHeight: 72)
             }
@@ -117,20 +117,20 @@ struct ThemeTextField: View {
                         .frame(width: 48)
                     
                     Text(type.overlayText)
-                        .foregroundStyle(Color("Purple050"))
+                        .foregroundStyle(Color("bgColor"))
                         .font(.subheadline)
                         .fontDesign(.rounded)
                         .scaleEffect(type == FieldType.percentage || type == FieldType.price ? 1.3 : 1.0)
                 }
             }
         }
-        .background(.white.opacity(0.95))
+        .background(Color("bgColor").opacity(0.95))
         .overlay(
             RoundedRectangle(cornerRadius: 6)
                 .stroke(lineWidth: 0.5)
-                .foregroundStyle(.gray)
-                .shadow(color: Color("Purple050"), radius: 4, x: 3, y: 3)
-                .shadow(color: Color("Purple050"), radius: 4, x: -3, y: -3)
+                .foregroundStyle(Color("GrayTextColor"))
+                .shadow(color: .accent.opacity(0.25), radius: 4, x: 3, y: 3)
+                .shadow(color: .accent.opacity(0.25), radius: 4, x: -3, y: -3)
         )
         .clipShape(RoundedRectangle(cornerRadius: 6))
         .shadow(color: Color.gray.opacity(0.20), radius: 4, x: 0, y: 0)

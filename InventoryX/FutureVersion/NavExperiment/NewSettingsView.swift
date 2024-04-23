@@ -16,93 +16,100 @@ struct NewSettingsView: View {
     @State var showingCompanyDetail: Bool = false
     @State var showPasscodeView: Bool = false
     @State var showDeleteAccountConfirmation: Bool = false
-    
+    @Binding var currentDisplay: DisplayState
     var body: some View {
-        VStack {
-            
+        NavigationSplitView {
+            NewMenuView(display: $currentDisplay)
+        } content: {
             VStack {
                 
-                Button {
-                    showingCompanyDetail = true
-                } label: {
-                    HStack {
-                        Image(systemName: "case")
-                            .frame(width: 24)
-                        Text("Company Info")
-                        Spacer()
+                VStack {
+                    
+                    Button {
+                        showingCompanyDetail = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "case")
+                                .frame(width: 24)
+                            Text("Company Info")
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
                     }
-                    .contentShape(Rectangle())
-                }
-                .padding(.vertical, 8)
-                .sheet(isPresented: $showingCompanyDetail, onDismiss: {
-                    settingsVM.fetchCompanyData()
-                }, content: {
-                    CompanyDetailView(company: CompanyEntity(name: settingsVM.companyName, taxRate: Double(settingsVM.taxRateStr) ?? 0.0))
-                })
-                
-                Divider()
-                
-                Button {
-                    showPasscodeView = true
-                } label: {
-                    HStack {
-                        Image(systemName: "lock")
-                            .frame(width: 24)
-                        Text("Change Passcode")
-                        Spacer()
-                    } //: HStack
-                    .contentShape(Rectangle())
-                }
-                .padding(.vertical, 8)
-                .sheet(isPresented: $showPasscodeView) {
-                    PasscodeView(processes: [.confirm, .set]) {
-                        showPasscodeView = false
+                    .padding(.vertical, 8)
+                    .sheet(isPresented: $showingCompanyDetail, onDismiss: {
+                        settingsVM.fetchCompanyData()
+                    }, content: {
+                        CompanyDetailView(company: CompanyEntity(name: settingsVM.companyName, taxRate: Double(settingsVM.taxRateStr) ?? 0.0))
+                    })
+                    
+                    Divider()
+                    
+                    Button {
+                        showPasscodeView = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "lock")
+                                .frame(width: 24)
+                            Text("Change Passcode")
+                            Spacer()
+                        } //: HStack
+                        .contentShape(Rectangle())
                     }
-                }
-                
-                Divider()
-                
-                Button {
-                    showDeleteAccountConfirmation = true
-                } label: {
-                    HStack {
-                        Image(systemName: "trash")
-                            .frame(width: 24)
-                        Text("Delete Account")
-                        Spacer()
-                    } //: HStack
-                    .contentShape(Rectangle())
-                }
-                .padding(.vertical, 8)
-            } //: VStack
-            .font(.subheadline)
-            .frame(maxWidth: .infinity)
-            .foregroundStyle(.black)
-            .modifier(PaneOutlineMod())
-            
-            Spacer()
-            
-            VStack {
-                Link("Terms of Service", destination: termsOfServiceURL)
                     .padding(.vertical, 8)
-                Divider()
-                Link("Privacy Policy", destination: privacyPolicyURL)
+                    .sheet(isPresented: $showPasscodeView) {
+                        PasscodeView(processes: [.confirm, .set]) {
+                            showPasscodeView = false
+                        }
+                    }
+                    
+                    Divider()
+                    
+                    Button {
+                        showDeleteAccountConfirmation = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "trash")
+                                .frame(width: 24)
+                            Text("Delete Account")
+                            Spacer()
+                        } //: HStack
+                        .contentShape(Rectangle())
+                    }
                     .padding(.vertical, 8)
+                } //: VStack
+                .font(.subheadline)
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(.black)
+                .modifier(PaneOutlineMod())
+                
+                Spacer()
+                
+                VStack {
+                    Link("Terms of Service", destination: termsOfServiceURL)
+                        .padding(.vertical, 8)
+                    Divider()
+                    Link("Privacy Policy", destination: privacyPolicyURL)
+                        .padding(.vertical, 8)
+                } //: VStack
+                .font(.subheadline)
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(.black)
+                .modifier(PaneOutlineMod())
             } //: VStack
-            .font(.subheadline)
-            .frame(maxWidth: .infinity)
-            .foregroundStyle(.black)
-            .modifier(PaneOutlineMod())
-        } //: VStack
-        .padding()
-        .alert("Are you sure?", isPresented: $showDeleteAccountConfirmation) {
-            Button("Go back", role: .cancel) { }
-            Button("Yes, delete account", role: .destructive) {
-                Task {
-                    await settingsVM.deleteAccount()
+            .padding()
+            .alert("Are you sure?", isPresented: $showDeleteAccountConfirmation) {
+                Button("Go back", role: .cancel) { }
+                Button("Yes, delete account", role: .destructive) {
+                    Task {
+                        await settingsVM.deleteAccount()
+                    }
                 }
             }
+        } detail: {
+            
         }
+        
         
     } 
 //                        .padding()
@@ -110,12 +117,12 @@ struct NewSettingsView: View {
     
 }
 
-#Preview {
-    NavigationSplitView {
-        
-    } content: {
-        NewSettingsView()
-    } detail: {
-        
-    }
-}
+//#Preview {
+//    NavigationSplitView {
+//        
+//    } content: {
+//        NewSettingsView()
+//    } detail: {
+//        
+//    }
+//}

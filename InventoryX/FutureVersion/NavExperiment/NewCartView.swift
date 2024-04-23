@@ -1,37 +1,17 @@
 //
-//  CartView.swift
+//  NewCartView.swift
 //  InventoryX
 //
-//  Created by Ryan Smetana on 4/9/24.
+//  Created by Ryan Smetana on 4/21/24.
 //
 
 import SwiftUI
 
-
-enum CartState {
-    case closed
-    case sidebar
-    case confirming
-    
-    var idealWidth: CGFloat {
-        switch self {
-        case .closed:
-            return 0
-        case .sidebar:
-            return 240
-        case .confirming:
-            return .infinity
-        }
-    }
-}
-
-/// Changing the opacity based on screenwidth improves the animation when hiding the cart.
-
-struct CartView: View {
+struct NewCartView: View {
     @EnvironmentObject var vm: PointOfSaleViewModel
     
     @Binding var cartState: CartState
-    @Binding var menuState: MenuState
+//    @Binding var menuState: MenuState
         
     let uiProperties: LayoutProperties
     
@@ -48,17 +28,17 @@ struct CartView: View {
                     /// Once the sale saves successfully, return the cart to its original state.
                     // TODO: This probably won't work for smaller screens. Menu shouldn't be compact.
                     cartState = .sidebar
-                    menuState = .compact
+//                    menuState = .compact
                 }
             }
         }
         
-        if cartState == .confirming {
-            withAnimation(.interpolatingSpring) {
-                menuState = .closed
-            }
-        }
-        print("Cart width is now: \(uiProperties.width)")
+//        if cartState == .confirming {
+//            withAnimation(.interpolatingSpring) {
+//                menuState = .closed
+//            }
+//        }
+//        print("Cart width is now: \(uiProperties.width)")
     }
     
     var receiptMaxHeight: CGFloat {
@@ -72,7 +52,7 @@ struct CartView: View {
     var body: some View {
         VStack(alignment: .center, spacing: cartState == .confirming ? 24 : 0) {
             Text(cartState == .confirming ? "Sale #\(vm.calcNextSaleNumber())" : "Cart")
-                .font(cartState == .confirming ? .largeTitle : .title2)
+                .font(.title2)
                 .fontWeight(.regular)
                 .fontDesign(cartState == .confirming ? .rounded : .default)
             
@@ -84,10 +64,9 @@ struct CartView: View {
                     HStack {
                         Spacer()
                         confirmationView
-                            .padding(.vertical)
-//                            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
-//                            .modifier(GlowingOutlineMod())
-                            .frame(minWidth: 320, idealWidth: 360, maxWidth: 420)
+                            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
+                            .modifier(GlowingOutlineMod())
+                            .frame(minWidth: 320, idealWidth: 420, maxWidth: 480)
                         Spacer()
                         receiptTotalsView
                             .frame(maxWidth: cartState == .confirming ? 420 : uiProperties.width)
@@ -97,8 +76,8 @@ struct CartView: View {
                     // For smaller screens
                     VStack {
                         confirmationView
-                            .background(Color("Purple050").opacity(0.2))
-//                            .modifier(GlowingOutlineMod())
+                            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
+                            .modifier(GlowingOutlineMod())
                         receiptTotalsView
                     } //: VStack
                 } //: ViewThatFits
@@ -110,12 +89,11 @@ struct CartView: View {
                 receiptTotalsView
             }
         } //: VStack
-        .padding(cartState == .confirming ? 16 : 0)
-        .background(Color("Purple050").opacity(0.5))
         .opacity(uiProperties.width < 150 ? 0 : 1)
         .onAppear {
             vm.fetchCompany()
         }
+        
     } //: Body
     
     private var confirmationView: some View {
@@ -210,7 +188,7 @@ struct CartView: View {
                 continueTapped()
             } label: {
                 Spacer()
-                Text(cartState == .confirming ? "Confirm Sale" : "Checkout")
+                Text("Checkout")
                 Spacer()
             }
             .modifier(PrimaryButtonMod())
@@ -235,34 +213,8 @@ struct CartView: View {
 
 #Preview {
     ResponsiveView { props in
-        CartView(cartState: .constant(.confirming), menuState: .constant(.compact), uiProperties: props)
+        NewCartView(cartState: .constant(.sidebar), uiProperties: props)
             .environment(\.realm, DepartmentEntity.previewRealm)
             .environmentObject(PointOfSaleViewModel())
-    }
-}
-
-
-struct SaleItemRowView: View {
-    enum ViewType { case cart, receipt }
-    @EnvironmentObject var vm: PointOfSaleViewModel
-    
-    @State var item: ItemEntity
-    @State var viewType: ViewType
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            HStack {
-                Text(item.name)
-                Spacer()
-               Text(item.retailPrice.formatAsCurrencyString())
-                    .font(.subheadline)
-            } //: HStack
-            
-            Stepper("x \(vm.cartItems.filter { $0._id == item._id }.count)") {
-                vm.addItemToCart(item)
-            } onDecrement: {
-                vm.removeItemFromCart(item)
-            }
-        } //: VStack
     }
 }

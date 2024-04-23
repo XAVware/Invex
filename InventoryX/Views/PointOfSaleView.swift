@@ -10,7 +10,8 @@ import RealmSwift
 import Algorithms
 
 @MainActor class PointOfSaleViewModel: ObservableObject {
-    @Published var cartItems: Array<ItemEntity> = .init()
+//    @Published var cartItems: Array<ItemEntity> = .init()
+    @Published var cartItems: Array<ItemEntity> = Array(ItemEntity.drinkArray)
     @Published var companyName: String = ""
     @Published var taxRate: Double = 0.0
     
@@ -217,7 +218,7 @@ struct PointOfSaleView: View {
                 }
                 .frame(maxWidth: cartState.idealWidth)
                 .padding()
-                .background(Color("Purple050").opacity(0.5))
+
             }
         } //: HStack
     } //: Body

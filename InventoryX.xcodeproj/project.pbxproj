@@ -52,6 +52,13 @@
 		9486886D2BC33C5B0030C8C6 /* TableStyle-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9486886C2BC33C5B0030C8C6 /* TableStyle-Mod.swift */; };
 		9488615B2BACC40A00580F38 /* DepartmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */; };
 		9490BAE02BB32044003C925A /* SecondaryButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */; };
+		94A939D72BD578490027A5E4 /* NewCartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939D62BD578490027A5E4 /* NewCartView.swift */; };
+		94A939D92BD58C0B0027A5E4 /* NewMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939D82BD58C0B0027A5E4 /* NewMenuView.swift */; };
+		94A939DB2BD6F21F0027A5E4 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939DA2BD6F21F0027A5E4 /* Date+Ext.swift */; };
+		94A939DE2BD6F4DB0027A5E4 /* SalesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939DD2BD6F4DB0027A5E4 /* SalesViewModel.swift */; };
+		94A939E02BD6F94E0027A5E4 /* DailyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939DF2BD6F94E0027A5E4 /* DailyChartView.swift */; };
+		94A939E22BD6F9600027A5E4 /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939E12BD6F9600027A5E4 /* WeeklyChartView.swift */; };
+		94A939E42BD6F97B0027A5E4 /* MonthlyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939E32BD6F97B0027A5E4 /* MonthlyChartView.swift */; };
 		94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */; };
 		94B3DE932A47C2CB00BBCB3A /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */; };
 		94B7EAC92BACDDEF00895FF7 /* ItemGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7EAC82BACDDEF00895FF7 /* ItemGridView.swift */; };
@@ -118,6 +125,13 @@
 		9486886C2BC33C5B0030C8C6 /* TableStyle-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableStyle-Mod.swift"; sourceTree = "<group>"; };
 		9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentDetailView.swift; sourceTree = "<group>"; };
 		9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SecondaryButton-Mod.swift"; sourceTree = "<group>"; };
+		94A939D62BD578490027A5E4 /* NewCartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCartView.swift; sourceTree = "<group>"; };
+		94A939D82BD58C0B0027A5E4 /* NewMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMenuView.swift; sourceTree = "<group>"; };
+		94A939DA2BD6F21F0027A5E4 /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
+		94A939DD2BD6F4DB0027A5E4 /* SalesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalesViewModel.swift; sourceTree = "<group>"; };
+		94A939DF2BD6F94E0027A5E4 /* DailyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChartView.swift; sourceTree = "<group>"; };
+		94A939E12BD6F9600027A5E4 /* WeeklyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChartView.swift; sourceTree = "<group>"; };
+		94A939E32BD6F97B0027A5E4 /* MonthlyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyChartView.swift; sourceTree = "<group>"; };
 		94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		94B7EAC82BACDDEF00895FF7 /* ItemGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemGridView.swift; sourceTree = "<group>"; };
@@ -249,6 +263,8 @@
 				9446D04E2BD4E8F7007D1131 /* NewPointOfSaleView.swift */,
 				9446D0502BD4E908007D1131 /* NewInventoryListView.swift */,
 				9446D0522BD4E933007D1131 /* NewSettingsView.swift */,
+				94A939D62BD578490027A5E4 /* NewCartView.swift */,
+				94A939D82BD58C0B0027A5E4 /* NewMenuView.swift */,
 			);
 			path = NavExperiment;
 			sourceTree = "<group>";
@@ -257,9 +273,11 @@
 			isa = PBXGroup;
 			children = (
 				9446D04D2BD4E8E4007D1131 /* NavExperiment */,
-				802EDC0129FA32160048A9A8 /* SaleDateManager.swift */,
-				944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */,
-				94F624452BAF1B1E0069C81E /* SalesHistoryView.swift */,
+				94A939DC2BD6F4C50027A5E4 /* Sales_Old */,
+				94A939DD2BD6F4DB0027A5E4 /* SalesViewModel.swift */,
+				94A939DF2BD6F94E0027A5E4 /* DailyChartView.swift */,
+				94A939E12BD6F9600027A5E4 /* WeeklyChartView.swift */,
+				94A939E32BD6F97B0027A5E4 /* MonthlyChartView.swift */,
 			);
 			path = FutureVersion;
 			sourceTree = "<group>";
@@ -273,6 +291,16 @@
 				94E8BEAD2BCD90EA00041614 /* RealmActor.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		94A939DC2BD6F4C50027A5E4 /* Sales_Old */ = {
+			isa = PBXGroup;
+			children = (
+				802EDC0129FA32160048A9A8 /* SaleDateManager.swift */,
+				944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */,
+				94F624452BAF1B1E0069C81E /* SalesHistoryView.swift */,
+			);
+			path = Sales_Old;
 			sourceTree = "<group>";
 		};
 		94F624472BB122E40069C81E /* Utilities */ = {
@@ -305,6 +333,7 @@
 				94F6244B2BB12D710069C81E /* String+Ext.swift */,
 				94341C0F2BA5895500334505 /* UIColor+Ext.swift */,
 				94F6244F2BB12DC20069C81E /* View+Ext.swift */,
+				94A939DA2BD6F21F0027A5E4 /* Date+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -417,6 +446,7 @@
 				9446D04A2BD1CE03007D1131 /* MoveItemsView.swift in Sources */,
 				948688672BB6B0B70030C8C6 /* AlertModel.swift in Sources */,
 				80DBB97F29F70EE000497695 /* OnboardingView.swift in Sources */,
+				94A939DE2BD6F4DB0027A5E4 /* SalesViewModel.swift in Sources */,
 				9490BAE02BB32044003C925A /* SecondaryButton-Mod.swift in Sources */,
 				94ECB3922BB3955F00A507AF /* PointOfSaleView.swift in Sources */,
 				94EA1CE32BB2763300BD0388 /* PasscodeView.swift in Sources */,
@@ -446,17 +476,23 @@
 				9446D0482BD151AB007D1131 /* NavExperiment.swift in Sources */,
 				944F8CEB2A2C4AE4007AD864 /* SettingsView.swift in Sources */,
 				9467C3F22BC577E400A7541E /* CartView.swift in Sources */,
+				94A939DB2BD6F21F0027A5E4 /* Date+Ext.swift in Sources */,
+				94A939E42BD6F97B0027A5E4 /* MonthlyChartView.swift in Sources */,
 				94F624462BAF1B1E0069C81E /* SalesHistoryView.swift in Sources */,
+				94A939E22BD6F9600027A5E4 /* WeeklyChartView.swift in Sources */,
 				9465246F2BA7E55C00F24CDD /* DepartmentButton-Mod.swift in Sources */,
 				944F8CE72A2AA94E007AD864 /* SaleDetailView.swift in Sources */,
+				94A939E02BD6F94E0027A5E4 /* DailyChartView.swift in Sources */,
 				80F6026629FFFD8A004C759D /* DepartmentPicker.swift in Sources */,
 				802EDC0A2A02166D0048A9A8 /* LogoView.swift in Sources */,
 				9465244F2BA658EE00F24CDD /* ResponsiveView.swift in Sources */,
+				94A939D72BD578490027A5E4 /* NewCartView.swift in Sources */,
 				9446D0512BD4E908007D1131 /* NewInventoryListView.swift in Sources */,
 				94F624502BB12DC20069C81E /* View+Ext.swift in Sources */,
 				9421930E2BB23816001D720D /* AppError.swift in Sources */,
 				94F624492BB12B040069C81E /* CompanyEntity.swift in Sources */,
 				94F624552BB12EEB0069C81E /* ItemGridButton-Mod.swift in Sources */,
+				94A939D92BD58C0B0027A5E4 /* NewMenuView.swift in Sources */,
 				94F6244C2BB12D710069C81E /* String+Ext.swift in Sources */,
 				80B5EF7129F0C318007D9842 /* InventoryXApp.swift in Sources */,
 				94D3F1052A1C6A1C00AF4393 /* DepartmentEntity.swift in Sources */,

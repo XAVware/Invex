@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+// Used for the tab-like scrolling department buttons in PointOfSaleView
 struct DepartmentButtonMod: ViewModifier {
     let isSelected: Bool
     func body(content: Content) -> some View {

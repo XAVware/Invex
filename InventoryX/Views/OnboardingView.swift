@@ -94,8 +94,8 @@ struct OnboardingView: View {
             .padding(.horizontal)
             .padding(.top)
 //            .overlay(AlertView())
-            
         } //: ScrollView
+        .background(Color("bgColor"))
     } //: Body
     
     
