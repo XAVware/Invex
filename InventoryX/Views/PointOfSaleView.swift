@@ -182,7 +182,7 @@ struct PointOfSaleView: View {
                     VStack(spacing: 24) {
                         DepartmentPicker(selectedDepartment: $selectedDept, style: .scrolling)
                         
-                        if let dept = selectedDept {
+                        if selectedDept != nil {
                             ItemGridView(items: Array(getItems())) { item in
                                 vm.addItemToCart(item)
                             }
