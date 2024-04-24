@@ -30,7 +30,7 @@ import RealmSwift
                 self.taxRateStr = String(format: "%.2f%", Double(company.taxRate))
             }
         } catch {
-            LogService(String(describing: self)).error("Settings VM err")
+            debugPrint(error.localizedDescription)
         }
     }
     
@@ -120,7 +120,7 @@ struct SettingsView: View {
                 } //: VStack
                 .font(.title3)
                 .frame(maxWidth: 360)
-                .foregroundStyle(.black)
+                .foregroundStyle(Color("TextColor"))
                 .modifier(PaneOutlineMod())
                 
                 Spacer()
@@ -135,7 +135,7 @@ struct SettingsView: View {
                 } //: VStack
                 .font(.title3)
                 .frame(maxWidth: 360)
-                .foregroundStyle(.black)
+                .foregroundStyle(Color("TextColor"))
                 .modifier(PaneOutlineMod())
             } //: VStack
             .padding()
@@ -150,7 +150,7 @@ struct SettingsView: View {
             
         } //: VStack
         .padding()
-        .background(Color("Purple050").opacity(0.2))
+        .background(Color("bgColor"))
     } //: Body
     
 }

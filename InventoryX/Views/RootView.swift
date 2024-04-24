@@ -116,6 +116,14 @@ struct RootView: View {
         }
     }
     
+    var contentOpacity: CGFloat {
+        if uiProperties.width < 680 && menuState == .open {
+            return 0
+        } else {
+            return 1
+        }
+    }
+    
     var body: some View {
         /// Don't show the menu when `cartState == .confirming`. The menu can be compact 
         /// when the width is over 840
@@ -127,6 +135,7 @@ struct RootView: View {
                     }
                 }
             }
+            
             
             /// Group views so TapGesture can be recognized when screen is tapped
             /// outside of menu bounds.
@@ -159,6 +168,7 @@ struct RootView: View {
                     }
                 }
             }
+            .opacity(contentOpacity)
         } //: HStack
         .overlay(smallViewMenuBtn, alignment: .topLeading)
         .onChange(of: menuState) { _, newValue in

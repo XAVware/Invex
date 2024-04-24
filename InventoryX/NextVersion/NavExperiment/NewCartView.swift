@@ -23,7 +23,7 @@ struct NewCartView: View {
         case .confirming:
             guard !vm.cartItems.isEmpty else { return }
             Task {
-                // TODO: Now that this is asynchronous, can probably get rid of the closure.
+                // TODO: Async, can probably get rid of the closure.
                 await vm.finalizeSale {
                     /// Once the sale saves successfully, return the cart to its original state.
                     // TODO: This probably won't work for smaller screens. Menu shouldn't be compact.
@@ -38,7 +38,6 @@ struct NewCartView: View {
 //                menuState = .closed
 //            }
 //        }
-//        print("Cart width is now: \(uiProperties.width)")
     }
     
     var receiptMaxHeight: CGFloat {
@@ -64,7 +63,7 @@ struct NewCartView: View {
                     HStack {
                         Spacer()
                         confirmationView
-                            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
+//                            .background(Color("bgColor").opacity(cartState == .confirming ? 0.25 : 0.0))
                             .modifier(GlowingOutlineMod())
                             .frame(minWidth: 320, idealWidth: 420, maxWidth: 480)
                         Spacer()
@@ -76,7 +75,7 @@ struct NewCartView: View {
                     // For smaller screens
                     VStack {
                         confirmationView
-                            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
+//                            .background(Color("bgColor").opacity(cartState == .confirming ? 0.25 : 0.0))
                             .modifier(GlowingOutlineMod())
                         receiptTotalsView
                     } //: VStack
@@ -180,7 +179,7 @@ struct NewCartView: View {
             } //: VStack
             .font(.subheadline)
             .padding(cartState == .confirming ? 16 : 8)
-            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
+//            .background(Color("bgColor").opacity(cartState == .confirming ? 0.25 : 0.0))
             .clipShape(RoundedRectangle(cornerRadius: cartState == .confirming ? 8 : 0))
             
             

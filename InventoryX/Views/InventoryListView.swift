@@ -17,10 +17,8 @@ import RealmSwift
     func deleteDepartment(withId id: RealmSwift.ObjectId) async {
         do {
             try await RealmActor().deleteDepartment(id: id)
-            debugPrint("Successfully deleted department")
         } catch {
             errorMessage = error.localizedDescription
-            print(error.localizedDescription)
         }
     }
 
@@ -31,12 +29,9 @@ import RealmSwift
 struct InventoryListView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @ObservedResults(ItemEntity.self) var items
-//    @Environment(\.layoutDirection) private var layoutDirection
     @StateObject var vm = InventoryListViewModel()
     private var isCompact: Bool { horizontalSizeClass == .compact }
     
-    @State var showDepartmentDetail: Bool = false
-//    @State var showItemDetail: Bool = false
     @State var showMoveItems: Bool = false
     
     // For when a user taps edit department.
@@ -59,14 +54,21 @@ struct InventoryListView: View {
     
     let uiProperties: LayoutProperties
     
+    var isShowingSheet: Bool {
+        return selectedItem != nil || editingDepartment != nil || showMoveItems
+    }
+    
     var body: some View {
         VStack {
-            if horizontalSizeClass == .regular {
-                regularView
-            } else {
-                compactView
+            if !isShowingSheet {
+                if horizontalSizeClass == .regular {
+                    regularView
+                } else {
+                    compactView
+                }
             }
         }
+        .background(Color("bgColor"))
         .sheet(item: $selectedItem, onDismiss: {
             vm.departments.realm?.refresh()
         }) { item in
@@ -88,7 +90,7 @@ struct InventoryListView: View {
             let item = try RealmActor().fetchItem(withId: item._id)
             self.selectedItem = item
         } catch {
-            print(error.localizedDescription)
+            debugPrint(error.localizedDescription)
         }
     }
     
@@ -97,11 +99,12 @@ struct InventoryListView: View {
             return Array(dept.items)
         } else {
             Task {
+                // TODO: Don't really need to handle errors if it can return an empty array.
                 do {
                     let items = try RealmActor().fetchAllItems()
                     return Array(items)
                 } catch {
-                    print(error.localizedDescription)
+                    debugPrint(error.localizedDescription)
                     return Array()
                 }
             }
@@ -162,7 +165,7 @@ struct InventoryListView: View {
                                         
                                         Image(systemName: selectedDepartment == dept ? "circle.fill" : "circle")
                                     } //: HStack
-                                    .foregroundStyle(selectedDepartment == dept ? .white : .black)
+                                    .foregroundStyle(selectedDepartment == dept ? Color("TextColorInverted") : Color("TextColor"))
                                     .padding(8)
                                     .onTapGesture {
                                         selectedDepartment = dept
@@ -215,6 +218,7 @@ struct InventoryListView: View {
                             .font(.title2)
                     } //: HStack
                     .modifier(PaneOutlineMod())
+                    .background(.ultraThinMaterial.opacity(0.2))
                     
                     // MARK: - REGULAR SIZE TABLE
                     Table(of: ItemEntity.self) {
@@ -222,6 +226,7 @@ struct InventoryListView: View {
                         TableColumn("Name") { item in
                             Text(item.name)
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(.clear)
                                 .onTapGesture { itemTapped(item) }
                         }
                         
@@ -268,21 +273,22 @@ struct InventoryListView: View {
                                 TableRow(ItemEntity())
                             }
                         }
-                    }
+                    } //: Table
+                    .scrollContentBackground(.hidden)
                     .padding(.vertical, 6)
-                    .background(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(.gray.opacity(0.7), lineWidth: 0.5)
+                            .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
                     )
-                    
                     .frame(maxWidth: .infinity)
+                    .background(.ultraThickMaterial.opacity(0.2))
                 } //: VStack
+                
             } //: HStack
         } //: VStack
+//        .background(Color("bgColor").opacity(0.2))
         .padding()
-        .background(Color("Purple050").opacity(0.2))
     }
     
     @ViewBuilder private var compactView: some View {
@@ -347,22 +353,17 @@ struct InventoryListView: View {
                                 Text("⚠️")
                             } //: HStack
                             .frame(height: 64) 
+                            .onTapGesture {
+                                self.selectedItem = item
+                            }
                         Divider()
                     }
                     .scrollIndicators(.hidden)
+                    .scrollContentBackground(.hidden)
                     Spacer()
                 } //: VStack
-//                .padding()
             } //: ScrollView
-//            .modifier(TableStyleMod())
             .padding(8)
-            .navigationDestination(for: ItemEntity.self, destination: { item in
-                AddItemView(item: item, showTitles: false)
-            })
-            .sheet(isPresented: $showDepartmentDetail, content: {
-                DepartmentDetailView(department: DepartmentEntity())
-            })
-            
         } //: VStack
         .padding()
     } //: Compact View
@@ -411,12 +412,12 @@ struct InventoryListView: View {
             content
                 .padding(.horizontal)
                 .padding(.vertical, 8)
-                .clipShape(RoundedRectangle(cornerRadius: 6))
+//                .clipShape(RoundedRectangle(cornerRadius: 6))
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
-                        .stroke(.gray.opacity(0.7), lineWidth: 0.5)
+                        .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
                 )
-                .background(.white)
+//                .background(.white)
         }
     }
 

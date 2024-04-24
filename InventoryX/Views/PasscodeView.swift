@@ -18,12 +18,6 @@ enum PasscodeViewState {
         }
     }
     
-//    var padSubtitle: String {
-//        return switch self {
-//        case .set: "Enter a 4-digit passcode."
-//        case .confirm: "Enter a 4-digit passcode."
-//        }
-//    }
 }
 
 /// To allow for reusability in Onboarding, Change Passcode, and Lock Screen scenarios, this view
@@ -72,9 +66,7 @@ enum PasscodeViewState {
     @Published var passcodeHash: String = ""
     @Published var showTitles: Bool
     let onSuccess: (() -> Void)?
-    
-//    @Published var headerTitle: String
-    
+        
     var headerTitle: String {
         switch processes.first {
         case .set:
@@ -95,14 +87,11 @@ enum PasscodeViewState {
     init(processes: [PasscodeViewState], showTitles: Bool, onSuccess: (() -> Void)?) {
         let authService = AuthService.shared
         let currentHash = authService.passHash
-        debugPrint("Hash stored in AuthService: \(currentHash)")
         self.passcodeHash = currentHash
         self.authService = authService
         self.onSuccess = onSuccess
         self.processes = processes
         self.showTitles = showTitles
-//        self.headerTitle = processes.first?.padTitle ?? "Err"
-        debugPrint("Initializing with processes: \(processes)")
     }
     
     func passcodeSubmitted(code: String) async throws {
@@ -112,12 +101,9 @@ enum PasscodeViewState {
         switch type {
         case .set:
             if passcodeHash.isEmpty {
-                debugPrint("Setting password hash to: \(newHash)")
                 passcodeHash = newHash
-//                headerTitle = "Re-enter passcode"
             } else {
                 guard passcodeHash == newHash else {
-                    debugPrint("Setting password hash to: ")
                     passcodeHash = ""
                     throw AppError.passcodesDoNotMatch
                 }
@@ -130,15 +116,9 @@ enum PasscodeViewState {
             guard !passcodeHash.isEmpty else { throw AppError.noPasscodeFound }
             guard passcodeHash == newHash else { throw AppError.passcodesDoNotMatch }
             processes.removeFirst()
-//            if processes.count > 0 {
-//                headerTitle = "Enter a new passcode"
-//            }
-            debugPrint("Setting password hash to: ")
             passcodeHash = ""
         }
-        
-        debugPrint("Remaining processes: \(processes)")
-    
+            
         if processes.isEmpty {
             onSuccess?()
         }
@@ -171,10 +151,10 @@ struct PasscodeView: View {
                 if error.localizedDescription == AppError.passcodesDoNotMatch.localizedDescription {
                     self.subtitle = error.localizedDescription
                 } else {
-                    print("Error submitting passcode: \(error.localizedDescription)")
+                    debugPrint("Error submitting passcode: \(error.localizedDescription)")
                 }
             } catch {
-                print("Error submitting passcode: \(error.localizedDescription)")
+                debugPrint("Error submitting passcode: \(error.localizedDescription)")
             }
         }
         
@@ -204,7 +184,7 @@ struct PasscodeView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(Color("TextColor"))
                 }
                 
                 Text(vm.headerTitle)
@@ -237,7 +217,7 @@ struct PasscodeView: View {
     }
     
     private var horLayout: some View {
-        HStack(alignment: .top, spacing: 16) {
+        HStack(alignment: .center, spacing: 16) {
             VStack(spacing: 16) {
                 Text(subtitle)
                     .font(.subheadline)
@@ -246,7 +226,7 @@ struct PasscodeView: View {
                 circleIndicator
                     .padding(.vertical)
                 
-                Spacer()
+                Spacer().frame(height: 24)
             } //: VStack
             .frame(maxWidth: .infinity, maxHeight: 420)
             

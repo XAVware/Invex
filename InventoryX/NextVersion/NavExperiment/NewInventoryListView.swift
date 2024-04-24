@@ -90,11 +90,11 @@ struct NewInventoryListView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .overlay(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(.gray.opacity(0.7), lineWidth: 0.5)
+                        .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
                 )
             } //: VStack
             .padding()
-            .background(Color("Purple050").opacity(0.2))
+            .background(Color("bgColor"))
             .navigationSplitViewStyle(.balanced)
             //            .toolbar(.hidden, for: .navigationBar)
             //            .navigationTitle("Inventory")

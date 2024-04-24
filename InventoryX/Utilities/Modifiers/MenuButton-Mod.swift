@@ -16,6 +16,7 @@ struct MenuButtonMod: ViewModifier {
             .padding(.leading)
             .padding(.vertical, 8)
             .frame(maxHeight: 64)
-            .foregroundStyle(isSelected ? .white : Color("Purple050").opacity(0.6))
+//            .foregroundStyle(isSelected ? .white : Color("bgColor").opacity(0.6))
+            .foregroundStyle(Color("lightAccent").opacity(isSelected ? 1.0 : 0.6))
     }
 }

@@ -14,11 +14,12 @@ import RealmSwift
     func save(name: String, threshold: String, markup: String, completion: @escaping ((Error?) -> Void)) async {
         do {
             try await RealmActor().addDepartment(name: name, restockThresh: threshold, markup: markup)
-            debugPrint("Successfully saved department.")
             completion(nil)
+        } catch let error as AppError {
+            errorMessage = error.localizedDescription
+            completion(error)
         } catch {
             errorMessage = error.localizedDescription
-            print(error)
             completion(error)
         }
     }
@@ -26,11 +27,12 @@ import RealmSwift
     func deleteDepartment(withId id: RealmSwift.ObjectId, completion: @escaping ((Error?) -> Void)) async {
         do {
             try await RealmActor().deleteDepartment(id: id)
-            debugPrint("Successfully deleted department")
             completion(nil)
+        } catch let error as AppError {
+            errorMessage = error.localizedDescription
+            completion(error)
         } catch {
             errorMessage = error.localizedDescription
-            print(error.localizedDescription)
             completion(error)
         }
     }
@@ -38,11 +40,12 @@ import RealmSwift
     func update(department: DepartmentEntity, name: String, threshold: String, markup: String, completion: @escaping ((Error?) -> Void)) async {
         do {
             try await RealmActor().updateDepartment(dept: department, newName: name, thresh: threshold, markup: markup)
-            print("Successfully updated department")
             completion(nil)
+        } catch let error as AppError {
+            errorMessage = error.localizedDescription
+            completion(error)
         } catch {
             errorMessage = error.localizedDescription
-            print(error.localizedDescription)
             completion(error)
         }
     }
@@ -68,7 +71,8 @@ struct DepartmentDetailView: View {
     
     let detailType: DetailViewType
     
-    
+    @State var showRemoveItemsAlert: Bool = false
+    @State var showDeleteConfirmation: Bool = false
     private enum Focus { case name, threshold, markup }
     @FocusState private var focus: Focus?
     
@@ -188,11 +192,10 @@ struct DepartmentDetailView: View {
             }
         } //: ScrollView
         .overlay(detailType == .modify ? deleteButton : nil, alignment: .topTrailing)
-        
+        .background(Color.clear)
     } //: Body
     
-    @State var showRemoveItemsAlert: Bool = false
-    @State var showDeleteConfirmation: Bool = false
+
     
     private var deleteButton: some View {
         Menu {
@@ -208,7 +211,7 @@ struct DepartmentDetailView: View {
         }
         .font(.title)
         .padding()
-        .foregroundStyle(.primary)
+        .foregroundStyle(.accent)
         .alert("You must remove the items from this department before you can delete it.", isPresented: $showRemoveItemsAlert) {
             Button("Okay", role: .cancel) { }
         }

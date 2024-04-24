@@ -19,14 +19,14 @@ import RealmSwift
 // TODO: Move form validation back into ViewModels. Only pass this actor type validated data so it is easier to troubleshoot.
 actor RealmActor {
     deinit {
-        print("RealmActor deinitialized")
-        print("-> Lifespan: \(bornTime.timeIntervalSinceNow)")
+        debugPrint("RealmActor deinitialized")
+        debugPrint("-> Lifespan: \(bornTime.timeIntervalSinceNow)")
     }
     
     let bornTime: Date
     
     init() {
-        print("RealActor Initialized")
+        debugPrint("RealActor Initialized")
         bornTime = Date()
     }
     
@@ -175,7 +175,7 @@ actor RealmActor {
         let realm = try await Realm()
         let itemsToMove = fromDept.items
         guard itemsToMove.count > 0 else {
-            print("Department has no items to move")
+            debugPrint("Department has no items to move")
             return
         }
         guard let fromDept = fromDept.thaw(), let toDept = toDept.thaw() else { throw AppError.thawingDepartmentError }

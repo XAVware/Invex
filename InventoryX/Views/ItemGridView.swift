@@ -69,26 +69,24 @@ struct ItemGridView: View {
                             VStack(alignment: .leading, spacing: 0) {
                                 Text(item.name)
                                     .font(.headline)
-                                    .foregroundStyle(.black)
+                                    .foregroundStyle(Color("TextColor"))
                                 Spacer()
                                 Text(item.attribute)
                                     .font(.subheadline)
-                                    .foregroundStyle(.black)
-                                    .opacity(0.8)
+                                    .foregroundStyle(Color("TextColor"))
                                 Spacer()
                                 Text(item.retailPrice.formatAsCurrencyString())
                                     .font(.headline)
                                     .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .foregroundStyle(.accent.opacity(0.8))
+                                    .foregroundStyle(.accent)
                             }
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
                         } //: VStack
                         .background(.ultraThinMaterial)
-                        .background(Color("Purple050").opacity(0.5))
+                        .background(Color("bgColor"))
                         .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .shadow(color: Color("Purple800").opacity(0.12), radius: 3, x: 2, y: 2)
-                        .shadow(color: Color("Purple200").opacity(0.12), radius: 3, x: -2, y: -2)
+                        .shadow(color: .accent.opacity(0.25), radius: 3, x: 2, y: 2)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     } //: ForEach
                     
@@ -109,12 +107,11 @@ struct ItemGridView: View {
 }
 
 
-//#Preview {
-//    ResponsiveView { props in
-//        ItemGridView(department: .constant(nil), onSelect: { item in
-//            
-//        })
-//        .padding()
-//        .environment(\.realm, DepartmentEntity.previewRealm)
-//    }
-//}
+#Preview {
+        ItemGridView(items: ItemEntity.drinkArray) { i in
+            
+        }
+        .padding()
+        .environment(\.realm, DepartmentEntity.previewRealm)
+    
+}

@@ -14,11 +14,12 @@ import RealmSwift
     func saveCompany(name: String, tax: String, completion: @escaping ((Error?) -> Void)) async {
         do {
             try await RealmActor().saveCompany(name: name, tax: tax)
-            debugPrint("Successfully saved company")
             completion(nil)
+        } catch let error as AppError {
+            errorMessage = error.localizedDescription
+            completion(error)
         } catch {
             errorMessage = error.localizedDescription
-            print(error.localizedDescription)
             completion(error)
         }
     }
@@ -138,6 +139,7 @@ struct CompanyDetailView: View {
                 self.focus = nil
             }
         } //: ScrollView
+        .background(Color.clear)
     } //: Body
     
 }

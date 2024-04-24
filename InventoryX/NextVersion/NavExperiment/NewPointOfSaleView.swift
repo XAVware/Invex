@@ -61,7 +61,7 @@ struct NewPointOfSaleView: View {
                     let items = try RealmActor().fetchAllItems()
                     return Array(items)
                 } catch {
-                    print(error.localizedDescription)
+                    debugPrint(error.localizedDescription)
                     return Array()
                 }
             }
@@ -122,7 +122,7 @@ struct NewPointOfSaleView: View {
     //                CartView(cartState: $cartState, menuState: $menuState, uiProperties: uiProperties)
     //                    .frame(maxWidth: cartState.idealWidth)
     //                    .padding()
-    //                    .background(Color("Purple050").opacity(0.25))
+    //                    .background(Color("bgColor").opacity(0.25))
     //                    .environmentObject(vm)
     //            }
     //

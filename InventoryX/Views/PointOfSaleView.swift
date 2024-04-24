@@ -10,8 +10,7 @@ import RealmSwift
 import Algorithms
 
 @MainActor class PointOfSaleViewModel: ObservableObject {
-//    @Published var cartItems: Array<ItemEntity> = .init()
-    @Published var cartItems: Array<ItemEntity> = Array(ItemEntity.drinkArray)
+    @Published var cartItems: Array<ItemEntity> = .init()
     @Published var companyName: String = ""
     @Published var taxRate: Double = 0.0
     
@@ -49,7 +48,8 @@ import Algorithms
             self.companyName = company.name
             self.taxRate = company.taxRate
         } catch {
-            LogService(String(describing: self)).error("Settings VM err")
+//            LogService(String(describing: self)).error("Settings VM err")
+            debugPrint(error.localizedDescription)
         }
         
     }
@@ -62,7 +62,8 @@ import Algorithms
             let salesCount = realm.objects(SaleEntity.self).count
             count = salesCount + 1
         } catch {
-            LogService(String(describing: self)).error("Error fetching sales")
+//            LogService(String(describing: self)).error("Error fetching sales")
+            debugPrint(error.localizedDescription)
         }
         return count
     }
@@ -92,7 +93,7 @@ import Algorithms
             cartItems.removeAll()
             completion()
         } catch {
-            
+            debugPrint(error.localizedDescription)
         }
         
     }
@@ -206,7 +207,7 @@ struct PointOfSaleView: View {
                 CartView(cartState: $cartState, menuState: $menuState, uiProperties: uiProperties)
                     .frame(maxWidth: cartState.idealWidth)
                     .padding()
-                    .background(Color("Purple050").opacity(0.25))
+                    .background(Color("bgColor"))
                     .environmentObject(vm)
             }
             
@@ -217,10 +218,10 @@ struct PointOfSaleView: View {
                         .environmentObject(vm)
                 }
                 .frame(maxWidth: cartState.idealWidth)
-                .padding()
 
             }
         } //: HStack
+        .background(Color("bgColor"))
     } //: Body
 }
 

@@ -92,7 +92,6 @@ struct AlertView: View {
                     } else {
                         showingAlert = false
                     }
-//                    debugPrint("View received alert: \(alert)")
                 })
                 .onTapGesture {
                     Task {
@@ -143,7 +142,7 @@ struct AlertView: View {
                     .padding(.horizontal)
             } //: HStack
             .transition(.move(edge: .top))
-            .foregroundStyle(.white)
+            .foregroundStyle(Color("TextColorInverted"))
             .frame(maxWidth: 400, maxHeight: (56 + CGFloat(alertPadding)))
             .background(
                 

@@ -15,8 +15,8 @@ struct PaneOutlineMod: ViewModifier {
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
-                    .stroke(.gray.opacity(0.7), lineWidth: 0.5)
+                    .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
             )
-            .background(.white)
+            .background(.ultraThinMaterial)
     }
 }

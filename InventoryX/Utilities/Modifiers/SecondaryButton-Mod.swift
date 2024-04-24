@@ -11,7 +11,7 @@ struct SecondaryButtonMod: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.callout)
-            .foregroundStyle(.white)
+            .foregroundStyle(Color("TextColorInverted"))
             .frame(minWidth: 64,
                    idealWidth: 72,
                    maxWidth: 84,
@@ -19,7 +19,7 @@ struct SecondaryButtonMod: ViewModifier {
                    idealHeight: 32,
                    maxHeight: 36)
             .background(.ultraThinMaterial)
-            .background(.accent.opacity(0.9))
+            .background(.accent)
             .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }

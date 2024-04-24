@@ -33,10 +33,8 @@
 		944F8CE72A2AA94E007AD864 /* SaleDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */; };
 		944F8CEB2A2C4AE4007AD864 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */; };
 		9453BEC42BB3C79F007C63A4 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 9453BEC32BB3C79F007C63A4 /* Algorithms */; };
-		945D80132BCA61BF002C4269 /* AppStoreListing.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 945D80122BCA61BF002C4269 /* AppStoreListing.rtf */; };
 		945DF5A92BAA5CAC002014F6 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945DF5A82BAA5CAC002014F6 /* RootView.swift */; };
 		945DF5AB2BAA5CF3002014F6 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945DF5AA2BAA5CF3002014F6 /* MenuView.swift */; };
-		945DF5AF2BAB64AE002014F6 /* DepartmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945DF5AE2BAB64AE002014F6 /* DepartmentsView.swift */; };
 		9465244F2BA658EE00F24CDD /* ResponsiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9465244E2BA658EE00F24CDD /* ResponsiveView.swift */; };
 		9465246F2BA7E55C00F24CDD /* DepartmentButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9465246E2BA7E55C00F24CDD /* DepartmentButton-Mod.swift */; };
 		946524712BA8036800F24CDD /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946524702BA8036800F24CDD /* LockScreenView.swift */; };
@@ -59,6 +57,7 @@
 		94A939E02BD6F94E0027A5E4 /* DailyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939DF2BD6F94E0027A5E4 /* DailyChartView.swift */; };
 		94A939E22BD6F9600027A5E4 /* WeeklyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939E12BD6F9600027A5E4 /* WeeklyChartView.swift */; };
 		94A939E42BD6F97B0027A5E4 /* MonthlyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939E32BD6F97B0027A5E4 /* MonthlyChartView.swift */; };
+		94A939E82BD8BB440027A5E4 /* UIColorOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A939E72BD8BB440027A5E4 /* UIColorOverride.swift */; };
 		94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */; };
 		94B3DE932A47C2CB00BBCB3A /* AddItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */; };
 		94B7EAC92BACDDEF00895FF7 /* ItemGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94B7EAC82BACDDEF00895FF7 /* ItemGridView.swift */; };
@@ -75,8 +74,6 @@
 		94F6244C2BB12D710069C81E /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F6244B2BB12D710069C81E /* String+Ext.swift */; };
 		94F6244E2BB12DAA0069C81E /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F6244D2BB12DAA0069C81E /* Double+Ext.swift */; };
 		94F624502BB12DC20069C81E /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F6244F2BB12DC20069C81E /* View+Ext.swift */; };
-		94F624552BB12EEB0069C81E /* ItemGridButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F624542BB12EEB0069C81E /* ItemGridButton-Mod.swift */; };
-		94F624572BB12F860069C81E /* ThemeField-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F624562BB12F860069C81E /* ThemeField-Mod.swift */; };
 		94F624592BB12FB90069C81E /* Title-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F624582BB12FB90069C81E /* Title-Mod.swift */; };
 /* End PBXBuildFile section */
 
@@ -106,10 +103,8 @@
 		9446D0522BD4E933007D1131 /* NewSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSettingsView.swift; sourceTree = "<group>"; };
 		944F8CE62A2AA94E007AD864 /* SaleDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleDetailView.swift; sourceTree = "<group>"; };
 		944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		945D80122BCA61BF002C4269 /* AppStoreListing.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = AppStoreListing.rtf; sourceTree = "<group>"; };
 		945DF5A82BAA5CAC002014F6 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		945DF5AA2BAA5CF3002014F6 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
-		945DF5AE2BAB64AE002014F6 /* DepartmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentsView.swift; sourceTree = "<group>"; };
 		9465244E2BA658EE00F24CDD /* ResponsiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponsiveView.swift; sourceTree = "<group>"; };
 		9465246E2BA7E55C00F24CDD /* DepartmentButton-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DepartmentButton-Mod.swift"; sourceTree = "<group>"; };
 		946524702BA8036800F24CDD /* LockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
@@ -132,6 +127,7 @@
 		94A939DF2BD6F94E0027A5E4 /* DailyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyChartView.swift; sourceTree = "<group>"; };
 		94A939E12BD6F9600027A5E4 /* WeeklyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyChartView.swift; sourceTree = "<group>"; };
 		94A939E32BD6F97B0027A5E4 /* MonthlyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyChartView.swift; sourceTree = "<group>"; };
+		94A939E72BD8BB440027A5E4 /* UIColorOverride.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorOverride.swift; sourceTree = "<group>"; };
 		94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItemView.swift; sourceTree = "<group>"; };
 		94B7EAC82BACDDEF00895FF7 /* ItemGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemGridView.swift; sourceTree = "<group>"; };
@@ -148,8 +144,6 @@
 		94F6244B2BB12D710069C81E /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		94F6244D2BB12DAA0069C81E /* Double+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
 		94F6244F2BB12DC20069C81E /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
-		94F624542BB12EEB0069C81E /* ItemGridButton-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ItemGridButton-Mod.swift"; sourceTree = "<group>"; };
-		94F624562BB12F860069C81E /* ThemeField-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeField-Mod.swift"; sourceTree = "<group>"; };
 		94F624582BB12FB90069C81E /* Title-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Title-Mod.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -170,12 +164,10 @@
 		80A9A8622A1B1A3800E0F96A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				948688662BB6B0B70030C8C6 /* AlertModel.swift */,
 				94F624482BB12B040069C81E /* CompanyEntity.swift */,
 				94D3F1042A1C6A1C00AF4393 /* DepartmentEntity.swift */,
 				80FFBD092A1D2F2700992440 /* ItemEntity.swift */,
 				80FFBD072A1D013A00992440 /* SaleEntity.swift */,
-				9486886A2BB6B1650030C8C6 /* UIFeedbackService.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -202,7 +194,7 @@
 				80B5EF7429F0C319007D9842 /* Assets.xcassets */,
 				802EDC082A01EFB00048A9A8 /* Info.plist */,
 				80B5EF8329F0CC1C007D9842 /* App */,
-				9453BEC52BB4D9FD007C63A4 /* FutureVersion */,
+				9453BEC52BB4D9FD007C63A4 /* NextVersion */,
 				80A9A8622A1B1A3800E0F96A /* Models */,
 				948861592BACC19800580F38 /* Services */,
 				94F624472BB122E40069C81E /* Utilities */,
@@ -226,7 +218,6 @@
 				9421930D2BB23816001D720D /* AppError.swift */,
 				80B5EF7029F0C318007D9842 /* InventoryXApp.swift */,
 				802EDC0629FB79E40048A9A8 /* DisplayState.swift */,
-				945D80122BCA61BF002C4269 /* AppStoreListing.rtf */,
 				94D1FDB12BCC8D13001DFEA5 /* LaunchScreen.storyboard */,
 			);
 			path = App;
@@ -237,21 +228,19 @@
 			children = (
 				94F6244A2BB12B860069C81E /* Components */,
 				94B3DE922A47C2CB00BBCB3A /* AddItemView.swift */,
-				948688682BB6B0CC0030C8C6 /* AlertView.swift */,
 				9467C3F12BC577E400A7541E /* CartView.swift */,
 				9421930F2BB23C92001D720D /* CompanyDetailView.swift */,
 				9488615A2BACC40A00580F38 /* DepartmentDetailView.swift */,
-				945DF5AE2BAB64AE002014F6 /* DepartmentsView.swift */,
 				94B7EAC82BACDDEF00895FF7 /* ItemGridView.swift */,
 				9467C40F2BC5995900A7541E /* InventoryListView.swift */,
 				946524702BA8036800F24CDD /* LockScreenView.swift */,
 				945DF5AA2BAA5CF3002014F6 /* MenuView.swift */,
+				9446D0492BD1CE03007D1131 /* MoveItemsView.swift */,
 				80DBB97E29F70EE000497695 /* OnboardingView.swift */,
 				94EA1CE22BB2763300BD0388 /* PasscodeView.swift */,
 				94ECB3912BB3955F00A507AF /* PointOfSaleView.swift */,
 				945DF5A82BAA5CAC002014F6 /* RootView.swift */,
 				944F8CEA2A2C4AE4007AD864 /* SettingsView.swift */,
-				9446D0492BD1CE03007D1131 /* MoveItemsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -269,24 +258,28 @@
 			path = NavExperiment;
 			sourceTree = "<group>";
 		};
-		9453BEC52BB4D9FD007C63A4 /* FutureVersion */ = {
+		9453BEC52BB4D9FD007C63A4 /* NextVersion */ = {
 			isa = PBXGroup;
 			children = (
+				94C7625D2BA8BEDB00A61F7D /* LogService.swift */,
+				948688662BB6B0B70030C8C6 /* AlertModel.swift */,
+				9486886A2BB6B1650030C8C6 /* UIFeedbackService.swift */,
+				948688682BB6B0CC0030C8C6 /* AlertView.swift */,
 				9446D04D2BD4E8E4007D1131 /* NavExperiment */,
 				94A939DC2BD6F4C50027A5E4 /* Sales_Old */,
 				94A939DD2BD6F4DB0027A5E4 /* SalesViewModel.swift */,
 				94A939DF2BD6F94E0027A5E4 /* DailyChartView.swift */,
 				94A939E12BD6F9600027A5E4 /* WeeklyChartView.swift */,
 				94A939E32BD6F97B0027A5E4 /* MonthlyChartView.swift */,
+				94A939E72BD8BB440027A5E4 /* UIColorOverride.swift */,
 			);
-			path = FutureVersion;
+			path = NextVersion;
 			sourceTree = "<group>";
 		};
 		948861592BACC19800580F38 /* Services */ = {
 			isa = PBXGroup;
 			children = (
 				94C7625B2BA8A9F800A61F7D /* AuthService.swift */,
-				94C7625D2BA8BEDB00A61F7D /* LogService.swift */,
 				94AC8DBC29FB25D4006A166E /* RealmMigrator.swift */,
 				94E8BEAD2BCD90EA00041614 /* RealmActor.swift */,
 			);
@@ -343,12 +336,10 @@
 			children = (
 				9465246E2BA7E55C00F24CDD /* DepartmentButton-Mod.swift */,
 				94860B9F2BB14EDF00B1138A /* GlowingOutline-Mod.swift */,
-				94F624542BB12EEB0069C81E /* ItemGridButton-Mod.swift */,
 				9467C4112BC5C59D00A7541E /* MenuButton-Mod.swift */,
 				94341C112BA5897000334505 /* PrimaryButton-Mod.swift */,
 				9490BADF2BB32044003C925A /* SecondaryButton-Mod.swift */,
 				9486886C2BC33C5B0030C8C6 /* TableStyle-Mod.swift */,
-				94F624562BB12F860069C81E /* ThemeField-Mod.swift */,
 				94F624582BB12FB90069C81E /* Title-Mod.swift */,
 				9446D04B2BD36CA0007D1131 /* PaneOutline-Mod.swift */,
 			);
@@ -425,7 +416,6 @@
 				80B5EF7829F0C319007D9842 /* Preview Assets.xcassets in Resources */,
 				94D1FDB22BCC8D13001DFEA5 /* LaunchScreen.storyboard in Resources */,
 				80B5EF7529F0C319007D9842 /* Assets.xcassets in Resources */,
-				945D80132BCA61BF002C4269 /* AppStoreListing.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,7 +426,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				945DF5AF2BAB64AE002014F6 /* DepartmentsView.swift in Sources */,
 				9446D04C2BD36CA0007D1131 /* PaneOutline-Mod.swift in Sources */,
 				802EDC0229FA32160048A9A8 /* SaleDateManager.swift in Sources */,
 				94E8BEB02BCF720600041614 /* CustomShape.swift in Sources */,
@@ -454,6 +443,7 @@
 				94341C1B2BA629F000334505 /* NumberPadView.swift in Sources */,
 				9488615B2BACC40A00580F38 /* DepartmentDetailView.swift in Sources */,
 				80FFBD0A2A1D2F2700992440 /* ItemEntity.swift in Sources */,
+				94A939E82BD8BB440027A5E4 /* UIColorOverride.swift in Sources */,
 				9467C4102BC5995900A7541E /* InventoryListView.swift in Sources */,
 				9486886D2BC33C5B0030C8C6 /* TableStyle-Mod.swift in Sources */,
 				9467C4122BC5C59D00A7541E /* MenuButton-Mod.swift in Sources */,
@@ -469,7 +459,6 @@
 				802EDC0729FB79E40048A9A8 /* DisplayState.swift in Sources */,
 				946524732BA803D000F24CDD /* DateTimeLabel.swift in Sources */,
 				948688692BB6B0CC0030C8C6 /* AlertView.swift in Sources */,
-				94F624572BB12F860069C81E /* ThemeField-Mod.swift in Sources */,
 				945DF5A92BAA5CAC002014F6 /* RootView.swift in Sources */,
 				946524712BA8036800F24CDD /* LockScreenView.swift in Sources */,
 				94C7625E2BA8BEDB00A61F7D /* LogService.swift in Sources */,
@@ -491,7 +480,6 @@
 				94F624502BB12DC20069C81E /* View+Ext.swift in Sources */,
 				9421930E2BB23816001D720D /* AppError.swift in Sources */,
 				94F624492BB12B040069C81E /* CompanyEntity.swift in Sources */,
-				94F624552BB12EEB0069C81E /* ItemGridButton-Mod.swift in Sources */,
 				94A939D92BD58C0B0027A5E4 /* NewMenuView.swift in Sources */,
 				94F6244C2BB12D710069C81E /* String+Ext.swift in Sources */,
 				80B5EF7129F0C318007D9842 /* InventoryXApp.swift in Sources */,

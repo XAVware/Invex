@@ -106,7 +106,6 @@
 //                } //: HStack
 //                .onTapGesture {
 //                    selectedSale = sale
-//                    print(sale.items.count)
 //                }
 //            }
 //            .toolbar(.hidden, for: .navigationBar)
@@ -183,12 +182,12 @@
 ////                } //: List
 ////                .scrollContentBackground(.hidden)
 ////                .frame(maxWidth: 0.6 * geo.size.width)
-////                .background(Color("Purple050"))
+////                .background(Color("bgColor"))
 ////                .cornerRadius(15)
 ////                
 ////            } //: VStack
 ////            .padding()
-////            .background(Color("Purple050"))
+////            .background(Color("bgColor"))
 ////            .onAppear {
 ////                updateSales(newRange: selectedDateRange)
 ////            }

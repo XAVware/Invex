@@ -32,7 +32,6 @@ class AuthService {
     func savePasscode(hash: String) async {
         UserDefaults.standard.setValue(hash, forKey: "passcode")
         self.passHash = hash
-        debugPrint("Passcode saved successfully")
     }
     
     func checkPasscode(hash: String) -> Bool {

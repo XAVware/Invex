@@ -80,7 +80,7 @@ struct NewSettingsView: View {
                 } //: VStack
                 .font(.subheadline)
                 .frame(maxWidth: .infinity)
-                .foregroundStyle(.black)
+                .foregroundStyle(Color("TextColor"))
                 .modifier(PaneOutlineMod())
                 
                 Spacer()
@@ -94,7 +94,7 @@ struct NewSettingsView: View {
                 } //: VStack
                 .font(.subheadline)
                 .frame(maxWidth: .infinity)
-                .foregroundStyle(.black)
+                .foregroundStyle(Color("TextColor"))
                 .modifier(PaneOutlineMod())
             } //: VStack
             .padding()
@@ -113,7 +113,7 @@ struct NewSettingsView: View {
         
     } 
 //                        .padding()
-//                        .background(Color("Purple050").opacity(0.2))
+//                        .background(Color("bgColor").opacity(0.2))
     
 }
 

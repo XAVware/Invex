@@ -52,7 +52,7 @@
 //                Text("Total:")
 //                    .font(.title)
 //                    .fontWeight(.semibold)
-//                    .foregroundStyle(.gray)
+//                    .foregroundStyle(Color("GrayTextColor"))
 //                
 //                Text(sale.total.formatAsCurrencyString())
 //            } //: HStack
@@ -73,7 +73,7 @@
 //                } //: HStack
 //                .frame(height: 50)
 //                .padding(.horizontal)
-//                .background(Color("Purple050").opacity(0.6))
+//                .background(Color("bgColor").opacity(0.6))
 //                
 //                ScrollView(.vertical, showsIndicators: false) {
 //                    ForEach(sale.items) { item in
@@ -98,7 +98,7 @@
 //                        } //: HStack
 //                        .frame(height: 50)
 //                        .padding(.horizontal)
-//                        .background(Color("Purple050").opacity(0.6))
+//                        .background(Color("bgColor").opacity(0.6))
 //                        
 //                    }
 //                } //: ScrollView
@@ -119,7 +119,7 @@
 //            }
 //            .padding()
 //            , alignment: .topLeading)
-//        .background(Color("Purple050").opacity(0.6))
+//        .background(Color("bgColor").opacity(0.6))
 //    } //: Body
 //    
 //}

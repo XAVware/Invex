@@ -20,14 +20,13 @@ struct DateTimeLabel: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text("\(Date.now.formatted(date: .omitted, time: .shortened))")
-                .font(.system(size: 84))
-                .fontWeight(.bold)
-            
-            Text(dateString)
                 .font(.largeTitle)
                 .fontWeight(.semibold)
+            Text(dateString)
+                .font(.largeTitle)
+                .fontWeight(.light)
         }
     }
 }

@@ -72,7 +72,7 @@ struct DepartmentPicker: View {
                             Text("\(department.items.count) Items")
                                 .font(.subheadline)
                                 .fontDesign(.rounded)
-                                .foregroundStyle(.gray)
+                                .foregroundStyle(Color("GrayTextColor"))
                         } //: VStack
                         
                         Spacer()
@@ -84,7 +84,7 @@ struct DepartmentPicker: View {
                             .foregroundStyle(.gray.opacity(0.6))
                             .fontWeight(.semibold)
                     } //: HStack
-                    .background(selectedDepartment == department ? Color("Purple050").opacity(0.5) : nil)
+                    .background(selectedDepartment == department ? Color("bgColor") : nil)
                 }
                 Divider()
             } //: For Each
@@ -105,12 +105,12 @@ struct DepartmentPicker: View {
             HStack(spacing: 12) {
                 ZStack {
                     Rectangle()
-                        .fill(.accent.opacity(0.9))
+                        .fill(.accent)
                         .opacity(0.8)
                         .frame(width: 48)
                     
                     Image(systemName: "building.2.fill")
-                        .foregroundStyle(Color("Purple050"))
+                        .foregroundStyle(Color("lightAccent"))
                         .font(.subheadline)
                         .fontDesign(.rounded)
                 } //: ZStack
@@ -121,19 +121,19 @@ struct DepartmentPicker: View {
                     .padding(.trailing)
             }
         }
-        .background(.white.opacity(0.95))
+        .background(.ultraThickMaterial)
         .overlay(
             RoundedRectangle(cornerRadius: 6)
                 .stroke(lineWidth: 0.5)
-                .foregroundStyle(.gray)
-                .shadow(color: Color("Purple050"), radius: 4, x: 3, y: 3)
-                .shadow(color: Color("Purple050"), radius: 4, x: -3, y: -3)
+                .foregroundStyle(Color("GrayTextColor").opacity(0.4))
+                .shadow(color: Color("bgColor"), radius: 4, x: 3, y: 3)
+                .shadow(color: Color("bgColor"), radius: 4, x: -3, y: -3)
         )
         .clipShape(RoundedRectangle(cornerRadius: 6))
-        .shadow(color: Color.gray.opacity(0.20), radius: 4, x: 0, y: 0)
+        .shadow(color: Color("ShadowColor"), radius: 4, x: 0, y: 0)
         .frame(minWidth: 190, maxWidth: 256, alignment: .trailing)
 //        .frame(height: 48)
-//        .foregroundStyle(.black)
+//        .foregroundStyle(Color("TextColor"))
 //        .modifier(GlowingOutlineMod())
     } //: Drop Down Style
     
@@ -155,7 +155,7 @@ struct DepartmentPicker: View {
         .padding()
         .frame(minWidth: 190, maxWidth: .infinity)
         .frame(height: 56)
-        .foregroundStyle(.black)
+        .foregroundStyle(Color("TextColor"))
     } //: Drop Down Style
 }
 

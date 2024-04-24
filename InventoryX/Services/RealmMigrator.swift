@@ -26,8 +26,7 @@ class RealmMigrator {
         do {
             _ = try Realm(configuration: config)
         } catch {
-            LogService(String(describing: self)).error("Error initializing Realm:\n \(error.localizedDescription)")
-            
+            debugPrint("Error initializing Realm:\n \(error.localizedDescription)")
         }
     }
     

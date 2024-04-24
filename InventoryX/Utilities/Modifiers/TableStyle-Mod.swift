@@ -16,12 +16,12 @@ struct TableStyleMod: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .background(Color("Purple050").opacity(0.2))
+            .background(Color("bgColor"))
             .overlay(
                 sizeClass == .regular ?
                     RoundedRectangle(cornerRadius: 6)
-                        .stroke(Color.gray.opacity(0.1))
-                        .shadow(color: Color.gray.opacity(0.2), radius: 2)
+                        .stroke(Color("ShadowColor").opacity(0.4))
+                        .shadow(color: Color("ShadowColor"), radius: 2)
                 : nil
             )
     }

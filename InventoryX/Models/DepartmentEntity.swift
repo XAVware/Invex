@@ -54,7 +54,7 @@ extension DepartmentEntity {
             realm = try Realm(configuration: config)
                 if realm.isEmpty {
                     // MARK: - CREATE PREVIEW DATA
-                    print("Creating preview data")
+                    debugPrint("Creating preview data")
                     try realm.write {
                         realm.add(company)
                         
@@ -71,7 +71,7 @@ extension DepartmentEntity {
                     }
                     return realm
                 } else {
-                    print("Deleting preview data")
+                    debugPrint("Deleting preview data")
                     let realm = try Realm()
                     try realm.write {
                         realm.deleteAll()

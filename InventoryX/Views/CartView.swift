@@ -58,7 +58,6 @@ struct CartView: View {
                 menuState = .closed
             }
         }
-        print("Cart width is now: \(uiProperties.width)")
     }
     
     var receiptMaxHeight: CGFloat {
@@ -85,7 +84,7 @@ struct CartView: View {
                         Spacer()
                         confirmationView
                             .padding(.vertical)
-//                            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
+//                            .background(Color("bgColor").opacity(cartState == .confirming ? 0.25 : 0.0))
 //                            .modifier(GlowingOutlineMod())
                             .frame(minWidth: 320, idealWidth: 360, maxWidth: 420)
                         Spacer()
@@ -97,7 +96,7 @@ struct CartView: View {
                     // For smaller screens
                     VStack {
                         confirmationView
-                            .background(Color("Purple050").opacity(0.2))
+                            .background(Color("bgColor"))
 //                            .modifier(GlowingOutlineMod())
                         receiptTotalsView
                     } //: VStack
@@ -110,8 +109,9 @@ struct CartView: View {
                 receiptTotalsView
             }
         } //: VStack
-        .padding(cartState == .confirming ? 16 : 0)
-        .background(Color("Purple050").opacity(0.5))
+        .padding()
+        .background(.ultraThinMaterial)
+        .background(Color("bgColor"))
         .opacity(uiProperties.width < 150 ? 0 : 1)
         .onAppear {
             vm.fetchCompany()
@@ -202,7 +202,7 @@ struct CartView: View {
             } //: VStack
             .font(.subheadline)
             .padding(cartState == .confirming ? 16 : 8)
-            .background(Color("Purple050").opacity(cartState == .confirming ? 0.25 : 0.0))
+            .background(Color("bgColor"))
             .clipShape(RoundedRectangle(cornerRadius: cartState == .confirming ? 8 : 0))
             
             

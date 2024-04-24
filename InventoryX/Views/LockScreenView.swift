@@ -9,38 +9,34 @@ import SwiftUI
 
 struct LockScreenView: View {
     @Environment(\.dismiss) var dismiss
-    let uiProperties: LayoutProperties
     var body: some View {
         HStack {
-            if uiProperties.width > 840 {
-                VStack(alignment: .leading) {
-//                    Spacer()
-                    DateTimeLabel()
-                        .padding(.top, 48)
-                    Spacer()
-                } //: VStack
-                .frame(maxWidth: 420)
-            }
-            
-            VStack(alignment: .center) {
+            Spacer()
+            VStack {
                 Spacer()
-                Text("Enter Passcode")
-                    .font(.largeTitle)
-                    .fontWeight(.heavy)
-                
                 PasscodeView(processes: [.confirm], showTitles: false, onSuccess: {
                     dismiss()
                 })
-                .frame(minHeight: 550, maxHeight: 600)
-
-            } //: VStack
+                .frame(minHeight: 360, maxHeight: 600)
+                Spacer()
+            }
+            .frame(maxWidth: 420)
         } //: HStack
         .frame(maxWidth: .infinity)
+        .overlay(dateTimeLabel, alignment: .topLeading)
+        .background(Color("bgColor"))
+    }
+    
+    private var dateTimeLabel: some View {
+        VStack(spacing: 32) {
+            DateTimeLabel()
+
+        } //: VStack
+        .padding(42)
     }
 }
 
 #Preview {
-    ResponsiveView { props in
-        LockScreenView(uiProperties: props)
-    }
+    LockScreenView()
+    
 }

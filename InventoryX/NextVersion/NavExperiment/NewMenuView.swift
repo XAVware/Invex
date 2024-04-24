@@ -32,7 +32,7 @@ struct NewMenuView: View {
 //                    }
 //                    .font(.title)
 //                    .fontDesign(.rounded)
-//                    .foregroundStyle(Color("Purple050").opacity(0.8))
+//                    .foregroundStyle(Color("bgColor").opacity(0.8))
 //                    .padding()
 //                } //: HStack
 //            }
@@ -85,9 +85,8 @@ struct NewMenuView: View {
 //        .frame(width: menuState.idealWidth)
         .background(.accent)
         .fullScreenCover(isPresented: $showingLockScreen) {
-            ResponsiveView { props in
-                LockScreenView(uiProperties: props)
-            }
+            LockScreenView()
+            
         }
         
     }

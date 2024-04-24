@@ -27,7 +27,7 @@ class SaleEntity: Object, ObjectKeyIdentifiable {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"
         guard let someDateTime = formatter.date(from: "2016/10/08 22:31") else {
-            LogService(String(describing: self)).error("Error getting date for preview")
+//            LogService(String(describing: self)).error("Error getting date for preview")
             return Date()
         }
         return someDateTime

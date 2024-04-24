@@ -93,7 +93,6 @@ struct OnboardingView: View {
             } //: VStack
             .padding(.horizontal)
             .padding(.top)
-//            .overlay(AlertView())
         } //: ScrollView
         .background(Color("bgColor"))
     } //: Body

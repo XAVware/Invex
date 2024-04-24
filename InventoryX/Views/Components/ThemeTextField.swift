@@ -112,28 +112,28 @@ struct ThemeTextField: View {
                 // Overlay highlight
                 ZStack {
                     Rectangle()
-                        .fill(.accent.opacity(0.9))
+                        .fill(.accent)
                         .opacity(0.8)
                         .frame(width: 48)
                     
                     Text(type.overlayText)
-                        .foregroundStyle(Color("bgColor"))
+                        .foregroundStyle(Color("lightAccent"))
                         .font(.subheadline)
                         .fontDesign(.rounded)
                         .scaleEffect(type == FieldType.percentage || type == FieldType.price ? 1.3 : 1.0)
                 }
             }
         }
-        .background(Color("bgColor").opacity(0.95))
+        .background(.ultraThickMaterial)
         .overlay(
             RoundedRectangle(cornerRadius: 6)
                 .stroke(lineWidth: 0.5)
-                .foregroundStyle(Color("GrayTextColor"))
-                .shadow(color: .accent.opacity(0.25), radius: 4, x: 3, y: 3)
-                .shadow(color: .accent.opacity(0.25), radius: 4, x: -3, y: -3)
+                .foregroundStyle(Color("GrayTextColor").opacity(0.4))
+                .shadow(color: .accent.opacity(0.2), radius: 4, x: 3, y: 3)
+                .shadow(color: .accent.opacity(0.2), radius: 4, x: -3, y: -3)
         )
         .clipShape(RoundedRectangle(cornerRadius: 6))
-        .shadow(color: Color.gray.opacity(0.20), radius: 4, x: 0, y: 0)
+        .shadow(color: Color("ShadowColor"), radius: 4, x: 0, y: 0)
         .frame(minWidth: 72, idealWidth: fieldWidth, maxWidth: fieldWidth,
                minHeight: 42, idealHeight: 45, maxHeight: 48, alignment: .topLeading)
     } //: Field

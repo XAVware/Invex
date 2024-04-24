@@ -12,6 +12,11 @@ import RealmSwift
 @MainActor class AddItemViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     
+    func getFirstDept() async -> DepartmentEntity?  {
+        let departments = try? await RealmActor().fetchDepartments()
+        return departments?.first ?? nil
+    }
+    
     func saveItem(
         dept: DepartmentEntity?,
         name: String,
@@ -24,9 +29,11 @@ import RealmSwift
         do {
             try await RealmActor().saveItem(dept: dept, name: name, att: att, qty: qty, price: price, cost: cost)
             completion(nil)
+        } catch let error as AppError {
+            errorMessage = error.localizedDescription
+            completion(error)
         } catch {
             errorMessage = error.localizedDescription
-            debugPrint(error.localizedDescription)
             completion(error)
         }
     } //: Save Item
@@ -44,9 +51,11 @@ import RealmSwift
         do {
             try await RealmActor().updateItem(item: item, name: name, att: att, qty: qty, price: price, cost: cost)
             completion(nil)
+        } catch let error as AppError {
+            errorMessage = error.localizedDescription
+            completion(error)
         } catch {
             errorMessage = error.localizedDescription
-            print(error.localizedDescription)
             completion(error)
         }
     }
@@ -55,10 +64,12 @@ import RealmSwift
         do {
             try await RealmActor().deleteItem(withId: id)
             completion(nil)
-        } catch {
-            completion(error)
+        } catch let error as AppError {
             errorMessage = error.localizedDescription
-            print(error.localizedDescription)
+            completion(error)
+        } catch {
+            errorMessage = error.localizedDescription
+            completion(error)
         }
     }
     
@@ -271,11 +282,18 @@ struct AddItemView: View {
                 if selectedItem.unitCost > 0 {
                     unitCost = selectedItem.unitCost.formatAsCurrencyString()
                 }
+                
+                if showTitles == false {
+                    Task {
+                        self.selectedDepartment = await vm.getFirstDept()
+                    }
+                }
             }
         } //: ScrollView
         .navigationTitle(detailType == .modify ? "Edit item" : "Add item")
         .navigationBarTitleDisplayMode(.large)
         .overlay(detailType == .modify ? deleteButton : nil, alignment: .topTrailing)
+        .background(Color.clear) 
     } //: Body
     
     private var deleteButton: some View {
@@ -288,7 +306,7 @@ struct AddItemView: View {
         }
         .font(.title)
         .padding()
-        .foregroundStyle(.primary)
+        .foregroundStyle(.accent) 
         .alert("Are you sure? This can't be undone.", isPresented: $showDeleteConfirmation) {
             Button("Go back", role: .cancel) { }
             Button("Yes, delete Item", role: .destructive) {

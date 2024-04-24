@@ -50,7 +50,7 @@ struct MenuView: View {
                     }
                     .font(.title)
                     .fontDesign(.rounded)
-                    .foregroundStyle(Color("Purple050").opacity(0.8))
+                    .foregroundStyle(Color("lightAccent"))
                     .padding()
                 } //: HStack
             }
@@ -59,7 +59,11 @@ struct MenuView: View {
             
             ForEach(DisplayState.allCases, id: \.self) { data in
                 Button {
-                    display = data
+                    if display == data {
+                        menuState = .closed
+                    } else {
+                        display = data
+                    }
                 } label: {
                     HStack(spacing: 16) {
                         if menuState == .open {
@@ -69,7 +73,7 @@ struct MenuView: View {
                         
                         Image(systemName: data.menuIconName)
                         RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
-                            .fill(.white)
+                            .fill(Color("lightAccent"))
                             .frame(width: 6)
                             .opacity(data == display ? 1 : 0)
                             .offset(x: 3)
@@ -91,7 +95,7 @@ struct MenuView: View {
                     }
                     Image(systemName: "lock")
                     RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
-                        .fill(.white)
+                        .fill(Color("lightAccent"))
                         .frame(width: 6)
                         .opacity(0)
                         .offset(x: 3)
@@ -103,9 +107,9 @@ struct MenuView: View {
         .frame(width: menuState.idealWidth)
         .background(.accent)
         .fullScreenCover(isPresented: $showingLockScreen) {
-            ResponsiveView { props in
-                LockScreenView(uiProperties: props)
-            }
+            LockScreenView()
+                .frame(maxHeight: .infinity)
+                .background(Color("bgColor"))
         }
         
     }

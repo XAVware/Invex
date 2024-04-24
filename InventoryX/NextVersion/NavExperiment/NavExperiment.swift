@@ -116,7 +116,7 @@ struct NavExperiment: View {
 //            }
 //            
 //        }
-//        .tint(colVis == .detailOnly ? .accent : Color("Purple050"))
+//        .tint(colVis == .detailOnly ? .accent : Color("bgColor"))
         
     }
     
@@ -158,10 +158,8 @@ struct NavExperiment: View {
             .frame(width: currentDisplay == .inventoryList ? .infinity : 64)
             .background(.accent)
             .fullScreenCover(isPresented: $showingLockScreen) {
-                // TODO: This shouldnt need to be a responsive view.
-                ResponsiveView { props in
-                    LockScreenView(uiProperties: props)
-                }
+                LockScreenView()
+                
             }
 //        }
     }
@@ -177,7 +175,7 @@ struct NavExperiment: View {
                     let items = try RealmActor().fetchAllItems()
                     return Array(items)
                 } catch {
-                    print(error.localizedDescription)
+                    debugPrint(error.localizedDescription)
                     return Array()
                 }
             }
@@ -193,7 +191,7 @@ struct NavExperiment: View {
                 .clipShape(RoundedRectangle(cornerRadius: 6))
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
-                        .stroke(.gray.opacity(0.7), lineWidth: 0.5)
+                        .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
                 )
                 .background(.white)
         }
