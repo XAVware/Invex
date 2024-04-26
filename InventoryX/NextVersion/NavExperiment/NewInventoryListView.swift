@@ -9,26 +9,24 @@ import SwiftUI
 import RealmSwift
 
 struct NewInventoryListView: View {
-    @State var colVis: NavigationSplitViewVisibility = .detailOnly
-    @Binding var currentDisplay: DisplayState
-    @State var prefCompactCol: NavigationSplitViewColumn = .detail
+//    @State var colVis: NavigationSplitViewVisibility = .detailOnly
+//    @Binding var currentDisplay: NewDisplayState
+//    @State var prefCompactCol: NavigationSplitViewColumn = .detail
     
     @ObservedResults(DepartmentEntity.self) var departments
     @StateObject var invListVM = InventoryListViewModel()
     @State var selectedDepartment: DepartmentEntity?
-    @State var selectedItem: ItemEntity?
+//    @State var selectedItem: ItemEntity?
     
     @State var showRemoveItemsAlert: Bool = false
     @State var showDeleteConfirmation: Bool = false
     
     @State var showDepartmentDetail: Bool = false
-    @State var showItemDetail: Bool = false
+//    @State var showItemDetail: Bool = false
     @State var showMoveItems: Bool = false
     
     var body: some View {
-        NavigationSplitView(columnVisibility: $colVis, preferredCompactColumn: $prefCompactCol) {
-            NewMenuView(display: $currentDisplay)
-        } detail: {
+
             VStack(alignment: .leading, spacing: 16) {
                 // DEPARTMENT HIGHLIGHT PANE
                 HStack {
@@ -95,14 +93,8 @@ struct NewInventoryListView: View {
             } //: VStack
             .padding()
             .background(Color("bgColor"))
-            .navigationSplitViewStyle(.balanced)
-            //            .toolbar(.hidden, for: .navigationBar)
-            //            .navigationTitle("Inventory")
-            //            .navigationSplitViewColumnWidth(400)
             
-            //        .toolbar(.hidden, for: .navigationBar)
-            
-        }
+        
     } //: Body
     
     @ViewBuilder private var departmentMenu: some View {
@@ -150,7 +142,8 @@ struct NewInventoryListView: View {
 
 #Preview {
     ResponsiveView { props in
-        NavExperiment(uiProperties: props, cartState: CartState.sidebar)
+        NavExperiment(uiProperties: props, cartState: NewCartState.sidebar)
             .environment(\.realm, DepartmentEntity.previewRealm)
+            .environmentObject(PointOfSaleViewModel())
     }
 }

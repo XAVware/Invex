@@ -36,6 +36,8 @@ import Algorithms
     func removeItemFromCart(_ item: ItemEntity) {
         if let itemIndex = cartItems.firstIndex(of: item) {
             cartItems.remove(at: itemIndex)
+        } else {
+            print("No item found")
         }
     }
     

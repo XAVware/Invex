@@ -20,7 +20,7 @@ struct ItemGridView: View {
     let onSelect: ((ItemEntity) -> Void)
     let items: Array<ItemEntity>
     let minButtonWidth: CGFloat = 160
-    let gridSpacing: CGFloat = 16
+    let gridSpacing: CGFloat = 24
     let horPadding: CGFloat = 0
     
     func recalcColumns(forWidth width: CGFloat) {

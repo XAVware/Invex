@@ -16,28 +16,29 @@ struct InventoryXApp: SwiftUI.App {
 //        UIColor.classInit
 //    }
     
-//    func addSampleData() {
-//        let drinks = DepartmentEntity(name: "Drinks", restockNum: 12)
-//        drinks.items.append(objectsIn: ItemEntity.drinkArray)
-//        drinks.items.append(objectsIn: ItemEntity.foodArray)
-//        let realm = try! Realm()
-//        try! realm.write {
-//            realm.add(drinks)
-//        }
-//    }
+    func addSampleData() {
+        let drinksDept = DepartmentEntity(name: "Drinks", restockNum: 12, defMarkup: 0.5)
+        drinksDept.items.append(objectsIn: ItemEntity.drinkArray)
+        
+        let snacksDept = DepartmentEntity(name: "Snacks", restockNum: 15, defMarkup: 0.2)
+        snacksDept.items.append(objectsIn: ItemEntity.snackArray)
+        
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(drinksDept)
+            realm.add(snacksDept)
+        }
+    }
     
     var body: some Scene {
         WindowGroup {
             ResponsiveView { props in
                 RootView(uiProperties: props)
             }
-//            .onAppear {
+            .onAppear {
 //                addSampleData()
                 //                UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
-//                                UserDefaults.standard.removeObject(forKey: "passcode")
-//                                let realm = try! Realm()
-//                                try! realm.write { realm.deleteAll() }
-//            }
+            }
         }
     } //: Body
 }

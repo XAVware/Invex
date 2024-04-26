@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+
+
+
+
 struct NewSettingsView: View {
     let termsOfServiceURL: URL = URL(string: "https://xavware.com/invex/termsOfService")!
     let privacyPolicyURL: URL = URL(string: "https://xavware.com/invex/privacyPolicy")!
@@ -16,14 +20,24 @@ struct NewSettingsView: View {
     @State var showingCompanyDetail: Bool = false
     @State var showPasscodeView: Bool = false
     @State var showDeleteAccountConfirmation: Bool = false
-    @Binding var currentDisplay: DisplayState
+//    @Binding var currentDisplay: NewDisplayState
     var body: some View {
-        NavigationSplitView {
-            NewMenuView(display: $currentDisplay)
-        } content: {
+
             VStack {
                 
                 VStack {
+                    NavigationLink {
+                        CompanyDetailView(company: CompanyEntity(name: settingsVM.companyName, taxRate: Double(settingsVM.taxRateStr) ?? 0.0))
+                    } label: {
+                        HStack {
+                            Image(systemName: "case")
+                                .frame(width: 24)
+                            Text("Company Info")
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    
                     
                     Button {
                         showingCompanyDetail = true
@@ -106,9 +120,7 @@ struct NewSettingsView: View {
                     }
                 }
             }
-        } detail: {
-            
-        }
+
         
         
     } 

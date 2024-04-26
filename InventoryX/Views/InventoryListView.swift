@@ -162,8 +162,6 @@ struct InventoryListView: View {
                                     HStack {
                                         Text(dept.name)
                                         Spacer()
-                                        
-                                        Image(systemName: selectedDepartment == dept ? "circle.fill" : "circle")
                                     } //: HStack
                                     .foregroundStyle(selectedDepartment == dept ? Color("TextColorInverted") : Color("TextColor"))
                                     .padding(8)
@@ -208,7 +206,7 @@ struct InventoryListView: View {
                         VStack(alignment: .leading) {
                             Text("Restock")
                                 .font(.headline)
-                            Text(selectedDepartment?.defMarkup.toPercentageString() ?? "0")
+                            Text(String(describing: selectedDepartment?.restockNumber ?? 0))
                                 .font(.callout)
                         } //: VStack
                         

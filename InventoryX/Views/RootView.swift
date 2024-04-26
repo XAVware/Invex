@@ -149,12 +149,11 @@ struct RootView: View {
                     ResponsiveView { props in
                         InventoryListView(uiProperties: props)
                     }
-                    .padding(.top)
+                    .padding(.top, uiProperties.landscape ? 16 : 24)
                     
                 case .settings:
                     SettingsView()
-                        .padding(.top)
-                    
+                        .padding(.top, uiProperties.landscape ? 16 : 24)
 //                case .salesHistory:
 //                    SalesHistoryView()
 //                }

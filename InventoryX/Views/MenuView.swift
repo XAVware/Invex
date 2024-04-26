@@ -23,6 +23,8 @@ enum MenuState: Equatable {
             //        case .closed(let viewWidth):   return viewWidth > 840 ? 64 : 0
         }
     }
+    
+
 }
 
 struct MenuView: View {

@@ -165,7 +165,27 @@ struct CartView: View {
     private var cartSidebarView: some View {
         ScrollView {
             ForEach(vm.uniqueItems) { item in
-                SaleItemRowView(item: item, viewType: .cart)
+                VStack(alignment: .leading, spacing: 24) {
+                    HStack {
+                        Text(item.name)
+                        Spacer()
+                       Text(item.retailPrice.formatAsCurrencyString())
+                            .font(.subheadline)
+                    } //: HStack
+                    
+                    HStack {
+                        Text("x \(vm.cartItems.filter { $0._id == item._id }.count)")
+                        
+                        Spacer()
+                    }
+//                    Stepper("x \(vm.cartItems.filter { $0._id == item._id }.count)") {
+//                        vm.addItemToCart(item)
+//                        print("Tapped")
+//                    } onDecrement: {
+//                        vm.removeItemFromCart(item)
+//                    }
+                } //: VStack
+
                 Divider().opacity(0.6).padding()
             } //: ForEach
             Spacer()
@@ -242,27 +262,14 @@ struct CartView: View {
 }
 
 
-struct SaleItemRowView: View {
-    enum ViewType { case cart, receipt }
-    @EnvironmentObject var vm: PointOfSaleViewModel
-    
-    @State var item: ItemEntity
-    @State var viewType: ViewType
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            HStack {
-                Text(item.name)
-                Spacer()
-               Text(item.retailPrice.formatAsCurrencyString())
-                    .font(.subheadline)
-            } //: HStack
-            
-            Stepper("x \(vm.cartItems.filter { $0._id == item._id }.count)") {
-                vm.addItemToCart(item)
-            } onDecrement: {
-                vm.removeItemFromCart(item)
-            }
-        } //: VStack
-    }
-}
+//struct SaleItemRowView: View {
+//    enum ViewType { case cart, receipt }
+//    @EnvironmentObject var vm: PointOfSaleViewModel
+//    
+//    @State var item: ItemEntity
+//    @State var viewType: ViewType
+//    
+//    var body: some View {
+//
+//    }
+//}

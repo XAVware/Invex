@@ -10,7 +10,7 @@ import SwiftUI
 struct NewCartView: View {
     @EnvironmentObject var vm: PointOfSaleViewModel
     
-    @Binding var cartState: CartState
+    @Binding var cartState: NewCartState
 //    @Binding var menuState: MenuState
         
     let uiProperties: LayoutProperties
@@ -142,7 +142,23 @@ struct NewCartView: View {
     private var cartSidebarView: some View {
         ScrollView {
             ForEach(vm.uniqueItems) { item in
-                SaleItemRowView(item: item, viewType: .cart)
+                VStack(alignment: .leading, spacing: 24) {
+                    HStack {
+                        Text(item.name)
+                        Spacer()
+                       Text(item.retailPrice.formatAsCurrencyString())
+                            .font(.subheadline)
+                    } //: HStack
+                    
+                    Stepper("x \(vm.cartItems.filter { $0._id == item._id }.count)") {
+                        vm.addItemToCart(item)
+                        print("Up")
+                    } onDecrement: {
+                        vm.removeItemFromCart(item)
+                        print("Down")
+                    }
+                } //: VStack
+                
                 Divider().opacity(0.6).padding()
             } //: ForEach
             Spacer()

@@ -17,7 +17,7 @@ struct NewPointOfSaleView: View {
     @Binding var cartState: CartState
     let uiProperties: LayoutProperties
     @State var selectedDept: DepartmentEntity?
-    @Binding var currentDisplay: DisplayState
+//    @Binding var currentDisplay: NewDisplayState
     func toggleCart() {
         var newState: CartState = .closed
         
@@ -70,9 +70,7 @@ struct NewPointOfSaleView: View {
     }
     
     var body: some View {
-        NavigationSplitView {
-            NewMenuView(display: $currentDisplay)
-        } detail: {
+
             // MARK: - ITEM PANE
             VStack(spacing: 24) {
                 DepartmentPicker(selectedDepartment: $selectedDept, style: .scrolling)
@@ -92,42 +90,7 @@ struct NewPointOfSaleView: View {
                 
             } //: VStack
             .padding(.horizontal)
-    //
-    //        HStack {
-    //
-    //            if cartState != .confirming {
-    //                VStack(spacing: 6) {
-    //                    // MARK: - TOOLBAR
-    //                    HStack {
-    //                        Spacer()
-    //                        Button {
-    //                            toggleCart()
-    //                        } label: {
-    //                            Image(systemName: "cart")
-    //                        }
-    //                    } //: HStack
-    //                    .font(.title)
-    //                    .padding()
-    //                    .fontDesign(.rounded)
-    //
-    //
-    //
-    //                } //: VStack
-    //            } else {
-    //
-    //                // MARK: - CART CONFIRMATION VIEW
-    //                /// Make the view disappear entirely when width is 0, otherwise it shows slightly
-    //                /// from content. If the cart is confirmation, it should take up the entire screen
-    //                /// width and the menu should be hidden
-    //                CartView(cartState: $cartState, menuState: $menuState, uiProperties: uiProperties)
-    //                    .frame(maxWidth: cartState.idealWidth)
-    //                    .padding()
-    //                    .background(Color("bgColor").opacity(0.25))
-    //                    .environmentObject(vm)
-    //            }
-    //
-    //        } //: HStack
-        }
+
 
         
     } //: Body
