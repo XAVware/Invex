@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-
-
-
-
 struct NewSettingsView: View {
     let termsOfServiceURL: URL = URL(string: "https://xavware.com/invex/termsOfService")!
     let privacyPolicyURL: URL = URL(string: "https://xavware.com/invex/privacyPolicy")!

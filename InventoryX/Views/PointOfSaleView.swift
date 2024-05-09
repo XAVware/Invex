@@ -199,6 +199,7 @@ struct PointOfSaleView: View {
                         
                     } //: VStack
                     .padding(.horizontal)
+                    .ignoresSafeArea(edges: [.leading, .bottom])
                 } //: VStack
             } else {
                 

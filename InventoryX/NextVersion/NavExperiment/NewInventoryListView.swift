@@ -15,7 +15,6 @@ struct NewInventoryListView: View {
     
     @ObservedResults(DepartmentEntity.self) var departments
     @StateObject var invListVM = InventoryListViewModel()
-    @State var selectedDepartment: DepartmentEntity?
 //    @State var selectedItem: ItemEntity?
     
     @State var showRemoveItemsAlert: Bool = false
@@ -24,6 +23,13 @@ struct NewInventoryListView: View {
     @State var showDepartmentDetail: Bool = false
 //    @State var showItemDetail: Bool = false
     @State var showMoveItems: Bool = false
+    
+    // For when a user taps edit department.
+    @State var editingDepartment: DepartmentEntity?
+    
+    // Department filter
+    @State var selectedDepartment: DepartmentEntity?
+    @State var selectedItem: ItemEntity?
     
     var body: some View {
 
@@ -93,7 +99,25 @@ struct NewInventoryListView: View {
             } //: VStack
             .padding()
             .background(Color("bgColor"))
-            
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Filters", systemImage: "slider.vertical.3") {
+                        
+                    }
+                } //: Toolbar Item - Filters Button
+                
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Button("Department", systemImage: "plus") {
+                        editingDepartment = DepartmentEntity()
+                    }
+                    .buttonStyle(BorderedButtonStyle())
+                    
+                    Button("Item", systemImage: "plus") {
+                        selectedItem = ItemEntity()
+                    }
+                    .buttonStyle(BorderedButtonStyle())
+                }
+            }
         
     } //: Body
     

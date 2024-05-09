@@ -79,12 +79,13 @@ enum NewDisplayState: CaseIterable {
     var isDetailProminent: Bool {
         return switch self {
         case .pointOfSale:      true
-        case .inventoryList:    false
-        case .settings:         true
+        case .inventoryList:    true
+        case .settings:         false
         }
     }
 
 }
+
 
 enum NewCartState {
     case closed
@@ -105,6 +106,134 @@ class NavExperimentViewModel: ObservableObject {
 }
 
 
+struct NavView<Content: View, Detail: View>: View {
+    
+    @Binding var currentDisplay: NewDisplayState
+    let content: Content?
+    let detail: Detail
+    
+    @State var colVis: NavigationSplitViewVisibility = .doubleColumn
+    @State var showingLockScreen: Bool = false
+    
+    
+    init(display: Binding<NewDisplayState>, content: (() -> Content)? = nil, @ViewBuilder detail: () -> Detail) {
+        self._currentDisplay = display
+        self.content = content?()
+        self.detail = detail()
+        
+        if content == nil {
+            print("Content is nil")
+        } else {
+            print("Content is not nil")
+        }
+    }
+    
+    func changeDisplay(to newDisplay: NewDisplayState) {
+        if newDisplay == .settings {
+            currentDisplay = newDisplay
+            
+            withAnimation {
+                colVis = .all
+                colVis = .doubleColumn
+            }
+        } else {
+            currentDisplay = newDisplay
+            withAnimation {
+                colVis = currentDisplay.primaryView
+            }
+        }
+    }
+    
+    @State var xOffset: CGFloat = 0
+    
+    var body: some View {
+        if currentDisplay.primaryView == .detailOnly {
+            NavigationSplitView(columnVisibility: $colVis) {
+                menu
+            } detail: {
+                detail
+            }
+
+        } else {
+            NavigationSplitView(columnVisibility: $colVis) {
+                menu
+            } content: {
+                content
+            } detail: {
+                detail
+                
+            }
+            
+//            .offset(x: xOffset)
+        }
+    }
+    
+    @ViewBuilder var menu: some View {
+        VStack(spacing: 16) {
+            Spacer()
+            
+            ForEach(NewDisplayState.allCases, id: \.self) { data in
+                Button {
+                    changeDisplay(to: data)
+                } label: {
+                    HStack(spacing: 16) {
+                        Text(data.menuButtonText)
+                        Spacer()
+                        Image(systemName: data.menuIconName)
+                        RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
+                            .fill(.white)
+                            .frame(width: 6)
+                            .opacity(data == currentDisplay ? 1 : 0)
+                            .offset(x: 3)
+                    }
+                    .modifier(MenuButtonMod(isSelected: data == currentDisplay))
+                }
+                
+            } //: For Each
+            
+            Spacer()
+            
+            Button {
+                showingLockScreen = true
+            } label: {
+                HStack(spacing: 16) {
+                    Text("Lock")
+                    Spacer()
+                    Image(systemName: "lock")
+                    RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
+                        .fill(.white)
+                        .frame(width: 6)
+                        .opacity(0)
+                        .offset(x: 3)
+                } //: HStack
+                .modifier(MenuButtonMod(isSelected: false))
+            }
+
+            
+        } //: VStack
+        .background(.accent)
+        .fullScreenCover(isPresented: $showingLockScreen) {
+            LockScreenView()
+        }
+    }
+}
+
+// Support optional footer
+extension NavView where Content == EmptyView {
+    init(display: Binding<NewDisplayState>, @ViewBuilder detail: () -> Detail) {
+        self._currentDisplay = display
+        self.content = nil
+        self.detail = detail()
+    }
+}
+
+
+
+
+
+
+
+
 struct NavExperiment: View {
     // NEW
     @StateObject var vm = NavExperimentViewModel()
@@ -122,21 +251,18 @@ struct NavExperiment: View {
     
     @State var showingOnboarding: Bool = false
     
-
-    // For when a user taps edit department.
-    @State var editingDepartment: DepartmentEntity?
-    
-    // Department filter
-    @State var selectedDepartment: DepartmentEntity?
-    @State var selectedItem: ItemEntity?
-    
     @State var showingLockScreen: Bool = false
 
+    @State var sidebarButtonBackground: Color = .accent
     
     func toggleCustomMenu() {
-        withAnimation {
-            menuState = menuState == .open ? .closed : .open
+        print("Custom menu button tapped")
+        if menuState == .open {
+            hideCustomMenu()
+        } else {
+            showCustomMenu()
         }
+
     }
     
     func showCustomMenu() {
@@ -152,25 +278,7 @@ struct NavExperiment: View {
             menuState = .closed
         }
     }
-    
-    
-    func getItems() -> Array<ItemEntity>{
-        if let dept = selectedDepartment {
-            return Array(dept.items)
-        } else {
-            Task {
-                do {
-                    let items = try RealmActor().fetchAllItems()
-                    return Array(items)
-                } catch {
-                    debugPrint(error.localizedDescription)
-                    return Array()
-                }
-            }
-            return Array()
-        }
-    }
-    
+
     // nav offset should always be menu's starting point + menu width + current point
     var navOffset: CGFloat {
         if currentDisplay.primaryView == .detailOnly || menuState == .closed { return 0 }
@@ -197,131 +305,113 @@ struct NavExperiment: View {
         }
         
     }
-    
-    
-     
+
     var body: some View {
         ZStack {
-            
-            NavigationSplitView(columnVisibility: $vm.colVis, preferredCompactColumn: $prefCompactCol) {
+            NavView(display: $currentDisplay) {
                 sidebarView
             } detail: {
                 NavigationStack {
                     detailView
                 }
             }
-            .offset(x: navOffset)
-            .navigationSplitViewStyle(.automatic)
-            .onReceive(vm.$colVis, perform: { newVis in
-                // if the previous state was detail only and the new state is doubleColumn or all, the user opened the menu
-//                if menuState == .closed || currentDisplay.primaryView == .detailOnly {
-//                    menuState = .closed
+            
+
+//            NavigationSplitView(columnVisibility: $vm.colVis, preferredCompactColumn: $prefCompactCol) {
+//                sidebarView
+//                    .navigationBarBackButtonHidden(true)
+//                    .toolbar(removing: currentDisplay.requiresCustomMenu ? .sidebarToggle : nil) // Remove default if custom is required
+//                    .toolbar {
+//                        if currentDisplay.requiresCustomMenu {
+//                            ToolbarItem(placement: .topBarLeading) {
+//                                Button("Sidebar", systemImage: "sidebar.left") {
+//                                    toggleCustomMenu()
+//                                }
+//                                .foregroundStyle(menuState == .open ? Color("lightAccent") : Color("bgColor"))
+//                            }
+//                        }
+//                    }
+//            } detail: {
+//                NavigationStack {
+//                    detailView
 //                }
-                /// The user tapped the menu button which changed the NavigationSplitViewColumnVisibility. The state of the `customMenu` needs to be synced up.
-                print("Col vis changed to: \(newVis)")
-                if newVis != .detailOnly && !currentDisplay.requiresCustomMenu {
-                    print("TRig")
-                    showCustomMenu()
-                }
-            })
-            .onChange(of: menuState) { oldValue, newValue in
-                print("Menu state is: \(newValue)")
-                if newValue == .closed {
-                    vm.colVis = currentDisplay.primaryView
-                }
-            }
+//            }
+//            .offset(x: navOffset)
             
+//            cartLayer
+//            customMenuLayer
             
-            // MARK: - CART LAYER
-//            HStack {
-//                Spacer()
-//                NewCartView(cartState: $cartState, uiProperties: uiProperties)
-//                    .frame(maxWidth: cartState.width)
-////                    .offset(x: menuState.xOffset)
-//            } //: HStack
-            
-            if currentDisplay == .settings {
-                // MARK: - MENU LAYER
-                HStack {
-                    menu
-                        .frame(maxWidth: menuState.width)
-                        .offset(x: menuState.xOffset)
-                        .transition(.move(edge: .leading))
-                        .overlay(Color.red.frame(width: 48, height: 48), alignment: .topTrailing)
-                    Color.white.opacity(0.00001)
-                } //: HStack
-                .onTapGesture(coordinateSpace: .global) { location in
-                    if menuState == .open && location.x > menuState.width {
-                        hideCustomMenu()
-                    }
-                }
-            }
         } //: ZStack
+        .onReceive(vm.$colVis, perform: { newVis in
+            /// The user tapped the menu button which changed the NavigationSplitViewColumnVisibility. The state of the `customMenu` needs to be synced up. If the previous state was detail only and the new state is doubleColumn or all, the user opened the menu
+            print("Col vis changed to: \(newVis)")
+            if newVis != .detailOnly && !currentDisplay.requiresCustomMenu {
+                print("TRig")
+                showCustomMenu()
+            }
+        })
+        .onChange(of: menuState) { oldValue, newValue in
+            print("Menu state is: \(newValue)")
+            if newValue == .closed {
+                vm.colVis = currentDisplay.primaryView
+            }
+        }
         
     } //: Body
     
     @ViewBuilder var sidebarView: some View {
         if currentDisplay == .settings {
             NewSettingsView()
-                .navigationBarBackButtonHidden(true)
-                .toolbar(removing: .sidebarToggle)
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Sidebar", systemImage: "sidebar.left") {
-                            toggleCustomMenu()
-                        }
-                        .foregroundStyle(menuState == .open ? Color("lightAccent") : Color("bgColor"))
-                    }
-                }
+                
         } else {
             menu
                 .overlay(Color.green.frame(width: 48, height: 48), alignment: .topTrailing)
+            
         }
     }
     
     
-    @ViewBuilder var detailView: some View {
+    @ViewBuilder var detailView: some View { 
         switch currentDisplay {
         case .pointOfSale:
             NewPointOfSaleView(cartState: .constant(.sidebar), uiProperties: uiProperties)
                 .environmentObject(posVM)
-                .navigationBarBackButtonHidden(true)
-                .toolbar(removing: .sidebarToggle)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            
-                        } label: {
-                            Image(systemName: "cart")
-                        }
-                    }
-                    
-                }
+
             
         case .inventoryList:
             NewInventoryListView()
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Filters", systemImage: "slider.vertical.3") {
-                            
-                        }
-                    } //: Toolbar Item - Filters Button
-                    
-                    ToolbarItemGroup(placement: .topBarTrailing) {
-                        Button("Department", systemImage: "plus") {
-                            editingDepartment = DepartmentEntity()
-                        }
-                        .buttonStyle(BorderedButtonStyle())
-                        
-                        Button("Item", systemImage: "plus") {
-                            selectedItem = ItemEntity()
-                        }
-                        .buttonStyle(BorderedButtonStyle())
-                    }
-                }
+
             
         default: Color.clear
             
+        }
+    }
+    
+    @ViewBuilder var cartLayer: some View {
+        HStack {
+            Spacer()
+            NewCartView(cartState: $cartState, uiProperties: uiProperties)
+                .frame(maxWidth: cartState.width)
+//                    .offset(x: menuState.xOffset)
+        }
+    }
+    
+    @ViewBuilder var customMenuLayer: some View {
+        if currentDisplay.requiresCustomMenu {
+            HStack {
+                menu
+                    .frame(maxWidth: menuState.width)
+                    .overlay(Color.red.frame(width: 48, height: 48), alignment: .topTrailing)
+                    .offset(x: menuState.xOffset)
+                    .transition(.move(edge: .leading))
+                
+                Color.white.opacity(0.00001)
+            } //: HStack
+            .onTapGesture(coordinateSpace: .global) { location in
+                if menuState == .open && location.x > menuState.width {
+                    hideCustomMenu()
+                }
+            }
         }
     }
     

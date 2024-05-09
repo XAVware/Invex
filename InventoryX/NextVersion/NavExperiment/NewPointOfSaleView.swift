@@ -90,7 +90,15 @@ struct NewPointOfSaleView: View {
                 
             } //: VStack
             .padding(.horizontal)
-
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationSplitViewStyle(.prominentDetail)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Cart", systemImage: "cart") {
+                        
+                    }
+                }
+            }
 
         
     } //: Body

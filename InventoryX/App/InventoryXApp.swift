@@ -33,7 +33,8 @@ struct InventoryXApp: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
             ResponsiveView { props in
-                RootView(uiProperties: props)
+//                RootView(uiProperties: props)
+                NavExperiment(uiProperties: props)
             }
             .onAppear {
 //                addSampleData()

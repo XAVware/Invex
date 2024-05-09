@@ -59,49 +59,50 @@ struct ItemGridView: View {
     }
     
     var body: some View {
-        VStack {
-            GeometryReader { geo in
-                LazyVGrid(columns: gridColumns, alignment: .leading, spacing: gridSpacing) {
-                    ForEach(items) { item in
-                        Button {
-                            onSelect(item)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 0) {
-                                Text(item.name)
-                                    .font(.headline)
-                                    .foregroundStyle(Color("TextColor"))
-                                Spacer()
-                                Text(item.attribute)
-                                    .font(.subheadline)
-                                    .foregroundStyle(Color("TextColor"))
-                                Spacer()
-                                Text(item.retailPrice.formatAsCurrencyString())
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .foregroundStyle(.accent)
-                            }
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                        } //: VStack
-                        .background(.ultraThinMaterial)
-                        .background(Color("bgColor"))
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                        .shadow(color: .accent.opacity(0.25), radius: 3, x: 2, y: 2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    } //: ForEach
-                    
-                } //: LazyVGrid
-                .padding(horPadding)
-                .onAppear {
-                    recalcColumns(forWidth: geo.size.width)
-                }
-                .onChange(of: geo.size.width) { _, newValue in
-                    recalcColumns(forWidth: newValue)
-                }
-            } //: Geometry Reader
-            Spacer()
-        } //: VStack
-        
+        ScrollView {
+            VStack {
+                GeometryReader { geo in
+                    LazyVGrid(columns: gridColumns, alignment: .leading, spacing: gridSpacing) {
+                        ForEach(items) { item in
+                            Button {
+                                onSelect(item)
+                            } label: {
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Text(item.name)
+                                        .font(.headline)
+                                        .foregroundStyle(Color("TextColor"))
+                                    Spacer()
+                                    Text(item.attribute)
+                                        .font(.subheadline)
+                                        .foregroundStyle(Color("TextColor"))
+                                    Spacer()
+                                    Text(item.retailPrice.formatAsCurrencyString())
+                                        .font(.headline)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .foregroundStyle(.accent)
+                                }
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                            } //: VStack
+                            .background(.ultraThinMaterial)
+                            .background(Color("bgColor"))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .shadow(color: .accent.opacity(0.25), radius: 3, x: 2, y: 2)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        } //: ForEach
+                        
+                    } //: LazyVGrid
+                    .padding(horPadding)
+                    .onAppear {
+                        recalcColumns(forWidth: geo.size.width)
+                    }
+                    .onChange(of: geo.size.width) { _, newValue in
+                        recalcColumns(forWidth: newValue)
+                    }
+                } //: Geometry Reader
+                Spacer()
+            } //: VStack
+        } //: Scroll
     } //: Body
     
 }
