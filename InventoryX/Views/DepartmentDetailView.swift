@@ -8,50 +8,7 @@
 import SwiftUI
 import RealmSwift
 
-@MainActor class DepartmentDetailViewModel: ObservableObject {
-    @Published var errorMessage: String = ""
-    
-    func save(name: String, threshold: String, markup: String, completion: @escaping ((Error?) -> Void)) async {
-        do {
-            try await RealmActor().addDepartment(name: name, restockThresh: threshold, markup: markup)
-            completion(nil)
-        } catch let error as AppError {
-            errorMessage = error.localizedDescription
-            completion(error)
-        } catch {
-            errorMessage = error.localizedDescription
-            completion(error)
-        }
-    }
-    
-    func deleteDepartment(withId id: RealmSwift.ObjectId, completion: @escaping ((Error?) -> Void)) async {
-        do {
-            try await RealmActor().deleteDepartment(id: id)
-            completion(nil)
-        } catch let error as AppError {
-            errorMessage = error.localizedDescription
-            completion(error)
-        } catch {
-            errorMessage = error.localizedDescription
-            completion(error)
-        }
-    }
-    
-    func update(department: DepartmentEntity, name: String, threshold: String, markup: String, completion: @escaping ((Error?) -> Void)) async {
-        do {
-            try await RealmActor().updateDepartment(dept: department, newName: name, thresh: threshold, markup: markup)
-            completion(nil)
-        } catch let error as AppError {
-            errorMessage = error.localizedDescription
-            completion(error)
-        } catch {
-            errorMessage = error.localizedDescription
-            completion(error)
-        }
-    }
-    
-  
-}
+enum DetailViewType { case create, modify }
 
 struct DepartmentDetailView: View {
     @Environment(\.dismiss) var dismiss
@@ -69,6 +26,7 @@ struct DepartmentDetailView: View {
     /// Used in onboarding view to execute additional logic.
     let onSuccess: (() -> Void)?
     
+
     let detailType: DetailViewType
     
     @State var showRemoveItemsAlert: Bool = false

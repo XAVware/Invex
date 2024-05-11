@@ -75,8 +75,7 @@ struct CartView: View {
                 .fontWeight(.regular)
                 .fontDesign(cartState == .confirming ? .rounded : .default)
             
-            /// Try to display the cart components horizontally first. If the screen
-            /// is not wide enough, display them vertically.
+            /// Try to display the cart components horizontally first. If the screen is not wide enough, display them vertically.
             if cartState == .confirming {
                 ViewThatFits {
                     // For larger screens
@@ -103,8 +102,8 @@ struct CartView: View {
                 } //: ViewThatFits
                 
             } else {
-                /// When the cartState is not confirming, it is either closed or
-                /// a sidebar which will always be stacked vertically.
+                /// When the cartState is not confirming, it is either closed or a sidebar which will
+                /// always be stacked vertically.
                 cartSidebarView
                 receiptTotalsView
             }
@@ -180,7 +179,6 @@ struct CartView: View {
                     }
 //                    Stepper("x \(vm.cartItems.filter { $0._id == item._id }.count)") {
 //                        vm.addItemToCart(item)
-//                        print("Tapped")
 //                    } onDecrement: {
 //                        vm.removeItemFromCart(item)
 //                    }

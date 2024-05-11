@@ -23,6 +23,4 @@ class CompanyEntity: Object, ObjectKeyIdentifiable {
         return taxRate.toPercentageString()
         
     }
-    
-    
 }

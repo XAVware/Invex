@@ -208,6 +208,12 @@ actor RealmActor {
         }
     }
     
+    @MainActor
+    func getSalesCount() throws -> Int {
+        let realm = try Realm()
+        return realm.objects(SaleEntity.self).count
+    }
+    
     func deleteAll() async throws {
         let realm = try await Realm()
         try await realm.asyncWrite {

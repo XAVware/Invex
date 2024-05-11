@@ -9,6 +9,13 @@
  User defined build settings:
  DISABLE_DIAMOND_PROBLEM_DIAGNOSTIC = YES was added to resolve an error of "Showing All Issues Swift package target 'Realm' is linked as a static library by 'InventoryX' and 'Realm', but cannot be built dynamically because there is a package product with the same name."
  
+ 
+ .onAppear {
+    // To fix an issue at some point I added this.
+    UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+ 
+ }
+ 
  */
 
 import SwiftUI
@@ -36,10 +43,6 @@ struct InventoryXApp: SwiftUI.App {
         WindowGroup {
             ResponsiveView { props in
                 RootView(uiProperties: props)
-            }
-            .onAppear {
-//                addSampleData()
-                //                UserDefaults.standard.setValue(true, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
             }
         }
     } //: Body

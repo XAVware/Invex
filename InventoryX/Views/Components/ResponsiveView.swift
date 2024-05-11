@@ -8,7 +8,18 @@
 import SwiftUI
 
 // https://www.ios-resolution.com/
-
+/// Screen widths:
+/// - iPads (non-mini)
+///     - Portrait: 768 - 1024
+///     - Landscape: 1024 - 1366
+///
+/// - iPads (mini)
+///     - Portrait: 744 - 768
+///     - Landscape: 1024
+///
+/// - iPhones
+///     - Portrait: 320 - 430
+///     - Landscape: 480 - 932
 
 /// Passing properties into a view using a const/let causes the view to be re-initialized every time the view's width changes.
 

@@ -7,42 +7,6 @@
 
 import SwiftUI
 import RealmSwift
-import Combine
-
-/// Screen widths:
-/// - iPads (non-mini)
-///     - Portrait: 768 - 1024
-///     - Landscape: 1024 - 1366
-///
-/// - iPads (mini)
-///     - Portrait: 744 - 768
-///     - Landscape: 1024
-///
-/// - iPhones
-///     - Portrait: 320 - 430
-///     - Landscape: 480 - 932
-
-class RootViewModel: ObservableObject {
-    
-    private let service = AuthService.shared
-    private var cancellables = Set<AnyCancellable>()
-    
-    @Published var companyExists: Bool = false 
-    
-    init() {
-        configureSubscribers()
-    }
-    
-    func configureSubscribers() {
-        service.$exists
-            .sink { [weak self] exists in
-                self?.companyExists = exists
-            }
-            .store(in: &cancellables)
-    }
-}
-
-// Use cmd + M for long initializer formatting
 
 /// PointOfSaleViewModel is initialized in the root so a user's cart is not lost when 
 /// they switch screens.
@@ -82,9 +46,6 @@ struct RootView: View {
             menuState = .compact
             cartState = .sidebar
         }
-        
-        
-        
     }
     
     /// Conditions required for menu to display.
@@ -97,10 +58,9 @@ struct RootView: View {
     }
 
     
-    /// Open or close the menu depending on the current MenuState. On large 
-    /// screens the menu never closes fully, so .compact is considered .closed
-    /// for larger screens. Then, if the view is large enough, always show a
-    /// compact menu instead of hiding it.
+    /// Open or close the menu depending on the current MenuState. On large  screens the menu never
+    /// closes fully, so .compact is considered .closed for larger screens. Then, if the view is
+    /// large enough, always show a compact menu instead of hiding it.
     func toggleMenu() {
         var newMenuState: MenuState = (menuState == .closed || menuState == .compact) ? .open : .closed
         
@@ -137,8 +97,8 @@ struct RootView: View {
             }
             
             
-            /// Group views so TapGesture can be recognized when screen is tapped
-            /// outside of menu bounds.
+            /// Group views so TapGesture can be recognized when screen is tapped outside of
+            /// menu bounds.
             Group {
                 switch currentDisplay {
                 case .makeASale:
@@ -154,9 +114,6 @@ struct RootView: View {
                 case .settings:
                     SettingsView()
                         .padding(.top, uiProperties.landscape ? 16 : 24)
-//                case .salesHistory:
-//                    SalesHistoryView()
-//                }
                 }
             }
             .background(.accent.opacity(0.0001))
@@ -172,8 +129,8 @@ struct RootView: View {
         .overlay(smallViewMenuBtn, alignment: .topLeading)
         .onChange(of: menuState) { _, newValue in
             if newValue == .closed {
-                /// Try to show a compact menu when the menu state is closed. The 
-                /// compact menu should only be displayed when the view is greater than 840
+                /// Try to show a compact menu when the menu state is closed. The compact menu should
+                /// only be displayed when the view is greater than 840
                 if uiProperties.width > 840 {
                     menuState = .compact
                 }
@@ -194,9 +151,9 @@ struct RootView: View {
         
     } //: Body
     
-    /// Menu button is presented as an overlay in the top left corner when the menuState 
-    /// is closed and the screen is not wide enough to display a compact menu. Make sure
-    /// the button is not being displayed when cartState is confirming.
+    /// Menu button is presented as an overlay in the top left corner when the menuState is closed and the
+    /// screen is not wide enough to display a compact menu. Make sure the button is not being displayed 
+    /// when cartState is confirming.
     @ViewBuilder private var smallViewMenuBtn: some View {
         if (menuState == .closed || uiProperties.width < 840) && cartState != .confirming {
             Button {

@@ -8,8 +8,7 @@
 import SwiftUI
 import RealmSwift
 
-/// Class used for easier Realm migration.
-/// The schemaVersion was previously included in @main but was moved here so all Realm versioning can be handled in one place.
+/// Class used for easier Realm migration. The schemaVersion was previously included in @main but was moved here so all Realm versioning can be handled in one place.
 class RealmMigrator {
     let currentSchemaVersion: UInt64 = 59
     

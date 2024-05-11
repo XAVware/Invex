@@ -8,24 +8,6 @@
 import SwiftUI
 import RealmSwift
 
-@MainActor class CompanyDetailViewModel: ObservableObject {
-    @Published var errorMessage: String = ""
-
-    func saveCompany(name: String, tax: String, completion: @escaping ((Error?) -> Void)) async {
-        do {
-            try await RealmActor().saveCompany(name: name, tax: tax)
-            completion(nil)
-        } catch let error as AppError {
-            errorMessage = error.localizedDescription
-            completion(error)
-        } catch {
-            errorMessage = error.localizedDescription
-            completion(error)
-        }
-    }
-
-}
-
 struct CompanyDetailView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: CompanyDetailViewModel = CompanyDetailViewModel()
