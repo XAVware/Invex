@@ -29,7 +29,6 @@ import RealmSwift
 struct CompanyDetailView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: CompanyDetailViewModel = CompanyDetailViewModel()
-    @StateObject var uiFeedback = UIFeedbackService.shared
     let company: CompanyEntity?
     
     @State private var companyName: String = ""
