@@ -59,7 +59,7 @@ struct RootView: View {
     let uiProperties: LayoutProperties
     @StateObject var vm = RootViewModel()
     @StateObject var posVM = PointOfSaleViewModel()
-    @State var currentDisplay: DisplayState = .makeASale
+    @State var currentDisplay: NewDisplayState = .pointOfSale
     @State var menuState: MenuState
     @State var cartState: CartState
     
@@ -141,7 +141,7 @@ struct RootView: View {
             /// outside of menu bounds.
             Group {
                 switch currentDisplay {
-                case .makeASale:
+                case .pointOfSale:
                     PointOfSaleView(menuState: $menuState, cartState: $cartState, uiProperties: uiProperties)
                         .environmentObject(posVM)
                     

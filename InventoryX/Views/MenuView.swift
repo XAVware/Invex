@@ -28,7 +28,7 @@ enum MenuState: Equatable {
 }
 
 struct MenuView: View {
-    @Binding var display: DisplayState
+    @Binding var display: NewDisplayState
     @Binding var menuState: MenuState
     let toggleMenu: (() -> Void)
     
@@ -59,7 +59,7 @@ struct MenuView: View {
             
             Spacer()
             
-            ForEach(DisplayState.allCases, id: \.self) { data in
+            ForEach(NewDisplayState.allCases, id: \.self) { data in
                 Button {
                     if display == data {
                         menuState = .closed
@@ -119,6 +119,6 @@ struct MenuView: View {
 }
 
 #Preview {
-    MenuView(display: .constant(.makeASale), menuState: .constant(.compact)) { }
+    MenuView(display: .constant(.pointOfSale), menuState: .constant(.compact)) { }
 }
 

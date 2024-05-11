@@ -54,7 +54,7 @@ extension DepartmentEntity {
             realm = try Realm(configuration: config)
                 if realm.isEmpty {
                     // MARK: - CREATE PREVIEW DATA
-                    debugPrint("Creating preview data")
+//                    debugPrint("Creating preview data")
                     try realm.write {
                         realm.add(company)
                         

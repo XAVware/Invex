@@ -166,7 +166,7 @@ struct NewInventoryListView: View {
 
 #Preview {
     ResponsiveView { props in
-        NavExperiment(uiProperties: props, cartState: NewCartState.sidebar)
+        NewRootView(uiProperties: props, cartState: CartState.sidebar)
             .environment(\.realm, DepartmentEntity.previewRealm)
             .environmentObject(PointOfSaleViewModel())
     }

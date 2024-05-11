@@ -33,45 +33,37 @@ struct NewSettingsView: View {
                         }
                         .contentShape(Rectangle())
                     }
-                    
-                    
-                    Button {
-                        showingCompanyDetail = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "case")
-                                .frame(width: 24)
-                            Text("Company Info")
-                            Spacer()
-                        }
-                        .contentShape(Rectangle())
-                    }
                     .padding(.vertical, 8)
-                    .sheet(isPresented: $showingCompanyDetail, onDismiss: {
-                        settingsVM.fetchCompanyData()
-                    }, content: {
-                        CompanyDetailView(company: CompanyEntity(name: settingsVM.companyName, taxRate: Double(settingsVM.taxRateStr) ?? 0.0))
-                    })
+//                    .sheet(isPresented: $showingCompanyDetail, onDismiss: {
+//                        settingsVM.fetchCompanyData()
+//                    }, content: {
+//                        CompanyDetailView(company: CompanyEntity(name: settingsVM.companyName, taxRate: Double(settingsVM.taxRateStr) ?? 0.0))
+//                    })
+                    
+                    
+                    
                     
                     Divider()
                     
-                    Button {
-                        showPasscodeView = true
+                    
+                    
+                    NavigationLink {
+                        PasscodeView(processes: [.confirm, .set]) {
+                            showPasscodeView = false
+                        }
                     } label: {
                         HStack {
                             Image(systemName: "lock")
                                 .frame(width: 24)
                             Text("Change Passcode")
                             Spacer()
-                        } //: HStack
+                        }
                         .contentShape(Rectangle())
                     }
                     .padding(.vertical, 8)
-                    .sheet(isPresented: $showPasscodeView) {
-                        PasscodeView(processes: [.confirm, .set]) {
-                            showPasscodeView = false
-                        }
-                    }
+                    .background(Color(""))
+                    
+                    
                     
                     Divider()
                     
@@ -108,6 +100,7 @@ struct NewSettingsView: View {
                 .modifier(PaneOutlineMod())
             } //: VStack
             .padding()
+            .background(Color("bgColor"))
             .alert("Are you sure?", isPresented: $showDeleteAccountConfirmation) {
                 Button("Go back", role: .cancel) { }
                 Button("Yes, delete account", role: .destructive) {
@@ -119,18 +112,30 @@ struct NewSettingsView: View {
 
         
         
-    } 
-//                        .padding()
-//                        .background(Color("bgColor").opacity(0.2))
+    }
     
 }
 
-//#Preview {
-//    NavigationSplitView {
-//        
-//    } content: {
-//        NewSettingsView()
-//    } detail: {
-//        
-//    }
-//}
+#Preview {
+    HStack {
+        NewSettingsView()
+            .frame(maxWidth: 420)
+        
+        Spacer()
+    }
+
+}
+
+struct PaneOutlineMod: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .overlay(
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
+            )
+//            .background(.ultraThinMaterial)
+    }
+}

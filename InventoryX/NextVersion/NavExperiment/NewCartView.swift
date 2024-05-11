@@ -10,7 +10,7 @@ import SwiftUI
 struct NewCartView: View {
     @EnvironmentObject var vm: PointOfSaleViewModel
     
-    @Binding var cartState: NewCartState
+    @Binding var cartState: CartState
 //    @Binding var menuState: MenuState
         
     let uiProperties: LayoutProperties
