@@ -7,18 +7,7 @@
 
 import SwiftUI
 
-enum PasscodeViewState {
-    case set
-    case confirm
-    
-    var padTitle: String {
-        return switch self {
-        case .set: "Enter a passcode"
-        case .confirm: "Enter current passcode"
-        }
-    }
-    
-}
+
 
 /// To allow for reusability in Onboarding, Change Passcode, and Lock Screen scenarios, this view
 /// is initialized with an array of processes that can either be `.confirm` or `.set`. Every time
