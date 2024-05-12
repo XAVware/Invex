@@ -21,12 +21,19 @@
 import SwiftUI
 import RealmSwift
 
-
+/*
+ If you're debugging and want to add sample data, add this to the view.
+ 
+ .onAppear {
+     Task {
+         try await RealmActor().setUpForDebug()
+     }
+ }
+ 
+ */
 
 @main
 struct InventoryXApp: SwiftUI.App {
-    let IS_DEBUG: Bool = true
-    
     let migrator: RealmMigrator = RealmMigrator()
     
     var body: some Scene {
@@ -34,15 +41,8 @@ struct InventoryXApp: SwiftUI.App {
             ResponsiveView { props in
                 RootView(uiProperties: props)
             }
-            .onAppear {
-                if IS_DEBUG {
-                    Task {
-//                        try await RealmActor().setUpForDebug()
-                    }
-                }
-            }
         }
-    } //: Body
+    }
 }
 
 
