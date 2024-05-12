@@ -20,7 +20,7 @@ import RealmSwift
 ///         less than 0.1
 
 struct RootView: View {
-    let uiProperties: LayoutProperties
+    let uiProps: LayoutProperties
     @StateObject var vm = RootViewModel()
     @StateObject var posVM = PointOfSaleViewModel()
     @State var currentDisplay: DisplayState = .makeASale
@@ -30,13 +30,13 @@ struct RootView: View {
     @State var showingOnboarding: Bool = false
     
     init(uiProperties: LayoutProperties) {
-        self.uiProperties = uiProperties
+        self.uiProps = uiProperties
         
-        if uiProperties.width < 680 {
+        if uiProps.width < 680 {
             // Both menu and cart should default to closed
             menuState = .closed
             cartState = .closed
-        } else if uiProperties.width < 840 {
+        } else if uiProps.width < 840 {
             // Menu should default to closed. Cart should default to sidebar
             menuState = .closed
             cartState = .sidebar
@@ -51,7 +51,7 @@ struct RootView: View {
     /// Conditions required for menu to display.
     var shouldShowMenu: Bool {
         let c1: Bool = cartState != .confirming
-        let c2: Bool = uiProperties.width > 840
+        let c2: Bool = uiProps.width > 840
         let c3: Bool = menuState == .open
         let shouldShow = (c1 && c2) || c3
         return shouldShow
@@ -64,7 +64,7 @@ struct RootView: View {
     func toggleMenu() {
         var newMenuState: MenuState = (menuState == .closed || menuState == .compact) ? .open : .closed
         
-        if newMenuState == .closed && uiProperties.width > 840 {
+        if newMenuState == .closed && uiProps.width > 840 {
             newMenuState = .compact
         }
         
@@ -77,7 +77,7 @@ struct RootView: View {
     }
     
     var contentOpacity: CGFloat {
-        if uiProperties.width < 680 && menuState == .open {
+        if uiProps.width < 680 && menuState == .open {
             return 0
         } else {
             return 1
@@ -89,7 +89,7 @@ struct RootView: View {
         /// when the width is over 840
         HStack(spacing: 0) {
             if cartState != .confirming {
-                if shouldShowMenu || uiProperties.width > 840 {
+                if shouldShowMenu || uiProps.width > 840 {
                     MenuView(display: $currentDisplay, menuState: $menuState) {
                         toggleMenu()
                     }
@@ -102,18 +102,19 @@ struct RootView: View {
             Group {
                 switch currentDisplay {
                 case .makeASale:
-                    PointOfSaleView(menuState: $menuState, cartState: $cartState, uiProperties: uiProperties)
+                    PointOfSaleView(menuState: $menuState, cartState: $cartState, uiSize: CGSize(width: uiProps.width, 
+                                                                                                 height: uiProps.height))
                         .environmentObject(posVM)
                     
                 case .inventoryList:
                     ResponsiveView { props in
                         InventoryListView(uiProperties: props)
                     }
-                    .padding(.top, uiProperties.landscape ? 16 : 24)
+                    .padding(.top, uiProps.landscape ? 16 : 24)
                     
                 case .settings:
                     SettingsView()
-                        .padding(.top, uiProperties.landscape ? 16 : 24)
+                        .padding(.top, uiProps.landscape ? 16 : 24)
                 }
             }
             .background(.accent.opacity(0.0001))
@@ -131,7 +132,7 @@ struct RootView: View {
             if newValue == .closed {
                 /// Try to show a compact menu when the menu state is closed. The compact menu should
                 /// only be displayed when the view is greater than 840
-                if uiProperties.width > 840 {
+                if uiProps.width > 840 {
                     menuState = .compact
                 }
             }
@@ -155,7 +156,7 @@ struct RootView: View {
     /// screen is not wide enough to display a compact menu. Make sure the button is not being displayed 
     /// when cartState is confirming.
     @ViewBuilder private var smallViewMenuBtn: some View {
-        if (menuState == .closed || uiProperties.width < 840) && cartState != .confirming {
+        if (menuState == .closed || uiProps.width < 840) && cartState != .confirming {
             Button {
                 toggleMenu()
             } label: {

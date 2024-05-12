@@ -204,14 +204,15 @@ actor RealmActor {
             try await realm.asyncWrite {
                 invItem.onHandQty = newOnHandQty
             }
-            
         }
     }
     
+    /// Try to get the number of sales, otherwise return 0
     @MainActor
-    func getSalesCount() throws -> Int {
-        let realm = try Realm()
-        return realm.objects(SaleEntity.self).count
+    func getSalesCount() -> Int {
+        let realm = try? Realm()
+        let count = realm?.objects(SaleEntity.self).count ?? 0
+        return count + 1
     }
     
     func deleteAll() async throws {

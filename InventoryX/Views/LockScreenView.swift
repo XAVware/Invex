@@ -30,7 +30,6 @@ struct LockScreenView: View {
     private var dateTimeLabel: some View {
         VStack(spacing: 32) {
             DateTimeLabel()
-
         } //: VStack
         .padding(42)
     }

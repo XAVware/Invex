@@ -8,14 +8,9 @@
 import SwiftUI
 import RealmSwift
 
-
-
-
-
 struct AddItemView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: AddItemViewModel = AddItemViewModel()
-    //    @StateObject var uiFeedback = UIFeedbackService.shared
     
     @State private var selectedDepartment: DepartmentEntity?
     @State private var itemName: String = ""

@@ -8,37 +8,6 @@
 import SwiftUI
 
 struct ThemeTextField: View {
-    enum FieldType {
-        case text
-        case integer
-        case price
-        case percentage
-        
-        
-        var overlayText: String {
-            return switch self {
-            case .text:         "abc"
-            case .integer:      "123"
-            case .price:        "$"
-            case .percentage:   "%"
-            }
-        }
-        
-        var overlayAlignment: Alignment {
-            return switch self {
-            case .percentage: .trailing
-            default: .leading
-            }
-        }
-        
-        var textAlignment: TextAlignment {
-            return switch self {
-            case .text: .leading
-            default: .center
-            }
-        }
-    }
-    
     private enum Focus { case text }
     @FocusState private var focus: Focus?
     
@@ -50,14 +19,10 @@ struct ThemeTextField: View {
     
     var fieldWidth: CGFloat {
         return switch type {
-        case .text:
-                .infinity
-        case .integer:
-            140
-        case .price:
-            140
-        case .percentage:
-            140
+        case .text:         .infinity
+        case .integer:      140
+        case .price:        140
+        case .percentage:   140
         }
     }
     
@@ -91,12 +56,12 @@ struct ThemeTextField: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .foregroundStyle(Color("TextColor"))
+            
             if let sub = subtitle {
                 Text(sub)
                     .fontWeight(.light)
                     .foregroundStyle(Color("GrayTextColor"))
                     .lineLimit(3)
-                //                    .frame(minHeight: 24, idealHeight: 32, maxHeight: 72)
             }
         } //: VStack
         .frame(minWidth: 140, maxWidth: 480, alignment: .leading)
@@ -138,6 +103,39 @@ struct ThemeTextField: View {
                minHeight: 42, idealHeight: 45, maxHeight: 48, alignment: .topLeading)
     } //: Field
     
+}
+
+
+extension ThemeTextField {
+    enum FieldType {
+        case text
+        case integer
+        case price
+        case percentage
+        
+        var overlayText: String {
+            return switch self {
+            case .text:         "abc"
+            case .integer:      "123"
+            case .price:        "$"
+            case .percentage:   "%"
+            }
+        }
+        
+        var overlayAlignment: Alignment {
+            return switch self {
+            case .percentage: .trailing
+            default: .leading
+            }
+        }
+        
+        var textAlignment: TextAlignment {
+            return switch self {
+            case .text: .leading
+            default: .center
+            }
+        }
+    }
 }
 
 #Preview {

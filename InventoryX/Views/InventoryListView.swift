@@ -8,22 +8,11 @@
 import SwiftUI
 import RealmSwift
 
-
-@MainActor class InventoryListViewModel: ObservableObject {
-    @ObservedResults(DepartmentEntity.self) var departments
-    
-    @Published var errorMessage = ""
-    
-    func deleteDepartment(withId id: RealmSwift.ObjectId) async {
-        do {
-            try await RealmActor().deleteDepartment(id: id)
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
-
+struct ColumnHeaderModel: Identifiable {
+    let id = UUID()
+    let headerText: String
+    let sortDescriptor: String
 }
-
 
 
 struct InventoryListView: View {
@@ -130,8 +119,8 @@ struct InventoryListView: View {
                     DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
                         .frame(height: 34)
                 }
-
-                Button("Department", systemImage: "plus") { 
+                
+                Button("Department", systemImage: "plus") {
                     editingDepartment = DepartmentEntity()
                 }
                 .buttonStyle(BorderedButtonStyle())
@@ -140,7 +129,7 @@ struct InventoryListView: View {
                     selectedItem = ItemEntity()
                 }
                 .buttonStyle(BorderedButtonStyle())
-
+                
             } //: HStack
             
             HStack(spacing: 16) {
@@ -170,8 +159,6 @@ struct InventoryListView: View {
                                     }
                                 } //: ZStack
                             } //: ForEach
-                            
-                            
                         } //: Scroll
                     } //: VStack
                     .frame(minWidth: 120, idealWidth: 160, maxWidth: 220, maxHeight: .infinity)
@@ -220,7 +207,6 @@ struct InventoryListView: View {
                     
                     // MARK: - REGULAR SIZE TABLE
                     Table(of: ItemEntity.self) {
-                        
                         TableColumn("Name") { item in
                             Text(item.name)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -285,7 +271,6 @@ struct InventoryListView: View {
                 
             } //: HStack
         } //: VStack
-//        .background(Color("bgColor").opacity(0.2))
         .padding()
     }
     
@@ -300,7 +285,7 @@ struct InventoryListView: View {
                 }
                 
                 Spacer()
-
+                
                 Button("Department", systemImage: "plus") {
                     editingDepartment = DepartmentEntity()
                 }
@@ -310,7 +295,7 @@ struct InventoryListView: View {
                     selectedItem = ItemEntity()
                 }
                 .buttonStyle(BorderedButtonStyle())
-
+                
             } //: HStack
             HStack {
                 ForEach(columnData) { header in
@@ -327,33 +312,32 @@ struct InventoryListView: View {
             
             ScrollView {
                 VStack {
-                    
                     ForEach(items) { item in
-                            HStack {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text(item.name)
-                                        .fontWeight(.semibold)
-                                    
-                                    Text(item.attribute)
-                                        .fontWeight(.light)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                } //: VStack
+                        HStack {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text(item.name)
+                                    .fontWeight(.semibold)
                                 
-                                Text(item.formattedQty)
+                                Text(item.attribute)
+                                    .fontWeight(.light)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                Text(item.formattedPrice)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                Text(item.formattedUnitCost)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                Text("⚠️")
-                            } //: HStack
-                            .frame(height: 64) 
-                            .onTapGesture {
-                                self.selectedItem = item
-                            }
+                            } //: VStack
+                            
+                            Text(item.formattedQty)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Text(item.formattedPrice)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Text(item.formattedUnitCost)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Text(item.restockWarning)
+                        } //: HStack
+                        .frame(height: 64)
+                        .onTapGesture {
+                            self.selectedItem = item
+                        }
                         Divider()
                     }
                     .scrollIndicators(.hidden)
@@ -370,7 +354,6 @@ struct InventoryListView: View {
         if let dept = selectedDepartment {
             Menu {
                 Button("Edit department", systemImage: "pencil") {
-//                    showDepartmentDetail = true
                     editingDepartment = selectedDepartment
                 }
                 
@@ -410,15 +393,13 @@ struct InventoryListView: View {
             content
                 .padding(.horizontal)
                 .padding(.vertical, 8)
-//                .clipShape(RoundedRectangle(cornerRadius: 6))
                 .overlay(
                     RoundedRectangle(cornerRadius: 6)
                         .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
                 )
-//                .background(.white)
         }
     }
-
+    
 }
 
 #Preview {

@@ -8,32 +8,13 @@
 import SwiftUI
 
 
-enum CartState {
-    case closed
-    case sidebar
-    case confirming
-    
-    var idealWidth: CGFloat {
-        switch self {
-        case .closed:
-            return 0
-        case .sidebar:
-            return 240
-        case .confirming:
-            return .infinity
-        }
-    }
-}
-
-/// Changing the opacity based on screenwidth improves the animation when hiding the cart.
-
 struct CartView: View {
     @EnvironmentObject var vm: PointOfSaleViewModel
     
     @Binding var cartState: CartState
     @Binding var menuState: MenuState
         
-    let uiProperties: LayoutProperties
+    let uiSize: CGSize
     
     func continueTapped() {
         
@@ -46,7 +27,6 @@ struct CartView: View {
                 // TODO: Now that this is asynchronous, can probably get rid of the closure.
                 await vm.finalizeSale {
                     /// Once the sale saves successfully, return the cart to its original state.
-                    // TODO: This probably won't work for smaller screens. Menu shouldn't be compact.
                     cartState = .sidebar
                     menuState = .compact
                 }
@@ -61,7 +41,7 @@ struct CartView: View {
     }
     
     var receiptMaxHeight: CGFloat {
-        if uiProperties.height < 440 {
+        if uiSize.height < 440 {
             return 300
         } else {
             return 600
@@ -83,20 +63,16 @@ struct CartView: View {
                         Spacer()
                         confirmationView
                             .padding(.vertical)
-//                            .background(Color("bgColor").opacity(cartState == .confirming ? 0.25 : 0.0))
-//                            .modifier(GlowingOutlineMod())
                             .frame(minWidth: 320, idealWidth: 360, maxWidth: 420)
                         Spacer()
                         receiptTotalsView
-                            .frame(maxWidth: cartState == .confirming ? 420 : uiProperties.width)
+                            .frame(maxWidth: cartState == .confirming ? 420 : uiSize.width)
                         Spacer()
                     } //: HStack
                     
                     // For smaller screens
                     VStack {
                         confirmationView
-                            .background(Color("bgColor"))
-//                            .modifier(GlowingOutlineMod())
                         receiptTotalsView
                     } //: VStack
                 } //: ViewThatFits
@@ -109,9 +85,10 @@ struct CartView: View {
             }
         } //: VStack
         .padding()
-        .background(.ultraThinMaterial)
+//        .background(.ultraThinMaterial)
         .background(Color("bgColor"))
-        .opacity(uiProperties.width < 150 ? 0 : 1)
+        /// Changing the opacity based on screenwidth improves the animation when hiding the cart.
+        .opacity(uiSize.width < 150 ? 0 : 1)
         .onAppear {
             vm.fetchCompany()
         }
@@ -192,7 +169,7 @@ struct CartView: View {
     
     private var receiptTotalsView: some View {
         VStack(alignment: cartState == .confirming ? .center : .leading, spacing: 16) {
-            VStack(spacing: uiProperties.width * 0.02) {
+            VStack(spacing: uiSize.width * 0.02) {
                 
                 HStack {
                     Text("Subtotal:")
@@ -219,8 +196,8 @@ struct CartView: View {
                 
             } //: VStack
             .font(.subheadline)
+//            .background(Color("bgColor"))
             .padding(cartState == .confirming ? 16 : 8)
-            .background(Color("bgColor"))
             .clipShape(RoundedRectangle(cornerRadius: cartState == .confirming ? 8 : 0))
             
             
@@ -235,7 +212,7 @@ struct CartView: View {
             
             if cartState == .confirming {
                 Button {
-                    if uiProperties.width < 640 {
+                    if uiSize.width < 640 {
                         cartState = .closed
                     } else {
                         cartState = .sidebar
@@ -253,21 +230,8 @@ struct CartView: View {
 
 #Preview {
     ResponsiveView { props in
-        CartView(cartState: .constant(.confirming), menuState: .constant(.compact), uiProperties: props)
+        CartView(cartState: .constant(.confirming), menuState: .constant(.compact), uiSize: CGSize(width: props.width, height: props.height))
             .environment(\.realm, DepartmentEntity.previewRealm)
             .environmentObject(PointOfSaleViewModel())
     }
 }
-
-
-//struct SaleItemRowView: View {
-//    enum ViewType { case cart, receipt }
-//    @EnvironmentObject var vm: PointOfSaleViewModel
-//    
-//    @State var item: ItemEntity
-//    @State var viewType: ViewType
-//    
-//    var body: some View {
-//
-//    }
-//}

@@ -14,8 +14,10 @@ struct PointOfSaleView: View {
     @ObservedResults(ItemEntity.self) var items
     @Binding var menuState: MenuState
     @Binding var cartState: CartState
-    let uiProperties: LayoutProperties
+    let uiSize: CGSize
     @State var selectedDept: DepartmentEntity?
+    
+    @State var showCartAlert: Bool = false
     
     func toggleCart() {
         var newState: CartState = .closed
@@ -24,22 +26,36 @@ struct PointOfSaleView: View {
         /// 680 (a little less than an iPad in portrait mode. If the cart is being displayed on a
         /// smaller screen it should only toggle between taking up the full width of the screen and
         /// being hidden entirely.
-        if uiProperties.width < 680 {
-            newState = .confirming
-        } else {
-            switch cartState {
-            case .closed:
-                newState = .sidebar
-            case .sidebar:
-                newState = .closed
-            case .confirming:
-                newState = .confirming
-            }
+        
+        newState = switch true {
+        case uiSize.width < 680: .confirming
+        case cartState == .closed: .sidebar
+        case cartState == .sidebar: .closed
+        case cartState == .confirming: .confirming
+        default: .closed
         }
+        
+//        if uiProperties.width < 680 {
+//            newState = .confirming
+//        } else {
+//            switch cartState {
+//            case .closed:
+//                newState = .sidebar
+//            case .sidebar:
+//                newState = .closed
+//            case .confirming:
+//                newState = .confirming
+//            }
+//        }
         
         // Make sure cart is not empty before displaying confirmation
         if newState == .confirming {
-            guard !vm.cartItems.isEmpty else { return }
+            guard !vm.cartItems.isEmpty else { 
+                if uiSize.width < 450 {
+                    showCartAlert.toggle()
+                }
+                return
+            }
         }
         
         withAnimation(.interpolatingSpring) {
@@ -88,19 +104,21 @@ struct PointOfSaleView: View {
                     // MARK: - ITEM PANE
                     VStack(spacing: 24) {
                         DepartmentPicker(selectedDepartment: $selectedDept, style: .scrolling)
+                        ScrollView {
+                            if selectedDept != nil {
+                                ItemGridView(items: Array(getItems())) { item in
+                                    vm.addItemToCart(item)
+                                }
+                                .padding(2)
+                                
+                            } else {
+                                ItemGridView(items: Array(items)) { item in
+                                    vm.addItemToCart(item)
+                                }
+                                .padding(2)
+                            }
+                        } //: Scroll
                         
-                        if selectedDept != nil {
-                            ItemGridView(items: Array(getItems())) { item in
-                                vm.addItemToCart(item)
-                            }
-                            .padding(2)
-                            
-                        } else {
-                            ItemGridView(items: Array(items)) { item in
-                                vm.addItemToCart(item)
-                            }
-                            .padding(2)
-                        }
                         
                     } //: VStack
                     .padding(.horizontal)
@@ -112,7 +130,7 @@ struct PointOfSaleView: View {
                 /// Make the view disappear entirely when width is 0, otherwise it shows slightly 
                 /// from content. If the cart is confirmation, it should take up the entire screen
                 /// width and the menu should be hidden
-                CartView(cartState: $cartState, menuState: $menuState, uiProperties: uiProperties)
+                CartView(cartState: $cartState, menuState: $menuState, uiSize: uiSize)
                     .frame(maxWidth: cartState.idealWidth)
                     .padding()
                     .background(Color("bgColor"))
@@ -120,9 +138,9 @@ struct PointOfSaleView: View {
             }
             
             // Sidebar for larger screens
-            if uiProperties.width > 680 && cartState == .sidebar {
+            if uiSize.width > 680 && cartState == .sidebar {
                 ResponsiveView { properties in
-                    CartView(cartState: $cartState, menuState: $menuState, uiProperties: properties)
+                    CartView(cartState: $cartState, menuState: $menuState, uiSize: uiSize)
                         .environmentObject(vm)
                 }
                 .frame(maxWidth: cartState.idealWidth)
@@ -130,12 +148,15 @@ struct PointOfSaleView: View {
             }
         } //: HStack
         .background(Color("bgColor"))
+        .alert("Your cart is empty.", isPresented: $showCartAlert) {
+            Button("Okay", role: .cancel) { }
+        }
     } //: Body
 }
 
 #Preview {
     ResponsiveView { props in
-        PointOfSaleView(menuState: .constant(.open), cartState: .constant(.sidebar), uiProperties: props)
+        PointOfSaleView(menuState: .constant(.open), cartState: .constant(.sidebar), uiSize: CGSize(width: props.width, height: props.height))
             .environment(\.realm, DepartmentEntity.previewRealm)
             .environmentObject(PointOfSaleViewModel())
     }

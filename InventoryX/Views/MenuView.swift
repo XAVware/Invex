@@ -7,26 +7,6 @@
 
 import SwiftUI
 
-
-// TODO: Pass UI width to closed state to determine if it should be shown as a compact sidebar or disappear entirely
-enum MenuState: Equatable {
-    case open
-    case compact
-    case closed
-    //    case closed(CGFloat)
-    
-    var idealWidth: CGFloat {
-        switch self {
-        case .open:     return 280
-        case .compact:  return 64
-        case .closed: return 0
-            //        case .closed(let viewWidth):   return viewWidth > 840 ? 64 : 0
-        }
-    }
-    
-
-}
-
 struct MenuView: View {
     @Binding var display: DisplayState
     @Binding var menuState: MenuState

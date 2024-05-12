@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct LogoView: View {
-    
     var body: some View {
         HStack(spacing: 0) {
             Text("Inve")

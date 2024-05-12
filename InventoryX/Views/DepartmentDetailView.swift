@@ -26,7 +26,6 @@ struct DepartmentDetailView: View {
     /// Used in onboarding view to execute additional logic.
     let onSuccess: (() -> Void)?
     
-
     let detailType: DetailViewType
     
     @State var showRemoveItemsAlert: Bool = false
