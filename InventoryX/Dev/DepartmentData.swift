@@ -1,33 +1,13 @@
 //
-//  Department.swift
+//  DepartmentData.swift
 //  InventoryX
 //
-//  Created by Ryan Smetana on 5/22/23.
+//  Created by Ryan Smetana on 5/11/24.
 //
 
-import SwiftUI
+import Foundation
 import RealmSwift
 
-class DepartmentEntity: Object, ObjectKeyIdentifiable {
-    @Persisted(primaryKey: true) var _id: ObjectId
-    @Persisted var name: String
-    @Persisted var restockNumber: Int
-    @Persisted var items: RealmSwift.List<ItemEntity>
-    @Persisted var defMarkup: Double
-    
-    convenience init(name: String, restockNum: Int = 10, defMarkup: Double = 0.0) {
-        self.init()
-        self.name = name
-        self.restockNumber = restockNum
-        self.defMarkup = defMarkup
-    }
-    
-    var formattedMarkup: String {
-        return defMarkup.toPercentageString()
-    }
-    
-    
-}
 
 
 // If data has changed drastically and preview data needs to be updated, uncomment the block containing the deleteAll function, open preview, then recomment the function out.
@@ -54,7 +34,7 @@ extension DepartmentEntity {
             realm = try Realm(configuration: config)
                 if realm.isEmpty {
                     // MARK: - CREATE PREVIEW DATA
-//                    debugPrint("Creating preview data")
+                    debugPrint("Creating preview data")
                     try realm.write {
                         realm.add(company)
                         
