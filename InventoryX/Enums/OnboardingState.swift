@@ -7,11 +7,12 @@
 
 import Foundation
 
-enum OnboardingState: Int {
+enum OnboardingState: Int, Hashable {
     case start = 0
-    case setPasscode = 1
-    case department = 2
-    case item = 3
+    case company = 1
+    case setPasscode = 2
+    case department = 3
+    case item = 4
     
     var viewTitle: String {
         return switch self {
@@ -19,6 +20,7 @@ enum OnboardingState: Int {
         case .setPasscode:  "Set a passcode"
         case .department:   "Add a department"
         case .item:         "Add an item"
+        case .company:      "Company Name"
         }
     }
     

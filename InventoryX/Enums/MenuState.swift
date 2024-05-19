@@ -12,14 +12,12 @@ enum MenuState: Equatable {
     case open
     case compact
     case closed
-    //    case closed(CGFloat)
     
     var idealWidth: CGFloat {
         return switch self {
         case .open:     280
         case .compact:  64
         case .closed:   0
-//        case .closed(let viewWidth):   return viewWidth > 840 ? 64 : 0
         }
     }
     

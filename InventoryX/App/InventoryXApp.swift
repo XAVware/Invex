@@ -69,6 +69,11 @@ struct InventoryXApp: SwiftUI.App {
             ResponsiveView { props in
                 RootView(uiProperties: props)
             }
+//            .onAppear {
+//                Task {
+//                    try await RealmActor().setUpForDebug()
+//                }
+//            }
         }
     }
 }
