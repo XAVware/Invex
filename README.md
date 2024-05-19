@@ -209,3 +209,22 @@ Version 1.0 of InveX uses a custom navigation structure where the orientation an
             }
         }
     ```
+
+## Menu: External Tap Detection
+Use a nearly-invisible background to detects taps that occur outside of the menu -> close the menu.
+    ```swift
+     Group {
+         switch currentDisplay {
+            // ...
+         }
+     }
+     .background(.accent.opacity(0.0001))
+     .onTapGesture(coordinateSpace: .global) { location in
+         if menuState == .open {
+             withAnimation(.interpolatingSpring) {
+                 menuState = .closed
+             }
+         }
+     }
+     .opacity(contentOpacity)
+    ```
