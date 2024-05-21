@@ -26,19 +26,21 @@
 
 import SwiftUI
 
-struct LazyNavView<S: View, C: View>: View {
+struct LazyNavView<S: View, C: View, T: ToolbarContent>: View {
     enum Layout { case full, column }
     @EnvironmentObject var vm: LazyNavViewModel
     @Environment(\.horizontalSizeClass) var horSize
     
+    let layout: Layout
     let sidebar: S
     let content: C
-    let layout: Layout
+    let toolbar: T
     
-    init(layout: Layout = .full, sidebar: (() -> S), content: (() -> C)) {
+    init(layout: Layout = .full, @ViewBuilder sidebar: (() -> S), @ViewBuilder content: (() -> C), @ToolbarContentBuilder toolbar: (() -> T)) {
         self.sidebar = sidebar()
         self.content = content()
         self.layout = layout
+        self.toolbar = toolbar()
     }
     
     var body: some View {
@@ -51,50 +53,60 @@ struct LazyNavView<S: View, C: View>: View {
             Group {
                 if layout == .column {
                     getColumnLayout(for: content)
-                    
                 } else {
                     content
                 }
             }
-            .toolbar(.hidden, for: .navigationBar)
-        }
-        .tint(.accent)
-        .environmentObject(vm)
-        .navigationSplitViewStyle(.prominentDetail)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar(removing: .sidebarToggle)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    vm.toggleSidebar()
-                } label: {
-                    Image(systemName: "sidebar.leading")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 42, height: 20)
-                        .fontWeight(.light)
-                        .foregroundStyle(.accent)
-                }
+            .tint(.accent)
+            // These modifiers need to be on the group otherwise any toolbar items passed in will appear below the nav bar containing the menu button.
+            .navigationSplitViewStyle(.prominentDetail)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar(removing: .sidebarToggle)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                sidebarToggle
+                toolbar
             }
-            
         }
+        .toolbar(.hidden, for: .navigationBar)
+        .environmentObject(vm)
     } //: Body
+
     
+    @ToolbarContentBuilder
+    var sidebarToggle: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button("Menu", systemImage: "sidebar.leading") {
+                vm.toggleSidebar()
+            }
+        }
+    }
+    
+    // These were being used to monitor if the SettingView's splitView ever changes configuration.
     @State var childColVis: NavigationSplitViewVisibility = .doubleColumn
     @State var childPrefCol: NavigationSplitViewColumn = .content
     
+    // Leave detail empty so content has a column to pass navigation views to.
     private func getColumnLayout(for content: C) -> some View {
         NavigationSplitView(columnVisibility: $childColVis, preferredCompactColumn: $childPrefCol) {
             // `.toolbar(.hidden, for: .navigationBar)` is required on the child splitView's content to fully remove sidebar toggle from settings page.
             content
                 .toolbar(.hidden, for: .navigationBar)
             
-        } detail: {
-            // Leave empty so content has a column to pass navigation views to.
+        } detail: { 
+            // Leave Empty
         }
         .navigationSplitViewStyle(.balanced)
         .toolbar(removing: .sidebarToggle)
     }
 }
 
+
+//extension LazyNavView where T: ToolbarContent == nil {
+//    init(layout: Layout = .full, @ViewBuilder sidebar: (() -> S), @ViewBuilder content: (() -> C)) {
+//        self.layout = layout
+//        self.sidebar = sidebar()
+//        self.content = content()
+//        self.toolbarContent = nil
+//    }
+//}
