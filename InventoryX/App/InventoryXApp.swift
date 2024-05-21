@@ -67,7 +67,7 @@ struct InventoryXApp: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
             ResponsiveView { props in
-                RootView(uiProperties: props)
+                RootView(UI: props)
             }
 //            .onAppear {
 //                Task {

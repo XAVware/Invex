@@ -13,6 +13,7 @@ enum DetailPath: Identifiable, Hashable {
     case setPasscode
     case department
     case item
+    case confirmSale
     
     var viewTitle: String {
         return switch self {
@@ -20,6 +21,7 @@ enum DetailPath: Identifiable, Hashable {
         case .department:   "Add a department"
         case .item:         "Add an item"
         case .company:      "Company"
+        case .confirmSale:  "Confirm Sale"
         }
     }
 }
