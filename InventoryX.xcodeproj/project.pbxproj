@@ -13,6 +13,8 @@
 		80B5EF7829F0C319007D9842 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80B5EF7729F0C319007D9842 /* Preview Assets.xcassets */; };
 		80B5EF9929F0CED3007D9842 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 80B5EF9829F0CED3007D9842 /* Realm */; };
 		80B5EF9B29F0CED3007D9842 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 80B5EF9A29F0CED3007D9842 /* RealmSwift */; };
+		940C97042BFD9B4200A0BEAF /* ItemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940C97032BFD9B4200A0BEAF /* ItemTableView.swift */; };
+		940C97062BFEBF4500A0BEAF /* SidebarToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940C97052BFEBF4500A0BEAF /* SidebarToggle.swift */; };
 		941A62712BF9E1E40040DC6C /* DetailPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A626D2BF9E1E30040DC6C /* DetailPath.swift */; };
 		941A62722BF9E1E40040DC6C /* LazyNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A626E2BF9E1E30040DC6C /* LazyNavView.swift */; };
 		941A62732BF9E1E40040DC6C /* LazyNavViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A626F2BF9E1E30040DC6C /* LazyNavViewModel.swift */; };
@@ -98,6 +100,8 @@
 		80B5EF7029F0C318007D9842 /* InventoryXApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryXApp.swift; sourceTree = "<group>"; };
 		80B5EF7429F0C319007D9842 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		80B5EF7729F0C319007D9842 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		940C97032BFD9B4200A0BEAF /* ItemTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableView.swift; sourceTree = "<group>"; };
+		940C97052BFEBF4500A0BEAF /* SidebarToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarToggle.swift; sourceTree = "<group>"; };
 		941A626D2BF9E1E30040DC6C /* DetailPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailPath.swift; sourceTree = "<group>"; };
 		941A626E2BF9E1E30040DC6C /* LazyNavView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyNavView.swift; sourceTree = "<group>"; };
 		941A626F2BF9E1E30040DC6C /* LazyNavViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyNavViewModel.swift; sourceTree = "<group>"; };
@@ -242,6 +246,25 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		940C97012BFD9A6A00A0BEAF /* DetailViews */ = {
+			isa = PBXGroup;
+			children = (
+				94462F8A2BF7AB9C00D0068F /* ItemDetailView.swift */,
+				94462F8C2BF7AB9C00D0068F /* CompanyDetailView.swift */,
+				94462F8D2BF7AB9C00D0068F /* DepartmentDetailView.swift */,
+			);
+			path = DetailViews;
+			sourceTree = "<group>";
+		};
+		940C97022BFD9A7300A0BEAF /* InventoryList */ = {
+			isa = PBXGroup;
+			children = (
+				94462F8E2BF7AB9C00D0068F /* InventoryListView.swift */,
+				940C97032BFD9B4200A0BEAF /* ItemTableView.swift */,
+			);
+			path = InventoryList;
+			sourceTree = "<group>";
+		};
 		941A62702BF9E1E30040DC6C /* LazyNavView */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,6 +272,7 @@
 				941A626D2BF9E1E30040DC6C /* DetailPath.swift */,
 				941A626E2BF9E1E30040DC6C /* LazyNavView.swift */,
 				941A626F2BF9E1E30040DC6C /* LazyNavViewModel.swift */,
+				940C97052BFEBF4500A0BEAF /* SidebarToggle.swift */,
 			);
 			path = LazyNavView;
 			sourceTree = "<group>";
@@ -299,10 +323,8 @@
 			children = (
 				945FFF2F2BFCD9D4005050F3 /* PointOfSale */,
 				94462F892BF7AB9C00D0068F /* Components */,
-				94462F8A2BF7AB9C00D0068F /* ItemDetailView.swift */,
-				94462F8C2BF7AB9C00D0068F /* CompanyDetailView.swift */,
-				94462F8D2BF7AB9C00D0068F /* DepartmentDetailView.swift */,
-				94462F8E2BF7AB9C00D0068F /* InventoryListView.swift */,
+				940C97012BFD9A6A00A0BEAF /* DetailViews */,
+				940C97022BFD9A7300A0BEAF /* InventoryList */,
 				94462F902BF7AB9C00D0068F /* LockScreenView.swift */,
 				94462F912BF7AB9C00D0068F /* MenuView.swift */,
 				94462F922BF7AB9C00D0068F /* MoveItemsView.swift */,
@@ -518,6 +540,7 @@
 				94462FB12BF7AB9C00D0068F /* PasscodeView.swift in Sources */,
 				802EDC0229FA32160048A9A8 /* SaleDateManager.swift in Sources */,
 				94462FA12BF7AB9C00D0068F /* DateTimeLabel.swift in Sources */,
+				940C97042BFD9B4200A0BEAF /* ItemTableView.swift in Sources */,
 				94462FC32BF7AC8100D0068F /* CompanyEntity.swift in Sources */,
 				94F6244E2BB12DAA0069C81E /* Double+Ext.swift in Sources */,
 				94E8BEAE2BCD90EA00041614 /* RealmActor.swift in Sources */,
@@ -583,6 +606,7 @@
 				94462FA22BF7AB9C00D0068F /* DepartmentPicker.swift in Sources */,
 				941A62772BFA37FC0040DC6C /* POSView.swift in Sources */,
 				94462F9A2BF7AB9C00D0068F /* CompanyDetailViewModel.swift in Sources */,
+				940C97062BFEBF4500A0BEAF /* SidebarToggle.swift in Sources */,
 				94341C122BA5897000334505 /* PrimaryButton-Mod.swift in Sources */,
 				94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */,
 				94462FA02BF7AB9C00D0068F /* SettingsViewModel.swift in Sources */,

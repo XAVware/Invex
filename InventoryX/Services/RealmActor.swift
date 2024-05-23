@@ -19,14 +19,13 @@ import RealmSwift
 // TODO: Move form validation back into ViewModels. Only pass this actor type validated data so it is easier to troubleshoot.
 actor RealmActor {
     deinit {
-        debugPrint("RealmActor deinitialized")
-        debugPrint("-> Lifespan: \(bornTime.timeIntervalSinceNow)")
+        debugPrint("RealmActor deinitialized -> Lifespan: \(bornTime.timeIntervalSinceNow)")
     }
     
     let bornTime: Date
     
     init() {
-        debugPrint("RealActor Initialized")
+//        debugPrint("RealActor Initialized")
         bornTime = Date()
     }
     
@@ -50,12 +49,12 @@ actor RealmActor {
         try await realm.asyncWrite {
             if let company = realm.objects(CompanyEntity.self).first {
                 // Company exists, update record
-                debugPrint("Company already exists, updating the record.")
+//                debugPrint("Company already exists, updating the record.")
                 company.name = name
                 company.taxRate = taxRate
             } else {
                 // Company doesn't exist. Create record
-                debugPrint("Creating company record.")
+//                debugPrint("Creating company record.")
                 realm.add(company)
             }
         }

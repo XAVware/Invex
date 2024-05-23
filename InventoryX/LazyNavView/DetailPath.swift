@@ -9,7 +9,7 @@ import Foundation
 
 enum DetailPath: Identifiable, Hashable {
     var id: DetailPath { return self }
-    case company
+    case company(CompanyEntity)
     case setPasscode
     case department
     case item

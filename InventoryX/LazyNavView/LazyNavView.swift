@@ -26,87 +26,192 @@
 
 import SwiftUI
 
-struct LazyNavView<S: View, C: View, T: ToolbarContent>: View {
-    enum Layout { case full, column }
+//
+//  LazyNavViewModel.swift
+//  CustomSplitView
+//
+//  Created by Ryan Smetana on 5/19/24.
+//
+
+import SwiftUI
+import Combine
+
+@MainActor final class LazyNavViewModel: ObservableObject {
+    @Published var mainDisplay: DisplayState = .makeASale
+    @Published var colVis: NavigationSplitViewVisibility = .detailOnly
+    @Published var prefCol: NavigationSplitViewColumn = .detail
+    @Published var sidebarPath: NavigationPath = .init()
+    @Published var contentPath: NavigationPath = .init()
+    
+    // TODO: This should be cleared eventually.
+    @Published var masterPath: [DisplayState] = [] {
+        didSet {
+            guard !masterPath.isEmpty else { return }
+            if let newDisplay = masterPath.last {
+                if newDisplay.prefCol == .left {
+                    sidebarPath.append(newDisplay)
+                } else {
+                    mainDisplay = newDisplay
+                }
+            }
+        }
+    }
+
+    private let service = AuthService.shared
+    private var cancellables = Set<AnyCancellable>()
+    
+    @Published var exists: Bool = false
+    
+    init() {
+        configureSubscribers()
+    }
+    
+    func configureSubscribers() {
+        service.$exists
+            .sink { [weak self] exists in
+                self?.exists = exists
+            }
+            .store(in: &cancellables)
+    }
+    
+    
+    // This is only called from the menu
+    func changeDisplay(to newDisplay: DisplayState) {
+        if newDisplay.prefCol == .left {
+            sidebarPath.append(newDisplay)
+        } else {
+            colVis = .detailOnly
+            prefCol = .detail
+            contentPath = .init()
+        }
+        
+        mainDisplay = newDisplay
+    }
+    
+    func toggleSidebar() {
+        if mainDisplay.prefCol == .left && !sidebarPath.isEmpty {
+            sidebarPath.removeLast()
+            return
+        }
+            colVis = colVis == .doubleColumn ? .detailOnly : .doubleColumn
+//            prefCol = colVis == .detailOnly ? .detail : .sidebar
+        prefCol = .sidebar
+    }
+    
+    func pushView(_ display: DetailPath) {
+        contentPath.append(display)
+        prefCol = .detail
+        colVis = .detailOnly
+    }
+    
+    func detailBackTapped() {
+        contentPath.removeLast()
+        prefCol = .sidebar
+        colVis = .doubleColumn
+    }
+
+    func setMenuVisFor(wasLandscape: Bool, willBeLandscape: Bool) async {
+        if mainDisplay.prefCol == .left && wasLandscape && !willBeLandscape {
+            print("Forcing menu to show in 1 second")
+            try? await Task.sleep(nanoseconds: 750_000_000)
+            print("Showing now")
+            colVis = .doubleColumn
+            prefCol = .sidebar
+        }
+    }
+}
+enum LazySplitViewColumn { case left, center, right }
+
+// A: Hides the default toggle that appears on the detail column on iPads
+// B: Adds the custom toggle to replace the default sidebar toggle
+// C: Hides the back button that appeaers on the detail of the iPhone 15 Pro in landscape
+
+// TODO: Menu button stops working sometimes when you open the menu by clicking the button, but close the menu by tapping to the right or dragging from the edge.
+struct LazyNavView<S: View, C: View>: View {
     @EnvironmentObject var vm: LazyNavViewModel
     @Environment(\.horizontalSizeClass) var horSize
+    @Environment(\.verticalSizeClass) var verSize
     
-    let layout: Layout
     let sidebar: S
     let content: C
-    let toolbar: T
     
-    init(layout: Layout = .full, @ViewBuilder sidebar: (() -> S), @ViewBuilder content: (() -> C), @ToolbarContentBuilder toolbar: (() -> T)) {
+    init(@ViewBuilder sidebar: (() -> S), @ViewBuilder content: (() -> C)) {
+        print("Lazy Nav Initialized")
         self.sidebar = sidebar()
-        self.content = content()
-        self.layout = layout
-        self.toolbar = toolbar()
+        self.content = content() 
     }
     
     var body: some View {
-        NavigationSplitView(columnVisibility: $vm.colVis,  preferredCompactColumn: $vm.prefCol) {
-            sidebar
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar(removing: .sidebarToggle)
-                
-        } detail: {
-            Group {
-                if layout == .column {
-                    getColumnLayout(for: content)
-                } else {
+        GeometryReader { geo in
+            let isLandscape = geo.size.width > geo.size.height
+            let isIphone = horSize == .compact || verSize == .compact
+            // The split view needs to be balanced if the main display is in the sidebar column because if they're prominent you can close them by tapping the darkened area on the right. In the settings view, the column on the right can be an empty view which doesn't have a menu button.
+            let c2 = vm.mainDisplay.prefCol != .left
+//            let isProminent = !isLandscape || vm.mainDisplay.prefCol == .content
+            NavigationSplitView(columnVisibility: $vm.colVis, preferredCompactColumn: $vm.prefCol) {
+                NavigationStack(path: $vm.sidebarPath) {
+                    sidebar
+                }
+                .toolbar(removing: .sidebarToggle) // - A
+            } detail: {
+                NavigationStack(path: $vm.contentPath) {
                     content
+                        .frame(width: geo.size.width)
+                        .toolbar(removing: .sidebarToggle) //
+                }
+                .navigationBarBackButtonHidden(true) // - C
+                .toolbar {
+                    
+                    sidebarToggle
+                } // - B
+            }
+            .modifier(LazyNavMod(isProminent: isIphone && horSize != .regular))
+//            .navigationSplitViewStyle(.balanced)
+            .environmentObject(vm)
+            
+            // The menu closes on iPad when the navigationSplitViewStyle is .balanced and the device orientation changes from landscape to portrait. This causes an issue on settings because the whole screen will be blank when the right column's view is empty and the device orientation changes.
+
+            // The detail could be empty or without a back button/sidebar toggle, so when the view changes to detail only and the current primary view is not in the full screen primary view location, and there isn't another detail view open to the right of the sidebar, then the user needs to see the view that is currently in the sidebar column.
+            .onChange(of: $vm.colVis.wrappedValue) { oldValue, newValue in
+                if newValue == .detailOnly && vm.mainDisplay.prefCol != .center {
+                    withAnimation(.interpolatingSpring) {
+                        vm.colVis = .doubleColumn
+//                        vm.prefCol = .sidebar
+                    }
                 }
             }
-            .tint(.accent)
-            // These modifiers need to be on the group otherwise any toolbar items passed in will appear below the nav bar containing the menu button.
-            .navigationSplitViewStyle(.prominentDetail)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar(removing: .sidebarToggle)
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                sidebarToggle
-                toolbar
-            }
         }
-        .toolbar(.hidden, for: .navigationBar)
-        .environmentObject(vm)
     } //: Body
 
     
     @ToolbarContentBuilder
     var sidebarToggle: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
-            Button("Menu", systemImage: "sidebar.leading") {
-                vm.toggleSidebar()
+        if vm.mainDisplay.prefCol == .center {
+            SidebarToggle()
+        }
+    }
+    
+    // Creates lag when tapping a menu button from a screen that is balanced to a screen that is prominent.
+    //  - Maybe try forcing a delay so the change happens when the menu is closed?
+    struct LazyNavMod: ViewModifier {
+        let isProminent: Bool
+        func body(content: Content) -> some View {
+            if isProminent {
+                content
+                    .navigationSplitViewStyle(.prominentDetail)
+            } else {
+                content
+                    .navigationSplitViewStyle(.balanced)
             }
         }
     }
     
-    // These were being used to monitor if the SettingView's splitView ever changes configuration.
-    @State var childColVis: NavigationSplitViewVisibility = .doubleColumn
-    @State var childPrefCol: NavigationSplitViewColumn = .content
-    
-    // Leave detail empty so content has a column to pass navigation views to.
-    private func getColumnLayout(for content: C) -> some View {
-        NavigationSplitView(columnVisibility: $childColVis, preferredCompactColumn: $childPrefCol) {
-            // `.toolbar(.hidden, for: .navigationBar)` is required on the child splitView's content to fully remove sidebar toggle from settings page.
-            content
-                .toolbar(.hidden, for: .navigationBar)
-            
-        } detail: { 
-            // Leave Empty
-        }
-        .navigationSplitViewStyle(.balanced)
-        .toolbar(removing: .sidebarToggle)
-    }
 }
 
 
-//extension LazyNavView where T: ToolbarContent == nil {
-//    init(layout: Layout = .full, @ViewBuilder sidebar: (() -> S), @ViewBuilder content: (() -> C)) {
-//        self.layout = layout
-//        self.sidebar = sidebar()
-//        self.content = content()
-//        self.toolbarContent = nil
-//    }
-//}
+#Preview {
+    ResponsiveView { props in
+        RootView(UI: props)
+            .environment(\.realm, DepartmentEntity.previewRealm)
+    }
+}
