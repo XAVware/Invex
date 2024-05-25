@@ -39,10 +39,7 @@ import RealmSwift
     
     func fetchCompany() {
         do {
-            guard let company = try RealmActor().fetchCompany() else {
-                print("Error fetching company")
-                return
-            }
+            guard let company = try RealmActor().fetchCompany() else { return }
             self.companyName = company.name
             self.taxRate = company.taxRate
         } catch {
@@ -58,31 +55,19 @@ import RealmSwift
         return count + 1
     }
     
-    func finalizeSale(completion: @escaping (() -> Void)) async {
-        // TODO: 1 & 2 might be able to run at the same time.
-        // 1. Update the on-hand quantity for each unique item in the cart
+    func finalizeSale() async throws {
+        // Update the on-hand quantity for each unique item in the cart
         for index in 0...uniqueItems.count - 1 {
             let tempItem = uniqueItems[index]
             let cartQty = cartItems.filter { $0._id == tempItem._id }.count
-            do {
-                try await RealmActor().adjustStock(for: tempItem, by: cartQty)
-                
-            } catch {
-                debugPrint("Error saving item in sale: \(tempItem)")
-            }
+            try await RealmActor().adjustStock(for: tempItem, by: cartQty)
         }
                 
         /// Convert ItemEntities to SaleItemEntities so they can be used in the sale, without
         /// risking losing an item record on delete.
         let saleItems = cartItems.map( { SaleItemEntity(item: $0) } )
         
-        do {
-            try await RealmActor().saveSale(items: saleItems, total: self.total)
-            cartItems.removeAll()
-            completion()
-        } catch {
-            debugPrint(error.localizedDescription)
-        }
-        
+        try await RealmActor().saveSale(items: saleItems, total: self.total)
+        cartItems.removeAll()
     }
 }

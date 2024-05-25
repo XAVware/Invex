@@ -12,16 +12,9 @@ struct SidebarToggle: ToolbarContent {
     @ToolbarContentBuilder var body: some ToolbarContent {
         ToolbarItem(placement: .topBarLeading) {
             Button("Menu", systemImage: "sidebar.leading") {
-                print("Tap")
-                print("Original pref col: \(vm.prefCol)")
-                print("Original col vis: \(vm.colVis)")
-
-
                 withAnimation {
                     vm.toggleSidebar()
                 }
-                print("New pref col: \(vm.prefCol)")
-                print("New col vis: \(vm.colVis)")
             }
         }
     }

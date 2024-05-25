@@ -11,6 +11,25 @@ import RealmSwift
 @MainActor class DepartmentDetailViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     
+//    func handleSave(forType: DetailType, dept: DepartmentEntity?) async {
+//        do {
+//            switch forType {
+//            case .create || case .onboarding:
+//                save(name: <#T##String#>, threshold: <#T##String#>, markup: <#T##String#>, completion: <#T##(((any Error)?) -> Void)##(((any Error)?) -> Void)##((any Error)?) -> Void#>)
+//            case .update:
+//                                
+//            }
+//            try await RealmActor().addDepartment(name: name, restockThresh: threshold, markup: markup)
+//            completion(nil)
+//        } catch let error as AppError {
+//            errorMessage = error.localizedDescription
+//            completion(error)
+//        } catch {
+//            errorMessage = error.localizedDescription
+//            completion(error)
+//        }
+//    }
+    
     func save(name: String, threshold: String, markup: String, completion: @escaping ((Error?) -> Void)) async {
         do {
             try await RealmActor().addDepartment(name: name, restockThresh: threshold, markup: markup)

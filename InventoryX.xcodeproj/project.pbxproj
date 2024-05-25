@@ -15,6 +15,7 @@
 		80B5EF9B29F0CED3007D9842 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 80B5EF9A29F0CED3007D9842 /* RealmSwift */; };
 		940C97042BFD9B4200A0BEAF /* ItemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940C97032BFD9B4200A0BEAF /* ItemTableView.swift */; };
 		940C97062BFEBF4500A0BEAF /* SidebarToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940C97052BFEBF4500A0BEAF /* SidebarToggle.swift */; };
+		940C970B2BFF9E0C00A0BEAF /* DepartmentTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940C970A2BFF9E0C00A0BEAF /* DepartmentTableView.swift */; };
 		941A62712BF9E1E40040DC6C /* DetailPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A626D2BF9E1E30040DC6C /* DetailPath.swift */; };
 		941A62722BF9E1E40040DC6C /* LazyNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A626E2BF9E1E30040DC6C /* LazyNavView.swift */; };
 		941A62732BF9E1E40040DC6C /* LazyNavViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A626F2BF9E1E30040DC6C /* LazyNavViewModel.swift */; };
@@ -51,7 +52,6 @@
 		94462FAF2BF7AB9C00D0068F /* MoveItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94462F922BF7AB9C00D0068F /* MoveItemsView.swift */; };
 		94462FB02BF7AB9C00D0068F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94462F932BF7AB9C00D0068F /* OnboardingView.swift */; };
 		94462FB12BF7AB9C00D0068F /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94462F942BF7AB9C00D0068F /* PasscodeView.swift */; };
-		94462FB22BF7AB9C00D0068F /* PointOfSaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94462F952BF7AB9C00D0068F /* PointOfSaleView.swift */; };
 		94462FB32BF7AB9C00D0068F /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94462F962BF7AB9C00D0068F /* RootView.swift */; };
 		94462FB42BF7AB9C00D0068F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94462F972BF7AB9C00D0068F /* SettingsView.swift */; };
 		94462FBA2BF7AC3600D0068F /* DepartmentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94462FB52BF7AC3600D0068F /* DepartmentData.swift */; };
@@ -102,6 +102,7 @@
 		80B5EF7729F0C319007D9842 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		940C97032BFD9B4200A0BEAF /* ItemTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableView.swift; sourceTree = "<group>"; };
 		940C97052BFEBF4500A0BEAF /* SidebarToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarToggle.swift; sourceTree = "<group>"; };
+		940C970A2BFF9E0C00A0BEAF /* DepartmentTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentTableView.swift; sourceTree = "<group>"; };
 		941A626D2BF9E1E30040DC6C /* DetailPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailPath.swift; sourceTree = "<group>"; };
 		941A626E2BF9E1E30040DC6C /* LazyNavView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyNavView.swift; sourceTree = "<group>"; };
 		941A626F2BF9E1E30040DC6C /* LazyNavViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyNavViewModel.swift; sourceTree = "<group>"; };
@@ -138,7 +139,6 @@
 		94462F922BF7AB9C00D0068F /* MoveItemsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveItemsView.swift; sourceTree = "<group>"; };
 		94462F932BF7AB9C00D0068F /* OnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		94462F942BF7AB9C00D0068F /* PasscodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
-		94462F952BF7AB9C00D0068F /* PointOfSaleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointOfSaleView.swift; sourceTree = "<group>"; };
 		94462F962BF7AB9C00D0068F /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		94462F972BF7AB9C00D0068F /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		94462FB52BF7AC3600D0068F /* DepartmentData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentData.swift; sourceTree = "<group>"; };
@@ -261,6 +261,7 @@
 			children = (
 				94462F8E2BF7AB9C00D0068F /* InventoryListView.swift */,
 				940C97032BFD9B4200A0BEAF /* ItemTableView.swift */,
+				940C970A2BFF9E0C00A0BEAF /* DepartmentTableView.swift */,
 			);
 			path = InventoryList;
 			sourceTree = "<group>";
@@ -330,7 +331,6 @@
 				94462F922BF7AB9C00D0068F /* MoveItemsView.swift */,
 				94462F932BF7AB9C00D0068F /* OnboardingView.swift */,
 				94462F942BF7AB9C00D0068F /* PasscodeView.swift */,
-				94462F952BF7AB9C00D0068F /* PointOfSaleView.swift */,
 				94462F962BF7AB9C00D0068F /* RootView.swift */,
 				94462F972BF7AB9C00D0068F /* SettingsView.swift */,
 			);
@@ -570,7 +570,6 @@
 				94C7625C2BA8A9F800A61F7D /* AuthService.swift in Sources */,
 				94462F762BF7AA0200D0068F /* DisplayState.swift in Sources */,
 				9486886B2BB6B1650030C8C6 /* UIFeedbackService.swift in Sources */,
-				94462FB22BF7AB9C00D0068F /* PointOfSaleView.swift in Sources */,
 				941A62712BF9E1E40040DC6C /* DetailPath.swift in Sources */,
 				94462FC62BF7AC8100D0068F /* SaleEntity.swift in Sources */,
 				94462FAD2BF7AB9C00D0068F /* LockScreenView.swift in Sources */,
@@ -602,6 +601,7 @@
 				94462FAA2BF7AB9C00D0068F /* DepartmentDetailView.swift in Sources */,
 				80B5EF7129F0C318007D9842 /* InventoryXApp.swift in Sources */,
 				94462FAC2BF7AB9C00D0068F /* ItemGridView.swift in Sources */,
+				940C970B2BFF9E0C00A0BEAF /* DepartmentTableView.swift in Sources */,
 				94462F792BF7AA0200D0068F /* PasscodeViewState.swift in Sources */,
 				94462FA22BF7AB9C00D0068F /* DepartmentPicker.swift in Sources */,
 				941A62772BFA37FC0040DC6C /* POSView.swift in Sources */,

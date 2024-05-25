@@ -74,6 +74,11 @@ import Combine
             .store(in: &cancellables)
     }
     
+    func finishOnboarding() {
+        exists = true
+        contentPath = .init()
+        mainDisplay = .makeASale
+    }
     
     // This is only called from the menu
     func changeDisplay(to newDisplay: DisplayState) {
@@ -93,8 +98,7 @@ import Combine
             sidebarPath.removeLast()
             return
         }
-            colVis = colVis == .doubleColumn ? .detailOnly : .doubleColumn
-//            prefCol = colVis == .detailOnly ? .detail : .sidebar
+        colVis = colVis == .doubleColumn ? .detailOnly : .doubleColumn
         prefCol = .sidebar
     }
     
@@ -110,15 +114,15 @@ import Combine
         colVis = .doubleColumn
     }
 
-    func setMenuVisFor(wasLandscape: Bool, willBeLandscape: Bool) async {
-        if mainDisplay.prefCol == .left && wasLandscape && !willBeLandscape {
-            print("Forcing menu to show in 1 second")
-            try? await Task.sleep(nanoseconds: 750_000_000)
-            print("Showing now")
-            colVis = .doubleColumn
-            prefCol = .sidebar
-        }
-    }
+//    func setMenuVisFor(wasLandscape: Bool, willBeLandscape: Bool) async {
+//        if mainDisplay.prefCol == .left && wasLandscape && !willBeLandscape {
+//            print("Forcing menu to show in 1 second")
+//            try? await Task.sleep(nanoseconds: 750_000_000)
+//            print("Showing now")
+//            colVis = .doubleColumn
+//            prefCol = .sidebar
+//        }
+//    }
 }
 enum LazySplitViewColumn { case left, center, right }
 
@@ -143,11 +147,10 @@ struct LazyNavView<S: View, C: View>: View {
     
     var body: some View {
         GeometryReader { geo in
-            let isLandscape = geo.size.width > geo.size.height
+//            let isLandscape = geo.size.width > geo.size.height
             let isIphone = horSize == .compact || verSize == .compact
             // The split view needs to be balanced if the main display is in the sidebar column because if they're prominent you can close them by tapping the darkened area on the right. In the settings view, the column on the right can be an empty view which doesn't have a menu button.
-            let c2 = vm.mainDisplay.prefCol != .left
-//            let isProminent = !isLandscape || vm.mainDisplay.prefCol == .content
+//            let c2 = vm.mainDisplay.prefCol != .left
             NavigationSplitView(columnVisibility: $vm.colVis, preferredCompactColumn: $vm.prefCol) {
                 NavigationStack(path: $vm.sidebarPath) {
                     sidebar
@@ -161,12 +164,10 @@ struct LazyNavView<S: View, C: View>: View {
                 }
                 .navigationBarBackButtonHidden(true) // - C
                 .toolbar {
-                    
                     sidebarToggle
                 } // - B
             }
             .modifier(LazyNavMod(isProminent: isIphone && horSize != .regular))
-//            .navigationSplitViewStyle(.balanced)
             .environmentObject(vm)
             
             // The menu closes on iPad when the navigationSplitViewStyle is .balanced and the device orientation changes from landscape to portrait. This causes an issue on settings because the whole screen will be blank when the right column's view is empty and the device orientation changes.
@@ -176,7 +177,6 @@ struct LazyNavView<S: View, C: View>: View {
                 if newValue == .detailOnly && vm.mainDisplay.prefCol != .center {
                     withAnimation(.interpolatingSpring) {
                         vm.colVis = .doubleColumn
-//                        vm.prefCol = .sidebar
                     }
                 }
             }
