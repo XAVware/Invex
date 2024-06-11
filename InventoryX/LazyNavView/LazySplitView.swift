@@ -17,8 +17,48 @@ enum MenuVisibility {
 
 enum Layout { case full, column }
 
+// MARK: - Lazy Split Service
+// Maybe move towards:
+//enum LazySplitColumn { case leftSidebar, supplemental, primaryContent, detail, rightSidebar }
+
+// Does this need to be a main actor?
+@MainActor class LazyNavService {
+    @Published var mainDisplay: DisplayState
+    @Published var path: NavigationPath = .init()
+    @Published var detailPath: NavigationPath = .init()
+    
+    static let shared = LazyNavService()
+    
+    init() {
+        self.mainDisplay = DisplayState.allCases.first ?? .settings
+    }
+    
+    func changeDisplay(to newDisplay: DisplayState) {
+        detailPath = .init()
+        path = .init()
+        mainDisplay = newDisplay
+    }
+    
+    func pushView(_ display: DetailPath, isDetail: Bool) {
+        if isDetail {
+            detailPath.append(display)
+        } else {
+            path.append(display)
+        }
+    }
+    
+    func popView(fromDetail: Bool) {
+        if fromDetail {
+            detailPath.removeLast()
+        } else {
+            
+            path.removeLast()
+        }
+    }
+}
 
 
+// MARK: - Lazy Split View Model
 @MainActor final class LazySplitViewModel: ObservableObject {
     @Published var colVis: NavigationSplitViewVisibility = .detailOnly
     @Published var prefCol: NavigationSplitViewColumn = .detail
@@ -40,6 +80,7 @@ enum Layout { case full, column }
     
     /// Used by the custom sidebar toggle button found in the parent NavigationSplitView's toolbar. The parent split view only has two columns, so when the columnVisibility is .doubleColumn the menu is open. When it's .detailOnly it is closed.
     ///     Preferred compact column is used to which views are displayed on smaller screen sizes. When the menu is open (colVis == .doubleColumn) we want  users on smaller devices to only see the menu.
+    ///     Making prefCol toggle between detail and sidebar allows users on smaller devices to close the menu by tapping the same button they used to open it. If prefCol were always set to sidebar after tap, the menu wont close on iPhones.
     func sidebarToggleTapped() {
         colVis = colVis == .doubleColumn ? .detailOnly : .doubleColumn
         prefCol = colVis == .detailOnly ? .detail : .sidebar
@@ -74,6 +115,7 @@ enum Layout { case full, column }
             .sink { [weak self] path in
                 print("Path subscription notified")
                 self?.path = path
+                
             }
             .store(in: &cancellables)
         
@@ -81,6 +123,7 @@ enum Layout { case full, column }
             .sink { [weak self] detailPath in
                 print("Detail path subscription notified")
                 self?.detailPath = detailPath
+                print(self?.detailPath.isEmpty)
             }
             .store(in: &cancellables)
     }
@@ -150,25 +193,34 @@ struct LazySplit<S: View, C: View, T: ToolbarContent>: View {
                                     .toolbar(.hidden, for: .navigationBar)
                             } detail: { 
                                 NavigationStack(path: $vm.detailPath) {
-                                    EmptyView()
-                                        .navigationDestination(for: DetailPath.self) { detail in
-                                            switch detail {
-                                            case .item(let item, let type): ItemDetailView(item: item, detailType: type)
-                                            case .confirmSale:
-                                                ConfirmSaleView() //Fix this, pass VM to enum so it can be accessed
-//                                                    .environmentObject(vm)
-                                                
-                                            case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
-                                            case .company(let c, let t):    CompanyDetailView(company: c, detailType: t)
-                                                
-                                            case .passcodePad(let p):
-                                                PasscodeView(processes: p) {
-                                                    LazyNavService.shared.pushView(.department(nil, .onboarding), isDetail: true)
-                        //                                vm.pushView(DetailPath.department(nil, .onboarding))
-                                                }
-                                            }
-                                        }
+//                                    
+//                                    EmptyView()
+//                                        .onAppear {
+//                                            print("Empty view appeared")
+//                                        }
+//                                        .navigationDestination(for: DetailPath.self) { detail in
+//                                            switch detail {
+//                                            case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
+//                                            case .confirmSale: ConfirmSaleView() //Fix this, pass VM to enum so it can be accessed
+////                                                    .environmentObject(vm)
+//                                                
+//                                            case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
+//                                            case .company(let c, let t):    CompanyDetailView(company: c, detailType: t)
+//                                                
+//                                            case .passcodePad(let p):
+//                                                PasscodeView(processes: p) {
+//                                                    LazyNavService.shared.pushView(.department(nil, .onboarding), isDetail: true)
+//                        //                                vm.pushView(DetailPath.department(nil, .onboarding))
+//                                                }
+//                                            }
+//                                        }
                                 }
+//                                .onAppear {
+//                                    print("Nav stack appeared")
+//                                }
+//                                .onDisappear {
+//                                    print("Nav stack disappeared")
+//                                }
                             }
                             .navigationSplitViewStyle(.balanced)
                             .toolbar(removing: .sidebarToggle)
@@ -181,7 +233,7 @@ struct LazySplit<S: View, C: View, T: ToolbarContent>: View {
                 .navigationDestination(for: DetailPath.self) { detail in
                     switch detail {
                     case .confirmSale:
-                        ConfirmSaleView() //Fix this, pass VM to enum so it can be accessed
+                        ConfirmSaleView()
                             .environmentObject(vm)
                         
                     default: Color.red
