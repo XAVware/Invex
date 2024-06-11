@@ -18,9 +18,9 @@ import RealmSwift
 
 // TODO: Move form validation back into ViewModels. Only pass this actor type validated data so it is easier to troubleshoot.
 actor RealmActor {
-    deinit {
-        debugPrint("RealmActor deinitialized -> Lifespan: \(bornTime.timeIntervalSinceNow)")
-    }
+//    deinit {
+//        debugPrint("RealmActor deinitialized -> Lifespan: \(bornTime.timeIntervalSinceNow)")
+//    }
     
     let bornTime: Date
     

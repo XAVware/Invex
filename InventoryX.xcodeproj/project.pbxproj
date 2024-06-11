@@ -14,13 +14,13 @@
 		80B5EF9929F0CED3007D9842 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 80B5EF9829F0CED3007D9842 /* Realm */; };
 		80B5EF9B29F0CED3007D9842 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 80B5EF9A29F0CED3007D9842 /* RealmSwift */; };
 		940C97042BFD9B4200A0BEAF /* ItemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940C97032BFD9B4200A0BEAF /* ItemTableView.swift */; };
-		940C97062BFEBF4500A0BEAF /* SidebarToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940C97052BFEBF4500A0BEAF /* SidebarToggle.swift */; };
 		940C970B2BFF9E0C00A0BEAF /* DepartmentTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 940C970A2BFF9E0C00A0BEAF /* DepartmentTableView.swift */; };
-		941A62712BF9E1E40040DC6C /* DetailPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A626D2BF9E1E30040DC6C /* DetailPath.swift */; };
-		941A62722BF9E1E40040DC6C /* LazyNavView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A626E2BF9E1E30040DC6C /* LazyNavView.swift */; };
-		941A62732BF9E1E40040DC6C /* LazyNavViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A626F2BF9E1E30040DC6C /* LazyNavViewModel.swift */; };
+		941A62722BF9E1E40040DC6C /* LazySplitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A626E2BF9E1E30040DC6C /* LazySplitView.swift */; };
 		941A62772BFA37FC0040DC6C /* POSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941A62762BFA37FC0040DC6C /* POSView.swift */; };
+		942C595F2C18103000229C79 /* LazySplit Notes in Resources */ = {isa = PBXBuildFile; fileRef = 942C595E2C18103000229C79 /* LazySplit Notes */; };
+		942C59612C1811FE00229C79 /* LazySplitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942C59602C1811FE00229C79 /* LazySplitService.swift */; };
 		94341C122BA5897000334505 /* PrimaryButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94341C112BA5897000334505 /* PrimaryButton-Mod.swift */; };
+		944324AE2C179123001D9C2A /* DetailPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944324AD2C179123001D9C2A /* DetailPath.swift */; };
 		94462F742BF7AA0200D0068F /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94462F6D2BF7AA0200D0068F /* AppError.swift */; };
 		94462F752BF7AA0200D0068F /* CartState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94462F6E2BF7AA0200D0068F /* CartState.swift */; };
 		94462F762BF7AA0200D0068F /* DisplayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94462F6F2BF7AA0200D0068F /* DisplayState.swift */; };
@@ -101,13 +101,13 @@
 		80B5EF7429F0C319007D9842 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		80B5EF7729F0C319007D9842 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		940C97032BFD9B4200A0BEAF /* ItemTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemTableView.swift; sourceTree = "<group>"; };
-		940C97052BFEBF4500A0BEAF /* SidebarToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarToggle.swift; sourceTree = "<group>"; };
 		940C970A2BFF9E0C00A0BEAF /* DepartmentTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentTableView.swift; sourceTree = "<group>"; };
-		941A626D2BF9E1E30040DC6C /* DetailPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailPath.swift; sourceTree = "<group>"; };
-		941A626E2BF9E1E30040DC6C /* LazyNavView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyNavView.swift; sourceTree = "<group>"; };
-		941A626F2BF9E1E30040DC6C /* LazyNavViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazyNavViewModel.swift; sourceTree = "<group>"; };
+		941A626E2BF9E1E30040DC6C /* LazySplitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LazySplitView.swift; sourceTree = "<group>"; };
 		941A62762BFA37FC0040DC6C /* POSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = POSView.swift; sourceTree = "<group>"; };
+		942C595E2C18103000229C79 /* LazySplit Notes */ = {isa = PBXFileReference; lastKnownFileType = text; path = "LazySplit Notes"; sourceTree = "<group>"; };
+		942C59602C1811FE00229C79 /* LazySplitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LazySplitService.swift; sourceTree = "<group>"; };
 		94341C112BA5897000334505 /* PrimaryButton-Mod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PrimaryButton-Mod.swift"; sourceTree = "<group>"; };
+		944324AD2C179123001D9C2A /* DetailPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailPath.swift; sourceTree = "<group>"; };
 		94462F6D2BF7AA0200D0068F /* AppError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		94462F6E2BF7AA0200D0068F /* CartState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartState.swift; sourceTree = "<group>"; };
 		94462F6F2BF7AA0200D0068F /* DisplayState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayState.swift; sourceTree = "<group>"; };
@@ -270,10 +270,10 @@
 			isa = PBXGroup;
 			children = (
 				94A939E72BD8BB440027A5E4 /* UIColorOverride.swift */,
-				941A626D2BF9E1E30040DC6C /* DetailPath.swift */,
-				941A626E2BF9E1E30040DC6C /* LazyNavView.swift */,
-				941A626F2BF9E1E30040DC6C /* LazyNavViewModel.swift */,
-				940C97052BFEBF4500A0BEAF /* SidebarToggle.swift */,
+				944324AD2C179123001D9C2A /* DetailPath.swift */,
+				941A626E2BF9E1E30040DC6C /* LazySplitView.swift */,
+				942C595E2C18103000229C79 /* LazySplit Notes */,
+				942C59602C1811FE00229C79 /* LazySplitService.swift */,
 			);
 			path = LazyNavView;
 			sourceTree = "<group>";
@@ -519,6 +519,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				942C595F2C18103000229C79 /* LazySplit Notes in Resources */,
 				80B5EF7829F0C319007D9842 /* Preview Assets.xcassets in Resources */,
 				94D1FDB22BCC8D13001DFEA5 /* LaunchScreen.storyboard in Resources */,
 				80B5EF7529F0C319007D9842 /* Assets.xcassets in Resources */,
@@ -534,7 +535,7 @@
 			files = (
 				94462FAF2BF7AB9C00D0068F /* MoveItemsView.swift in Sources */,
 				94462FBC2BF7AC3600D0068F /* RealmActor_Ext.swift in Sources */,
-				941A62722BF9E1E40040DC6C /* LazyNavView.swift in Sources */,
+				941A62722BF9E1E40040DC6C /* LazySplitView.swift in Sources */,
 				9446D04C2BD36CA0007D1131 /* PaneOutline-Mod.swift in Sources */,
 				94462F9D2BF7AB9C00D0068F /* MoveItemsViewModel.swift in Sources */,
 				94462FB12BF7AB9C00D0068F /* PasscodeView.swift in Sources */,
@@ -570,8 +571,8 @@
 				94C7625C2BA8A9F800A61F7D /* AuthService.swift in Sources */,
 				94462F762BF7AA0200D0068F /* DisplayState.swift in Sources */,
 				9486886B2BB6B1650030C8C6 /* UIFeedbackService.swift in Sources */,
-				941A62712BF9E1E40040DC6C /* DetailPath.swift in Sources */,
 				94462FC62BF7AC8100D0068F /* SaleEntity.swift in Sources */,
+				942C59612C1811FE00229C79 /* LazySplitService.swift in Sources */,
 				94462FAD2BF7AB9C00D0068F /* LockScreenView.swift in Sources */,
 				94462FBD2BF7AC3600D0068F /* SaleData.swift in Sources */,
 				948688692BB6B0CC0030C8C6 /* AlertView.swift in Sources */,
@@ -580,7 +581,6 @@
 				94462FA72BF7AB9C00D0068F /* ItemDetailView.swift in Sources */,
 				94462F782BF7AA0200D0068F /* OnboardingState.swift in Sources */,
 				94A939DB2BD6F21F0027A5E4 /* Date+Ext.swift in Sources */,
-				941A62732BF9E1E40040DC6C /* LazyNavViewModel.swift in Sources */,
 				94462FB42BF7AB9C00D0068F /* SettingsView.swift in Sources */,
 				94A939E42BD6F97B0027A5E4 /* MonthlyChartView.swift in Sources */,
 				94F624462BAF1B1E0069C81E /* SalesHistoryView.swift in Sources */,
@@ -599,6 +599,7 @@
 				94462F752BF7AA0200D0068F /* CartState.swift in Sources */,
 				94F6244C2BB12D710069C81E /* String+Ext.swift in Sources */,
 				94462FAA2BF7AB9C00D0068F /* DepartmentDetailView.swift in Sources */,
+				944324AE2C179123001D9C2A /* DetailPath.swift in Sources */,
 				80B5EF7129F0C318007D9842 /* InventoryXApp.swift in Sources */,
 				94462FAC2BF7AB9C00D0068F /* ItemGridView.swift in Sources */,
 				940C970B2BFF9E0C00A0BEAF /* DepartmentTableView.swift in Sources */,
@@ -606,7 +607,6 @@
 				94462FA22BF7AB9C00D0068F /* DepartmentPicker.swift in Sources */,
 				941A62772BFA37FC0040DC6C /* POSView.swift in Sources */,
 				94462F9A2BF7AB9C00D0068F /* CompanyDetailViewModel.swift in Sources */,
-				940C97062BFEBF4500A0BEAF /* SidebarToggle.swift in Sources */,
 				94341C122BA5897000334505 /* PrimaryButton-Mod.swift in Sources */,
 				94AC8DBD29FB25D4006A166E /* RealmMigrator.swift in Sources */,
 				94462FA02BF7AB9C00D0068F /* SettingsViewModel.swift in Sources */,

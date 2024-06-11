@@ -50,6 +50,10 @@ import SwiftUI
 import RealmSwift
 
 /*
+ Ability to drag the cart side view. Change size and capacity of point of sale view while the cart is dragging. If the user drags it to a certain spot and leaves it, that's how they prefer the cart to appear on their device and it should be saved in user defaults.
+ */
+
+/*
  If you're debugging and want to add sample data, add this to the view.
  
  .onAppear {
@@ -60,15 +64,20 @@ import RealmSwift
  
  */
 
+/*
+ Version 1.2
+ Removed ResponsiveView
+ */
+
 @main
 struct InventoryXApp: SwiftUI.App {
     let migrator: RealmMigrator = RealmMigrator()
     
     var body: some Scene {
         WindowGroup {
-            ResponsiveView { props in
-                RootView(UI: props)
-            }
+//            ResponsiveView { props in
+                RootView()
+//            }
 //            .onAppear {
 //                Task {
 //                    try await RealmActor().setUpForDebug()

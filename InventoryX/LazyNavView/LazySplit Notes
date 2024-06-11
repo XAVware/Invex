@@ -1,0 +1,7 @@
+
+I changed from storing all logic in the LazySplitViewModel to using a singleton LazyNavService. LazySplitViewModel subscribes to the LazyNavService with Combine. Lazy split view then receives notifications when the view changes so it knows when to hide the menu.
+
+There's a bit of lag when opening closing the menu in Index, but it might be because of the Async/Await RealmActor
+
+6/10/24
+From SettingsView, using LazySplitService.pushView will add a view to the detail, but won't remove it after tapping back.

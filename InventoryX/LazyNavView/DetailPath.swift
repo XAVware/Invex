@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RealmSwift
+//import RealmSwift
 
 enum DetailType: Identifiable, Hashable {
     case onboarding
@@ -19,9 +19,11 @@ enum DetailType: Identifiable, Hashable {
 }
 
 
+// Hashable because 'Instance method 'append' requires that 'DetailPath' conform to 'Hashable'
 
 enum DetailPath: Identifiable, Hashable {
     var id: DetailPath { return self }
+    
     case company(CompanyEntity, DetailType)
     case passcodePad([PasscodeViewState])
     case department(DepartmentEntity?, DetailType)
@@ -41,19 +43,47 @@ enum DetailPath: Identifiable, Hashable {
 
 
 
-enum DisplayState: CaseIterable, Hashable {
-    case onboarding
+//enum DisplayState: CaseIterable, Hashable {
+//    case onboarding
+//    case makeASale
+//    case inventoryList
+//    case settings
+//    
+//    // Specify which views should be layed out differently than main views.
+//    var prefCol: LazySplitViewColumn {
+//        return switch self {
+//        case .settings: .left
+//        default:        .center
+//        }
+//    }
+//    
+//
+//}
+
+enum LazySplitDisplayMode { case detailOnly, besideDetail }
+
+// When using LazySplitService, the first case will be the default.
+
+// I removed Hashable when importing LazySplit. If errors occur, it may need to be added back.
+enum DisplayState: CaseIterable {
     case makeASale
     case inventoryList
     case settings
     
-    // Specify which views should be layed out differently than main views.
-    var prefCol: LazySplitViewColumn {
+    case onboarding
+    
+    var viewTitle: String {
         return switch self {
-        case .settings: .left
-        default:        .center
+        case .makeASale:        "Home"
+        case .inventoryList:    "Inventory"
+        default:                ""
         }
     }
     
-
+    var displayMode: LazySplitDisplayMode {
+        return switch self {
+        case .settings:     .besideDetail
+        default:            .detailOnly
+        }
+    }
 }

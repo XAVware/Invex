@@ -9,6 +9,7 @@ import Foundation
 import RealmSwift
 
 @MainActor class PointOfSaleViewModel: ObservableObject {
+    let id = UUID()
     @Published var cartItems: Array<ItemEntity> = .init()
     @Published var companyName: String = ""
     @Published var taxRate: Double = 0.0
@@ -46,6 +47,10 @@ import RealmSwift
             debugPrint(error.localizedDescription)
         }
         
+    }
+    
+    nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
     // TODO: Maybe, Only call this when initialized. Then increment stored property.
