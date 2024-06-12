@@ -6,7 +6,6 @@
 //
 
 import Foundation
-//import RealmSwift
 
 enum DetailType: Identifiable, Hashable {
     case onboarding
@@ -43,27 +42,9 @@ enum DetailPath: Identifiable, Hashable {
 
 
 
-//enum DisplayState: CaseIterable, Hashable {
-//    case onboarding
-//    case makeASale
-//    case inventoryList
-//    case settings
-//    
-//    // Specify which views should be layed out differently than main views.
-//    var prefCol: LazySplitViewColumn {
-//        return switch self {
-//        case .settings: .left
-//        default:        .center
-//        }
-//    }
-//    
-//
-//}
-
 enum LazySplitDisplayMode { case detailOnly, besideDetail }
 
 // When using LazySplitService, the first case will be the default.
-
 // I removed Hashable when importing LazySplit. If errors occur, it may need to be added back.
 enum DisplayState: CaseIterable {
     case makeASale

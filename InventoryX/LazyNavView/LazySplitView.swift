@@ -19,49 +19,78 @@ enum Layout { case full, column }
 
 // MARK: - Lazy Split Service
 // Maybe move towards:
-//enum LazySplitColumn { case leftSidebar, supplemental, primaryContent, detail, rightSidebar }
+enum LazySplitColumn { case leftSidebar, primaryContent, detail, rightSidebar }
 
 // Does this need to be a main actor?
 @MainActor class LazyNavService {
-    @Published var mainDisplay: DisplayState
-    @Published var path: NavigationPath = .init()
+    @Published var primaryRoot: DisplayState
+    @Published var detailRoot: DetailPath?
+    
+    
+    // TODO: Make these passthrough?
+    @Published var primaryPath: NavigationPath = .init()
     @Published var detailPath: NavigationPath = .init()
     
     static let shared = LazyNavService()
     
     init() {
-        self.mainDisplay = DisplayState.allCases.first ?? .settings
+        self.primaryRoot = DisplayState.allCases.first ?? .settings
     }
     
     func changeDisplay(to newDisplay: DisplayState) {
         detailPath = .init()
-        path = .init()
-        mainDisplay = newDisplay
+        primaryPath = .init()
+        primaryRoot = newDisplay
     }
     
-    func pushView(_ display: DetailPath, isDetail: Bool) {
-        if isDetail {
-            detailPath.append(display)
+    func pushPrimary(_ display: DetailPath, isDetail: Bool) {
+        primaryPath.append(display)
+//        if isDetail {
+//            if detailRoot == nil {
+//                detailRoot = display
+//            } else {
+//                detailPath.append(display)
+//            }
+//        } else {
+//            primaryPath.append(display)
+//        }
+    }
+    
+    func setDetailRoot(_ view: DetailPath) {
+        self.detailRoot = view
+    }
+    
+    /// Only call this from views appearing after the detail root
+    func pushDetail(view: DetailPath) {
+//        if detailRoot == nil {
+//            detailRoot = view
+//        } else {
+            detailPath.append(view)
+//        }
+    }
+    
+    func popPrimary() {
+        primaryPath.removeLast()
+    }
+    
+    func popDetail() {
+        if detailPath.isEmpty {
+            detailRoot = nil
         } else {
-            path.append(display)
-        }
-    }
-    
-    func popView(fromDetail: Bool) {
-        if fromDetail {
             detailPath.removeLast()
-        } else {
-            
-            path.removeLast()
         }
     }
 }
+
+
+
 
 
 // MARK: - Lazy Split View Model
 @MainActor final class LazySplitViewModel: ObservableObject {
     @Published var colVis: NavigationSplitViewVisibility = .detailOnly
     @Published var prefCol: NavigationSplitViewColumn = .detail
+    
     @Published var detailPath: NavigationPath = .init()
     
     init() {
@@ -100,32 +129,31 @@ enum Layout { case full, column }
     
     // MARK: - Navigation Subscriptions
     private let navService = LazyNavService.shared
-    @Published var path: NavigationPath = .init()
     @Published var mainDisplay: DisplayState = .makeASale
+    @Published var detailRoot: DetailPath?
+    @Published var path: NavigationPath = .init()
     
     func configNavSubscribers() {
-        navService.$mainDisplay
+        navService.$primaryRoot
             .sink { [weak self] display in
-                print("Display subscription notified")
                 self?.mainDisplay = display
-            }
-            .store(in: &cancellables)
+            }.store(in: &cancellables)
         
-        navService.$path
+        navService.$detailRoot
+            .sink { [weak self] detailPath in
+                self?.detailRoot = detailPath
+            }.store(in: &cancellables)
+        
+        navService.$primaryPath
             .sink { [weak self] path in
-                print("Path subscription notified")
                 self?.path = path
                 
-            }
-            .store(in: &cancellables)
+            }.store(in: &cancellables)
         
         navService.$detailPath
             .sink { [weak self] detailPath in
-                print("Detail path subscription notified")
                 self?.detailPath = detailPath
-                print(self?.detailPath.isEmpty)
-            }
-            .store(in: &cancellables)
+            }.store(in: &cancellables)
     }
     
 
@@ -151,7 +179,7 @@ enum Layout { case full, column }
     }
 }
 
-struct LazySplit<S: View, C: View, T: ToolbarContent>: View {
+struct LazySplit<S: View, C: View, T: ToolbarContent, D: View>: View {
     @StateObject var vm: LazySplitViewModel
     @Environment(\.horizontalSizeClass) var horSize
     @Environment(\.verticalSizeClass) var verSize
@@ -161,13 +189,15 @@ struct LazySplit<S: View, C: View, T: ToolbarContent>: View {
     
     let sidebar: S
     let content: C
-    let toolbarContent: T
+    let contentToolbar: T
+    let detail: D
     
-    init(viewModel: LazySplitViewModel, sidebar: (() -> S), content: (() -> C), toolbar: (() -> T)) {
+    init(viewModel: LazySplitViewModel, sidebar: (() -> S), content: (() -> C), contentToolbar: (() -> T), detail: (() -> D)) {
         self._vm = StateObject(wrappedValue: viewModel)
         self.sidebar = sidebar()
         self.content = content()
-        self.toolbarContent = toolbar()
+        self.contentToolbar = contentToolbar()
+        self.detail = detail()
     }
         
     var body: some View {
@@ -191,37 +221,19 @@ struct LazySplit<S: View, C: View, T: ToolbarContent>: View {
                             NavigationSplitView(columnVisibility: $childColVis, preferredCompactColumn: $childPrefCol) {
                                 content
                                     .toolbar(.hidden, for: .navigationBar)
-                            } detail: { 
+                            } detail: {
                                 NavigationStack(path: $vm.detailPath) {
-//                                    
-//                                    EmptyView()
-//                                        .onAppear {
-//                                            print("Empty view appeared")
-//                                        }
-//                                        .navigationDestination(for: DetailPath.self) { detail in
-//                                            switch detail {
-//                                            case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
-//                                            case .confirmSale: ConfirmSaleView() //Fix this, pass VM to enum so it can be accessed
-////                                                    .environmentObject(vm)
-//                                                
-//                                            case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
-//                                            case .company(let c, let t):    CompanyDetailView(company: c, detailType: t)
-//                                                
-//                                            case .passcodePad(let p):
-//                                                PasscodeView(processes: p) {
-//                                                    LazyNavService.shared.pushView(.department(nil, .onboarding), isDetail: true)
-//                        //                                vm.pushView(DetailPath.department(nil, .onboarding))
-//                                                }
-//                                            }
-//                                        }
+                                    detail
                                 }
-//                                .onAppear {
-//                                    print("Nav stack appeared")
-//                                }
-//                                .onDisappear {
-//                                    print("Nav stack disappeared")
-//                                }
+                                .navigationDestination(for: DetailPath.self) { detail in
+                                    switch detail {
+                                    case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
+                                    default: Color.blue
+                                    }
+                                    
+                                }
                             }
+                            .navigationBarTitleDisplayMode(.inline)
                             .navigationSplitViewStyle(.balanced)
                             .toolbar(removing: .sidebarToggle)
                         } else {
@@ -245,25 +257,30 @@ struct LazySplit<S: View, C: View, T: ToolbarContent>: View {
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
                     sidebarToggle
-                    toolbarContent
+                    contentToolbar
                 }
                 .modifier(LazySplitMod(isProminent: !isLandscape))
-                // For primary stack
 
                 
             } //: Navigation Stack
+            // I intentionally put the hide/show menu functions in the view. I think it was causing issues with the menu animations, but it should be tested & compared to calling from VM.
             .onChange(of: isLandscape) { prev, landscape in
-                print("Orientation changed from \(prev) to \(landscape)")
                 if landscape {
                     vm.hideMenu()
                 }
             }
             .onReceive(vm.$mainDisplay) { newDisplay in
-                print("Display received: \(newDisplay). Hiding menu.")
                 vm.hideMenu()
             }
-//            .environmentObject(vm)
-            
+            .onReceive(vm.$detailRoot) { detailRoot in
+                // Pushing a view into the detail column by itself only works for iPad. childPrefCol needs to toggle between content and detail for iPhone.
+                print("Detail root received: \(detailRoot)")
+                self.childPrefCol = detailRoot != nil ? .detail : .content
+            }
+            .onReceive(vm.$detailPath) { detailPath in
+                print("Detail path received: \(detailPath). Size \(detailPath.count)")
+            }
+                        
         }
     } //: Body
     
@@ -397,3 +414,8 @@ struct LazySplit<S: View, C: View, T: ToolbarContent>: View {
 //
 //
 //
+
+#Preview {
+    RootView()
+        .environment(\.realm, DepartmentEntity.previewRealm)
+}
