@@ -66,7 +66,9 @@ import RealmSwift
 
 /*
  Version 1.2
- Removed ResponsiveView
+ - Finished developing LazySplit which resulted in:
+    - Removed ResponsiveView
+    - No longer need to track if menu is open or not. LazyNavView's .prominentDetail style won't compress the button grid.
  */
 
 @main
@@ -75,9 +77,7 @@ struct InventoryXApp: SwiftUI.App {
     
     var body: some Scene {
         WindowGroup {
-//            ResponsiveView { props in
-                RootView()
-//            }
+            RootView()
 //            .onAppear {
 //                Task {
 //                    try await RealmActor().setUpForDebug()
