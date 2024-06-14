@@ -16,13 +16,14 @@ enum Layout { case full, column }
 enum LazySplitColumn { case leftSidebar, primaryContent, detail, rightSidebar }
 
 // Does this need to be a main actor?
-//@MainActor 
+//@MainActor
 class LazySplitService {
     @Published var primaryRoot: DisplayState
     @Published var detailRoot: DetailPath?
     
     // TODO: Make these passthrough?
     @Published var primaryPath: NavigationPath = .init()
+    //    let primaryPath = PassthroughSubject<NavigationPath, Never>()
     @Published var detailPath: NavigationPath = .init()
     
     static let shared = LazySplitService()
@@ -33,12 +34,13 @@ class LazySplitService {
     
     func changeDisplay(to newDisplay: DisplayState) {
         detailPath = .init()
-        primaryPath = .init()
+        //        primaryPath = .init()
         primaryRoot = newDisplay
     }
     
     func pushPrimary(_ display: DetailPath, isDetail: Bool) {
         primaryPath.append(display)
+        print("Pushed primary")
     }
     
     func setDetailRoot(_ view: DetailPath) {
@@ -51,7 +53,9 @@ class LazySplitService {
     }
     
     func popPrimary() {
-        primaryPath.removeLast()
+        if primaryPath.count > 0 {
+            primaryPath.removeLast()
+        }
     }
     
     func popDetail() {
@@ -78,7 +82,7 @@ class LazySplitService {
         configNavSubscribers()
         configAuthSubscribers()
     }
-
+    
     func setLandscape(to isLandscape: Bool) {
         if isLandscape {
             hideMenu()
@@ -108,7 +112,7 @@ class LazySplitService {
     @Published var mainDisplay: DisplayState = .makeASale
     @Published var detailRoot: DetailPath?
     @Published var path: NavigationPath = .init()
-//    let path: PassthroughSubject<[DisplayState], Never>()
+    //    let path = PassthroughSubject<NavigationPath, Never>()
     
     func configNavSubscribers() {
         navService.$primaryRoot
@@ -123,6 +127,7 @@ class LazySplitService {
         
         navService.$primaryPath
             .sink { [weak self] path in
+                
                 self?.path = path
                 
             }.store(in: &cancellables)
@@ -133,14 +138,14 @@ class LazySplitService {
             }.store(in: &cancellables)
     }
     
-
+    
     
     // MARK: - Authentication / Onboarding
     private let service = AuthService.shared
     private var cancellables = Set<AnyCancellable>()
     
     @Published var exists: Bool = false
-
+    
     func configAuthSubscribers() {
         service.$exists
             .sink { [weak self] exists in
@@ -180,7 +185,7 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
         self.contentToolbar = contentToolbar()
         self.detail = detail()
     }
-        
+    
     var body: some View {
         GeometryReader { geo in
             let isLandscape = geo.size.width > geo.size.height
@@ -234,17 +239,12 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
                 .toolbar {
                     sidebarToggle
                     contentToolbar
-//                    vm.mainDisplay.toolbar
                 }
-                .modifier(LazySplitMod(style: $style))
+                .modifier(LazySplitMod(isProminent: horSize == .compact && !isLandscape))
             } //: Navigation Stack
             
             // I intentionally put the hide/show menu functions in the view. I think it was causing issues with the menu animations, but it should be tested & compared to calling from VM.
             .onChange(of: isLandscape) { prev, landscape in
-                withAnimation {
-                    style = isLandscape ? .balanced : .prominentDetail
-                }
-                
                 if landscape {
                     vm.hideMenu()
                 }
@@ -278,10 +278,9 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
     }
     
     struct LazySplitMod: ViewModifier {
-        @Binding var style: LazySplitStyle
-//        let isProminent: Bool
+        let isProminent: Bool
         func body(content: Content) -> some View {
-            if style == .prominentDetail {
+            if isProminent {
                 content.navigationSplitViewStyle(.prominentDetail)
             } else {
                 content.navigationSplitViewStyle(.balanced)
@@ -295,5 +294,5 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
 #Preview {
     RootView()
         .environment(\.realm, DepartmentEntity.previewRealm)
-        
+    
 }
