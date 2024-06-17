@@ -9,21 +9,33 @@
 import SwiftUI
 import Combine
 
+/*
+ 6/13/24 Bug: On regular size class, dragging from left screen starts opening menu. If the menu isn't entirely opened it will close, but LazySplit acts as if it's open. The sidebar toggle turns to an x and doesn't work.
+        - I tried adding .navigationBackButtonHidden() to everything in LazySplit.
+    - Solution: Fixed by overlaying a nearly transparent color over the leading safe area.
+
+ 
+ */
+
 enum Layout { case full, column }
 
 // MARK: - Lazy Split Service
 // Maybe move towards:
 enum LazySplitColumn { case leftSidebar, primaryContent, detail, rightSidebar }
 
-// Does this need to be a main actor?
+/*
+ Does this need to be a main actor?
+    - It doesn't need to be as of v1.3. Are there performance benefits?
+ */
+
 //@MainActor
 class LazySplitService {
     @Published var primaryRoot: DisplayState
     @Published var detailRoot: DetailPath?
     
     // TODO: Make these passthrough?
-    @Published var primaryPath: NavigationPath = .init()
-    //    let primaryPath = PassthroughSubject<NavigationPath, Never>()
+//    @Published var primaryPath: NavigationPath = .init()
+    let primaryPath = PassthroughSubject<DetailPath, Never>()
     @Published var detailPath: NavigationPath = .init()
     
     static let shared = LazySplitService()
@@ -38,9 +50,9 @@ class LazySplitService {
         primaryRoot = newDisplay
     }
     
-    func pushPrimary(_ display: DetailPath, isDetail: Bool) {
-        primaryPath.append(display)
-        print("Pushed primary")
+    func pushPrimary(_ display: DetailPath) {
+        primaryPath.send(display)
+//        primaryPath.append(display)
     }
     
     func setDetailRoot(_ view: DetailPath) {
@@ -53,9 +65,9 @@ class LazySplitService {
     }
     
     func popPrimary() {
-        if primaryPath.count > 0 {
-            primaryPath.removeLast()
-        }
+//        if primaryPath.count > 0 {
+//            primaryPath.removeLast()
+//        }
     }
     
     func popDetail() {
@@ -80,7 +92,6 @@ class LazySplitService {
     
     init() {
         configNavSubscribers()
-        configAuthSubscribers()
     }
     
     func setLandscape(to isLandscape: Bool) {
@@ -112,7 +123,8 @@ class LazySplitService {
     @Published var mainDisplay: DisplayState = .makeASale
     @Published var detailRoot: DetailPath?
     @Published var path: NavigationPath = .init()
-    //    let path = PassthroughSubject<NavigationPath, Never>()
+    private var cancellables = Set<AnyCancellable>()
+//        let path = PassthroughSubject<NavigationPath, Never>()
     
     func configNavSubscribers() {
         navService.$primaryRoot
@@ -125,12 +137,15 @@ class LazySplitService {
                 self?.detailRoot = detailPath
             }.store(in: &cancellables)
         
-        navService.$primaryPath
-            .sink { [weak self] path in
+        navService.primaryPath
+            .sink { [weak self] completion in
+                print("Sink Completion called")
+//                self?.path = path
                 
-                self?.path = path
-                
-            }.store(in: &cancellables)
+            } receiveValue: { [weak self] detailPath in
+                self?.path.append(detailPath)
+            }
+            .store(in: &cancellables)
         
         navService.$detailPath
             .sink { [weak self] detailPath in
@@ -138,26 +153,6 @@ class LazySplitService {
             }.store(in: &cancellables)
     }
     
-    
-    
-    // MARK: - Authentication / Onboarding
-    private let service = AuthService.shared
-    private var cancellables = Set<AnyCancellable>()
-    
-    @Published var exists: Bool = false
-    
-    func configAuthSubscribers() {
-        service.$exists
-            .sink { [weak self] exists in
-                self?.exists = exists
-            }.store(in: &cancellables)
-    }
-    
-    // MARK: - Onboarding
-    func finishOnboarding() {
-        exists = true
-        mainDisplay = .makeASale
-    }
 }
 
 struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
@@ -165,10 +160,13 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
     @Environment(\.verticalSizeClass) var verSize
     
     @StateObject var vm: LazySplitViewModel
-    @EnvironmentObject var toolbarVM: ToolbarViewModel
+    @EnvironmentObject var toolbarVM: RootViewModel
     
     @State var childColVis: NavigationSplitViewVisibility = .doubleColumn
     @State var childPrefCol: NavigationSplitViewColumn = .content
+    
+    enum DragState { case dragging, ended }
+    @State var dragState: DragState = .ended
     
     let sidebar: S
     let content: C
@@ -222,6 +220,11 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
                             content
                         }
                     }
+                    .onAppear {
+                        // This fixes the issue with first pushing one primaryView, then going back, then the second time pushing 2.
+                        // Should probably reset instead.
+                        LazySplitService.shared.popPrimary()
+                    }
                     .toolbar(.hidden, for: .navigationBar)
                 }
                 // Can I make this a modifier?
@@ -229,6 +232,13 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
                     switch detail {
                     case .confirmSale(let items):   ConfirmSaleView(cartItems: items)
                     case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
+                    case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
+                    case .passcodePad(let p):
+                        PasscodeView(processes: p) {
+                            LazySplitService.shared.pushPrimary(.department(nil, .onboarding))
+                        }
+                        
+                    
                     default: Color.red
                     }
                 }
@@ -242,7 +252,6 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
                 }
                 .modifier(LazySplitMod(isProminent: horSize == .compact && !isLandscape))
             } //: Navigation Stack
-            
             // I intentionally put the hide/show menu functions in the view. I think it was causing issues with the menu animations, but it should be tested & compared to calling from VM.
             .onChange(of: isLandscape) { prev, landscape in
                 if landscape {
@@ -254,9 +263,18 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
             }
             .onReceive(vm.$detailRoot) { detailRoot in
                 // Pushing a view into the detail column by itself only works for iPad. childPrefCol needs to toggle between content and detail for iPhone.
+                // This should be added to VM because I'm getting an error for updating preferred column multiple times per frame.
                 self.childPrefCol = detailRoot != nil ? .detail : .content
             }
             .environmentObject(toolbarVM)
+            .overlay(
+                // Used to disable the swipe gesture that shows the menu. Perhaps the NavigationSplitView monitors the velocity of a swipe during the first pixel of the screen that isn't in the safe area?
+                Color.white.opacity(0.001)
+                    .frame(width: geo.safeAreaInsets.leading + 1)
+                    .ignoresSafeArea()
+                , alignment: .leading
+            
+            )
         }
     } //: Body
     
@@ -280,11 +298,8 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
     struct LazySplitMod: ViewModifier {
         let isProminent: Bool
         func body(content: Content) -> some View {
-            if isProminent {
-                content.navigationSplitViewStyle(.prominentDetail)
-            } else {
-                content.navigationSplitViewStyle(.balanced)
-            }
+            if isProminent { content.navigationSplitViewStyle(.prominentDetail) }
+            else { content.navigationSplitViewStyle(.balanced) }
         }
     }
     

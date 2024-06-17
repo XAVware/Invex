@@ -48,7 +48,7 @@ enum DisplayState: CaseIterable {
     
     var viewTitle: String {
         return switch self {
-        case .makeASale:        "Home"
+        case .makeASale:        "Make A Sale"
         case .inventoryList:    "Inventory"
         default:                ""
         }
@@ -66,9 +66,9 @@ enum DisplayState: CaseIterable {
 //            ToolbarItem(placement: .topBarTrailing) {
 //                Button("Right Sidebar", systemImage: "cart") {
 ////                    Task {
-////                        await LazySplitService.shared.pushPrimary(.confirmSale, isDetail: false)
+////                        await LazySplitService.shared.pushPrimary(.confirmSale)
 ////                    }
-//                    LazySplitService.shared.pushPrimary(.confirmSale, isDetail: false)
+//                    LazySplitService.shared.pushPrimary(.confirmSale)
 //                }
 //            }
 //            
@@ -76,19 +76,19 @@ enum DisplayState: CaseIterable {
 //            ToolbarItem(placement: .topBarTrailing) {
 //                Button("Add Item", systemImage: "plus") {
 ////                    Task {
-////                        await LazySplitService.shared.pushPrimary(.item(nil, .create), isDetail: true)
+////                        await LazySplitService.shared.pushPrimary(.item(nil, .create))
 ////                    }
-//                    LazySplitService.shared.pushPrimary(.item(nil, .create), isDetail: true)
+//                    LazySplitService.shared.pushPrimary(.item(nil, .create))
 //                }
 //            }
 //            
 ////            ToolbarItem(placement: .topBarTrailing) {
 ////                Button("Add \(selectedTableType == .items ? "Item" : "Department")", systemImage: "plus") {
 ////                    if selectedTableType == .items {
-////                        LazySplitService.shared.pushPrimary(.item(nil, .create), isDetail: true)
+////                        LazySplitService.shared.pushPrimary(.item(nil, .create))
 ////    //                    navVM.pushView(.item(nil, .create))
 ////                    } else {
-////                        LazySplitService.shared.pushPrimary(.department(nil, .create), isDetail: true)
+////                        LazySplitService.shared.pushPrimary(.department(nil, .create))
 ////    //                    navVM.pushView(.department(nil, .create))
 ////                    }
 ////                }
