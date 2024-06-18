@@ -5,8 +5,9 @@
 //  Created by Ryan Smetana on 5/11/24.
 //
 
-import Foundation
+import SwiftUI
 import RealmSwift
+
 
 @MainActor class PointOfSaleViewModel: ObservableObject {
     let id = UUID()
@@ -25,6 +26,32 @@ import RealmSwift
     var total: Double { cartSubtotal + taxAmount }
     
     var cartItemCount: Int { cartItems.count }
+    
+    @Published var cartDisplayMode: CartState = .sidebar
+    // Instead of pushing confirmSale from here, only toggle the cartDisplayMode. Then listen for cartDisplayMode changes from the view you need to push confirmSale from.
+    
+    
+    /// Toggle between hidden and sidebar cart state. Only called from regular horizontal size class devices.
+    func toggleCart() {
+        if cartDisplayMode == .hidden {
+            hideCartSidebar()
+        } else {
+            showCartSidebar()
+        }
+    }
+    
+    func hideCartSidebar() {
+        withAnimation {
+            cartDisplayMode = .hidden
+        }
+    }
+    
+    func showCartSidebar() {
+        withAnimation {
+            cartDisplayMode = .sidebar
+        }
+        
+    }
     
     func addItemToCart(_ item: ItemEntity) {
         cartItems.append(item)

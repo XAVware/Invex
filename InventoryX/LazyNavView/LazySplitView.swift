@@ -34,8 +34,8 @@ class LazySplitService {
     @Published var detailRoot: DetailPath?
     
     // TODO: Make these passthrough?
-//    @Published var primaryPath: NavigationPath = .init()
-    let primaryPath = PassthroughSubject<DetailPath, Never>()
+    @Published var primaryPath: NavigationPath = .init()
+//    let primaryPath = PassthroughSubject<DetailPath?, Never>()
     @Published var detailPath: NavigationPath = .init()
     
     static let shared = LazySplitService()
@@ -51,8 +51,8 @@ class LazySplitService {
     }
     
     func pushPrimary(_ display: DetailPath) {
-        primaryPath.send(display)
-//        primaryPath.append(display)
+//        primaryPath.send(display)
+        primaryPath.append(display)
     }
     
     func setDetailRoot(_ view: DetailPath) {
@@ -65,9 +65,10 @@ class LazySplitService {
     }
     
     func popPrimary() {
-//        if primaryPath.count > 0 {
-//            primaryPath.removeLast()
-//        }
+//        primaryPath.send(nil)
+        if primaryPath.count > 0 {
+            primaryPath.removeLast()
+        }
     }
     
     func popDetail() {
@@ -137,15 +138,25 @@ class LazySplitService {
                 self?.detailRoot = detailPath
             }.store(in: &cancellables)
         
-        navService.primaryPath
-            .sink { [weak self] completion in
-                print("Sink Completion called")
-//                self?.path = path
-                
-            } receiveValue: { [weak self] detailPath in
-                self?.path.append(detailPath)
-            }
-            .store(in: &cancellables)
+        navService.$primaryPath
+            .sink { [weak self] primaryPath in
+                self?.path = primaryPath
+            }.store(in: &cancellables)
+        
+//        navService.primaryPath
+//            .sink { [weak self] completion in
+//                print("Sink Completion called")
+////                self?.path = path
+//                
+//            } receiveValue: { [weak self] detailPath in
+//                if let detailPath = detailPath {
+//                    self?.path.append(detailPath)
+//                } else {
+//                    guard self?.path.count ?? 0 > 0 else { return }
+//                    self?.path.removeLast()
+//                }                
+//            }
+//            .store(in: &cancellables)
         
         navService.$detailPath
             .sink { [weak self] detailPath in
@@ -160,13 +171,13 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
     @Environment(\.verticalSizeClass) var verSize
     
     @StateObject var vm: LazySplitViewModel
-    @EnvironmentObject var toolbarVM: RootViewModel
+    @EnvironmentObject var posVM: PointOfSaleViewModel
     
     @State var childColVis: NavigationSplitViewVisibility = .doubleColumn
     @State var childPrefCol: NavigationSplitViewColumn = .content
     
-    enum DragState { case dragging, ended }
-    @State var dragState: DragState = .ended
+//    enum DragState { case dragging, ended }
+//    @State var dragState: DragState = .ended
     
     let sidebar: S
     let content: C
@@ -230,7 +241,9 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
                 // Can I make this a modifier?
                 .navigationDestination(for: DetailPath.self) { detail in
                     switch detail {
-                    case .confirmSale(let items):   ConfirmSaleView(cartItems: items)
+                    case .confirmSale:   
+                        ConfirmSaleView()
+                            .environmentObject(posVM)
                     case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
                     case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
                     case .passcodePad(let p):
@@ -266,7 +279,7 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
                 // This should be added to VM because I'm getting an error for updating preferred column multiple times per frame.
                 self.childPrefCol = detailRoot != nil ? .detail : .content
             }
-            .environmentObject(toolbarVM)
+            .environmentObject(posVM)
             .overlay(
                 // Used to disable the swipe gesture that shows the menu. Perhaps the NavigationSplitView monitors the velocity of a swipe during the first pixel of the screen that isn't in the safe area?
                 Color.white.opacity(0.001)
@@ -287,8 +300,8 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
             Button("Close", systemImage: isXmark ? "xmark" : "sidebar.leading") {
                 vm.sidebarToggleTapped()
                 
-                if toolbarVM.cartDisplayMode == .sidebar {
-                    toolbarVM.hideCartSidebar()
+                if posVM.cartDisplayMode == .sidebar {
+                    posVM.hideCartSidebar()
                     // TODO: If the sidebar was originally open, open it again if the menu closes back to the same screen.
                 }
             }

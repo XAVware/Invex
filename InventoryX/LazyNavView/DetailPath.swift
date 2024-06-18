@@ -19,7 +19,6 @@ enum DetailType: Identifiable, Hashable {
 
 
 // Hashable because 'Instance method 'append' requires that 'DetailPath' conform to 'Hashable'
-
 enum DetailPath: Identifiable, Hashable {
     var id: DetailPath { return self }
     
@@ -27,10 +26,7 @@ enum DetailPath: Identifiable, Hashable {
     case passcodePad([PasscodeViewState])
     case department(DepartmentEntity?, DetailType)
     case item(ItemEntity?, DetailType)
-    case confirmSale(Array<ItemEntity>)
-//    case confirmSale(StateObject<PointOfSaleViewModel>)
-//    case confirmSale(PointOfSaleViewModel)
-    
+    case confirmSale
 }
 
 
