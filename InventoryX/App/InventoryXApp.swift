@@ -75,29 +75,16 @@ import RealmSwift
 struct InventoryXApp: SwiftUI.App {
     let migrator: RealmMigrator = RealmMigrator()
     
-
-    
     var body: some Scene {
         WindowGroup {
             RootView()
-            .onAppear {
-                Task {
-                    try await RealmActor().setUpForDebug()
-//                    try await RealmActor().deleteAll()
-//                    AuthService.shared.deleteAll()
-                }
-            }
+//            .onAppear {
+//                Task {
+//                    try await RealmActor().setUpForDebug()
+////                    try await RealmActor().deleteAll()
+////                    AuthService.shared.deleteAll()
+//                }
+//            }
         }
     }
 }
-
-//extension UINavigationController: UIGestureRecognizerDelegate {
-//    override open func viewDidLoad() {
-//        super.viewDidLoad()
-//        interactivePopGestureRecognizer?.delegate = self
-//    }
-//    
-//    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return false
-//    }
-//}

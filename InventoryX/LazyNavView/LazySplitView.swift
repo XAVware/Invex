@@ -131,6 +131,7 @@ class LazySplitService {
         navService.$primaryRoot
             .sink { [weak self] display in
                 self?.mainDisplay = display
+                self?.hideMenu()
             }.store(in: &cancellables)
         
         navService.$detailRoot
@@ -246,12 +247,8 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
                             .environmentObject(posVM)
                     case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
                     case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
-                    case .passcodePad(let p):
-                        PasscodeView(processes: p) {
-                            LazySplitService.shared.pushPrimary(.department(nil, .onboarding))
-                        }
+                    case .passcodePad(let p): PasscodeView(processes: p) { }
                         
-                    
                     default: Color.red
                     }
                 }
@@ -272,6 +269,7 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
                 }
             }
             .onReceive(vm.$mainDisplay) { newDisplay in
+                // Without this in the view itself, the show/hide functionality of the menu randomly stops working.
                 vm.hideMenu()
             }
             .onReceive(vm.$detailRoot) { detailRoot in
@@ -286,7 +284,6 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
                     .frame(width: geo.safeAreaInsets.leading + 1)
                     .ignoresSafeArea()
                 , alignment: .leading
-            
             )
         }
     } //: Body
