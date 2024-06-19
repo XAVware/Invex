@@ -253,7 +253,7 @@ struct ItemDetailView: View {
     
 }
 
-#Preview {
-    ItemDetailView(item: ItemEntity(), detailType: .create) {}
-}
+//#Preview {
+//    ItemDetailView(item: ItemEntity(), detailType: .create) {}
+//}
 

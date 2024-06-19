@@ -157,12 +157,12 @@ struct ItemGridView: View {
 }
 
 
-#Preview {
-    ItemGridView(items: ItemEntity.drinkArray) { i in
-        
-    }
-    .padding()
-    .background(.ultraThickMaterial)
-    .environment(\.realm, DepartmentEntity.previewRealm)
-    
-}
+//#Preview {
+//    ItemGridView(items: ItemEntity.drinkArray) { i in
+//        
+//    }
+//    .padding()
+//    .background(.ultraThickMaterial)
+//    .environment(\.realm, DepartmentEntity.previewRealm)
+//    
+//}

@@ -83,12 +83,12 @@ struct CartSidebarView: View {
     
 }
 
-#Preview {
-    HStack {
-        CartSidebarView(vm: PointOfSaleViewModel(), ignoresTopBar: false)
-            .environment(\.realm, DepartmentEntity.previewRealm)
-            .frame(maxWidth: 360, alignment: .leading)
-
-        Spacer()
-    }
-}
+//#Preview {
+//    HStack {
+//        CartSidebarView(vm: PointOfSaleViewModel(), ignoresTopBar: false)
+//            .environment(\.realm, DepartmentEntity.previewRealm)
+//            .frame(maxWidth: 360, alignment: .leading)
+//
+//        Spacer()
+//    }
+//}

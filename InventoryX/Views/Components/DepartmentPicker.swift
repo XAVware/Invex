@@ -160,8 +160,8 @@ struct DepartmentPicker: View {
 }
 
 
-#Preview {
-    DepartmentPicker(selectedDepartment: .constant(nil), style: .dropdown)
-        .padding()
-        .environment(\.realm, DepartmentEntity.previewRealm)
-}
+//#Preview {
+//    DepartmentPicker(selectedDepartment: .constant(nil), style: .dropdown)
+//        .padding()
+//        .environment(\.realm, DepartmentEntity.previewRealm)
+//}

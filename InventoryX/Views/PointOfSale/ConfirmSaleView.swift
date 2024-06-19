@@ -144,10 +144,10 @@ struct ConfirmSaleView: View {
 }
 
 
-#Preview {
-    NavigationStack {
-        ConfirmSaleView()
-            .navigationTitle("Confirm Sale")
-            .environmentObject(PointOfSaleViewModel())
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        ConfirmSaleView()
+//            .navigationTitle("Confirm Sale")
+//            .environmentObject(PointOfSaleViewModel())
+//    }
+//}

@@ -106,7 +106,7 @@ struct ItemTableView: View {
     }
 }
 
-#Preview {
-    ItemTableView()
-        .environment(\.realm, DepartmentEntity.previewRealm)
-}
+//#Preview {
+//    ItemTableView()
+//        .environment(\.realm, DepartmentEntity.previewRealm)
+//}

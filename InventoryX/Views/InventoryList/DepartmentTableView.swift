@@ -67,6 +67,6 @@ struct DepartmentTableView: View {
     
 }
 
-#Preview {
-    DepartmentTableView()
-}
+//#Preview {
+//    DepartmentTableView()
+//}

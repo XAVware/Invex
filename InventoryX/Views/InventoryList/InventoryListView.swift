@@ -114,9 +114,9 @@ struct InventoryListView: View {
     
 }
 
-#Preview {
-    NavigationStack {
-        InventoryListView()
-            .environment(\.realm, DepartmentEntity.previewRealm)
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        InventoryListView()
+//            .environment(\.realm, DepartmentEntity.previewRealm)
+//    }
+//}

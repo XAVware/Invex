@@ -190,9 +190,9 @@ struct DepartmentDetailView: View {
     
 }
 
-#Preview {
-    DepartmentDetailView(department: DepartmentEntity(), detailType: .create) {}
-}
+//#Preview {
+//    DepartmentDetailView(department: DepartmentEntity(), detailType: .create) {}
+//}
 
 
 

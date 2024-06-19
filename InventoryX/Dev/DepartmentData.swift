@@ -24,7 +24,6 @@ extension DepartmentEntity {
     static let frozenItems: [ItemEntity] = ItemEntity.frozenArray
     
     static let categoryArray = [foodCategory, drinkCategory, frozenCategory]
-    
     static var previewRealm: Realm {
 //        let migrator: RealmMigrator = RealmMigrator()
         var realm: Realm
@@ -65,4 +64,5 @@ extension DepartmentEntity {
             fatalError("Can't bootstrap item data: \(error.localizedDescription)")
         }
     }
+    
 }

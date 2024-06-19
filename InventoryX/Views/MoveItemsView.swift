@@ -79,6 +79,6 @@ struct MoveItemsView: View {
     }
 }
 
-#Preview {
-    MoveItemsView()
-}
+//#Preview {
+//    MoveItemsView()
+//}

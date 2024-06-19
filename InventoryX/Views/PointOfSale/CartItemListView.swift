@@ -70,7 +70,7 @@ struct CartItemListView: View {
         .frame(maxWidth: 420)
     }
 }
-
-#Preview {
-    CartItemListView(vm: PointOfSaleViewModel(), isEditable: true)
-}
+//
+//#Preview {
+//    CartItemListView(vm: PointOfSaleViewModel(), isEditable: true)
+//}

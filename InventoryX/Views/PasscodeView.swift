@@ -239,6 +239,6 @@ struct PasscodeView: View {
     
 }
 
-#Preview {
-    PasscodeView(processes: [.set]) {}
-}
+//#Preview {
+//    PasscodeView(processes: [.set]) {}
+//}

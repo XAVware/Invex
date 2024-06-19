@@ -138,12 +138,12 @@ extension ThemeTextField {
     }
 }
 
-#Preview {
-    ThemeTextField(boundTo: .constant(""),
-                   placeholder: "0.00",
-                   title: "Restock Threshold:",
-                   subtitle: "This is the number that you want to restock the items in the department at. This will help you quickly find items that need to be restocked.",
-                   type: .integer)
-    .padding()
-    
-}
+//#Preview {
+//    ThemeTextField(boundTo: .constant(""),
+//                   placeholder: "0.00",
+//                   title: "Restock Threshold:",
+//                   subtitle: "This is the number that you want to restock the items in the department at. This will help you quickly find items that need to be restocked.",
+//                   type: .integer)
+//    .padding()
+//    
+//}

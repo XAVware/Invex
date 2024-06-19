@@ -302,8 +302,8 @@
 				9421892D2C2375AC00C78586 /* DetailViews */,
 				942189312C2375AC00C78586 /* InventoryList */,
 				942189372C2375AC00C78586 /* PointOfSale */,
-				942189382C2375AC00C78586 /* LockScreenView.swift */,
 				942189392C2375AC00C78586 /* MenuView.swift */,
+				942189382C2375AC00C78586 /* LockScreenView.swift */,
 				9421893A2C2375AC00C78586 /* MoveItemsView.swift */,
 				9421893B2C2375AC00C78586 /* OnboardingView.swift */,
 				9421893C2C2375AC00C78586 /* PasscodeView.swift */,
@@ -655,7 +655,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xavware.InventoryX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -695,7 +695,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xavware.InventoryX;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

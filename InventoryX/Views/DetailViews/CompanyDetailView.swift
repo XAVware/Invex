@@ -124,6 +124,6 @@ struct CompanyDetailView: View {
 }
 
 
-#Preview {
-    CompanyDetailView(company: nil, detailType: .onboarding) {}
-}
+//#Preview {
+//    CompanyDetailView(company: nil, detailType: .onboarding) {}
+//}
