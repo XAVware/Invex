@@ -8,13 +8,13 @@
 import Foundation
 
 enum CartState {
-    case closed
+    case hidden
     case sidebar
     case confirming
     
     var idealWidth: CGFloat {
         return switch self {
-        case .closed:       0
+        case .hidden:       0
         case .sidebar:      240
         case .confirming:   .infinity
         }

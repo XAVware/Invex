@@ -6,119 +6,100 @@
 //
 
 import SwiftUI
-import RealmSwift
+//import RealmSwift
 
 struct SettingsView: View {
+//    @ObservedResults(CompanyEntity.self) var company
+//    @ObservedResults(DepartmentEntity.self) var departments
+//    @ObservedResults(ItemEntity.self) var items
     let termsOfServiceURL: URL = URL(string: "https://xavware.com/invex/termsOfService")!
     let privacyPolicyURL: URL = URL(string: "https://xavware.com/invex/privacyPolicy")!
     
     @StateObject var settingsVM: SettingsViewModel = SettingsViewModel()
     
-    @State var showingCompanyDetail: Bool = false
     @State var showPasscodeView: Bool = false
     @State var showDeleteConfirmation: Bool = false
     
-    
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Settings")
-                .modifier(TitleMod())
-            
-            
-            VStack {
-                
-                VStack {
-                    
-                    Button {
-                        showingCompanyDetail = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "case")
-                                .frame(width: 24)
-                            Text("Company Info")
-                            Spacer()
-                        }
-                        .contentShape(Rectangle())
-                    }
-                    .padding(.vertical, 8)
-                    .sheet(isPresented: $showingCompanyDetail, onDismiss: {
-                        settingsVM.fetchCompanyData()
-                    }, content: {
-                        CompanyDetailView(company: CompanyEntity(name: settingsVM.companyName, taxRate: Double(settingsVM.taxRateStr) ?? 0.0))
-                    })
-                    
-                    Divider()
-                    
-                    Button {
-                        showPasscodeView = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "lock")
-                                .frame(width: 24)
-                            Text("Change Passcode")
-                            Spacer()
-                        } //: HStack
-                        .contentShape(Rectangle())
-                    }
-                    .padding(.vertical, 8)
-                    .sheet(isPresented: $showPasscodeView) {
-                        PasscodeView(processes: [.confirm, .set]) {
-                            showPasscodeView = false
-                        }
-                    }
-                    
-                    Divider()
-                    
-                    Button {
-                        showDeleteConfirmation = true
-                    } label: {
-                        HStack {
-                            Image(systemName: "trash")
-                                .frame(width: 24)
-                            Text("Delete Account")
-                            Spacer()
-                        } //: HStack
-                        .contentShape(Rectangle())
-                    }
-                    .padding(.vertical, 8)
-                } //: VStack
-                .font(.title3)
-                .frame(maxWidth: 360)
-                .foregroundStyle(Color("TextColor"))
-                .modifier(PaneOutlineMod())
-                
-                Spacer()
-                
-                VStack {
-                    Link("Terms of Service", destination: termsOfServiceURL)
-                        .font(.title3)
-                        .padding(.vertical, 8)
-                    Divider()
-                    Link("Privacy Policy", destination: privacyPolicyURL)
-                        .padding(.vertical, 8)
-                } //: VStack
-                .font(.title3)
-                .frame(maxWidth: 360)
-                .foregroundStyle(Color("TextColor"))
-                .modifier(PaneOutlineMod())
-            } //: VStack
-            .padding()
-            .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
-                Button("Go back", role: .cancel) { }
-                Button("Yes, delete account", role: .destructive) {
-                    Task {
-                        await settingsVM.deleteAccount()
-                    }
+            Button {
+                LazySplitService.shared.setDetailRoot(DetailPath.company(CompanyEntity(name: settingsVM.companyName, taxRate: Double(settingsVM.taxRateStr) ?? 0.0), .update))
+            } label: {
+                HStack {
+                    Image(systemName: "case")
+                        .frame(width: 24)
+                    Text("Company Info")
+                    Spacer()
                 }
+                .contentShape(Rectangle())
             }
+            .padding(.vertical, 8)
+            .foregroundStyle(.accent)
             
+            Button {
+                LazySplitService.shared.setDetailRoot(.passcodePad([.confirm, .set]))
+            } label: {
+                HStack {
+                    Image(systemName: "lock")
+                        .frame(width: 24)
+                    Text("Change Passcode")
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+            }
+            .padding(.vertical, 8)
+            .foregroundStyle(.accent)
+            
+            Button {
+                LazySplitService.shared.popDetail()
+                
+                showDeleteConfirmation = true
+            } label: {
+                HStack {
+                    Image(systemName: "trash")
+                        .frame(width: 24)
+                    Text("Delete Account")
+                    Spacer()
+                } //: HStack
+                .contentShape(Rectangle())
+            }
+            .padding(.vertical, 8)
+            
+            Spacer()
+            
+            VStack(alignment: .leading, spacing: 12) {
+                Link("Terms of Service", destination: termsOfServiceURL)
+                Link("Privacy Policy", destination: privacyPolicyURL)
+            } //: VStack
+            .font(.footnote)
+            
+            Text("© 2024 XAVware, LLC. All Rights Reserved.")
+                .font(.caption2)
+                .padding(.top, 24)
+                .foregroundStyle(.accent)
+                .opacity(0.6)
         } //: VStack
         .padding()
-        .background(Color("bgColor"))
+        .background(Color.gray.opacity(0.1))
+        //        .clipShape(RoundedCorner(radius: 24, corners: [.topRight, .bottomLeft]))
+        //        .ignoresSafeArea(.all)
+        .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
+            Button("Go back", role: .cancel) { }
+            Button("Yes, delete account", role: .destructive) {
+                LazySplitService.shared.primaryRoot = .makeASale
+                LazySplitService.shared.detailRoot =  nil
+                LazySplitService.shared.primaryPath = .init()
+                LazySplitService.shared.detailPath = .init()
+                
+                Task {
+                    await settingsVM.deleteAccount()
+                }
+            }
+        }
+        
     } //: Body
     
 }
-
 
 #Preview {
     SettingsView()

@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-
-
 struct MoveItemsView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm = MoveItemsViewModel()

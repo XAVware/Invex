@@ -7,74 +7,53 @@
 
 import SwiftUI
 
-struct MenuView: View {
-    @Binding var display: DisplayState
-    @Binding var menuState: MenuState
-    let toggleMenu: (() -> Void)
-    
+struct MenuView: View {    
+    // This could be causing lock screen to dismiss on orientation change.
     @State var showingLockScreen: Bool = false
+    
+    let menuButtons: [DisplayState] = [.makeASale, .inventoryList, .settings]
+    
+    func getButtonData(for display: DisplayState) -> (String, String) {
+        return switch display {
+        case .makeASale:        ("Sale", "cart.fill")
+        case .inventoryList:    ("Inventory", "tray.full.fill")
+        case .settings:         ("Settings", "gearshape")
+        default:                ("","")
+        }
+    }
     
     var body: some View {
         VStack(spacing: 16) {
-            /// Don't show this button when the menu is closed because the menu button is
-            /// being overlayed. Placing the menu button in an HStack with a Spacer improves
-            /// the animation when changing state.
-            if menuState == .open || menuState == .compact {
-                HStack {
-                    if menuState == .open {
-                        Spacer()
-                    }
-                    
-                    Button {
-                        toggleMenu()
-                    } label: {
-                        Image(systemName: "line.3.horizontal")
-                    }
-                    .font(.title)
-                    .fontDesign(.rounded)
-                    .foregroundStyle(Color("lightAccent"))
-                    .padding()
-                } //: HStack
-            }
-            
             Spacer()
             
-            ForEach(DisplayState.allCases, id: \.self) { data in
+            ForEach(menuButtons, id: \.self) { display in
                 Button {
-                    if display == data {
-                        menuState = .closed
-                    } else {
-                        display = data
-                    }
+                    LazySplitService.shared.changeDisplay(to: display)
                 } label: {
                     HStack(spacing: 16) {
-                        if menuState == .open {
-                            Text(data.menuButtonText)
-                            Spacer()
-                        }
-                        
-                        Image(systemName: data.menuIconName)
+                        let data = getButtonData(for: display)
+                        Text(data.0)
+                        Spacer()
+                        Image(systemName: data.1)
                         RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
                             .fill(Color("lightAccent"))
                             .frame(width: 6)
-                            .opacity(data == display ? 1 : 0)
+                            .opacity(display == LazySplitService.shared.primaryRoot ? 1 : 0)
                             .offset(x: 3)
                     }
-                    .modifier(MenuButtonMod(isSelected: data == display))
+                    .modifier(MenuButtonMod(isSelected: display == LazySplitService.shared.primaryRoot))
                 }
                 
             } //: For Each
-            
+
             Spacer()
             
             Button {
                 showingLockScreen = true
             } label: {
                 HStack(spacing: 16) {
-                    if menuState == .open {
-                        Text("Lock")
-                        Spacer()
-                    }
+                    Text("Lock")
+                    Spacer()
                     Image(systemName: "lock")
                     RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
                         .fill(Color("lightAccent"))
@@ -86,8 +65,7 @@ struct MenuView: View {
             }
             
         } //: VStack
-        .frame(width: menuState.idealWidth)
-        .background(.accent)
+        .background(.lightAccent)
         .fullScreenCover(isPresented: $showingLockScreen) {
             LockScreenView()
                 .frame(maxHeight: .infinity)
@@ -96,9 +74,22 @@ struct MenuView: View {
         
     }
     
+    struct MenuButtonMod: ViewModifier {
+        let isSelected: Bool
+        func body(content: Content) -> some View {
+            content
+                .font(.headline)
+                .fontDesign(.rounded)
+                .padding(.leading)
+                .padding(.vertical, 8)
+                .frame(maxHeight: 64)
+    //            .foregroundStyle(isSelected ? .white : Color("bgColor").opacity(0.6))
+                .foregroundStyle(.accent.opacity(isSelected ? 1.0 : 0.6))
+        }
+    }
+    
 }
 
 #Preview {
-    MenuView(display: .constant(.makeASale), menuState: .constant(.compact)) { }
+    MenuView()
 }
-

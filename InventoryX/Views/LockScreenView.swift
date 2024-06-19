@@ -14,9 +14,9 @@ struct LockScreenView: View {
             Spacer()
             VStack {
                 Spacer()
-                PasscodeView(processes: [.confirm], showTitles: false, onSuccess: {
+                PasscodeView(processes: [.confirm]) {
                     dismiss()
-                })
+                }
                 .frame(minHeight: 360, maxHeight: 600)
                 Spacer()
             }

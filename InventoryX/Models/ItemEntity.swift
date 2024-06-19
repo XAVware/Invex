@@ -53,4 +53,6 @@ class ItemEntity: Object, ObjectKeyIdentifiable {
         return department.first?.name ?? ""
     }
     
+//    var id: UInt64 { return UInt64.}
+    
 }

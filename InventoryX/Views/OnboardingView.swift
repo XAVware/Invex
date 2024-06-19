@@ -8,78 +8,141 @@
 import SwiftUI
 import RealmSwift
 
-
-
-
+@MainActor final class OnboardingViewModel: ObservableObject {
+    
+    
+}
 
 struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
-//    @Environment(\.verticalSizeClass) var vSize
-    @State var currentDisplay: OnboardingState = .start
+    @EnvironmentObject var navVM: LazySplitViewModel
+    @StateObject var vm = OnboardingViewModel()
+    @State var selectedView: Int = 0
+    
+    @State var path: NavigationPath = .init()
     
     var body: some View {
-        ScrollView {
+        //        TabView(selection: $selectedView) {
+        //            VStack {
+        //                LogoView()
+        //                
+        //                Image("LandingImage")
+        //                    .resizable()
+        //                    .scaledToFit()
+        //                    .frame(minWidth: 240, maxWidth: 420)
+        //                
+        //                Button {
+        //                    selectedView += 1
+        //                } label: {
+        //                    Spacer()
+        //                    Text("Continue")
+        //                    Spacer()
+        //                }
+        //                .modifier(PrimaryButtonMod())
+        //                
+        //            } //: VStack
+        //            .toolbar(content: {
+        //                ToolbarItem(placement: .keyboard) {
+        //                    Button {
+        //                        selectedView += 1
+        //                    } label: {
+        //                        Spacer()
+        //                        Text("Continue")
+        //                        Spacer()
+        //                    }
+        //                    .modifier(PrimaryButtonMod())
+        //                }
+        //            })
+        //            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        //            .tag(0)
+        //            
+        //            CompanyDetailView(company: nil, detailType: .onboarding)
+        //                .navigationTitle("Welcome!")
+        //                .navigationBarTitleDisplayMode(.large)
+        //                .tag(1)
+        //            
+        //            
+        //            DepartmentDetailView(department: nil, detailType: .onboarding)
+        //                .tag(2)
+        //            
+        //            ItemDetailView(item: nil, detailType: .onboarding)
+        //                .tag(3)
+        //            
+        //            
+        //            PasscodeView(processes: [.set]) {
+        //                LazySplitService.shared.pushPrimary(DetailPath.department(nil, .onboarding))
+        //            }
+        //            .tag(4)
+        //            
+        //        }
+        
+        
+        NavigationStack(path: $path) {
             VStack(spacing: 16) {
-                
                 VStack(alignment: .leading, spacing: 16) {
-                    if currentDisplay != .start {
-                        Button {
-                            guard let prevPage = OnboardingState(rawValue: currentDisplay.rawValue - 1) else { return }
-                            
-                            currentDisplay = prevPage
-                        } label: {
-                            Image(systemName: "chevron.left")
-                            Spacer()
-                            Text("Back")
-                        }
-                        .padding(.horizontal, 12)
-                        .modifier(SecondaryButtonMod())
-                    } else {
-                        LogoView()
-                    }
+                    Text("Welcome to InveX")
+                        .font(.title)
+                        .fontWeight(.semibold)
+                        .fontDesign(.rounded)
+                        .foregroundStyle(.accent)
                     
-                    Text(currentDisplay.viewTitle)
-                        .modifier(TitleMod())
-                } //: VStack
-                .frame(maxWidth: .infinity)
+                    
+                    Text("The point of sale app designed for small businesses.")
+                        .font(.headline)
+                        .fontDesign(.rounded)
+                        .fontWeight(.regular)
+                }
+                Spacer()
                 
+                Image("LandingImage")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(minWidth: 240, maxWidth: 420)
                 
-                switch currentDisplay {
-                case .start:
-                    Text("Start by telling us a little bit about your business.")
-                        .font(.title2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    CompanyDetailView(company: nil, showTitles: false) {
-                        currentDisplay = .setPasscode
-                    }
-                    .padding(.vertical)
-                    .frame(maxHeight: .infinity)
-                    
-                case .setPasscode:
+                Spacer()
+                
+                Button {
+                    path.append(DetailPath.company(CompanyEntity(), .onboarding))
+                } label: {
                     Spacer()
-                    PasscodeView(processes: [.set], showTitles: false) {
-                        currentDisplay = .department
-                    }
+                    Text("Continue")
                     Spacer()
+                }
+                .modifier(PrimaryButtonMod())
+                Spacer()
+                
+            } //: VStack
+            .padding(.vertical)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .navigationDestination(for: DetailPath.self) { view in
+                switch view {
+                case .company(let c, let t):
+                    CompanyDetailView(company: c, detailType: t) {
+                        path.append(DetailPath.passcodePad([.set]))
+                    }
+                    .navigationTitle("Welcome!")
+                    .navigationBarTitleDisplayMode(.large)
                     
-                case .department:
-                    DepartmentDetailView(department: DepartmentEntity(), showTitles: false) {
-                        currentDisplay = .item
+                case .passcodePad(let p):
+                    PasscodeView(processes: p) {
+                        path.append(DetailPath.department(nil, .onboarding))
                     }
                     
-                case .item:
-                    AddItemView(item: ItemEntity(), showTitles: false) {
+                case .department(let d, let t):
+                    DepartmentDetailView(department: d, detailType: t) {
+                        path.append(DetailPath.item(nil, .onboarding))
+                    }
+                    
+                case .item(let i, let t):
+                    ItemDetailView(item: i, detailType: t) {
                         dismiss()
                     }
                     
-                } //: Switch
-                
-            } //: VStack
-            .padding(.horizontal)
-            .padding(.top)
-        } //: ScrollView
-        .background(Color("bgColor"))
+                default: Color.black
+                }
+            } // Navigation Stack
+        }
+        
     } //: Body
     
     

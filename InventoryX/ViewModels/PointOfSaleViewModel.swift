@@ -1,14 +1,10 @@
-//
-//  PointOfSaleViewModel.swift
-//  InventoryX
-//
-//  Created by Ryan Smetana on 5/11/24.
-//
 
-import Foundation
+import SwiftUI
 import RealmSwift
 
+
 @MainActor class PointOfSaleViewModel: ObservableObject {
+    let id = UUID()
     @Published var cartItems: Array<ItemEntity> = .init()
     @Published var companyName: String = ""
     @Published var taxRate: Double = 0.0
@@ -24,6 +20,32 @@ import RealmSwift
     var total: Double { cartSubtotal + taxAmount }
     
     var cartItemCount: Int { cartItems.count }
+
+    @Published var cartDisplayMode: CartState = .sidebar
+    // Instead of pushing confirmSale from here, only toggle the cartDisplayMode. Then listen for cartDisplayMode changes from the view you need to push confirmSale from.
+    
+    
+    /// Toggle between hidden and sidebar cart state. Only called from regular horizontal size class devices.
+    func toggleCart() {
+        if cartDisplayMode == .hidden {
+            hideCartSidebar()
+        } else {
+            showCartSidebar()
+        }
+    }
+    
+    func hideCartSidebar() {
+        withAnimation {
+            cartDisplayMode = .hidden
+        }
+    }
+    
+    func showCartSidebar() {
+        withAnimation {
+            cartDisplayMode = .sidebar
+        }
+        
+    }
     
     func addItemToCart(_ item: ItemEntity) {
         cartItems.append(item)
@@ -39,16 +61,18 @@ import RealmSwift
     
     func fetchCompany() {
         do {
-            guard let company = try RealmActor().fetchCompany() else {
-                print("Error fetching company")
-                return
-            }
+
+            guard let company = try RealmActor().fetchCompany() else { return }
             self.companyName = company.name
             self.taxRate = company.taxRate
         } catch {
             debugPrint(error.localizedDescription)
         }
         
+    }
+
+    nonisolated func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
     
     // TODO: Maybe, Only call this when initialized. Then increment stored property.
@@ -58,31 +82,20 @@ import RealmSwift
         return count + 1
     }
     
-    func finalizeSale(completion: @escaping (() -> Void)) async {
-        // TODO: 1 & 2 might be able to run at the same time.
-        // 1. Update the on-hand quantity for each unique item in the cart
+    func finalizeSale() async throws {
+        // Update the on-hand quantity for each unique item in the cart
         for index in 0...uniqueItems.count - 1 {
             let tempItem = uniqueItems[index]
             let cartQty = cartItems.filter { $0._id == tempItem._id }.count
-            do {
-                try await RealmActor().adjustStock(for: tempItem, by: cartQty)
-                
-            } catch {
-                debugPrint("Error saving item in sale: \(tempItem)")
-            }
+            try await RealmActor().adjustStock(for: tempItem, by: cartQty)
         }
                 
         /// Convert ItemEntities to SaleItemEntities so they can be used in the sale, without
         /// risking losing an item record on delete.
         let saleItems = cartItems.map( { SaleItemEntity(item: $0) } )
         
-        do {
-            try await RealmActor().saveSale(items: saleItems, total: self.total)
-            cartItems.removeAll()
-            completion()
-        } catch {
-            debugPrint(error.localizedDescription)
-        }
-        
+
+        try await RealmActor().saveSale(items: saleItems, total: self.total)
+        cartItems.removeAll()
     }
 }

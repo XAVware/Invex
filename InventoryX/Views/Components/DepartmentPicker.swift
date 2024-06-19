@@ -22,7 +22,7 @@ struct DepartmentPicker: View {
         case .scrolling:
             scrollStyle
             
-        case .list:         
+        case .list:
             listStyle
             
         case .dropdown:
@@ -30,7 +30,7 @@ struct DepartmentPicker: View {
             
         case .columnHeaderBtn:
             columnHeaderStyle
-        
+            
         }
     } //: Body
     
@@ -114,7 +114,7 @@ struct DepartmentPicker: View {
                         .font(.subheadline)
                         .fontDesign(.rounded)
                 } //: ZStack
-//                Spacer(minLength: 12)
+                //                Spacer(minLength: 12)
                 Text(selectedDepartment?.name ?? "Department")
                 Spacer()
                 Image(systemName: "chevron.up.chevron.down")
@@ -132,9 +132,9 @@ struct DepartmentPicker: View {
         .clipShape(RoundedRectangle(cornerRadius: 6))
         .shadow(color: Color("ShadowColor"), radius: 4, x: 0, y: 0)
         .frame(minWidth: 190, maxWidth: 256, alignment: .trailing)
-//        .frame(height: 48)
-//        .foregroundStyle(Color("TextColor"))
-//        .modifier(GlowingOutlineMod())
+        //        .frame(height: 48)
+        //        .foregroundStyle(Color("TextColor"))
+        //        .modifier(GlowingOutlineMod())
     } //: Drop Down Style
     
     private var columnHeaderStyle: some View {
