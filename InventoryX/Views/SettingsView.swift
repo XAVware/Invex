@@ -6,12 +6,8 @@
 //
 
 import SwiftUI
-//import RealmSwift
 
 struct SettingsView: View {
-//    @ObservedResults(CompanyEntity.self) var company
-//    @ObservedResults(DepartmentEntity.self) var departments
-//    @ObservedResults(ItemEntity.self) var items
     let termsOfServiceURL: URL = URL(string: "https://xavware.com/invex/termsOfService")!
     let privacyPolicyURL: URL = URL(string: "https://xavware.com/invex/privacyPolicy")!
     

@@ -8,15 +8,9 @@
 import SwiftUI
 import RealmSwift
 
-@MainActor final class OnboardingViewModel: ObservableObject {
-    
-    
-}
-
 struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var navVM: LazySplitViewModel
-    @StateObject var vm = OnboardingViewModel()
     @State var selectedView: Int = 0
     
     @State var path: NavigationPath = .init()

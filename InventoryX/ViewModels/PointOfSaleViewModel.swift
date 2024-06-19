@@ -61,7 +61,6 @@ import RealmSwift
     
     func fetchCompany() {
         do {
-
             guard let company = try RealmActor().fetchCompany() else { return }
             self.companyName = company.name
             self.taxRate = company.taxRate
@@ -93,8 +92,6 @@ import RealmSwift
         /// Convert ItemEntities to SaleItemEntities so they can be used in the sale, without
         /// risking losing an item record on delete.
         let saleItems = cartItems.map( { SaleItemEntity(item: $0) } )
-        
-
         try await RealmActor().saveSale(items: saleItems, total: self.total)
         cartItems.removeAll()
     }

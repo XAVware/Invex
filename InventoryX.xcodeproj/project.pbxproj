@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		942189032C23757200C78586 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 942189022C23757200C78586 /* .gitignore */; };
-		942189572C2375AD00C78586 /* AlertModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189042C2375AC00C78586 /* AlertModel.swift */; };
-		942189582C2375AD00C78586 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189052C2375AC00C78586 /* AlertView.swift */; };
-		942189592C2375AD00C78586 /* UIFeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189062C2375AC00C78586 /* UIFeedbackService.swift */; };
 		9421895A2C2375AD00C78586 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189092C2375AC00C78586 /* Date+Ext.swift */; };
 		9421895B2C2375AD00C78586 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890A2C2375AC00C78586 /* Double+Ext.swift */; };
 		9421895C2C2375AD00C78586 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890B2C2375AC00C78586 /* String+Ext.swift */; };
@@ -78,9 +75,6 @@
 /* Begin PBXFileReference section */
 		80B5EF6D29F0C318007D9842 /* InventoryX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InventoryX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		942189022C23757200C78586 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		942189042C2375AC00C78586 /* AlertModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertModel.swift; sourceTree = "<group>"; };
-		942189052C2375AC00C78586 /* AlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
-		942189062C2375AC00C78586 /* UIFeedbackService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIFeedbackService.swift; sourceTree = "<group>"; };
 		942189092C2375AC00C78586 /* Date+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		9421890A2C2375AC00C78586 /* Double+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
 		9421890B2C2375AC00C78586 /* String+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
@@ -183,33 +177,14 @@
 				942189202C2375AC00C78586 /* Enums */,
 				942189522C2375AD00C78586 /* LazyNavView */,
 				9421894E2C2375AD00C78586 /* Models */,
-				942189082C2375AC00C78586 /* NextVersion */,
-				942189492C2375AD00C78586 /* Preview Content */,
 				942189562C2375AD00C78586 /* Services */,
-				942189122C2375AC00C78586 /* Utilities */,
 				9421891B2C2375AC00C78586 /* ViewModels */,
 				9421893F2C2375AC00C78586 /* Views */,
 				942189972C23766600C78586 /* Info.plist */,
+				942189122C2375AC00C78586 /* Utilities */,
+				942189492C2375AD00C78586 /* Preview Content */,
 			);
 			path = InventoryX;
-			sourceTree = "<group>";
-		};
-		942189072C2375AC00C78586 /* Alerts */ = {
-			isa = PBXGroup;
-			children = (
-				942189042C2375AC00C78586 /* AlertModel.swift */,
-				942189052C2375AC00C78586 /* AlertView.swift */,
-				942189062C2375AC00C78586 /* UIFeedbackService.swift */,
-			);
-			path = Alerts;
-			sourceTree = "<group>";
-		};
-		942189082C2375AC00C78586 /* NextVersion */ = {
-			isa = PBXGroup;
-			children = (
-				942189072C2375AC00C78586 /* Alerts */,
-			);
-			path = NextVersion;
 			sourceTree = "<group>";
 		};
 		9421890D2C2375AC00C78586 /* Extensions */ = {
@@ -498,9 +473,7 @@
 				942189702C2375AD00C78586 /* DateTimeLabel.swift in Sources */,
 				942189892C2375AD00C78586 /* ItemData.swift in Sources */,
 				942189712C2375AD00C78586 /* DepartmentPicker.swift in Sources */,
-				942189592C2375AD00C78586 /* UIFeedbackService.swift in Sources */,
 				942189632C2375AD00C78586 /* DepartmentDetailViewModel.swift in Sources */,
-				942189572C2375AD00C78586 /* AlertModel.swift in Sources */,
 				9421897A2C2375AD00C78586 /* CartItemListView.swift in Sources */,
 				942189792C2375AD00C78586 /* ItemTableView.swift in Sources */,
 				9421896B2C2375AD00C78586 /* DisplayState.swift in Sources */,
@@ -510,7 +483,6 @@
 				942189822C2375AD00C78586 /* OnboardingView.swift in Sources */,
 				9421896A2C2375AD00C78586 /* CartState.swift in Sources */,
 				9421898E2C2375AD00C78586 /* DepartmentEntity.swift in Sources */,
-				942189582C2375AD00C78586 /* AlertView.swift in Sources */,
 				942189852C2375AD00C78586 /* SettingsView.swift in Sources */,
 				942189752C2375AD00C78586 /* DepartmentDetailView.swift in Sources */,
 				942189782C2375AD00C78586 /* InventoryListView.swift in Sources */,

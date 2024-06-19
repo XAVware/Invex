@@ -111,6 +111,7 @@ class LazySplitService {
         guard colVis != .doubleColumn && prefCol != .sidebar else { return }
         colVis = .doubleColumn
         prefCol = .sidebar
+        detailRoot = nil
     }
     
     func hideMenu() {
@@ -188,7 +189,12 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
     enum LazySplitStyle { case balanced, prominentDetail }
     @State var style: LazySplitStyle = .balanced
     
-    init(viewModel: LazySplitViewModel, sidebar: (() -> S), content: (() -> C), detail: (() -> D), contentToolbar: (() -> T)) {
+    init(viewModel: LazySplitViewModel,
+         @ViewBuilder sidebar: (() -> S),
+         @ViewBuilder content: (() -> C),
+         @ViewBuilder detail: (() -> D),
+         @ToolbarContentBuilder contentToolbar: (() -> T)
+    ) {
         self._vm = StateObject(wrappedValue: viewModel)
         self.sidebar = sidebar()
         self.content = content()

@@ -44,9 +44,9 @@ struct POSView: View {
                     } //: HStack
                 } //: Scroll View
                 
-//                ItemGridView(items: selDept != nil ? Array(selDept?.items ?? .init()) : Array(items)) { item in
-//                    vm.addItemToCart(item)
-//                }
+                ItemGridView(items: selDept != nil ? Array(selDept?.items ?? .init()) : Array(items)) { item in
+                    vm.addItemToCart(item)
+                }
                 
             } //: VStack
             .padding(.horizontal)

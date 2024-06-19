@@ -9,7 +9,6 @@ import Foundation
 import Combine
 
 class RootViewModel: ObservableObject {
-    
     private let service = AuthService.shared
     private var cancellables = Set<AnyCancellable>()
     
@@ -23,7 +22,6 @@ class RootViewModel: ObservableObject {
         service.$exists
             .sink { [weak self] exists in
                 self?.companyExists = exists
-            }
-            .store(in: &cancellables)
+            }.store(in: &cancellables)
     }
 }

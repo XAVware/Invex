@@ -8,7 +8,7 @@
 #
 # Version 2.6
 # For latest version, see: http://stackoverflow.com/questions/49478/git-ignore-file-for-xcode-projects
-#
+# 
 # 2015 updates:
 # - Fixed typo in "xccheckout" line - thanks to @lyck for pointing it out!
 # - Fixed the .idea optional ignore. Thanks to @hashier for pointing this out

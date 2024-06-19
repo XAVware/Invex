@@ -6,8 +6,6 @@
 //
 
 /// To Do List
-/// - Apple changes from version 1
-
 /// - Sort/Filter Item List
 /// - Pass width to cart and menu enums to determine states for device size
 /// [x] Make detailViews Generic (v1.1)

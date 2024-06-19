@@ -18,7 +18,6 @@ import Foundation
             try await RealmActor().moveItems(from: fromDept, to: toDept)
             completion(nil)
         } catch {
-            print(error.localizedDescription)
             completion(error)
         }
     }
