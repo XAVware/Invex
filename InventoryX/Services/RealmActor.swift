@@ -217,6 +217,7 @@ actor RealmActor {
     
     func deleteAll() async throws {
         let realm = try await Realm()
+        realm.refresh()
         try await realm.asyncWrite {
             realm.deleteAll()
         }

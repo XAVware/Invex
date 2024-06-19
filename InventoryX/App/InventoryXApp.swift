@@ -10,7 +10,7 @@
 
 /// - Sort/Filter Item List
 /// - Pass width to cart and menu enums to determine states for device size
-/// - Make detailViews Generic
+/// [x] Make detailViews Generic (v1.1)
 /// - Improve animations and UI of cart and menu
 /// - Receive inventory
 /// - Implement UIFeedback Service for Alerts
@@ -69,22 +69,42 @@ import RealmSwift
  - Finished developing LazySplit which resulted in:
     - Removed ResponsiveView
     - No longer need to track if menu is open or not. LazyNavView's .prominentDetail style won't compress the button grid.
+ 
+ - Added item count to cart button so the user is aware of what is happening on compact screens.
+ - Add landing page to onboarding sequence.
+ - Fix bug where lock screen dismissed on orientation change.
+ - Improve UI of InventoryListView
+ - Minor Realm performance improvements
+ 
+ Removed:
+ - ResponsiveView
+ - MenuState
+ - OnboardingState
+ - GlowingOutlineMod
+ - SecondaryButtonMod
+ - TitleMod
+ - PaneOutlineMod
+ - MenuButtonMod
+ - ColumnHeaderModel
  */
 
 @main
+
 struct InventoryXApp: SwiftUI.App {
     let migrator: RealmMigrator = RealmMigrator()
     
     var body: some Scene {
         WindowGroup {
             RootView()
-//            .onAppear {
-//                Task {
-//                    try await RealmActor().setUpForDebug()
-////                    try await RealmActor().deleteAll()
-////                    AuthService.shared.deleteAll()
-//                }
-//            }
+                .onAppear {
+                    Task {
+                        try await RealmActor().setUpForDebug()
+//                        let h = AuthService.shared.hashString("1234")
+//                        await AuthService.shared.savePasscode(hash: h)
+                        AuthService.shared.exists = true
+                        
+                    }
+                }
         }
     }
 }

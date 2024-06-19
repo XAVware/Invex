@@ -21,11 +21,14 @@ extension RealmActor {
         let snacksDept = DepartmentEntity(name: "Snacks", restockNum: 15, defMarkup: 0.2)
         snacksDept.items.append(objectsIn: ItemEntity.snackArray)
         
+//        let h = AuthService.shared.hashString("1234")
+//        await AuthService.shared.savePasscode(hash: h)
         let realm = try await Realm()
         try await realm.asyncWrite {
             realm.add(debugCompany)
             realm.add(drinksDept)
             realm.add(snacksDept)
         }
+        
     }
 }

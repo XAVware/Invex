@@ -247,7 +247,7 @@ struct LazySplit<S: View, C: View, D: View, T: ToolbarContent>: View {
                             .environmentObject(posVM)
                     case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
                     case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
-                    case .passcodePad(let p): PasscodeView(processes: p) { }
+                    case .passcodePad(let p):       PasscodeView(processes: p) { }
                         
                     default: Color.red
                     }
