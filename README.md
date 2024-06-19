@@ -228,3 +228,10 @@ Use a nearly-invisible background to detects taps that occur outside of the menu
      }
      .opacity(contentOpacity)
     ```
+
+
+## Version 1.0
+4555
+
+## Version 1.1
+Lines of code: 4625
