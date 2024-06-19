@@ -160,6 +160,7 @@
 		80B5EF6429F0C318007D9842 = {
 			isa = PBXGroup;
 			children = (
+				942189022C23757200C78586 /* .gitignore */,
 				80B5EF6F29F0C318007D9842 /* InventoryX */,
 				80B5EF6E29F0C318007D9842 /* Products */,
 			);
@@ -188,7 +189,6 @@
 				942189122C2375AC00C78586 /* Utilities */,
 				9421891B2C2375AC00C78586 /* ViewModels */,
 				9421893F2C2375AC00C78586 /* Views */,
-				942189022C23757200C78586 /* .gitignore */,
 				942189972C23766600C78586 /* Info.plist */,
 			);
 			path = InventoryX;
