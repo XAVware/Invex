@@ -33,7 +33,15 @@
 # OS X temporary files that should never be committed
 #
 # c.f. http://www.westwind.com/reference/os-x/invisibles.html
+xcuserdata/
 
+## Obj-C/Swift specific
+*.hmap
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
 .DS_Store
 *.xcuserinterfacestate
 # c.f. http://www.westwind.com/reference/os-x/invisibles.html
