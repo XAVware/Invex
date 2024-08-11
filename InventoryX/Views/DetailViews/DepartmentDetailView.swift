@@ -12,7 +12,7 @@ enum DetailViewType { case create, modify }
 
 struct DepartmentDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var vm: DepartmentDetailViewModel = DepartmentDetailViewModel()
+    @StateObject var vm: DetailViewModel = DetailViewModel()
     @State private var name: String = ""
     @State private var restockThreshold: String = ""
     @State private var markup: String = ""

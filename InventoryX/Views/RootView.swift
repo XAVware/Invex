@@ -36,7 +36,49 @@ struct RootView: View {
             MenuView()
         } content: {
             switch navVM.mainDisplay {
-            case .makeASale:        POSView()
+            case .makeASale:        
+                POSView()
+                    .toolbar {
+                        // Only show cart toolbar button when menu isn't open
+                        if navVM.prefCol != .sidebar {
+                            ToolbarItem(placement: .topBarTrailing) {
+                                Button {
+                                    switch horSize {
+                                    case .compact:
+                                        // On Compact, push confirm sale view with the cart items.
+                                        guard !posVM.cartItems.isEmpty else {
+                                            showCartAlert.toggle()
+                                            return
+                                        }
+                                        LazySplitService.shared.pushPrimary(.confirmSale)
+                                        
+                                    case .regular:
+                                        // Toggle between sidebar and hidden display mode.
+                                        if posVM.cartDisplayMode == .hidden {
+                                            posVM.showCartSidebar()
+                                        } else {
+                                            posVM.hideCartSidebar()
+                                        }
+                                        
+                                    default: print("Invalid horizontal size class.")
+                                    }
+                                } label: {
+                                    HStack(spacing: 12) {
+                                        Text("\(posVM.cartItems.count)")
+                                        Image(systemName: "cart")
+                                            .frame(width: 18, height: 18)
+                                    }
+                                    .padding(8)
+                                    .padding(.horizontal, 4)
+                                    .font(.callout)
+                                    .foregroundStyle(Color.white)
+                                    .background(Color.accent.opacity(0.95))
+                                    .clipShape(Capsule())
+                                }
+                                
+                            }
+                        }
+                    }
             case .inventoryList:    InventoryListView()
             case .settings:         SettingsView()
             default:                EmptyView()
@@ -49,52 +91,54 @@ struct RootView: View {
             case .passcodePad(let p):       PasscodeView(processes: p) { }
             default:                        EmptyView()
             }
-        } contentToolbar: {
-            switch navVM.mainDisplay {
-            case .makeASale:
-                // Only show cart toolbar button when menu isn't open
-                if navVM.prefCol != .sidebar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            switch horSize {
-                            case .compact:
-                                // On Compact, push confirm sale view with the cart items.
-                                guard !posVM.cartItems.isEmpty else {
-                                    showCartAlert.toggle()
-                                    return
-                                }
-                                LazySplitService.shared.pushPrimary(.confirmSale)
-                                
-                            case .regular:
-                                // Toggle between sidebar and hidden display mode.
-                                if posVM.cartDisplayMode == .hidden {
-                                    posVM.showCartSidebar()
-                                } else {
-                                    posVM.hideCartSidebar()
-                                }
-                                
-                            default: print("Invalid horizontal size class.")
-                            }
-                        } label: {
-                            HStack(spacing: 12) {
-                                Text("\(posVM.cartItems.count)")
-                                Image(systemName: "cart")
-                                    .frame(width: 18, height: 18)
-                            }
-                            .padding(8)
-                            .padding(.horizontal, 4)
-                            .font(.callout)
-                            .foregroundStyle(Color.white)
-                            .background(Color.accent.opacity(0.95))
-                            .clipShape(Capsule())
-                        }
-                        
-                    }
-                }
-                
-            default: ToolbarItem(placement: .topBarTrailing) { EmptyView() }
-            }
-        }
+        } 
+        
+//    contentToolbar: {
+//            switch navVM.mainDisplay {
+//            case .makeASale:
+//                // Only show cart toolbar button when menu isn't open
+//                if navVM.prefCol != .sidebar {
+//                    ToolbarItem(placement: .topBarTrailing) {
+//                        Button {
+//                            switch horSize {
+//                            case .compact:
+//                                // On Compact, push confirm sale view with the cart items.
+//                                guard !posVM.cartItems.isEmpty else {
+//                                    showCartAlert.toggle()
+//                                    return
+//                                }
+//                                LazySplitService.shared.pushPrimary(.confirmSale)
+//                                
+//                            case .regular:
+//                                // Toggle between sidebar and hidden display mode.
+//                                if posVM.cartDisplayMode == .hidden {
+//                                    posVM.showCartSidebar()
+//                                } else {
+//                                    posVM.hideCartSidebar()
+//                                }
+//                                
+//                            default: print("Invalid horizontal size class.")
+//                            }
+//                        } label: {
+//                            HStack(spacing: 12) {
+//                                Text("\(posVM.cartItems.count)")
+//                                Image(systemName: "cart")
+//                                    .frame(width: 18, height: 18)
+//                            }
+//                            .padding(8)
+//                            .padding(.horizontal, 4)
+//                            .font(.callout)
+//                            .foregroundStyle(Color.white)
+//                            .background(Color.accent.opacity(0.95))
+//                            .clipShape(Capsule())
+//                        }
+//                        
+//                    }
+//                }
+//                
+//            default: ToolbarItem(placement: .topBarTrailing) { EmptyView() }
+//            }
+//        }
         .alert("Your cart is empty.", isPresented: $showCartAlert) {
             Button("Okay", role: .cancel) { }
         }
@@ -125,7 +169,7 @@ struct RootView: View {
     
 }
 
-//#Preview {
-//    RootView()
-//        .environment(\.realm, DepartmentEntity.previewRealm)
-//}
+#Preview {
+    RootView()
+        .environment(\.realm, DepartmentEntity.previewRealm)
+}

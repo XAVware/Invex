@@ -12,7 +12,7 @@ import RealmSwift
 
 struct CompanyDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var vm: CompanyDetailViewModel = CompanyDetailViewModel()
+    @StateObject var vm: DetailViewModel = DetailViewModel()
     let company: CompanyEntity?
     @State private var companyName: String = ""
     @State private var taxRate: String = ""
@@ -23,7 +23,7 @@ struct CompanyDetailView: View {
     let onSuccess: (() -> Void)?
     
     init(company: CompanyEntity?, detailType: DetailType, onSuccess: (() -> Void)? = nil) {
-        self._vm = StateObject(wrappedValue: CompanyDetailViewModel())
+        self._vm = StateObject(wrappedValue: DetailViewModel())
         self.detailType = detailType
         
         if let company = company {

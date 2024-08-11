@@ -10,7 +10,7 @@ import RealmSwift
 
 struct ItemDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var vm: AddItemViewModel = AddItemViewModel()
+    @StateObject var vm: DetailViewModel = DetailViewModel()
     
     @State private var selectedDepartment: DepartmentEntity?
     @State private var itemName: String = ""
