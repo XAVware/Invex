@@ -75,8 +75,8 @@ struct POSView: View {
     
 }
 
-//#Preview {
-//    POSView()
-//        .environmentObject(PointOfSaleViewModel())
-//        .environment(\.realm, DepartmentEntity.previewRealm)
-//}
+#Preview {
+    POSView()
+        .environmentObject(PointOfSaleViewModel())
+        .environment(\.realm, DepartmentEntity.previewRealm)
+}

@@ -162,7 +162,6 @@ struct PasscodeView: View {
     }
     
     var body: some View {
-        
         ViewThatFits {
             verLayout
             horLayout

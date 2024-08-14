@@ -11,15 +11,13 @@ struct PrimaryButtonMod: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.headline)
-            .foregroundStyle(Color("TextColorInverted"))
-            .frame(minWidth: 140, idealWidth: 360, maxWidth: 420, minHeight: 36, idealHeight: 48, maxHeight: 54)
-            .background(.accent.opacity(0.75))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .foregroundStyle(Color.textColorInverted)
+            .frame(minWidth: 260, idealWidth: 320, maxWidth: 360, minHeight: 36, idealHeight: 42, maxHeight: 48)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.accent.gradient)
+                    .shadow(color: .gray.opacity(0.8), radius: 3, x: 2, y: 2)
+            )
             .contentShape(RoundedRectangle(cornerRadius: 8))
-            .shadow(color: Color("ShadowColor"), radius: 4, x: 0, y: 0)
     }
 }
-
-
-
-

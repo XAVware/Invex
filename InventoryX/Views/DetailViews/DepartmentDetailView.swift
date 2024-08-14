@@ -73,37 +73,41 @@ struct DepartmentDetailView: View {
                     .foregroundStyle(.red)
                 
                 
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading) {
                     ThemeTextField(boundTo: $name,
                                    placeholder: "i.e. Clothing",
                                    title: "Department Name:",
-                                   subtitle: nil,
+                                   hint: nil,
                                    type: .text)
                     .focused($focus, equals: .name)
                     .submitLabel(.return)
                     .onSubmit { focus = nil }
                     
+                    FieldDivider()
+                    
                     ThemeTextField(boundTo: $restockThreshold,
                                    placeholder: "0",
                                    title: "Restock Threshold:",
-                                   subtitle: "This will help you quickly find items that need to be restocked.",
+                                   hint: "This will help you quickly find items that need to be restocked.",
                                    type: .integer)
                     .keyboardType(.numberPad)
                     .focused($focus, equals: .threshold)
                     .submitLabel(.return)
                     .onSubmit { focus = nil }
                     
+                    FieldDivider()
+                    
                     ThemeTextField(boundTo: $markup,
                                    placeholder: "0",
                                    title: "Default markup:",
-                                   subtitle: "When an item is added to this department it will be marked up by this percentage by default.",
+                                   hint: "When an item is added to this department it will be marked up by this percentage by default.",
                                    type: .percentage)
                     .keyboardType(.numberPad)
                     .focused($focus, equals: .markup)
                     .submitLabel(.return)
                     .onSubmit { focus = nil }
                 } //: VStack
-                .padding(.vertical, 24)
+                .modifier(SectionMod())
                 .onChange(of: focus) { _, newValue in
                     guard !markup.isEmpty else { return }
                     guard let markup = Double(markup) else { return }
@@ -129,11 +133,12 @@ struct DepartmentDetailView: View {
                     }
                 }
             }
-            .background(Color.clear)
             .navigationTitle(detailType == .update ? "Edit department" : "Add department")
             .navigationBarTitleDisplayMode(.large)
         } //: Scroll
+        .frame(maxWidth: .infinity, maxHeight: .infinity) 
         .scrollIndicators(.hidden)
+        .background(Color.bg.ignoresSafeArea())
         .toolbar {
             if detailType == .update {
                 deleteButton
@@ -190,9 +195,10 @@ struct DepartmentDetailView: View {
     
 }
 
-//#Preview {
-//    DepartmentDetailView(department: DepartmentEntity(), detailType: .create) {}
-//}
+#Preview {
+    DepartmentDetailView(department: DepartmentEntity(), detailType: .create) {}
+        .background(Color.bg) 
+}
 
 
 

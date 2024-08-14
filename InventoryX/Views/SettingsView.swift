@@ -97,7 +97,7 @@ struct SettingsView: View {
     
 }
 
-//#Preview {
-//    SettingsView()
-//        .environment(\.realm, DepartmentEntity.previewRealm)
-//}
+#Preview {
+    SettingsView()
+        .environment(\.realm, DepartmentEntity.previewRealm)
+}

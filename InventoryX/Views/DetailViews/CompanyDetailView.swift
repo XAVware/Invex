@@ -60,22 +60,24 @@ struct CompanyDetailView: View {
                 Text(vm.errorMessage)
                     .foregroundStyle(.red)
                 
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading) {
+                    
                     ThemeTextField(boundTo: $companyName,
-                                   placeholder: "Company Name",
+                                   placeholder: "Business Name",
                                    title: "Business Name:",
-                                   subtitle: nil,
+                                   hint: nil,
                                    type: .text)
                     .autocorrectionDisabled()
                     .focused($focus, equals: .name)
                     .submitLabel(.return)
                     .onSubmit { focus = nil }
                     
+                    FieldDivider()
                     
                     ThemeTextField(boundTo: $taxRate,
                                    placeholder: "0",
                                    title: "Tax Rate:",
-                                   subtitle: "If you want us to calculate the tax on your sales, enter a tax rate here.",
+                                   hint: "If you want us to calculate the tax on your sales, enter a tax rate here.",
                                    type: .percentage)
                     .keyboardType(.numberPad)
                     .focused($focus, equals: .taxRate)
@@ -83,7 +85,7 @@ struct CompanyDetailView: View {
                     .onSubmit { focus = nil }
                     
                 } //: VStack
-                .padding(.vertical, 24)
+                .modifier(SectionMod())
                 .onChange(of: focus) { _, newValue in
                     guard !taxRate.isEmpty else { return }
                     guard let tax = Double(taxRate) else { return }
@@ -91,8 +93,6 @@ struct CompanyDetailView: View {
                     self.taxRate = tax.toPercentageString()
                 }
 
-                
-               
                 Spacer()
                 continueButton
                 Spacer()
@@ -104,9 +104,10 @@ struct CompanyDetailView: View {
             .onTapGesture {
                 self.focus = nil
             }
-            .background(Color.clear)
         } //: Scroll
+        .frame(maxWidth: .infinity, maxHeight: .infinity) 
         .scrollIndicators(.hidden)
+        .background(Color.bg.ignoresSafeArea())
     } //: Body
     
     private var continueButton: some View {
@@ -124,6 +125,7 @@ struct CompanyDetailView: View {
 }
 
 
-//#Preview {
-//    CompanyDetailView(company: nil, detailType: .onboarding) {}
-//}
+#Preview {
+    CompanyDetailView(company: nil, detailType: .onboarding) {}
+        .background(Color.bg) 
+}

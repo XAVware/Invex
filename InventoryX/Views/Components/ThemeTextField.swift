@@ -14,94 +14,107 @@ struct ThemeTextField: View {
     @Binding var boundTo: String
     let placeholder: String
     let title: String
-    let subtitle: String?
+    let hint: String?
     let type: FieldType
     
-    var fieldWidth: CGFloat {
-        return switch type {
-        case .text:         .infinity
-        case .integer:      140
-        case .price:        140
-        case .percentage:   140
-        }
-    }
+    @State var showingHint: Bool = false
+    
+//    var fieldWidth: CGFloat {
+//        return switch type {
+//        case .text:         .infinity
+//        case .integer:      140
+//        case .price:        140
+//        case .percentage:   140
+//        }
+//    }
     
     var body: some View {
-        ViewThatFits {
+//        ViewThatFits {
             HStack(alignment: .center, spacing: 16) {
-                labels
+                Text(title)
+                    .foregroundStyle(Color.textPrimary)
+
+                
+                if let hint = hint {
+                    Button("", systemImage: "questionmark.circle.fill") {
+                        showingHint.toggle()
+                    }
+                    .foregroundStyle(Color.textPrimary.opacity(0.35))
+                    .popover(isPresented: $showingHint) {
+                        Text(hint)
+                            .padding()
+                            .frame(minWidth: 200, idealWidth: 280, maxWidth: 320)
+                            .background(Color.white)
+                            .font(.callout)
+                            .presentationCompactAdaptation(.popover)
+                    }
+                }
+                
                 Spacer()
-                field
+                                
+                TextField(placeholder, text: $boundTo)
+                    .multilineTextAlignment(.trailing)
                     .focused($focus, equals: .text)
                     .onTapGesture {
                         self.focus = .text
                     }
             } //: HStack
-            .frame(maxHeight: 140)
+            .font(.subheadline)
+            .padding()
+//            .frame(minHeight: 42, idealHeight: 45, maxHeight: 48)
+//            .background(.fafafa)
+
             
-            VStack(alignment: .trailing, spacing: 16) {
-                labels
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                field
-                    .focused($focus, equals: .text)
-                    .onTapGesture {
-                        self.focus = .text
-                    }
-            } //: VStack
-            .frame(maxHeight: 140)
-        }
+//            VStack(alignment: .trailing, spacing: 16) {
+//                labels
+//                    .frame(maxWidth: .infinity, alignment: .leading)
+//                field
+//                    .focused($focus, equals: .text)
+//                    .onTapGesture {
+//                        self.focus = .text
+//                    }
+//            } //: VStack
+//            .frame(maxHeight: 140)
+//        }
     } //: Body
     
-    private var labels: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .foregroundStyle(Color("TextColor"))
-            
-            if let sub = subtitle {
-                Text(sub)
-                    .fontWeight(.light)
-                    .foregroundStyle(Color("GrayTextColor"))
-                    .lineLimit(3)
-            }
-        } //: VStack
-        .frame(minWidth: 140, maxWidth: 480, alignment: .leading)
-    } //: Labels
+//    private var labels: some View {
+//        HStack(spacing: 8) {
+//            
+//            
+//            
+//            
+//            
+//            
+////            if let sub = subtitle {
+////                Text(sub)
+////                    .fontWeight(.light)
+////                    .foregroundStyle(Color.textSecondary)
+////                    .lineLimit(3)
+////            }
+//        } //: VStack
+//        .frame(minWidth: 140, maxWidth: 480, alignment: .leading)
+//    } //: Labels
     
-    private var field: some View {
-        HStack(spacing: 0) {
-            TextField(placeholder, text: $boundTo)
-                .padding(.horizontal, 12)
-                .multilineTextAlignment(type.textAlignment)
-            
-            if (!type.overlayText.isEmpty) {
-                // Overlay highlight
-                ZStack {
-                    Rectangle()
-                        .fill(.accent)
-                        .opacity(0.8)
-                        .frame(width: 48)
-                    
-                    Text(type.overlayText)
-                        .foregroundStyle(Color("lightAccent"))
-                        .font(.subheadline)
-                        .fontDesign(.rounded)
-                        .scaleEffect(type == FieldType.percentage || type == FieldType.price ? 1.3 : 1.0)
-                }
-            }
-        }
-        .background(.ultraThickMaterial)
-        .overlay(
-            RoundedRectangle(cornerRadius: 6)
-                .stroke(lineWidth: 0.5)
-                .foregroundStyle(Color("GrayTextColor").opacity(0.4))
-                .shadow(color: .accent.opacity(0.2), radius: 4, x: 3, y: 3)
-                .shadow(color: .accent.opacity(0.2), radius: 4, x: -3, y: -3)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 6))
-        .shadow(color: Color("ShadowColor"), radius: 4, x: 0, y: 0)
-        .frame(minWidth: 72, idealWidth: fieldWidth, maxWidth: fieldWidth,
-               minHeight: 42, idealHeight: 45, maxHeight: 48, alignment: .topLeading)
-    } //: Field
+//    private var field: some View {
+//        TextField(placeholder, text: $boundTo)
+//            .multilineTextAlignment(type.textAlignment)
+//            .background(.fafafa)
+////            .overlay(
+////                RoundedRectangle(cornerRadius: 6)
+////                    .stroke(lineWidth: 0.5)
+////                    .foregroundStyle(Color.accentColor.opacity(0.5))
+////                    .shadow(color: .accent.opacity(0.2), radius: 4, x: 3, y: 3)
+////                    .shadow(color: .accent.opacity(0.2), radius: 4, x: -3, y: -3)
+////            )
+//            .clipShape(RoundedRectangle(cornerRadius: 6))
+//
+//            
+//        //        .shadow(color: Color("ShadowColor"), radius: 4, x: 0, y: 0)
+////            .frame(minWidth: 72, idealWidth: fieldWidth, maxWidth: fieldWidth,
+////                   minHeight: 42, idealHeight: 45, maxHeight: 48, alignment: .topLeading)
+//
+//    } //: Field
     
 }
 
@@ -138,12 +151,13 @@ extension ThemeTextField {
     }
 }
 
-//#Preview {
-//    ThemeTextField(boundTo: .constant(""),
-//                   placeholder: "0.00",
-//                   title: "Restock Threshold:",
-//                   subtitle: "This is the number that you want to restock the items in the department at. This will help you quickly find items that need to be restocked.",
-//                   type: .integer)
-//    .padding()
-//    
-//}
+#Preview {
+    ThemeTextField(boundTo: .constant(""),
+                   placeholder: "0.00",
+                   title: "Restock Threshold:",
+                   hint: "This is the number that you want to restock the items in the department at. This will help you quickly find items that need to be restocked.",
+                   type: .integer)
+    .padding()
+    .background(.bg)
+    
+}

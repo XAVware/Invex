@@ -22,6 +22,9 @@ struct ItemDetailView: View {
     let selectedItem: ItemEntity?
     let detailType: DetailType
     
+    @ObservedResults(ItemEntity.self) var items
+    @ObservedResults(DepartmentEntity.self) var departments
+    
     private enum Focus { case name, attribute, price, onHandQty, unitCost }
     @FocusState private var focus: Focus?
     
@@ -85,68 +88,118 @@ struct ItemDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .center, spacing: 24) {
-                VStack(alignment: .center, spacing: 24) {
-                    Text(vm.errorMessage)
-                        .foregroundStyle(.red)
+            VStack(spacing: 16) {
+                Text(vm.errorMessage)
+                    .foregroundStyle(.red)
+                
+                VStack(spacing: 16) {
                     
-                    DepartmentPicker(selectedDepartment: $selectedDepartment, style: .dropdown)
-                        .frame(height: 48)
-                        .onAppear {
-                            if let selectedItem = selectedItem {
-                                self.selectedDepartment = selectedItem.department.first
-                            }
+                    
+                    Section {
+                        VStack(alignment: .leading, spacing: 0) {
+                            ThemeTextField(boundTo: $itemName,
+                                           placeholder: "i.e. Gatorade",
+                                           title: "Item Name:",
+                                           hint: nil,
+                                           type: .text)
+                            .focused($focus, equals: .name)
+                            .submitLabel(.return)
+                            .onSubmit { focus = nil }
+                            
+                            FieldDivider()
+                            
+                            HStack {
+                                Text("Department:")
+                                    .foregroundStyle(Color.textPrimary)
+                                Spacer()
+                                Picker("Departments", selection: $selectedDepartment) {
+                                    ForEach(departments) { department in
+                                        Text(department.name)
+                                            .font(.subheadline)
+                                    }
+                                }
+                                .pickerStyle(NavigationLinkPickerStyle())
+                                .font(.subheadline)
+                            } //: HStack
+                            .foregroundStyle(Color.textPrimary)
+                            .tint(Color.textPrimary)
+                            .font(.subheadline)
+                            .padding()
+                            
+                            FieldDivider()
+                            
+                            ThemeTextField(boundTo: $attribute,
+                                           placeholder: "i.e. Blue",
+                                           title: "Attribute:",
+                                           hint: nil,
+                                           type: .text)
+                            .focused($focus, equals: .attribute)
+                            .submitLabel(.return)
+                            .onSubmit { focus = nil }
                         }
+                        .modifier(SectionMod())
+                    } header: {
+                        Text("General")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .fontWeight(.light)
+                            .foregroundStyle(Color.textSecondary)
+                    } //: Section
                     
-                    Divider()
                     
-                    ThemeTextField(boundTo: $itemName,
-                                   placeholder: "i.e. Gatorade",
-                                   title: "Item Name:",
-                                   subtitle: nil,
-                                   type: .text)
-                    .focused($focus, equals: .name)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
                     
-                    ThemeTextField(boundTo: $attribute,
-                                   placeholder: "i.e. Blue",
-                                   title: "Attribute:",
-                                   subtitle: nil,
-                                   type: .text)
-                    .focused($focus, equals: .attribute)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
                     
-                    ThemeTextField(boundTo: $quantity,
-                                   placeholder: "24",
-                                   title: "On-hand quantity:",
-                                   subtitle: nil,
-                                   type: .integer)
-                    .keyboardType(.numberPad)
-                    .focused($focus, equals: .onHandQty)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
                     
-                    ThemeTextField(boundTo: $retailPrice,
-                                   placeholder: "$ 2.00",
-                                   title: "Retail Price:",
-                                   subtitle: nil,
-                                   type: .price)
-                    .keyboardType(.numberPad)
-                    .focused($focus, equals: .price)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
+                    Section {
+                        VStack(alignment: .leading, spacing: 0) {
+                            ThemeTextField(boundTo: $quantity,
+                                           placeholder: "24",
+                                           title: "On-hand quantity:",
+                                           hint: nil,
+                                           type: .integer)
+                            .keyboardType(.numberPad)
+                            .focused($focus, equals: .onHandQty)
+                            .submitLabel(.return)
+                            .onSubmit { focus = nil }
+                        } //: VStack
+                        .modifier(SectionMod())
+                    } header: {
+                        Text("Stock")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .fontWeight(.light)
+                            .foregroundStyle(Color.textSecondary)
+                    } //: Section
                     
-                    ThemeTextField(boundTo: $unitCost,
-                                   placeholder: "$ 1.00",
-                                   title: "Unit Cost:",
-                                   subtitle: nil,
-                                   type: .price)
-                    .keyboardType(.numberPad)
-                    .focused($focus, equals: .unitCost)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
+                    Section {
+                        VStack(alignment: .leading, spacing: 0) {
+                            ThemeTextField(boundTo: $retailPrice,
+                                           placeholder: "$ 2.00",
+                                           title: "Retail Price:",
+                                           hint: nil,
+                                           type: .price)
+                            .keyboardType(.numberPad)
+                            .focused($focus, equals: .price)
+                            .submitLabel(.return)
+                            .onSubmit { focus = nil }
+                            FieldDivider()
+                            ThemeTextField(boundTo: $unitCost,
+                                           placeholder: "$ 1.00",
+                                           title: "Unit Cost:",
+                                           hint: nil,
+                                           type: .price)
+                            .keyboardType(.numberPad)
+                            .focused($focus, equals: .unitCost)
+                            .submitLabel(.return)
+                            .onSubmit { focus = nil }
+                            
+                        } //: VStack
+                        .modifier(SectionMod())
+                    } header: {
+                        Text("Pricing")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .fontWeight(.light)
+                            .foregroundStyle(Color.textSecondary)
+                    } //: Section
+                    
                 } //: VStack
                 .onChange(of: focus) { _, newValue in
                     if !retailPrice.isEmpty {
@@ -202,7 +255,9 @@ struct ItemDetailView: View {
             .navigationBarTitleDisplayMode(.large)
             .background(Color.clear)
         } //: Scroll
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .scrollIndicators(.hidden)
+        .background(Color.bg.ignoresSafeArea())
         .alert("Are you sure? This can't be undone.", isPresented: $showDeleteConfirmation) {
             Button("Go back", role: .cancel) { }
             Button("Yes, delete Item", role: .destructive) {
@@ -253,7 +308,9 @@ struct ItemDetailView: View {
     
 }
 
-//#Preview {
-//    ItemDetailView(item: ItemEntity(), detailType: .create) {}
-//}
+#Preview {
+    ItemDetailView(item: ItemEntity(), detailType: .create) {}
+        .environment(\.realm, DepartmentEntity.previewRealm)
+        .background(Color.bg)
+}
 
