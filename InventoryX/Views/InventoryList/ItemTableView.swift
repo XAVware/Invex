@@ -15,7 +15,7 @@ struct ItemTableView: View {
     @State private var sortOrder: [KeyPathComparator<ItemEntity>] = []
     
     func onSelect(_ item: ItemEntity) {
-        LazySplitService.shared.pushPrimary(.item(item, .update))
+        LSXService.shared.update(newDisplay: .item(item, .update))
     }
     
     var body: some View {
@@ -86,7 +86,6 @@ struct ItemTableView: View {
                     TableRow($0)
                 }
             } //: Table
-            
             //        .onAppear {
             //            sortOrder = [KeyPathComparator(\ItemEntity.name)]
             //        }
@@ -97,11 +96,7 @@ struct ItemTableView: View {
             .scrollContentBackground(.hidden)
             .padding(.vertical, 6)
             .frame(maxWidth: .infinity)
-            //        .clipShape(RoundedRectangle(cornerRadius: 8))
-            //        .overlay(
-            //            RoundedRectangle(cornerRadius: 8)
-            //                .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
-            //        )
+
         }
     }
 }

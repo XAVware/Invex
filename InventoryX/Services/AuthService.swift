@@ -9,13 +9,14 @@ import SwiftUI
 import CryptoKit
 
 class AuthService {
+    private let UDPasscodeKey = "passcode"
     @Published var exists: Bool
     @Published var passHash: String = ""
     
     static let shared = AuthService()
     
     init() {
-        self.exists = UserDefaults.standard.object(forKey: "passcode") != nil
+        self.exists = UserDefaults.standard.object(forKey: UDPasscodeKey) != nil
         
         if self.exists {
             self.passHash = getCurrentPasscode() ?? ""
@@ -30,7 +31,7 @@ class AuthService {
     }
     
     func savePasscode(hash: String) async {
-        UserDefaults.standard.setValue(hash, forKey: "passcode")
+        UserDefaults.standard.setValue(hash, forKey: UDPasscodeKey)
         self.passHash = hash
     }
     
@@ -40,11 +41,11 @@ class AuthService {
     }
     
     func getCurrentPasscode() -> String? {
-        return UserDefaults.standard.value(forKey: "passcode") as? String
+        return UserDefaults.standard.value(forKey: UDPasscodeKey) as? String
     }
     
     func deleteAll() {
-        UserDefaults.standard.removeObject(forKey: "passcode")
+        UserDefaults.standard.removeObject(forKey: UDPasscodeKey)
         self.passHash = ""
         self.exists = false
     }

@@ -30,7 +30,6 @@ extension SaleEntity {
 
 
 extension SaleItemEntity {
-    
-    static let saleItem1: SaleItemEntity = SaleItemEntity(name: "Cheetos", attribute: "sample", retailPrice: 1.0, unitPrice: 1.5)
-    static let saleItem2: SaleItemEntity = SaleItemEntity(name: "Milk", attribute: "sample", retailPrice: 1.0, unitPrice: 1.0)
+    static let saleItem1: SaleItemEntity = SaleItemEntity(item: ItemEntity.item1)
+    static let saleItem2: SaleItemEntity = SaleItemEntity(item: ItemEntity.item2)
 }

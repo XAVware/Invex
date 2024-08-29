@@ -27,32 +27,18 @@ class ItemEntity: Object, ObjectKeyIdentifiable {
         self.onHandQty = onHandQty
     }
     
-    var formattedPrice: String {
-        return self.retailPrice.formatAsCurrencyString()
-    }
-    
-    var formattedQty: String {
-        return String(describing: self.onHandQty)
-    }
-    
-    var formattedUnitCost: String {
-        return self.unitCost.formatAsCurrencyString()
-    }
+    var formattedPrice: String { retailPrice.formatAsCurrencyString() }
+    var formattedQty: String { String(describing: onHandQty) }
+    var formattedUnitCost: String { unitCost.formatAsCurrencyString() }
+    var departmentName: String { department.first?.name ?? "" }
     
     var showWarning: Bool {
         guard let dept = self.department.first else { return true }
-        return self.onHandQty < dept.restockNumber
+        return onHandQty < dept.restockNumber
     }
     
     var restockWarning: String {
         guard let dept = department.first else { return "" }
         return onHandQty < dept.restockNumber ? "⚠️" : ""
     }
-    
-    var departmentName: String {
-        return department.first?.name ?? ""
-    }
-    
-//    var id: UInt64 { return UInt64.}
-    
 }

@@ -53,7 +53,6 @@ import SwiftUI
     @Published var authService: AuthService
     @Published var processes: [PasscodeViewState]
     @Published var passcodeHash: String = ""
-    //    @Published var showTitles: Bool
     let onSuccess: (() -> Void)
     
     
@@ -65,7 +64,6 @@ import SwiftUI
         self.authService = authService
         self.onSuccess = onSuccess
         self.processes = processes
-        //        self.showTitles = showTitles
     }
     
     func passcodeSubmitted(code: String) async throws {

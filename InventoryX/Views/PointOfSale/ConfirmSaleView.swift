@@ -17,7 +17,7 @@ struct ConfirmSaleView: View {
         Task {
             do {
                 try await vm.finalizeSale()
-                LazySplitService.shared.popPrimary()
+//                LazySplitService.shared.popPrimary()
             } catch {
                 debugPrint("Error saving sale: \(error)")
             }

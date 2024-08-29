@@ -25,7 +25,6 @@ struct MoveItemsView: View {
                 
                 Text("Move items")
                     .font(.largeTitle)
-                
             } //: VStack
             .fontDesign(.rounded)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -35,7 +34,7 @@ struct MoveItemsView: View {
             HStack(spacing: 24) {
                 VStack(alignment: .leading) {
                     Text("From:")
-                    DepartmentPicker(selectedDepartment: $fromDepartment, style: .dropdown)
+                    DepartmentPicker(selectedDepartment: $fromDepartment)
                         .frame(height: 48)
                 }
                 
@@ -49,7 +48,7 @@ struct MoveItemsView: View {
                 
                 VStack(alignment: .leading) {
                     Text("To:")
-                    DepartmentPicker(selectedDepartment: $toDepartment, style: .dropdown)
+                    DepartmentPicker(selectedDepartment: $toDepartment)
                         .frame(height: 48)
                 }
             }

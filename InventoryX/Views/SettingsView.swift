@@ -19,7 +19,7 @@ struct SettingsView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Button {
-                LazySplitService.shared.setDetailRoot(DetailPath.company(CompanyEntity(name: settingsVM.companyName, taxRate: Double(settingsVM.taxRateStr) ?? 0.0), .update))
+                LSXService.shared.update(newDisplay: .company(CompanyEntity(name: settingsVM.companyName, taxRate: Double(settingsVM.taxRateStr) ?? 0.0), .update))
             } label: {
                 HStack {
                     Image(systemName: "case")
@@ -33,7 +33,7 @@ struct SettingsView: View {
             .foregroundStyle(.accent)
             
             Button {
-                LazySplitService.shared.setDetailRoot(.passcodePad([.confirm, .set]))
+                LSXService.shared.update(newDisplay: .passcodePad([.confirm, .set]))
             } label: {
                 HStack {
                     Image(systemName: "lock")
@@ -47,7 +47,7 @@ struct SettingsView: View {
             .foregroundStyle(.accent)
             
             Button {
-                LazySplitService.shared.popDetail()
+//                LSXService.shared.popDetail()
                 
                 showDeleteConfirmation = true
             } label: {
@@ -82,10 +82,10 @@ struct SettingsView: View {
         .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
             Button("Go back", role: .cancel) { }
             Button("Yes, delete account", role: .destructive) {
-                LazySplitService.shared.primaryRoot = .makeASale
-                LazySplitService.shared.detailRoot =  nil
-                LazySplitService.shared.primaryPath = .init()
-                LazySplitService.shared.detailPath = .init()
+//                LSXService.shared.primaryRoot = .makeASale
+//                LSXService.shared.detailRoot =  nil
+//                LSXService.shared.primaryPath = .init()
+//                LSXService.shared.detailPath = .init()
                 
                 Task {
                     await settingsVM.deleteAccount()

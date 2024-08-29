@@ -12,6 +12,12 @@ class CompanyEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var name: String
     @Persisted var taxRate: Double
+//    @Persisted var industry: String // Could be used for improving the app based on popular demand
+//    @Persisted var email: String
+//    @Persisted var streetAddress: String?
+//    @Persisted var city: String?
+//    @Persisted var state: String?
+//    @Persisted var zipCode: String?
     
     convenience init(name: String, taxRate: Double = 0) {
         self.init()

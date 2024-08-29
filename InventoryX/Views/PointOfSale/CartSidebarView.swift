@@ -22,7 +22,7 @@ struct CartSidebarView: View {
         if vm.cartItems.isEmpty {
             showCartAlert.toggle()
         } else {
-            LazySplitService.shared.pushPrimary(.confirmSale)
+            LSXService.shared.update(newDisplay: .confirmSale)
         }
     }
     

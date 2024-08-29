@@ -61,8 +61,7 @@ actor RealmActor {
     
     // MARK: - DEPARTMENTS
     /// Fetch all departments
-    @MainActor
-    func fetchDepartments() async throws -> Results<DepartmentEntity> {
+    @MainActor func fetchDepartments() async throws -> Results<DepartmentEntity> {
         let realm = try await Realm()
         return realm.objects(DepartmentEntity.self)
     }
@@ -79,8 +78,7 @@ actor RealmActor {
     }
     
     /// Update an existing department
-    @MainActor
-    func updateDepartment(dept: DepartmentEntity, newName: String, thresh: String, markup: String) async throws {
+    @MainActor func updateDepartment(dept: DepartmentEntity, newName: String, thresh: String, markup: String) async throws {
         guard let thresh = Int(thresh)      else { throw AppError.numericThresholdRequired }
         guard let markup = Double(markup)   else { throw AppError.invalidMarkup }
         guard let dept = dept.thaw()        else { throw AppError.thawingDepartmentError }
@@ -93,8 +91,7 @@ actor RealmActor {
         }
     }
     
-    @MainActor
-    func deleteDepartment(id: RealmSwift.ObjectId) async throws {
+    @MainActor func deleteDepartment(id: RealmSwift.ObjectId) async throws {
         let realm = try await Realm()
         guard let dept = realm.object(ofType: DepartmentEntity.self,
                                       forPrimaryKey: id) else { throw AppError.departmentDoesNotExist }
@@ -106,8 +103,7 @@ actor RealmActor {
     }
     
     /// Sales use a SaleEntity model instead of ItemEntity, so there's no risk of losing sale data.
-    @MainActor
-    func deleteItem(withId id: ObjectId) async throws {
+    @MainActor func deleteItem(withId id: ObjectId) async throws {
         // Make sure item is not currently in cart.
         let realm = try await Realm()
         guard let item = realm.object(ofType: ItemEntity.self, forPrimaryKey: id) else { throw AppError.noItemFound }
@@ -118,14 +114,12 @@ actor RealmActor {
     }
     
     // MARK: - ITEMS
-    @MainActor
-    func fetchAllItems() throws -> Results<ItemEntity> {
+    @MainActor func fetchAllItems() throws -> Results<ItemEntity> {
         let realm = try Realm()
         return realm.objects(ItemEntity.self)
     }
     
-    @MainActor
-    func fetchItem(withId id: ObjectId) throws -> ItemEntity {
+    @MainActor func fetchItem(withId id: ObjectId) throws -> ItemEntity {
         let realm = try Realm()
         return realm.object(ofType: ItemEntity.self, forPrimaryKey: id) ?? ItemEntity()
     }
@@ -146,8 +140,7 @@ actor RealmActor {
         }
     } //: Save Item
     
-    @MainActor
-    func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) async throws {
+    @MainActor func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) async throws {
         let price = price.replacingOccurrences(of: "$", with: "")
         let cost = cost.replacingOccurrences(of: "$", with: "")
         
@@ -168,8 +161,7 @@ actor RealmActor {
         
     }
     
-    @MainActor
-    func moveItems(from fromDept: DepartmentEntity, to toDept: DepartmentEntity) async throws {
+    @MainActor func moveItems(from fromDept: DepartmentEntity, to toDept: DepartmentEntity) async throws {
         let realm = try await Realm()
         let itemsToMove = fromDept.items
         guard itemsToMove.count > 0 else {
@@ -194,8 +186,7 @@ actor RealmActor {
         }
     }
     
-    @MainActor
-    func adjustStock(for item: ItemEntity, by amt: Int) async throws {
+    @MainActor func adjustStock(for item: ItemEntity, by amt: Int) async throws {
         if let invItem = item.thaw() {
             let newOnHandQty = invItem.onHandQty - amt
             let realm = try await Realm()
@@ -206,8 +197,7 @@ actor RealmActor {
     }
     
     /// Try to get the number of sales, otherwise return 0
-    @MainActor
-    func getSalesCount() -> Int {
+    @MainActor func getSalesCount() -> Int {
         let realm = try? Realm()
         let count = realm?.objects(SaleEntity.self).count ?? 0
         return count + 1

@@ -47,9 +47,9 @@ struct InventoryListView: View {
                     
                     Button("Add", systemImage: "plus") {
                         if selectedTableType == .items {
-                            LazySplitService.shared.pushPrimary(.item(nil, .create))
+                            LSXService.shared.update(newDisplay: .item(nil, .create))
                         } else {
-                            LazySplitService.shared.pushPrimary(.department(nil, .create))
+                            LSXService.shared.update(newDisplay: .department(nil, .create))
                         }
                     }
                 }

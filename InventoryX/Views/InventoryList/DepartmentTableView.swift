@@ -12,7 +12,7 @@ struct DepartmentTableView: View {
     @ObservedResults(DepartmentEntity.self) var depts
     
     func onSelect(_ dept: DepartmentEntity) {
-        LazySplitService.shared.pushPrimary(.department(dept, .update))
+        LSXService.shared.update(newDisplay: .department(dept, .update))
     }
     
     var body: some View {
@@ -56,11 +56,6 @@ struct DepartmentTableView: View {
         } //: Table
         .scrollContentBackground(.hidden)
         .padding(.vertical, 6)
-        //        .clipShape(RoundedRectangle(cornerRadius: 8))
-        //        .overlay(
-        //            RoundedRectangle(cornerRadius: 8)
-        //                .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
-        //        )
         .frame(maxWidth: .infinity)
         
     }
