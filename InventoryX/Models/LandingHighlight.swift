@@ -9,7 +9,7 @@ import Foundation
 
 struct LandingHighlight: Identifiable {
     let id: UUID = UUID()
-    let iconName: String
+    let imageName: String
     let title: String
     let caption: String
 }

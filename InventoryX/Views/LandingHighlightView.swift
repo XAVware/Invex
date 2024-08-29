@@ -12,27 +12,37 @@ struct LandingHighlightView: View {
     let vSize: UserInterfaceSizeClass?
     
     var body: some View {
-        HStack(spacing: 16) {
-            Image(systemName: highlight.iconName)
-                .foregroundStyle(.accent)
-                .padding(6)
-                .font(vSize == .regular ? .largeTitle : .title2)
+        ZStack(alignment: .center) {
+            NeomophicCardView(layer: .under)
             
-            VStack(alignment: .leading, spacing: 6) {
-                Text(highlight.title)
-                    .font(.headline)
+            VStack(spacing: 16) {
+                Image(highlight.imageName)
+                    .resizable()
+                    .scaledToFit()
+//                    .rotationEffect(Angle(degrees: -4))
                 
-                Text(highlight.caption)
-                    .font(.subheadline)
-                    .multilineTextAlignment(.leading)
-                    .lineLimit(3)
-                    .frame(minHeight: 42)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        } //: HStack
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(highlight.title)
+                        .font(.title)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.accent)
+                    
+                    Text(highlight.caption)
+                        .font(.title3)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(3)
+                        .frame(minHeight: 42)
+                } //: VStack
+                .fontDesign(.rounded)
+                .padding()
+                .frame(maxWidth: 540, maxHeight: 180, alignment: .leading)
+            } //: VStack
+            .padding()
+            .frame(maxWidth: 540)
+        }
     }
 }
 
 #Preview {
-    LandingHighlightView(highlight: LandingHighlight(iconName: "archivebox", title: "Title", caption: "Caption"), vSize: .regular)
+    LandingHighlightView(highlight: LandingHighlight(imageName: "archivebox", title: "Title", caption: "Caption"), vSize: .regular)
 }

@@ -67,6 +67,8 @@
 		94815B572C6B32640085EE3C /* FieldDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94815B562C6B32640085EE3C /* FieldDivider.swift */; };
 		94AD4E5F2BF004EA007647E4 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 94AD4E5E2BF004EA007647E4 /* Realm */; };
 		94AD4E612BF004EA007647E4 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 94AD4E602BF004EA007647E4 /* RealmSwift */; };
+		94E10E382C80EAB00091ABBF /* NeomophicCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E10E372C80EAB00091ABBF /* NeomophicCardView.swift */; };
+		94E10E3A2C80ED2E0091ABBF /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E10E392C80ED2E0091ABBF /* PrimaryButton.swift */; };
 		94E1853F2C7F30CB0011A3F8 /* SaleItemEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E1853E2C7F30CB0011A3F8 /* SaleItemEntity.swift */; };
 		94E185412C7FD1880011A3F8 /* LandingHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E185402C7FD1880011A3F8 /* LandingHighlight.swift */; };
 		94FA6CCB2C6C01BE001D3CA8 /* NeoUnderShadow-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCA2C6C01BE001D3CA8 /* NeoUnderShadow-Mod.swift */; };
@@ -139,6 +141,8 @@
 		942189972C23766600C78586 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		943AACD02C6B224C005056F0 /* Section-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Section-Mod.swift"; sourceTree = "<group>"; };
 		94815B562C6B32640085EE3C /* FieldDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldDivider.swift; sourceTree = "<group>"; };
+		94E10E372C80EAB00091ABBF /* NeomophicCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomophicCardView.swift; sourceTree = "<group>"; };
+		94E10E392C80ED2E0091ABBF /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		94E1853E2C7F30CB0011A3F8 /* SaleItemEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleItemEntity.swift; sourceTree = "<group>"; };
 		94E185402C7FD1880011A3F8 /* LandingHighlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingHighlight.swift; sourceTree = "<group>"; };
 		94FA6CCA2C6C01BE001D3CA8 /* NeoUnderShadow-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NeoUnderShadow-Mod.swift"; sourceTree = "<group>"; };
@@ -274,6 +278,8 @@
 				942189272C2375AC00C78586 /* NumberPadView.swift */,
 				942189282C2375AC00C78586 /* ThemeTextField.swift */,
 				94815B562C6B32640085EE3C /* FieldDivider.swift */,
+				94E10E372C80EAB00091ABBF /* NeomophicCardView.swift */,
+				94E10E392C80ED2E0091ABBF /* PrimaryButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -506,6 +512,7 @@
 				9421897D2C2375AD00C78586 /* ItemGridView.swift in Sources */,
 				94FA6CE02C6E64CD001D3CA8 /* LandingView.swift in Sources */,
 				9421897C2C2375AD00C78586 /* ConfirmSaleView.swift in Sources */,
+				94E10E382C80EAB00091ABBF /* NeomophicCardView.swift in Sources */,
 				942189802C2375AD00C78586 /* MenuView.swift in Sources */,
 				942189822C2375AD00C78586 /* OnboardingView.swift in Sources */,
 				9421896A2C2375AD00C78586 /* CartState.swift in Sources */,
@@ -521,6 +528,7 @@
 				942189732C2375AD00C78586 /* ThemeTextField.swift in Sources */,
 				9421898F2C2375AD00C78586 /* ItemEntity.swift in Sources */,
 				9421897F2C2375AD00C78586 /* LockScreenView.swift in Sources */,
+				94E10E3A2C80ED2E0091ABBF /* PrimaryButton.swift in Sources */,
 				9421895A2C2375AD00C78586 /* Date+Ext.swift in Sources */,
 				943AACD12C6B224C005056F0 /* Section-Mod.swift in Sources */,
 				9421895B2C2375AD00C78586 /* Double+Ext.swift in Sources */,
