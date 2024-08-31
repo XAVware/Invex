@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NeomophicCardView: View {
+struct NeomorphicCardView: View {
     enum Layer { case under, over }
     
     @State var layer: Layer
@@ -15,7 +15,7 @@ struct NeomophicCardView: View {
     var body: some View {
         switch layer {
         case .under:
-            RoundedRectangle(cornerRadius: 24)
+            RoundedRectangle(cornerRadius: 18)
                 .fill(
                     .shadow(.inner(color: .neoUnderDark, radius: 3, x: 2, y: 1))
                     .shadow(.inner(color: .neoUnderLight, radius: 2, x: -3, y: -2))
@@ -56,7 +56,7 @@ struct NeomophicCardView: View {
 //        ]), startPoint: .topLeading, endPoint: .bottomTrailing)
 //        
         Color.bg
-        NeomophicCardView(layer: .under)
+        NeomorphicCardView(layer: .under)
             .padding(64)
     }
 }

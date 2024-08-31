@@ -34,8 +34,15 @@ struct InventoryXApp: SwiftUI.App {
 
     init() {
         UIColor.classInit
-        UIPageControl.appearance().currentPageIndicatorTintColor = .accent.withAlphaComponent(0.8)
-        UIPageControl.appearance().pageIndicatorTintColor = .accent.withAlphaComponent(0.2)
+        
+         /*
+          TODO: Document this in LazySplitX
+          I added this to change the color of the page indicator dots in a Tab View Page style. It seems to cause the default tinting of all components, including buttons, table headers, and LazySplitX toolbar buttons, to revert back to blue.
+          
+          UIPageControl.appearance().currentPageIndicatorTintColor = .accent.withAlphaComponent(0.8)
+          UIPageControl.appearance().pageIndicatorTintColor = .accent.withAlphaComponent(0.2)
+          */
+         
     }
     
     var body: some Scene {

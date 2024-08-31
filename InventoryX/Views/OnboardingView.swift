@@ -10,8 +10,6 @@ import RealmSwift
 
 struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
-//    @Environment(\.horizontalSizeClass) var hSize
-//    @Environment(\.verticalSizeClass) var vSize
     
     @State var path: NavigationPath = .init()
     

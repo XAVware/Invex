@@ -24,7 +24,7 @@ struct LockScreenView: View {
         } //: HStack
         .frame(maxWidth: .infinity)
         .overlay(dateTimeLabel, alignment: .topLeading)
-        .background(Color("bgColor"))
+        .background(Color.bg)
     }
     
     private var dateTimeLabel: some View {

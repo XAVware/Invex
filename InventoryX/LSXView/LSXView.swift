@@ -55,6 +55,7 @@ struct LSXView<S: View, C: View, D: View>: View {
                         , alignment: .leading
                     )
             } //: Navigation Stack
+            
             .onAppear {
                 vm.setHorIsCompact(isCompact: horSize == .compact)
             }
@@ -83,7 +84,7 @@ struct LSXView<S: View, C: View, D: View>: View {
                 .toolbar { menuToolbar }
         } detail: {
             contentLayout
-                .navigationBarBackButtonHidden() // I: Hides back button resulting from moving toolbar control back to views.
+                .navigationBarBackButtonHidden() // Hides back button resulting from moving toolbar control back to views.
 //                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {

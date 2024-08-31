@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LandingHighlight: Identifiable {
+struct LandingHighlight: Identifiable, Hashable {
     let id: UUID = UUID()
     let imageName: String
     let title: String
