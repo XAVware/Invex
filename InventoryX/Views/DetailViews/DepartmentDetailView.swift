@@ -72,50 +72,56 @@ struct DepartmentDetailView: View {
                 Text(vm.errorMessage)
                     .foregroundStyle(.red)
                 
-                
-                VStack(alignment: .leading) {
-                    ThemeTextField(boundTo: $name,
-                                   placeholder: "i.e. Clothing",
-                                   title: "Department Name:",
-                                   hint: nil,
-                                   type: .text)
-                    .focused($focus, equals: .name)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
-                    
-                    FieldDivider()
-                    
-                    ThemeTextField(boundTo: $restockThreshold,
-                                   placeholder: "0",
-                                   title: "Restock Threshold:",
-                                   hint: "This will help you quickly find items that need to be restocked.",
-                                   type: .integer)
-                    .keyboardType(.numberPad)
-                    .focused($focus, equals: .threshold)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
-                    
-                    FieldDivider()
-                    
-                    ThemeTextField(boundTo: $markup,
-                                   placeholder: "0",
-                                   title: "Default markup:",
-                                   hint: "When an item is added to this department it will be marked up by this percentage by default.",
-                                   type: .percentage)
-                    .keyboardType(.numberPad)
-                    .focused($focus, equals: .markup)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
-                } //: VStack
-                .modifier(SectionMod())
-                .onChange(of: focus) { _, newValue in
-                    guard !markup.isEmpty else { return }
-                    guard let markup = Double(markup) else { return }
-                    self.markup = markup.toPercentageString()
+                NeomorphicSection(header: "General") {
+                    VStack(alignment: .leading) {
+                        ThemeTextField(boundTo: $name,
+                                       placeholder: "i.e. Clothing",
+                                       title: "Department Name:",
+                                       hint: nil,
+                                       type: .text)
+                        .focused($focus, equals: .name)
+                        .submitLabel(.return)
+                        .onSubmit { focus = nil }
+                        
+                        FieldDivider()
+                        
+                        ThemeTextField(boundTo: $restockThreshold,
+                                       placeholder: "0",
+                                       title: "Restock Qty:",
+                                       hint: "This will help you quickly find items that need to be restocked.",
+                                       type: .integer)
+                        .keyboardType(.numberPad)
+                        .focused($focus, equals: .threshold)
+                        .submitLabel(.return)
+                        .onSubmit { focus = nil }
+                        
+                        FieldDivider()
+                        
+                        ThemeTextField(boundTo: $markup,
+                                       placeholder: "0",
+                                       title: "Default markup:",
+                                       hint: "When an item is added to this department it will be marked up by this percentage by default.",
+                                       type: .percentage)
+                        .keyboardType(.numberPad)
+                        .focused($focus, equals: .markup)
+                        .submitLabel(.return)
+                        .onSubmit { focus = nil }
+                    } //: VStack
+                    .onChange(of: focus) { _, newValue in
+                        guard !markup.isEmpty else { return }
+                        guard let markup = Double(markup) else { return }
+                        self.markup = markup.toPercentageString()
+                    }
                 }
                 
                 Spacer()
-                continueButton
+                
+                Button(action: continueTapped) {
+                    Text("Continue")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(ThemeButtonStyle())
+                
                 Spacer()
                 
             } //: VStack
@@ -145,18 +151,6 @@ struct DepartmentDetailView: View {
             }
         }
     } //: Body
-    
-    private var continueButton: some View {
-        Button {
-            continueTapped()
-        } label: {
-            Spacer()
-            Text("Continue")
-            Spacer()
-        }
-        .modifier(PrimaryButtonMod())
-    }
-    
     
     private var deleteButton: some View {
         Menu {

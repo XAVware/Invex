@@ -60,41 +60,48 @@ struct CompanyDetailView: View {
                 Text(vm.errorMessage)
                     .foregroundStyle(.red)
                 
-                VStack(alignment: .leading) {
-                    
-                    ThemeTextField(boundTo: $companyName,
-                                   placeholder: "Business Name",
-                                   title: "Business Name:",
-                                   hint: nil,
-                                   type: .text)
-                    .autocorrectionDisabled()
-                    .focused($focus, equals: .name)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
-                    
-                    FieldDivider()
-                    
-                    ThemeTextField(boundTo: $taxRate,
-                                   placeholder: "0",
-                                   title: "Tax Rate:",
-                                   hint: "If you want us to calculate the tax on your sales, enter a tax rate here.",
-                                   type: .percentage)
-                    .keyboardType(.numberPad)
-                    .focused($focus, equals: .taxRate)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
-                    
-                } //: VStack
-                .modifier(SectionMod())
-                .onChange(of: focus) { _, newValue in
-                    guard !taxRate.isEmpty else { return }
-                    guard let tax = Double(taxRate) else { return }
-                    guard tax != 0 else { return }
-                    self.taxRate = tax.toPercentageString()
+                NeomorphicSection(header: "General") {
+                    VStack(alignment: .leading) {
+                        
+                        ThemeTextField(boundTo: $companyName,
+                                       placeholder: "Business Name",
+                                       title: "Business Name:",
+                                       hint: nil,
+                                       type: .text)
+                        .autocorrectionDisabled()
+                        .focused($focus, equals: .name)
+                        .submitLabel(.return)
+                        .onSubmit { focus = nil }
+                        
+                        FieldDivider()
+                        
+                        ThemeTextField(boundTo: $taxRate,
+                                       placeholder: "0",
+                                       title: "Tax Rate:",
+                                       hint: "If you want us to calculate the tax on your sales, enter a tax rate here.",
+                                       type: .percentage)
+                        .keyboardType(.numberPad)
+                        .focused($focus, equals: .taxRate)
+                        .submitLabel(.return)
+                        .onSubmit { focus = nil }
+                        
+                    } //: VStack
+                    .onChange(of: focus) { _, newValue in
+                        guard !taxRate.isEmpty else { return }
+                        guard let tax = Double(taxRate) else { return }
+                        guard tax != 0 else { return }
+                        self.taxRate = tax.toPercentageString()
+                    }
                 }
-
+               
                 Spacer()
-                continueButton
+                
+                Button(action: continueTapped) {
+                    Text("Continue")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(ThemeButtonStyle())
+                
                 Spacer()
             } //: VStack
             .navigationTitle("Company info")
@@ -110,22 +117,44 @@ struct CompanyDetailView: View {
         .background(Color.bg.ignoresSafeArea())
     } //: Body
     
-    private var continueButton: some View {
-        Button {
-            continueTapped()
-        } label: {
-            Spacer()
-            Text("Continue")
-            Spacer()
-        }
-        .modifier(PrimaryButtonMod())
-        .padding()
-        .padding(.bottom, 24)
-    }
 }
 
 
 #Preview {
     CompanyDetailView(company: nil, detailType: .onboarding) {}
         .background(Color.bg) 
+}
+
+struct NeomorphicSection<C: View>: View {
+    let content: C
+    let headerText: String
+    
+    init(header: String, @ViewBuilder content: (() -> C)) {
+        self.content = content()
+        self.headerText = header
+    }
+    
+    var body: some View {
+        Section {
+            ZStack {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(
+                        .shadow(.inner(color: .neoUnderDark, radius: 3, x: 1, y: 1))
+                        .shadow(.inner(color: .neoUnderLight, radius: 2, x: -3, y: -2))
+                    )
+                    .foregroundColor(.neoUnderBg)
+                
+                content
+                    .padding(.vertical, 6)
+            }
+        } header: {
+            Text(headerText)
+                .padding(.horizontal, 10)
+//                .padding(.vertical, -8)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fontWeight(.light)
+                .foregroundStyle(Color.textSecondary)
+        }
+    }
+    
 }

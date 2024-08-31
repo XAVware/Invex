@@ -49,7 +49,7 @@ struct MenuView: View {
         .navigationTitle("Menu")
         .navigationBarTitleDisplayMode(.inline)
         .background(
-            Color.lightAccent
+            Color.bg
                 .cornerRadius(36, corners: [.topRight, .bottomRight])
                 .shadow(radius: 2)
                 .ignoresSafeArea()

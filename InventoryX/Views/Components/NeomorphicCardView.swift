@@ -17,7 +17,7 @@ struct NeomorphicCardView: View {
         case .under:
             RoundedRectangle(cornerRadius: 18)
                 .fill(
-                    .shadow(.inner(color: .neoUnderDark, radius: 3, x: 2, y: 1))
+                    .shadow(.inner(color: .neoUnderDark, radius: 3, x: 1, y: 1))
                     .shadow(.inner(color: .neoUnderLight, radius: 2, x: -3, y: -2))
                 )
                 .foregroundColor(.neoUnderBg)

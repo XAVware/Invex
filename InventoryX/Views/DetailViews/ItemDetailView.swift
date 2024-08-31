@@ -93,9 +93,7 @@ struct ItemDetailView: View {
                     .foregroundStyle(.red)
                 
                 VStack(spacing: 16) {
-                    
-                    
-                    Section {
+                    NeomorphicSection(header: "General") {
                         VStack(alignment: .leading, spacing: 0) {
                             ThemeTextField(boundTo: $itemName,
                                            placeholder: "i.e. Gatorade",
@@ -109,17 +107,14 @@ struct ItemDetailView: View {
                             FieldDivider()
                             
                             HStack {
-                                Text("Department:")
-                                    .foregroundStyle(Color.textPrimary)
-                                Spacer()
-                                Picker("Departments", selection: $selectedDepartment) {
+                                Picker("Department:", selection: $selectedDepartment) {
                                     ForEach(departments) { department in
                                         Text(department.name)
-                                            .font(.subheadline)
+                                            .font(.subheadline) 
                                     }
                                 }
                                 .pickerStyle(NavigationLinkPickerStyle())
-                                .font(.subheadline)
+//                                .font(.subheadline)
                             } //: HStack
                             .foregroundStyle(Color.textPrimary)
                             .tint(Color.textPrimary)
@@ -137,19 +132,9 @@ struct ItemDetailView: View {
                             .submitLabel(.return)
                             .onSubmit { focus = nil }
                         }
-                        .modifier(SectionMod())
-                    } header: {
-                        Text("General")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .fontWeight(.light)
-                            .foregroundStyle(Color.textSecondary)
-                    } //: Section
+                    }
                     
-                    
-                    
-                    
-                    
-                    Section {
+                    NeomorphicSection(header: "Stock") {
                         VStack(alignment: .leading, spacing: 0) {
                             ThemeTextField(boundTo: $quantity,
                                            placeholder: "24",
@@ -161,15 +146,9 @@ struct ItemDetailView: View {
                             .submitLabel(.return)
                             .onSubmit { focus = nil }
                         } //: VStack
-                        .modifier(SectionMod())
-                    } header: {
-                        Text("Stock")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .fontWeight(.light)
-                            .foregroundStyle(Color.textSecondary)
-                    } //: Section
+                    }
                     
-                    Section {
+                    NeomorphicSection(header: "Pricing") {
                         VStack(alignment: .leading, spacing: 0) {
                             ThemeTextField(boundTo: $retailPrice,
                                            placeholder: "$ 2.00",
@@ -180,7 +159,9 @@ struct ItemDetailView: View {
                             .focused($focus, equals: .price)
                             .submitLabel(.return)
                             .onSubmit { focus = nil }
+                            
                             FieldDivider()
+                            
                             ThemeTextField(boundTo: $unitCost,
                                            placeholder: "$ 1.00",
                                            title: "Unit Cost:",
@@ -190,15 +171,8 @@ struct ItemDetailView: View {
                             .focused($focus, equals: .unitCost)
                             .submitLabel(.return)
                             .onSubmit { focus = nil }
-                            
                         } //: VStack
-                        .modifier(SectionMod())
-                    } header: {
-                        Text("Pricing")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .fontWeight(.light)
-                            .foregroundStyle(Color.textSecondary)
-                    } //: Section
+                    }
                     
                 } //: VStack
                 .onChange(of: focus) { _, newValue in
@@ -219,10 +193,14 @@ struct ItemDetailView: View {
                     }
                 }
                 
-                
-                
                 Spacer()
-                continueButton
+                
+                Button(action: continueTapped) {
+                    Text("Continue")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(ThemeButtonStyle())
+                
                 Spacer()
             } //: VStack
             .frame(maxWidth: 720)
@@ -295,16 +273,6 @@ struct ItemDetailView: View {
         }
     } //: Body
     
-    private var continueButton: some View {
-        Button {
-            continueTapped()
-        } label: {
-            Spacer()
-            Text("Continue")
-            Spacer()
-        }
-        .modifier(PrimaryButtonMod())
-    }
     
 }
 

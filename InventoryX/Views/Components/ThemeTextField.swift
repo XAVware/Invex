@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ThemeTextField: View {
+    @Environment(\.colorScheme) var colorScheme
     private enum Focus { case text }
     @FocusState private var focus: Focus?
     
@@ -18,39 +19,38 @@ struct ThemeTextField: View {
     let type: FieldType
     
     @State var showingHint: Bool = false
-
+    
     var body: some View {
-            HStack(alignment: .center, spacing: 16) {
-                Text(title)
-                    .foregroundStyle(Color.textPrimary)
-
-                
-                if let hint = hint {
-                    Button("", systemImage: "questionmark.circle.fill") {
-                        showingHint.toggle()
-                    }
-                    .foregroundStyle(Color.textPrimary.opacity(0.35))
-                    .popover(isPresented: $showingHint) {
-                        Text(hint)
-                            .padding()
-                            .frame(minWidth: 200, idealWidth: 280, maxWidth: 320)
-                            .background(Color.white)
-                            .font(.callout)
-                            .presentationCompactAdaptation(.popover)
-                    }
+        HStack(alignment: .center, spacing: 16) {
+            Text(title)
+                .foregroundStyle(Color.textPrimary)
+            
+            if let hint = hint {
+                Button("", systemImage: "questionmark.circle.fill") {
+                    showingHint.toggle()
                 }
-                
-                Spacer()
-                                
-                TextField(placeholder, text: $boundTo)
-                    .multilineTextAlignment(.trailing)
-                    .focused($focus, equals: .text)
-                    .onTapGesture {
-                        self.focus = .text
-                    }
-            } //: HStack
-            .font(.subheadline)
-            .padding()
+                .foregroundStyle(Color.textPrimary.opacity(0.25))
+                .offset(x: -12, y: -1)
+                .popover(isPresented: $showingHint) {
+                    Text(hint)
+                        .padding()
+                        .frame(minWidth: 200, idealWidth: 280, maxWidth: 320)
+                        .font(.callout)
+                        .presentationCompactAdaptation(.popover)
+                }
+            }
+            
+            Spacer()
+            
+            TextField(placeholder, text: $boundTo)
+                .multilineTextAlignment(.trailing)
+                .focused($focus, equals: .text)
+                .onTapGesture {
+                    self.focus = .text
+                }
+        } //: HStack
+        .font(.subheadline)
+        .padding()
     } //: Body
     
 }
