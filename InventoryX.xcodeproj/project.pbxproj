@@ -64,6 +64,8 @@
 		942189962C2375AD00C78586 /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189552C2375AD00C78586 /* RealmMigrator.swift */; };
 		943AACD12C6B224C005056F0 /* Section-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943AACD02C6B224C005056F0 /* Section-Mod.swift */; };
 		9453BEC42BB3C79F007C63A4 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 9453BEC32BB3C79F007C63A4 /* Algorithms */; };
+		9454FEF92C843A0E00F8B6D2 /* NeomorphicSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */; };
+		9454FEFB2C843A3A00F8B6D2 /* NeomorphicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454FEFA2C843A3A00F8B6D2 /* NeomorphicView.swift */; };
 		94797A842C8294E100B9CDD8 /* LandingHighlightTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */; };
 		94797A862C8294EC00B9CDD8 /* Hexagon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A852C8294EC00B9CDD8 /* Hexagon.swift */; };
 		94797A892C8295C600B9CDD8 /* ThemeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */; };
@@ -142,6 +144,8 @@
 		942189552C2375AD00C78586 /* RealmMigrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		942189972C23766600C78586 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		943AACD02C6B224C005056F0 /* Section-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Section-Mod.swift"; sourceTree = "<group>"; };
+		9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicSection.swift; sourceTree = "<group>"; };
+		9454FEFA2C843A3A00F8B6D2 /* NeomorphicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicView.swift; sourceTree = "<group>"; };
 		94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingHighlightTextView.swift; sourceTree = "<group>"; };
 		94797A852C8294EC00B9CDD8 /* Hexagon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexagon.swift; sourceTree = "<group>"; };
 		94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButtonStyle.swift; sourceTree = "<group>"; };
@@ -284,9 +288,11 @@
 				942189282C2375AC00C78586 /* ThemeTextField.swift */,
 				94815B562C6B32640085EE3C /* FieldDivider.swift */,
 				94E10E372C80EAB00091ABBF /* NeomorphicCardView.swift */,
+				9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */,
 				94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */,
 				94797A852C8294EC00B9CDD8 /* Hexagon.swift */,
 				94797A8A2C82964F00B9CDD8 /* HexImage.swift */,
+				9454FEFA2C843A3A00F8B6D2 /* NeomorphicView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -499,6 +505,7 @@
 				94FA6CD32C6D2D54001D3CA8 /* UIColorOverride.swift in Sources */,
 				942189812C2375AD00C78586 /* MoveItemsView.swift in Sources */,
 				94FA6CD42C6D2D54001D3CA8 /* LSXView.swift in Sources */,
+				9454FEFB2C843A3A00F8B6D2 /* NeomorphicView.swift in Sources */,
 				942189942C2375AD00C78586 /* AuthService.swift in Sources */,
 				9421898B2C2375AD00C78586 /* SaleData.swift in Sources */,
 				94815B572C6B32640085EE3C /* FieldDivider.swift in Sources */,
@@ -539,6 +546,7 @@
 				942189602C2375AD00C78586 /* TableStyle-Mod.swift in Sources */,
 				9421896D2C2375AD00C78586 /* InventoryXApp.swift in Sources */,
 				942189742C2375AD00C78586 /* CompanyDetailView.swift in Sources */,
+				9454FEF92C843A0E00F8B6D2 /* NeomorphicSection.swift in Sources */,
 				942189732C2375AD00C78586 /* ThemeTextField.swift in Sources */,
 				9421898F2C2375AD00C78586 /* ItemEntity.swift in Sources */,
 				9421897F2C2375AD00C78586 /* LockScreenView.swift in Sources */,
@@ -564,6 +572,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "";
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -628,6 +637,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "";
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = "";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -703,6 +713,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -743,6 +754,7 @@
 				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

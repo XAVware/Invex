@@ -18,6 +18,7 @@ import Combine
     @Published var detailPath: NavigationPath = .init()
     
     @Published var mainDisplay: LSXDisplay = .pos
+
     @Published var detailRoot: LSXDisplay?
     
     private var isCompact: Bool = false

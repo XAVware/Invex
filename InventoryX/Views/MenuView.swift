@@ -50,10 +50,10 @@ struct MenuView: View {
         .navigationBarTitleDisplayMode(.inline)
         .background(
             Color.bg
-                .cornerRadius(36, corners: [.topRight, .bottomRight])
-                .shadow(radius: 2)
-                .ignoresSafeArea()
-                .padding(.trailing, 3)
+//                .cornerRadius(36, corners: [.topRight, .bottomRight])
+//                .shadow(radius: 2)
+//                .ignoresSafeArea()
+//                .padding(.trailing, 3)
         )
         
 //        VStack(spacing: 16) {

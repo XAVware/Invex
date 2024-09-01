@@ -27,11 +27,8 @@ struct LandingView: View {
     
     var body: some View {
         ZStack {
-            if vSize == .regular {
-                Color.bg.ignoresSafeArea()
-            } else {
-                Color.neoUnderBg.ignoresSafeArea()
-            }
+            (vSize == .regular ? Color.bg : Color.neoUnderBg).ignoresSafeArea()
+            
             
             GeometryReader { geo in
                 let isLandscape = geo.size.width > geo.size.height

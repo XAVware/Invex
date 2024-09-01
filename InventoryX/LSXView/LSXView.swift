@@ -39,13 +39,13 @@ struct LSXView<S: View, C: View, D: View>: View {
             NavigationStack(path: $vm.primaryPath) {
                 
                 primarySplit
-//                    .navigationDestination(for: LSXDisplay.self) { detail in
-//                        switch detail {
-//                        case .detail:           DetailView()
-//                        case .subdetail(let s): SubDetailView(dataString: s)
-//                        default:                Text("Err with full screen detail view")
-//                        }
-//                    }
+                    // TODO: Document in LSX that this needs to be included in order for the toolbar title and toolbar button to appear on the home view
+                    .navigationDestination(for: LSXDisplay.self) { detail in
+                        switch detail {
+                        default:                Text("Err with full screen detail view")
+                        }
+                    }
+                
                     .toolbar(.hidden, for: .navigationBar)
                     .modifier(LazySplitMod(isProminent: horSize == .compact && !isLandscape))
                     .overlay(
@@ -55,7 +55,7 @@ struct LSXView<S: View, C: View, D: View>: View {
                         , alignment: .leading
                     )
             } //: Navigation Stack
-            
+            .tint(.accent)
             .onAppear {
                 vm.setHorIsCompact(isCompact: horSize == .compact)
             }
@@ -82,8 +82,10 @@ struct LSXView<S: View, C: View, D: View>: View {
             sidebar
                 .toolbar(removing: .sidebarToggle) // A
                 .toolbar { menuToolbar }
+            
         } detail: {
             contentLayout
+            
                 .navigationBarBackButtonHidden() // Hides back button resulting from moving toolbar control back to views.
 //                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -128,6 +130,7 @@ struct LSXView<S: View, C: View, D: View>: View {
             }
             .opacity(horSize == .compact ? 1 : 0)
         }
+        
     }
     
     struct LazySplitMod: ViewModifier {

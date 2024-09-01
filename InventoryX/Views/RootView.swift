@@ -35,14 +35,14 @@ struct RootView: View {
     @StateObject var posVM = PointOfSaleViewModel()
     @StateObject var rootVM = RootViewModel()
     
-    @State var showCartAlert: Bool = false
-    @State var showOnboarding: Bool? = nil
+//    @State var showOnboarding: Bool? = nil // For production
+    @State var showOnboarding = false // For Dev
     
     var body: some View {
         content
             .onReceive(rootVM.$companyExists) { exists in
                 print("Root: Company Received")
-                self.showOnboarding = !exists
+//                self.showOnboarding = !exists
             }
         
     } //: Body
@@ -58,49 +58,7 @@ struct RootView: View {
                 MenuView()
             } content: {
                 switch lsxVM.mainDisplay {
-                case .pos:
-                    POSView()
-                        .toolbar {
-                            // Only show cart toolbar button when menu isn't open
-                            if lsxVM.prefCol != .sidebar {
-                                ToolbarItem(placement: .topBarTrailing) {
-                                    Button {
-                                        switch hSize {
-                                        case .compact:
-                                            // On Compact, push confirm sale view with the cart items.
-                                            guard !posVM.cartItems.isEmpty else {
-                                                showCartAlert.toggle()
-                                                return
-                                            }
-                                            LSXService.shared.update(newDisplay: .confirmSale)
-                                            
-                                        case .regular:
-                                            // Toggle between sidebar and hidden display mode.
-                                            if posVM.cartDisplayMode == .hidden {
-                                                posVM.showCartSidebar()
-                                            } else {
-                                                posVM.hideCartSidebar()
-                                            }
-                                            
-                                        default: print("Invalid horizontal size class.")
-                                        }
-                                    } label: {
-                                        HStack(spacing: 12) {
-                                            Text("\(posVM.cartItems.count)")
-                                            Image(systemName: "cart")
-                                                .frame(width: 18, height: 18)
-                                        }
-                                        .padding(8)
-                                        .padding(.horizontal, 4)
-                                        .font(.callout)
-                                        .foregroundStyle(Color.white)
-                                        .background(Color.accent.opacity(0.95))
-                                        .clipShape(Capsule())
-                                    }
-                                    
-                                }
-                            }
-                        }
+                case .pos:              POSView()
                 case .inventoryList:    InventoryListView()
                 case .settings:         SettingsView()
                 default:                EmptyView()
@@ -114,9 +72,7 @@ struct RootView: View {
                 default:                        EmptyView()
                 }
             } //: LSX View
-            .alert("Your cart is empty.", isPresented: $showCartAlert) {
-                Button("Okay", role: .cancel) { }
-            }
+
             .environmentObject(posVM)
             .onAppear {
                 print("Root: On Appear")
@@ -134,8 +90,7 @@ struct RootView: View {
                 }
             }
             
-        default:
-            ProgressView()
+        default: ProgressView()
         }
     }
     
@@ -145,4 +100,13 @@ struct RootView: View {
 #Preview {
     RootView()
         .environment(\.realm, DepartmentEntity.previewRealm)
+//        .onAppear {
+//            Task {
+//                try await RealmActor().setUpForDebug()
+////                        let h = AuthService.shared.hashString("1234")
+////                        await AuthService.shared.savePasscode(hash: h)
+//                AuthService.shared.exists = true
+//
+//            }
+//        }
 }

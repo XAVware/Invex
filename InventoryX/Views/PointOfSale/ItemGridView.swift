@@ -12,8 +12,8 @@ struct ItemGridView: View {
     @Environment(\.verticalSizeClass) var verSize
     let onSelect: ((ItemEntity) -> Void)
     let items: Array<ItemEntity>
-    let colSpacing: CGFloat = 16
-    let rowSpacing: CGFloat = 16
+    let colSpacing: CGFloat = 8
+    let rowSpacing: CGFloat = 8
     
     init(items: Array<ItemEntity>, onSelect: @escaping ((ItemEntity) -> Void)) {
         self.items = items
@@ -32,35 +32,41 @@ struct ItemGridView: View {
                             UIImpactFeedbackGenerator(style: .light).impactOccurred(intensity: 0.9)
                             onSelect(item)
                         } label: {
-                            VStack(alignment: .leading, spacing: 0) {
-                                Text(item.name)
-                                    .font(.headline)
-                                    .foregroundStyle(Color("TextColor"))
-                                
-                                Spacer()
-                                
-                                Text(item.attribute)
-                                    .font(.subheadline)
-                                    .foregroundStyle(Color("TextColor"))
-                                
-                                Spacer()
-                                
-                                Text(item.retailPrice.formatAsCurrencyString())
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity, alignment: .trailing)
-                                    .foregroundStyle(.accent)
-                            } //: VStack
-                            .fontDesign(.rounded)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(
-                                Color.lightAccent
-                                    .opacity(0.8)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    .blur(radius: 3)
-                                    .shadow(color: Color.lightButtonGradient1, radius: 1, x: 2, y: 2)
-                                    .shadow(color: Color.lightButtonGradient2, radius: 1, x: -2, y: -2)
-                            )
+                            ZStack {
+                                NeomorphicCardView(layer: .over)
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Text(item.name)
+                                        .font(.headline)
+                                        .foregroundStyle(Color("TextColor"))
+                                    
+                                    Spacer()
+                                    
+                                    Text(item.attribute)
+                                        .font(.subheadline)
+                                        .foregroundStyle(Color("TextColor"))
+                                    
+                                    Spacer()
+                                    
+                                    Text(item.retailPrice.formatAsCurrencyString())
+                                        .font(.headline)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                        .foregroundStyle(.accent)
+                                } //: VStack
+                                .fontDesign(.rounded)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                            }
+                            .padding(4)
+
+    
+//                            .background(
+//                                Color.lightAccent
+//                                    .opacity(0.8)
+//                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+//                                    .blur(radius: 3)
+//                                    .shadow(color: Color.lightButtonGradient1, radius: 1, x: 2, y: 2)
+//                                    .shadow(color: Color.lightButtonGradient2, radius: 1, x: -2, y: -2)
+//                            )
                             
                             
                             //                    .background(.lightAccent)

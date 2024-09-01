@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct NeomorphicCardView: View {
+    @Environment(\.colorScheme) var colorScheme
     enum Layer { case under, over }
     
     @State var layer: Layer
     
-    var body: some View {
+    var body: some View { 
         switch layer {
         case .under:
             RoundedRectangle(cornerRadius: 18)
@@ -23,38 +24,20 @@ struct NeomorphicCardView: View {
                 .foregroundColor(.neoUnderBg)
             
         case .over:
-            //        RoundedRectangle(cornerRadius: 12)
-            //            .fill(
-            //                LinearGradient(gradient: Gradient(stops: [
-            //                    Gradient.Stop(color: .neoOverLight, location: 0),
-            //                    Gradient.Stop(color: .neoOverDark, location: 1)
-            //                ]), startPoint: .topLeading, endPoint: .bottomTrailing)
-            //            )
-            //            .shadow(color: .white, radius: 1.5, x: -2, y: -2)
-            //            .shadow(color: .neoOverDark, radius: 2, x: 2, y: 2)
-            //            .blendMode(.luminosity)
-                    RoundedRectangle(cornerRadius: 24)
+                    RoundedRectangle(cornerRadius: 12)
                         .fill(
-                            .shadow(.inner(color: .fcfcfc, radius: 2, x: 3, y: 3))
-                            .shadow(.inner(color: .neoUnderDark.opacity(0.8), radius: 2, x: -2, y: -2))
+                            .shadow(.inner(color: .neoOverLight, radius: 3, x: 2, y: 2 ))
+                            .shadow(.inner(color: .neoOverDark, radius: 2, x: -2, y: -2))
                         )
                         .foregroundColor(.bg)
-            //            .blendMode(.plusDarker)
-            //            .shadow(color: .neoUnderDark.opacity(0.3), radius: 6, x: -2, y: -2)
-            //            .shadow(color: .bg, radius: 6, x: 2, y: 2)
-            //            .blendMode(.luminosity)
+                        .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
+//                        .shadow(color: .neoUnderLight, radius: 2, x: -2, y: -2)
         }
     }
 }
 
 #Preview {
     ZStack {
-//        LinearGradient(gradient: Gradient(stops: [
-//            Gradient.Stop(color: .bg.opacity(0.6), location: 0),
-////            Gradient.Stop(color: .bg.opacity(0.5), location: 0.25),
-//            Gradient.Stop(color: .bg, location: 1)
-//        ]), startPoint: .topLeading, endPoint: .bottomTrailing)
-//        
         Color.bg
         NeomorphicCardView(layer: .under)
             .padding(64)

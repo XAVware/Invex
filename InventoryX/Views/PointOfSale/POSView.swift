@@ -15,7 +15,7 @@ import Algorithms
  */
 
 struct POSView: View {
-    @Environment(\.horizontalSizeClass) var horSize
+    @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var verSize
     @EnvironmentObject var vm: PointOfSaleViewModel
     @ObservedResults(ItemEntity.self) var items
@@ -25,50 +25,100 @@ struct POSView: View {
     let colSpacing: CGFloat = 16
     let rowSpacing: CGFloat = 16
     
+    @State var showCartAlert: Bool = false
+
+    
     var body: some View {
         HStack {
-            VStack(spacing: horSize == .compact ? 16 : 24) {
-                // MARK: - Department Picker
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 16) {
-                        Button {
-                            selDept = nil
-                        } label: {
-                            Text("All")
-                                .modifier(DepartmentButtonMod(isSelected: selDept == nil))
-                        }
-                        
-                        ForEach(departments) { department in
+            NeomorphicView {
+                VStack(spacing: hSize == .compact ? 16 : 24) {
+                    // MARK: - Department Picker
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
                             Button {
-                                selDept = department
+                                selDept = nil
                             } label: {
-                                Text(department.name)
-                                    .modifier(DepartmentButtonMod(isSelected: selDept == department))
+                                Text("All")
+                                    .modifier(DepartmentButtonMod(isSelected: selDept == nil))
                             }
-                        } //: For Each
-                    } //: HStack
-                } //: Scroll View
-                
-                ItemGridView(items: selDept != nil ? Array(selDept?.items ?? .init()) : Array(items)) { item in
-                    vm.addItemToCart(item)
-                }
-                
-            } //: VStack
-            .padding(.horizontal)
-            .animation(.interpolatingSpring, value: true)
-
+                            
+                            ForEach(departments) { department in
+                                Button {
+                                    selDept = department
+                                } label: {
+                                    Text(department.name)
+                                        .modifier(DepartmentButtonMod(isSelected: selDept == department))
+                                }
+                            } //: For Each
+                        } //: HStack
+                    } //: Scroll View
+                    .padding(.horizontal)
+                    .padding(.top)
+                    
+                    ItemGridView(items: selDept != nil ? Array(selDept?.items ?? .init()) : Array(items)) { item in
+                        vm.addItemToCart(item)
+                    }
+                    
+                } //: VStack
+                .padding(.horizontal)
+                .animation(.interpolatingSpring, value: true)
+            }
             
-            if horSize == .regular {
+            
+            if hSize == .regular {
                 CartSidebarView(vm: vm, ignoresTopBar: true)
                     .frame(maxWidth: vm.cartDisplayMode.idealWidth)
-                    .clipShape(RoundedCorner(radius: 24, corners: [.topLeft, .bottomLeft]))
-                    .shadow(radius: 4)
+//                    .clipShape(RoundedCorner(radius: 24, corners: [.topLeft, .bottomLeft]))
+//                    .shadow(radius: 4)
                     .offset(x: vm.cartDisplayMode == .hidden ? 320 : 0)
                     .ignoresSafeArea()
             }
         } //: HStack
+        .background(.bg)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            // Only show cart toolbar button when menu isn't open
+//            if lsxVM.prefCol != .sidebar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        switch hSize {
+                        case .compact:
+                            // On Compact, push confirm sale view with the cart items.
+                            guard !vm.cartItems.isEmpty else {
+//                                showCartAlert.toggle()
+                                return
+                            }
+                            LSXService.shared.update(newDisplay: .confirmSale)
+                            
+                        case .regular:
+                            // Toggle between sidebar and hidden display mode.
+                            if vm.cartDisplayMode == .hidden {
+                                vm.showCartSidebar()
+                            } else {
+                                vm.hideCartSidebar()
+                            }
+                            
+                        default: print("Invalid horizontal size class.")
+                        }
+                    } label: {
+                        HStack(spacing: 12) {
+                            Text("\(vm.cartItems.count)")
+                            Image(systemName: "cart")
+                                .frame(width: 18, height: 18)
+                        }
+                        .padding(8)
+                        .padding(.horizontal, 4)
+                        .font(.callout)
+                        .foregroundStyle(Color.white)
+                        .background(Color.accent.opacity(0.95))
+                        .clipShape(Capsule())
+                    }
+                    
+                }
+//            }
+        }
         .onAppear {
-            if horSize == .regular {
+            if hSize == .regular {
                 vm.showCartSidebar()
             } else {
                 vm.hideCartSidebar()

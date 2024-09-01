@@ -57,16 +57,10 @@ struct CartSidebarView: View {
                 .font(.subheadline)
                 .padding(8)
                 
-                
-                Button {
-                    continueTapped()
-                } label: {
-                    Spacer()
-                    Text("Checkout")
-                    Spacer()
+                Button(action: continueTapped) {
+                    Text("Checkout").frame(maxWidth: .infinity)
                 }
-                .modifier(PrimaryButtonMod())
-                
+                .buttonStyle(ThemeButtonStyle())
                 
             } //: VStack
             
@@ -75,7 +69,7 @@ struct CartSidebarView: View {
             Button("Okay", role: .cancel) { }
         }
         .padding()
-        .background(.ultraThinMaterial)
+        .background(.bg)
         .onAppear {
             vm.fetchCompany()
         }
