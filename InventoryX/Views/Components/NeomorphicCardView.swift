@@ -24,14 +24,13 @@ struct NeomorphicCardView: View {
                 .foregroundColor(.neoUnderBg)
             
         case .over:
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(
-                            .shadow(.inner(color: .neoOverLight, radius: 3, x: 2, y: 2 ))
-                            .shadow(.inner(color: .neoOverDark, radius: 2, x: -2, y: -2))
-                        )
-                        .foregroundColor(.bg)
-                        .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
-//                        .shadow(color: .neoUnderLight, radius: 2, x: -2, y: -2)
+            RoundedRectangle(cornerRadius: 12)
+                .fill(
+                    .shadow(.inner(color: .neoOverLight, radius: 3, x: 2, y: 2 ))
+                    .shadow(.inner(color: .neoOverDark, radius: 2, x: -2, y: -2))
+                )
+                .foregroundColor(.bg)
+                .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
         }
     }
 }

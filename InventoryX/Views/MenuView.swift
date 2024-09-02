@@ -45,8 +45,8 @@ struct MenuView: View {
             } //: VStack
             .padding(.vertical)
         } //: Scroll
-        .padding(.trailing)
-        .navigationTitle("Menu")
+//        .padding(.trailing)
+//        .navigationTitle("Menu")
         .navigationBarTitleDisplayMode(.inline)
         .background(
             Color.bg

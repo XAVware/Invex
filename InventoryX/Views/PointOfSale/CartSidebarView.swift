@@ -12,10 +12,12 @@ struct CartSidebarView: View {
     @StateObject var vm: PointOfSaleViewModel
     @State var ignoresTopBar: Bool
     @State var showCartAlert: Bool = false
+    let width: CGFloat
     
-    init(vm: PointOfSaleViewModel, ignoresTopBar: Bool) {
+    init(vm: PointOfSaleViewModel, ignoresTopBar: Bool, width: CGFloat) {
         self._vm = StateObject(wrappedValue: vm)
         self.ignoresTopBar = ignoresTopBar
+        self.width = width
     }
     
     func continueTapped() {
@@ -41,24 +43,37 @@ struct CartSidebarView: View {
                     } //: HStack
                     
                     HStack {
-                        Text("Tax: (\((vm.taxRate * 100).toPercentageString())%)")
+                        Text("Tax:")
                         Spacer()
                         Text("\(vm.taxAmount.formatAsCurrencyString())")
                     } //: HStack
                     
-                    HStack {
-                        Text("Total:")
-                        Spacer()
-                        Text(vm.total.formatAsCurrencyString())
-                    } //: HStack
-                    .fontWeight(.semibold)
+//                    HStack {
+//                        Text("Total:")
+//                        Spacer()
+//                        Text(vm.total.formatAsCurrencyString())
+//                    } //: HStack
+//                    .fontWeight(.semibold)
                     
                 } //: VStack
                 .font(.subheadline)
                 .padding(8)
                 
                 Button(action: continueTapped) {
-                    Text("Checkout").frame(maxWidth: .infinity)
+                    VStack(spacing: 4) {
+                        HStack {
+                            Text("Checkout")
+//                                .frame(maxWidth: .infinity)
+                            Text(vm.total.formatAsCurrencyString())
+                        }
+                        .frame(maxWidth: .infinity)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        
+//                        Text("\(vm.cartItems.count.description) items")
+//                            .font(.caption2)
+                    }
+                    .fontDesign(.rounded)
                 }
                 .buttonStyle(ThemeButtonStyle())
                 
@@ -68,11 +83,15 @@ struct CartSidebarView: View {
         .alert("Your cart is empty.", isPresented: $showCartAlert) {
             Button("Okay", role: .cancel) { }
         }
-        .padding()
+        .padding(.trailing, 8)
         .background(.bg)
+        //TODO: Company data doesn't need to be fetched every time this appears. Just save it in POS VM
         .onAppear {
             vm.fetchCompany()
         }
+        .frame(maxWidth: width)
+        .offset(x: vm.cartDisplayMode == .hidden ? width : 0)
+        .ignoresSafeArea()
     } //: Body
     
 }

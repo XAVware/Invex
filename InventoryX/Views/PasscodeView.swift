@@ -112,9 +112,9 @@ struct PasscodeView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: PasscodeViewModel
     let constProc: [PasscodeViewState]
-    let defaultSubtitle: String = "Enter a 4-digit passcode"
+    let defaultSubtitle: String = "Enter passcode"
     @State private var passcode = ""
-    @State private var subtitle = "Enter a 4-digit passcode"
+    @State private var subtitle = "Enter passcode"
     
     var navTitle: String {
         return switch vm.processes.first {
@@ -165,6 +165,7 @@ struct PasscodeView: View {
             horLayout
         }
         .padding()
+        .background(.bg)
         .navigationTitle(navTitle)
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
@@ -236,6 +237,6 @@ struct PasscodeView: View {
     
 }
 
-//#Preview {
-//    PasscodeView(processes: [.set]) {}
-//}
+#Preview {
+    PasscodeView(processes: [.set]) {}
+}

@@ -24,6 +24,6 @@ extension UIColor {
 
     /// Replaces the `orig` color with a clear color.
     @objc open class var customDividerColor: UIColor {
-        return UIColor(Color.clear)
+        return UIColor(Color.bg)
     }
 }

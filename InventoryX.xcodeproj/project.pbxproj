@@ -65,7 +65,6 @@
 		943AACD12C6B224C005056F0 /* Section-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943AACD02C6B224C005056F0 /* Section-Mod.swift */; };
 		9453BEC42BB3C79F007C63A4 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 9453BEC32BB3C79F007C63A4 /* Algorithms */; };
 		9454FEF92C843A0E00F8B6D2 /* NeomorphicSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */; };
-		9454FEFB2C843A3A00F8B6D2 /* NeomorphicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454FEFA2C843A3A00F8B6D2 /* NeomorphicView.swift */; };
 		94797A842C8294E100B9CDD8 /* LandingHighlightTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */; };
 		94797A862C8294EC00B9CDD8 /* Hexagon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A852C8294EC00B9CDD8 /* Hexagon.swift */; };
 		94797A892C8295C600B9CDD8 /* ThemeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */; };
@@ -145,7 +144,6 @@
 		942189972C23766600C78586 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		943AACD02C6B224C005056F0 /* Section-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Section-Mod.swift"; sourceTree = "<group>"; };
 		9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicSection.swift; sourceTree = "<group>"; };
-		9454FEFA2C843A3A00F8B6D2 /* NeomorphicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicView.swift; sourceTree = "<group>"; };
 		94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingHighlightTextView.swift; sourceTree = "<group>"; };
 		94797A852C8294EC00B9CDD8 /* Hexagon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexagon.swift; sourceTree = "<group>"; };
 		94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButtonStyle.swift; sourceTree = "<group>"; };
@@ -289,10 +287,6 @@
 				94815B562C6B32640085EE3C /* FieldDivider.swift */,
 				94E10E372C80EAB00091ABBF /* NeomorphicCardView.swift */,
 				9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */,
-				94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */,
-				94797A852C8294EC00B9CDD8 /* Hexagon.swift */,
-				94797A8A2C82964F00B9CDD8 /* HexImage.swift */,
-				9454FEFA2C843A3A00F8B6D2 /* NeomorphicView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -332,6 +326,7 @@
 		9421893F2C2375AC00C78586 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9454FEFC2C85348F00F8B6D2 /* Landing */,
 				942189292C2375AC00C78586 /* Components */,
 				9421892D2C2375AC00C78586 /* DetailViews */,
 				942189312C2375AC00C78586 /* InventoryList */,
@@ -343,7 +338,6 @@
 				9421893C2C2375AC00C78586 /* PasscodeView.swift */,
 				9421893D2C2375AC00C78586 /* RootView.swift */,
 				9421893E2C2375AC00C78586 /* SettingsView.swift */,
-				94FA6CDF2C6E64CD001D3CA8 /* LandingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -400,6 +394,17 @@
 				942189552C2375AD00C78586 /* RealmMigrator.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		9454FEFC2C85348F00F8B6D2 /* Landing */ = {
+			isa = PBXGroup;
+			children = (
+				94FA6CDF2C6E64CD001D3CA8 /* LandingView.swift */,
+				94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */,
+				94797A852C8294EC00B9CDD8 /* Hexagon.swift */,
+				94797A8A2C82964F00B9CDD8 /* HexImage.swift */,
+			);
+			path = Landing;
 			sourceTree = "<group>";
 		};
 		94797A872C8295B400B9CDD8 /* Styles */ = {
@@ -505,7 +510,6 @@
 				94FA6CD32C6D2D54001D3CA8 /* UIColorOverride.swift in Sources */,
 				942189812C2375AD00C78586 /* MoveItemsView.swift in Sources */,
 				94FA6CD42C6D2D54001D3CA8 /* LSXView.swift in Sources */,
-				9454FEFB2C843A3A00F8B6D2 /* NeomorphicView.swift in Sources */,
 				942189942C2375AD00C78586 /* AuthService.swift in Sources */,
 				9421898B2C2375AD00C78586 /* SaleData.swift in Sources */,
 				94815B572C6B32640085EE3C /* FieldDivider.swift in Sources */,

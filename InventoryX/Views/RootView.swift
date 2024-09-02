@@ -35,14 +35,14 @@ struct RootView: View {
     @StateObject var posVM = PointOfSaleViewModel()
     @StateObject var rootVM = RootViewModel()
     
-//    @State var showOnboarding: Bool? = nil // For production
-    @State var showOnboarding = false // For Dev
+    @State var showOnboarding: Bool? = nil // For production
+//    @State var showOnboarding = false // For Dev
     
     var body: some View {
         content
             .onReceive(rootVM.$companyExists) { exists in
                 print("Root: Company Received")
-//                self.showOnboarding = !exists
+                self.showOnboarding = !exists
             }
         
     } //: Body
@@ -72,7 +72,6 @@ struct RootView: View {
                 default:                        EmptyView()
                 }
             } //: LSX View
-
             .environmentObject(posVM)
             .onAppear {
                 print("Root: On Appear")

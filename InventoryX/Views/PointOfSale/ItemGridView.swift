@@ -37,13 +37,13 @@ struct ItemGridView: View {
                                 VStack(alignment: .leading, spacing: 0) {
                                     Text(item.name)
                                         .font(.headline)
-                                        .foregroundStyle(Color("TextColor"))
+                                        .foregroundStyle(Color.textPrimary)
                                     
                                     Spacer()
                                     
                                     Text(item.attribute)
                                         .font(.subheadline)
-                                        .foregroundStyle(Color("TextColor"))
+                                        .foregroundStyle(Color.textPrimary) 
                                     
                                     Spacer()
                                     
@@ -58,36 +58,9 @@ struct ItemGridView: View {
                             }
                             .padding(4)
 
-    
-//                            .background(
-//                                Color.lightAccent
-//                                    .opacity(0.8)
-//                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-//                                    .blur(radius: 3)
-//                                    .shadow(color: Color.lightButtonGradient1, radius: 1, x: 2, y: 2)
-//                                    .shadow(color: Color.lightButtonGradient2, radius: 1, x: -2, y: -2)
-//                            )
-                            
-                            
-                            //                    .background(.lightAccent)
-                            //                    .background(.thinMaterial)
-                            //                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                            //                    .shadow(color: .lightButtonStroke2, radius: 3, x: 1, y: 1)
-                            //                    .background(
-                            //                        LinearGradient(colors: [Color.lightButtonGradient1,
-                            ////                                                Color.lightButtonGradientBase,
-                            //                                                Color.lightButtonGradient3,
-                            //                                                Color.lightButtonGradient1],
-                            //                                       startPoint: .topLeading,
-                            //                                       endPoint: .bottomTrailing)
-                            //                        .opacity(0.2)
-                            //                    )
-                            //                    .modifier(GridButtonMod())
-                            //                    .frame(maxWidth: .infinity, alignment: .leading)
                             
                         }
-                        //                    .buttonStyle(BorderedProminentButtonStyle())
-                        //                    .buttonBorderShape(.roundedRectangle(radius: 12))
+
                         
                         
                         

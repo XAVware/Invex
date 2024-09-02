@@ -39,13 +39,12 @@ struct LSXView<S: View, C: View, D: View>: View {
             NavigationStack(path: $vm.primaryPath) {
                 
                 primarySplit
-                    // TODO: Document in LSX that this needs to be included in order for the toolbar title and toolbar button to appear on the home view
+                        // TODO: Document in LSX that this needs to be included in order for the toolbar title and toolbar button to appear on the home view
                     .navigationDestination(for: LSXDisplay.self) { detail in
                         switch detail {
                         default:                Text("Err with full screen detail view")
                         }
                     }
-                
                     .toolbar(.hidden, for: .navigationBar)
                     .modifier(LazySplitMod(isProminent: horSize == .compact && !isLandscape))
                     .overlay(
