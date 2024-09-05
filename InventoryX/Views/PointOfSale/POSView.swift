@@ -9,14 +9,16 @@ import SwiftUI
 import RealmSwift
 import Algorithms
 
-/* 
-8.29.24 - A warning is being thrown for breaking constraints on startup on regular width devices. I thought it was related to POSView but it only happens when OnboardingView is being displayed as a full screen cover. Going to toggle onboarding with an optional isOnboarding variable in the root.
+/*
+ 8.29.24 - A warning is being thrown for breaking constraints on startup on regular width devices. I thought it was related to POSView but it only happens when OnboardingView is being displayed as a full screen cover. Going to toggle onboarding with an optional isOnboarding variable in the root.
  
  */
 
 struct POSView: View {
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
+    @Environment(\.colorScheme) var colorScheme
+    
     @EnvironmentObject var vm: PointOfSaleViewModel
     
     @ObservedResults(ItemEntity.self) var items
@@ -29,15 +31,14 @@ struct POSView: View {
     
     @State var showCartAlert: Bool = false
     
-    
     func continueTapped() {
         if vm.cartItems.isEmpty {
             showCartAlert.toggle()
         } else {
-            LSXService.shared.update(newDisplay: .confirmSale)
+            LSXService.shared.update(newDisplay: .confirmSale(vm.cartItems))
         }
     }
-
+    
     
     var body: some View {
         GeometryReader { geo in
@@ -45,8 +46,6 @@ struct POSView: View {
             let isHorizontalLayout: Bool = isLandscape || hSize == .regular
             HStack {
                 ZStack(alignment: .center) {
-                    Color.bg.ignoresSafeArea()
-                    
                     NeomorphicCardView(layer: .under)
                     
                     VStack(spacing: 0) {
@@ -81,9 +80,90 @@ struct POSView: View {
                     
                 } //: ZStack
                 .padding(.bottom, !isHorizontalLayout ? 48 : 0)
+                .frame(maxWidth: .infinity)
                 
+                // MARK: - Cart Sidebar
                 if isHorizontalLayout {
-                    CartSidebarView(vm: vm, ignoresTopBar: true, width: min(geo.size.width * 0.3, 280))
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 18)
+                            .fill(
+                                .shadow(.inner(color: .neoUnderDark, radius: 3, x: 1, y: 1))
+                                .shadow(.inner(color: .neoUnderLight, radius: 2, x: -3, y: -2))
+                            )
+                            .foregroundColor(.neoUnderBg)
+                            .overlay(
+                                Color.accent.opacity(0.02)
+                                    .clipShape(RoundedRectangle(cornerRadius: 18))
+                                
+                            )
+                        
+                        VStack {
+                            HStack {
+                                Image(systemName: "cart")
+                                Text("Cart")
+                                    .padding(.horizontal)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .padding([.top, .horizontal])
+                            .font(.headline)
+                            .foregroundStyle(.accent)
+                            .opacity(0.8)
+                            
+                            
+                            List(vm.cartItems) { item in
+                                CartItemView(item)
+                                    .listRowBackground(Color.clear)
+                                    .environmentObject(vm)
+                                
+                            }
+                            .frame(maxHeight: .infinity)
+                            .listStyle(PlainListStyle())
+                            
+                            
+                            // MARK: - Cart Totals
+                            VStack(alignment: .leading, spacing: 16) {
+                                VStack(spacing: 4) {
+                                    HStack {
+                                        Text("Subtotal:")
+                                        Spacer()
+                                        Text("\(vm.cartSubtotal.formatAsCurrencyString())")
+                                    } //: HStack
+                                    
+                                    HStack {
+                                        Text("Tax:")
+                                        Spacer()
+                                        Text("\(vm.taxAmount.formatAsCurrencyString())")
+                                    } //: HStack
+                                } //: VStack
+                                .font(.subheadline)
+                                .padding(8)
+                                
+                                Button(action: continueTapped) {
+                                    HStack {
+                                        Text("Checkout")
+                                            .frame(maxWidth: .infinity)
+                                        Text(vm.total.formatAsCurrencyString())
+                                    }
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .fontDesign(.rounded)
+                                }
+                                .buttonStyle(ThemeButtonStyle())
+                                
+                            } //: VStack
+                            .padding()
+                        } //: VStack
+                        .alert("Your cart is empty.", isPresented: $showCartAlert) {
+                            Button("Okay", role: .cancel) { }
+                        }
+                        //TODO: Company data doesn't need to be fetched every time this appears. Just save it in POS VM
+                        .onAppear {
+                            vm.fetchCompany()
+                        }
+                    } //: ZStack
+                    .frame(maxWidth: vm.cartDisplayMode.idealWidth)
+                    .offset(x: vm.cartDisplayMode == .hidden ? 320 : 0)
+                    .ignoresSafeArea(edges: [.bottom])
                 }
             } //: HStack
             .padding(.bottom)
@@ -98,48 +178,25 @@ struct POSView: View {
                     vm.hideCartSidebar()
                 }
             }
-//            .toolbar {
-//                // Only show cart toolbar button when menu isn't open
-//                //            if lsxVM.prefCol != .sidebar {
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    Button {
-//                        switch hSize {
-//                        case .compact:
-//                            // On Compact, push confirm sale view with the cart items.
-//                            guard !vm.cartItems.isEmpty else {
-//                                //                                showCartAlert.toggle()
-//                                return
-//                            }
-//                            LSXService.shared.update(newDisplay: .confirmSale)
-//                            
-//                        case .regular:
-//                            // Toggle between sidebar and hidden display mode.
-//                            if vm.cartDisplayMode == .hidden {
-//                                vm.showCartSidebar()
-//                            } else {
-//                                vm.hideCartSidebar()
-//                            }
-//                            
-//                        default: print("Invalid horizontal size class.")
-//                        }
-//                    } label: {
-//                        HStack(spacing: 12) {
-//                            Text("\(vm.cartItems.count)")
-//                            Image(systemName: "cart")
-//                                .frame(width: 18, height: 18)
-//                        }
-//                        .padding(8)
-//                        .padding(.horizontal, 4)
-//                        .font(.callout)
-//                        .foregroundStyle(Color.white)
-//                        .background(Color.accent.opacity(0.95))
-//                        .clipShape(Capsule())
-//                    }
-//                    
-//                }
-//                //            }
-//            }
-
+            .toolbar {
+                // Only show cart toolbar button when menu isn't open
+                ToolbarItem(placement: .topBarTrailing) {
+                    if hSize == .regular {
+                        Button {
+                            if vm.cartDisplayMode == .hidden {
+                                vm.showCartSidebar()
+                            } else {
+                                vm.hideCartSidebar()
+                            }
+                        } label: {
+                            Image(systemName: "chevron.forward.2")
+                        }
+                    } else {
+                        EmptyView()
+                    }
+                }
+            }
+            
         } //: Geometry Reader
         
     } //: Body
@@ -156,8 +213,8 @@ struct POSView: View {
             .fontWeight(.semibold)
             .fontDesign(.rounded)
         }
-            .padding(.horizontal)
-            .buttonStyle(ThemeButtonStyle())
+        .padding(.horizontal)
+        .buttonStyle(ThemeButtonStyle())
     }
     
     

@@ -63,8 +63,10 @@
 		942189952C2375AD00C78586 /* RealmActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189542C2375AD00C78586 /* RealmActor.swift */; };
 		942189962C2375AD00C78586 /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189552C2375AD00C78586 /* RealmMigrator.swift */; };
 		943AACD12C6B224C005056F0 /* Section-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943AACD02C6B224C005056F0 /* Section-Mod.swift */; };
+		944F670A2C89448F00828875 /* CartItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F67092C89448F00828875 /* CartItemView.swift */; };
 		9453BEC42BB3C79F007C63A4 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 9453BEC32BB3C79F007C63A4 /* Algorithms */; };
 		9454FEF92C843A0E00F8B6D2 /* NeomorphicSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */; };
+		945C28882C8689A10041836D /* ExternalLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945C28872C8689A10041836D /* ExternalLinks.swift */; };
 		94797A842C8294E100B9CDD8 /* LandingHighlightTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */; };
 		94797A862C8294EC00B9CDD8 /* Hexagon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A852C8294EC00B9CDD8 /* Hexagon.swift */; };
 		94797A892C8295C600B9CDD8 /* ThemeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */; };
@@ -143,7 +145,9 @@
 		942189552C2375AD00C78586 /* RealmMigrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		942189972C23766600C78586 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		943AACD02C6B224C005056F0 /* Section-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Section-Mod.swift"; sourceTree = "<group>"; };
+		944F67092C89448F00828875 /* CartItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemView.swift; sourceTree = "<group>"; };
 		9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicSection.swift; sourceTree = "<group>"; };
+		945C28872C8689A10041836D /* ExternalLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinks.swift; sourceTree = "<group>"; };
 		94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingHighlightTextView.swift; sourceTree = "<group>"; };
 		94797A852C8294EC00B9CDD8 /* Hexagon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexagon.swift; sourceTree = "<group>"; };
 		94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButtonStyle.swift; sourceTree = "<group>"; };
@@ -273,6 +277,7 @@
 			children = (
 				942189212C2375AC00C78586 /* InventoryXApp.swift */,
 				942189222C2375AC00C78586 /* LaunchScreen.storyboard */,
+				945C28872C8689A10041836D /* ExternalLinks.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -319,6 +324,7 @@
 				942189342C2375AC00C78586 /* ConfirmSaleView.swift */,
 				942189352C2375AC00C78586 /* ItemGridView.swift */,
 				942189362C2375AC00C78586 /* POSView.swift */,
+				944F67092C89448F00828875 /* CartItemView.swift */,
 			);
 			path = PointOfSale;
 			sourceTree = "<group>";
@@ -549,6 +555,7 @@
 				94FA6CD12C6D2D54001D3CA8 /* LSXViewModel.swift in Sources */,
 				942189602C2375AD00C78586 /* TableStyle-Mod.swift in Sources */,
 				9421896D2C2375AD00C78586 /* InventoryXApp.swift in Sources */,
+				944F670A2C89448F00828875 /* CartItemView.swift in Sources */,
 				942189742C2375AD00C78586 /* CompanyDetailView.swift in Sources */,
 				9454FEF92C843A0E00F8B6D2 /* NeomorphicSection.swift in Sources */,
 				942189732C2375AD00C78586 /* ThemeTextField.swift in Sources */,
@@ -559,6 +566,7 @@
 				9421895A2C2375AD00C78586 /* Date+Ext.swift in Sources */,
 				943AACD12C6B224C005056F0 /* Section-Mod.swift in Sources */,
 				9421895B2C2375AD00C78586 /* Double+Ext.swift in Sources */,
+				945C28882C8689A10041836D /* ExternalLinks.swift in Sources */,
 				94797A8B2C82964F00B9CDD8 /* HexImage.swift in Sources */,
 				942189832C2375AD00C78586 /* PasscodeView.swift in Sources */,
 				9421897B2C2375AD00C78586 /* CartSidebarView.swift in Sources */,

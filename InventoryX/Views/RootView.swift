@@ -35,16 +35,17 @@ struct RootView: View {
     @StateObject var posVM = PointOfSaleViewModel()
     @StateObject var rootVM = RootViewModel()
     
-    @State var showOnboarding: Bool? = nil // For production
-//    @State var showOnboarding = false // For Dev
+//    @State var showOnboarding: Bool? = nil // For production
+    @State var showOnboarding = false // For Dev
     
     var body: some View {
-        content
-            .onReceive(rootVM.$companyExists) { exists in
-                print("Root: Company Received")
-                self.showOnboarding = !exists
-            }
-        
+        ZStack {
+            content
+                .onReceive(rootVM.$companyExists) { exists in
+                    print("Root: Company Received")
+                    //                self.showOnboarding = !exists
+                }
+        } //: ZStack
     } //: Body
     
     @ViewBuilder private var content: some View {
@@ -58,7 +59,7 @@ struct RootView: View {
                 MenuView()
             } content: {
                 switch lsxVM.mainDisplay {
-                case .pos:              POSView()
+                case .pos:              POSView().environmentObject(posVM)
                 case .inventoryList:    InventoryListView()
                 case .settings:         SettingsView()
                 default:                EmptyView()
@@ -69,12 +70,11 @@ struct RootView: View {
                 case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
                 case .company(let c, let t):    CompanyDetailView(company: c, detailType: t)
                 case .passcodePad(let p):       PasscodeView(processes: p) { }
-                default:                        EmptyView()
+                default:                        Color.bg.ignoresSafeArea()
                 }
             } //: LSX View
-            .environmentObject(posVM)
             .onAppear {
-                print("Root: On Appear")
+                print("Root: On Appear") 
                 // Setup cart sidebar
                 switch hSize {
                 case .regular:  posVM.showCartSidebar()

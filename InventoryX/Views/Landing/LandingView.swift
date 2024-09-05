@@ -77,6 +77,22 @@ struct LandingView: View {
                                     .padding(isIphone ? 12 : 0)
                                 }
                                 
+                                if index == highlights.count - 1 {
+                                    VStack {
+                                        Spacer()
+                                        Text("By using Invex, you consent to our")
+                                        HStack(spacing: 6) {
+                                            Link("Terms of Service", destination: K.termsOfServiceURL)
+                                                .underline()
+                                            Text("and")
+                                            Link("Privacy Policy", destination: K.privacyPolicyURL)
+                                                .underline()
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                    }
+                                    .font(.caption2)
+                                    .padding()
+                                }
                             } //: ZStack
                             .padding(.leading, max(8, geo.safeAreaInsets.leading)) // Padding on side of NeoCard. Use the width of safe areas unless they're less than 8
                             .padding(.trailing, max(8, geo.safeAreaInsets.trailing))
@@ -86,6 +102,8 @@ struct LandingView: View {
                     } //: TabView
                     .ignoresSafeArea()
                     .tabViewStyle(.page(indexDisplayMode: .never))
+                    
+                    
                     
                     navigationPanel
                     

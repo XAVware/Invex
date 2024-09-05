@@ -10,6 +10,8 @@ import RealmSwift
 
 
 struct InventoryListView: View {
+    @Environment(\.horizontalSizeClass) var hSize
+
     @ObservedResults(ItemEntity.self) var items
     @ObservedResults(DepartmentEntity.self) var departments
     @StateObject var vm = InventoryListViewModel()
@@ -33,46 +35,53 @@ struct InventoryListView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            VStack {
-                HStack {
-                    Picker("Table Type", selection: $selectedTableType) {
-                        ForEach(TableType.allCases) { type in
-                            Text(type.rawValue.capitalized)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    
-                    Spacer()
-                    
-                    Button("Add", systemImage: "plus") {
-                        if selectedTableType == .items {
-                            LSXService.shared.update(newDisplay: .item(nil, .create))
-                        } else {
-                            LSXService.shared.update(newDisplay: .department(nil, .create))
-                        }
-                    }
-                }
-                
-                Divider()
-            } //: VStack
-            .padding(.horizontal)
-            .padding(.vertical, 8)
+        ZStack(alignment: .center) {
+            Color.bg.ignoresSafeArea()
             
-            if selectedTableType == .items {
-                ItemTableView(items: self.$items)
-            } else {
-                DepartmentTableView(depts: self.$departments)
-            }
-        } //: VStack
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
-        )
-        .navigationTitle(selectedTableType == .items ? "Inventory" : "Departments")
-        .padding()
-        
+            NeomorphicCardView(layer: .under)
+            VStack(alignment: .leading, spacing: 0) {
+                VStack {
+                    HStack {
+                        Picker("Table Type", selection: $selectedTableType) {
+                            ForEach(TableType.allCases) { type in
+                                Text(type.rawValue.capitalized)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                        
+                        Spacer()
+                        
+                        Button("Add", systemImage: "plus") {
+                            if selectedTableType == .items {
+                                LSXService.shared.update(newDisplay: .item(nil, .create))
+                            } else {
+                                LSXService.shared.update(newDisplay: .department(nil, .create))
+                            }
+                        }
+                    }
+                    
+                    Divider()
+                } //: VStack
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                
+                if selectedTableType == .items {
+                    ItemTableView(items: self.$items)
+                } else {
+                    DepartmentTableView(depts: self.$departments)
+                }
+            } //: VStack
+            //        .clipShape(RoundedRectangle(cornerRadius: 8))
+            //        .overlay(
+            //            RoundedRectangle(cornerRadius: 8)
+            //                .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
+            //        )
+            .navigationTitle(selectedTableType == .items ? "Inventory" : "Departments")
+            .padding()
+        } //: ZStack
+        .padding(.bottom)
+        .padding(.horizontal, hSize == .regular ? 12 : 4)
+        .background(.bg)
     } //: Body
     
     @ViewBuilder private var departmentMenu: some View {

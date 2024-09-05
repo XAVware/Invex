@@ -54,19 +54,16 @@ struct InventoryXApp: SwiftUI.App {
     
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                (vSize == .regular ? Color.bg : Color.neoUnderBg).ignoresSafeArea()
-                RootView()
-            }
-//                .onAppear {
-//                    Task {
-//                        try await RealmActor().setUpForDebug()
-////                        let h = AuthService.shared.hashString("1234")
-////                        await AuthService.shared.savePasscode(hash: h)
-//                        AuthService.shared.exists = true
-//                        
-//                    }
-//                }
+            RootView()
+                .onAppear {
+                    Task {
+                        try await RealmActor().setUpForDebug()
+//                        let h = AuthService.shared.hashString("1234")
+//                        await AuthService.shared.savePasscode(hash: h)
+                        AuthService.shared.exists = true
+                        
+                    }
+                }
         }
     }
 }

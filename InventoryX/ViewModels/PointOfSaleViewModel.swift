@@ -5,7 +5,9 @@ import RealmSwift
 
 @MainActor class PointOfSaleViewModel: ObservableObject {
     let id = UUID()
-    @Published var cartItems: Array<ItemEntity> = .init()
+//    @Published var cartItems: Array<ItemEntity> = .init()
+    @Published var cartItems: Array<ItemEntity> = [ItemEntity.item1, ItemEntity.item2]
+
     @Published var companyName: String = ""
     @Published var taxRate: Double = 0.0
     
@@ -19,7 +21,7 @@ import RealmSwift
     var taxAmount: Double { cartSubtotal * taxRate / 100 }
     var total: Double { cartSubtotal + taxAmount }
     
-    var cartItemCount: Int { cartItems.count }
+//    var cartItemCount: Int { cartItems.count }
 
     @Published var cartDisplayMode: CartState = .sidebar
     // Instead of pushing confirmSale from here, only toggle the cartDisplayMode. Then listen for cartDisplayMode changes from the view you need to push confirmSale from.
@@ -44,7 +46,6 @@ import RealmSwift
         withAnimation {
             cartDisplayMode = .sidebar
         }
-        
     }
     
     func addItemToCart(_ item: ItemEntity) {

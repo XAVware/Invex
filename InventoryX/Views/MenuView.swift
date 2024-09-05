@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MenuView: View {    
+struct MenuView: View {
     // This could be causing lock screen to dismiss on orientation change.
     @State var showingLockScreen: Bool = false
     
@@ -23,106 +23,105 @@ struct MenuView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                ForEach(menuButtons, id: \.self) { display in
-                    if let data = getButtonData(for: display) {
-                        Button {
-                            LSXService.shared.update(newDisplay: display)
-                        } label: {
-                            HStack(spacing: 16) {
-                                Text(data.0)
-                                Spacer()
-                                Image(systemName: data.1)
-                            } //: HStack
-                            .font(.title3)
-                            .fontDesign(.rounded)
-                            .padding()
+        ZStack {
+            VStack {
+                ZStack {
+                    NeomorphicCardView(layer: .over)
+                    VStack {
+                        ForEach(menuButtons, id: \.self) { display in
+                            if let data = getButtonData(for: display) {
+                                Button {
+                                    LSXService.shared.update(newDisplay: display)
+                                } label: {
+                                    HStack(spacing: 24) {
+                                        Image(systemName: data.1)
+                                        Text(data.0)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                    }
+                                }
+                                .buttonStyle(MenuButtonStyle())
+                                
+                                if display != .settings {
+                                    FieldDivider()
+                                }
+                                
+                            }
+                        } //: For Each
+                    } //: VStack
+                } //: ZStack
+                .frame(maxHeight: CGFloat(menuButtons.count) * 72)
+                
+                Spacer()
+                
+                ZStack {
+                    NeomorphicCardView(layer: .over)
+                    
+                    Button {
+                        showingLockScreen = true
+                    } label: {
+                        HStack(spacing: 24) {
+                            Image(systemName: "lock")
+                            Text("Lock")
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
-                } //: For Each
-                Spacer()
+                    .buttonStyle(MenuButtonStyle())
+                } //: ZStack
+                .frame(maxHeight: 48)
+                
+                
+                VStack(spacing: 8) {
+                    Text("© 2024 XAVware, LLC. All Rights Reserved.")
+                    HStack(spacing: 6) {
+                        Link("Terms of Service", destination: K.termsOfServiceURL)
+                        Text("-")
+                        Link("Privacy Policy", destination: K.privacyPolicyURL)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    
+                }
+                .font(.caption2)
+                .padding(.top, 24)
+                .foregroundStyle(.accent)
+                .opacity(0.6)
+//                .font(.caption2)
+//                .padding()
+                
             } //: VStack
             .padding(.vertical)
-        } //: Scroll
-//        .padding(.trailing)
-//        .navigationTitle("Menu")
-        .navigationBarTitleDisplayMode(.inline)
-        .background(
-            Color.bg
-//                .cornerRadius(36, corners: [.topRight, .bottomRight])
-//                .shadow(radius: 2)
-//                .ignoresSafeArea()
-//                .padding(.trailing, 3)
-        )
+            .padding(.leading)
+            .navigationBarTitleDisplayMode(.inline)
+            .background(Color.bg)
+            .fullScreenCover(isPresented: $showingLockScreen) {
+                LockScreenView()
+                    .frame(maxHeight: .infinity)
+                    .background(Color.bg)
+            }
+            
+        } //: Body
         
-//        VStack(spacing: 16) {
-//            Spacer()
-//            
-//            ForEach(menuButtons, id: \.self) { display in
-//                Button {
-//                    LSXService.shared.update(newDisplay: display)
-//                } label: {
-//                    HStack(spacing: 16) {
-//                        let data = getButtonData(for: display)
-//                        Text(data.0)
-//                        Spacer()
-//                        Image(systemName: data.1)
-//                        RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
-//                            .fill(Color("lightAccent"))
-//                            .frame(width: 6)
-////                            .opacity(display == LSXService.shared.primaryRoot ? 1 : 0)
-//                            .offset(x: 3)
-//                    }
-////                    .modifier(MenuButtonMod(isSelected: display == LazySplitService.shared.primaryRoot))
-//                }
-//                
-//            } //: For Each
-//
-//            Spacer()
-//            
-//            Button {
-//                showingLockScreen = true
-//            } label: {
-//                HStack(spacing: 16) {
-//                    Text("Lock")
-//                    Spacer()
-//                    Image(systemName: "lock")
-//                    RoundedCorner(radius: 8, corners: [.topLeft, .bottomLeft])
-//                        .fill(Color("lightAccent"))
-//                        .frame(width: 6)
-//                        .opacity(0)
-//                        .offset(x: 3)
-//                } //: HStack
-//                .modifier(MenuButtonMod(isSelected: false))
-//            }
-//            
-//        } //: VStack
-//        .background(.lightAccent)
-//        .fullScreenCover(isPresented: $showingLockScreen) {
-//            LockScreenView()
-//                .frame(maxHeight: .infinity)
-//                .background(Color("bgColor"))
-//        }
-//        
     }
-    
-    struct MenuButtonMod: ViewModifier {
-        let isSelected: Bool
-        func body(content: Content) -> some View {
-            content
-                .font(.headline)
-                .fontDesign(.rounded)
-                .padding(.leading)
-                .padding(.vertical, 8)
-                .frame(maxHeight: 64)
-    //            .foregroundStyle(isSelected ? .white : Color("bgColor").opacity(0.6))
-                .foregroundStyle(.accent.opacity(isSelected ? 1.0 : 0.6))
-        }
-    }
-    
 }
 
 #Preview {
     MenuView()
+}
+
+struct MenuButtonStyle: ButtonStyle {
+    @Environment(\.verticalSizeClass) var vSize
+    @Environment(\.horizontalSizeClass) var hSize
+
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+//            .padding(vSize == .compact || hSize == .compact ? 10 : 14)
+            .padding()
+            .font(.title3)
+            .fontDesign(.rounded)
+            .background(Color.bg.opacity(0.01))
+            .foregroundColor(Color.accent)
+            .opacity(configuration.isPressed ? 0.7 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+    }
 }

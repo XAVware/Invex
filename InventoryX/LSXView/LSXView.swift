@@ -39,12 +39,24 @@ struct LSXView<S: View, C: View, D: View>: View {
             NavigationStack(path: $vm.primaryPath) {
                 
                 primarySplit
-                        // TODO: Document in LSX that this needs to be included in order for the toolbar title and toolbar button to appear on the home view
+                    // TODO: Document in LSX that this needs to be included in order for the toolbar title and toolbar button to appear on the home view
                     .navigationDestination(for: LSXDisplay.self) { detail in
-                        switch detail {
-                        default:                Text("Err with full screen detail view")
+                            switch detail {
+                            case .confirmSale(let items):   ConfirmSaleView(items: items)
+                            case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
+                            case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
+                            case .passcodePad(let p):       PasscodeView(processes: p) { }
+                                
+                            default: Color.red
+                            }
                         }
-                    }
+//                    .navigationDestination(for: LSXDisplay.self) { detail in
+//                        switch detail {
+//                            
+////                        case .confirmSale: ConfirmSaleView()
+//                        default:                Text("Err with full screen detail view")
+//                        }
+//                    }
                     .toolbar(.hidden, for: .navigationBar)
                     .modifier(LazySplitMod(isProminent: horSize == .compact && !isLandscape))
                     .overlay(
@@ -100,17 +112,20 @@ struct LSXView<S: View, C: View, D: View>: View {
     @ViewBuilder private var contentLayout: some View {
         if vm.mainDisplay.displayMode == .besideDetail {
             innerSplit
+                .navigationTitle(vm.mainDisplay == .settings ? "Settings" : "")
 //                .navigationBarTitleDisplayMode(.inline) // D
                 .navigationSplitViewStyle(.balanced)
                 .toolbar(removing: .sidebarToggle) // E
         } else {
             content
+            
         }
     } //: Content Layout
     
     @ViewBuilder private var innerSplit: some View {
         NavigationSplitView(columnVisibility: $childColVis, preferredCompactColumn: $childPrefCol) {
             content
+                
                 .toolbar(.hidden, for: .navigationBar) // C
         } detail: {
             GeometryReader { geo in

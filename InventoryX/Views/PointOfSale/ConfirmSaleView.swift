@@ -10,13 +10,55 @@ import RealmSwift
 
 struct ConfirmSaleView: View {
     @Environment(\.verticalSizeClass) var verSize
-    @EnvironmentObject var vm: PointOfSaleViewModel
+    
+    @ObservedResults(CompanyEntity.self) var companies
+    @ObservedResults(SaleEntity.self) var sales
+    
+    @State var companyName: String = ""
+    @State var saleNumber: Int = -2
+    @State var taxRate: Double = 0
+    @State var items: [ItemEntity]
+    
+    
+    /// Computed array of unique items in the cart. `CartView` uses this to display a section for each item,
+    /// without re-ordering them. The array of `@Published cartItems` in `PointOfSaleViewModel` can then be
+    /// queried by the view to find data on each unique item such as the quantity in cart and its subtotal.
+    /// This allows for re-use of `ItemEntity`. `.uniqued()` requires `Swift Algorithms.`
+    var uniqueItems: [ItemEntity] { Array(items.uniqued()) }
+    
+    var cartSubtotal: Double { items.reduce(0) { $0 + $1.retailPrice } }
+    var taxAmount: Double { cartSubtotal * taxRate / 100 }
+    var total: Double { cartSubtotal + taxAmount }
+    
+    var cartItemCount: Int { items.count }
+    
+    init(items: [ItemEntity]) {
+        self.items = items
+    }
+    
+    
+    func finalizeSale() async throws {
+        /// Update the on-hand quantity for each unique item in the cart.
+        ///     - Looping through the unique items performs better than looping through all items.
+        for index in 0...uniqueItems.count - 1 {
+            let tempItem = uniqueItems[index]
+            let cartQty = items.filter { $0._id == tempItem._id }.count
+            try await RealmActor().adjustStock(for: tempItem, by: cartQty)
+        }
+                
+        /// Convert ItemEntities to SaleItemEntities so they can be used in the sale, without
+        /// risking losing an item record on delete.
+        let saleItems = items.map( { SaleItemEntity(item: $0) } )
+        try await RealmActor().saveSale(items: saleItems, total: self.total)
+        items.removeAll()
+    }
+
     
     func continueTapped() {
-        guard !vm.cartItems.isEmpty else { return }
+        guard !items.isEmpty else { return }
         Task {
             do {
-                try await vm.finalizeSale()
+                try await finalizeSale()
 //                LazySplitService.shared.popPrimary()
             } catch {
                 debugPrint("Error saving sale: \(error)")
@@ -40,16 +82,16 @@ struct ConfirmSaleView: View {
                     // MARK: - Receipt View
                     VStack(spacing: 16) {
                         HStack {
-                            Text("Sale #\(vm.calcNextSaleNumber())")
+                            Text("Sale #\(saleNumber)")
                             Spacer()
                         }
                         
-                        Text("\(vm.companyName)")
+                        Text("\(companyName)")
                         
                         ScrollView(.vertical, showsIndicators: false) {
                             VStack(spacing: 16) {
-                                ForEach(vm.uniqueItems) { item in
-                                    let itemQty = vm.cartItems.filter { $0._id == item._id }.count
+                                ForEach(uniqueItems) { item in
+                                    let itemQty = items.filter { $0._id == item._id }.count
                                     let itemSubtotal: Double = Double(itemQty) * item.retailPrice
                                     HStack(spacing: 0) {
                                         VStack(alignment: .leading) {
@@ -91,13 +133,13 @@ struct ConfirmSaleView: View {
                                 HStack {
                                     Text("Subtotal:")
                                     Spacer()
-                                    Text("\(vm.cartSubtotal.formatAsCurrencyString())")
+                                    Text("\(cartSubtotal.formatAsCurrencyString())")
                                 } //: HStack
                                 
                                 HStack {
-                                    Text("Tax: (\(vm.taxRate.toPercentageString())%)")
+                                    Text("Tax: (\(taxRate.toPercentageString())%)")
                                     Spacer()
-                                    Text("\(vm.taxAmount.formatAsCurrencyString())")
+                                    Text("\(taxAmount.formatAsCurrencyString())")
                                 } //: HStack
                             } //: VStack
                             .font(.subheadline)
@@ -107,7 +149,7 @@ struct ConfirmSaleView: View {
                             HStack {
                                 Text("Total:")
                                 Spacer()
-                                Text(vm.total.formatAsCurrencyString())
+                                Text(total.formatAsCurrencyString())
                             } //: HStack
                             .fontWeight(.semibold)
                             .font(.title3)
@@ -136,7 +178,15 @@ struct ConfirmSaleView: View {
             .navigationTitle("Confirm Sale")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
-                vm.fetchCompany()
+//                vm.fetchCompany()
+                guard let c = companies.first else {
+                    print("No company found")
+                    return
+                }
+                
+                self.companyName = c.name
+                self.taxRate = c.taxRate
+                self.saleNumber = sales.count + 1
             }
         } //: Geometry Reader
     } //: Body
