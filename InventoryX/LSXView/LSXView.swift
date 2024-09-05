@@ -42,7 +42,7 @@ struct LSXView<S: View, C: View, D: View>: View {
                     // TODO: Document in LSX that this needs to be included in order for the toolbar title and toolbar button to appear on the home view
                     .navigationDestination(for: LSXDisplay.self) { detail in
                             switch detail {
-                            case .confirmSale(let items):   ConfirmSaleView(items: items)
+                            case .confirmSale(let items):   ConfirmSaleView(cartItems: items)
                             case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
                             case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
                             case .passcodePad(let p):       PasscodeView(processes: p) { }

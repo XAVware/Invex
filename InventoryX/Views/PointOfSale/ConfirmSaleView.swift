@@ -13,49 +13,69 @@ struct ConfirmSaleView: View {
     
     @ObservedResults(CompanyEntity.self) var companies
     @ObservedResults(SaleEntity.self) var sales
+    @ObservedResults(ItemEntity.self) var realmItems
     
     @State var companyName: String = ""
     @State var saleNumber: Int = -2
     @State var taxRate: Double = 0
-    @State var items: [ItemEntity]
+    @State var cartItems: [CartItem]
     
     
     /// Computed array of unique items in the cart. `CartView` uses this to display a section for each item,
     /// without re-ordering them. The array of `@Published cartItems` in `PointOfSaleViewModel` can then be
     /// queried by the view to find data on each unique item such as the quantity in cart and its subtotal.
     /// This allows for re-use of `ItemEntity`. `.uniqued()` requires `Swift Algorithms.`
-    var uniqueItems: [ItemEntity] { Array(items.uniqued()) }
+//    var uniqueItems: [ItemEntity] { Array(items.uniqued()) }
     
-    var cartSubtotal: Double { items.reduce(0) { $0 + $1.retailPrice } }
+    var cartSubtotal: Double { cartItems.reduce(0) { $0 + $1.retailPrice } }
     var taxAmount: Double { cartSubtotal * taxRate / 100 }
     var total: Double { cartSubtotal + taxAmount }
     
-    var cartItemCount: Int { items.count }
+//    var cartItemCount: Int { items.count }
     
-    init(items: [ItemEntity]) {
-        self.items = items
+    init(cartItems: [CartItem]) {
+        self.cartItems = cartItems
     }
     
     
     func finalizeSale() async throws {
         /// Update the on-hand quantity for each unique item in the cart.
         ///     - Looping through the unique items performs better than looping through all items.
-        for index in 0...uniqueItems.count - 1 {
-            let tempItem = uniqueItems[index]
-            let cartQty = items.filter { $0._id == tempItem._id }.count
-            try await RealmActor().adjustStock(for: tempItem, by: cartQty)
+//        for index in 0...uniqueItems.count - 1 {
+//            let tempItem = uniqueItems[index]
+//            let cartQty = items.filter { $0._id == tempItem._id }.count
+//            try await RealmActor().adjustStock(for: tempItem, by: cartQty)
+//        }
+        
+//        for index in 0...cartItems.count - 1 {
+//            let tempItem = cartItems[index]
+//            let cartQty = tempItem.qtyInCart
+////            let cartQty = items.filter { $0._id == tempItem._id }.count
+//            try await RealmActor().adjustStock(for: tempItem, by: cartQty)
+//        }
+        
+        for item in cartItems {
+            if let realmItem = realmItems.first(where: { $0._id == item.id })?.thaw() {
+                let realm = try await Realm()
+                try realm.write {
+                    realmItem.onHandQty = realmItem.onHandQty - item.qtyInCart
+                }
+                print("Finished updating stock")
+            } else {
+                print("Could not find item: \(item)")
+            }
         }
                 
         /// Convert ItemEntities to SaleItemEntities so they can be used in the sale, without
         /// risking losing an item record on delete.
-        let saleItems = items.map( { SaleItemEntity(item: $0) } )
+        let saleItems = Array(cartItems.map( { SaleItemEntity(item: $0) } ))
         try await RealmActor().saveSale(items: saleItems, total: self.total)
-        items.removeAll()
+        cartItems.removeAll()
     }
 
     
     func continueTapped() {
-        guard !items.isEmpty else { return }
+        guard !cartItems.isEmpty else { return }
         Task {
             do {
                 try await finalizeSale()
@@ -90,8 +110,9 @@ struct ConfirmSaleView: View {
                         
                         ScrollView(.vertical, showsIndicators: false) {
                             VStack(spacing: 16) {
-                                ForEach(uniqueItems) { item in
-                                    let itemQty = items.filter { $0._id == item._id }.count
+                                ForEach(cartItems) { item in
+//                                    let itemQty = items.filter { $0._id == item._id }.count
+                                    let itemQty = item.qtyInCart
                                     let itemSubtotal: Double = Double(itemQty) * item.retailPrice
                                     HStack(spacing: 0) {
                                         VStack(alignment: .leading) {

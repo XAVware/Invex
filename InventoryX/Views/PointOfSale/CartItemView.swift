@@ -6,25 +6,37 @@
 //
 
 import SwiftUI
+import RealmSwift
 
-struct CartItem: Identifiable {
-//    let id: UUID
-//    let name: String
-//    let attribute: String
-//    let price: Double
-    var id: UInt64 { return item.id }
-    let item: ItemEntity
-    @State var qtyInCart: Int
+struct CartItem: Identifiable, Hashable {
+    var id: ObjectId
+    var name: String
+    var attribute: String
+    var retailPrice: Double
+    var qtyInCart: Int
+    
+    init(from itemEntity: ItemEntity) {
+        self.id = itemEntity._id
+        self.name = itemEntity.name
+        self.attribute = itemEntity.attribute
+        self.retailPrice = itemEntity.retailPrice
+        self.qtyInCart = 1
+    }
+    
 }
 
 struct CartItemView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var vm: PointOfSaleViewModel
-    @State var item: ItemEntity
+//    @State var item: ItemEntity
+//    
+//    init(_ item: ItemEntity) {
+//        self.item = item
+//    }
     
-    init(_ item: ItemEntity) {
-        self.item = item
-    }
+    @State var item: CartItem
+    let qty: Int
+    
     
     var body: some View {
         VStack(spacing: 12) {
@@ -37,7 +49,7 @@ struct CartItemView: View {
                 } //: VStack
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text(item.retailPrice.formatAsCurrencyString())
+                Text($item.wrappedValue.retailPrice.formatAsCurrencyString())
                     .font(.callout)
             } //: HStack
             
@@ -52,7 +64,8 @@ struct CartItemView: View {
     private var stepper: some View {
         HStack(spacing: 0) {
             Button {
-                vm.removeItemFromCart(item)
+                vm.setQty(of: item.id, to: item.qtyInCart - 1)
+//                vm.removeItemFromCart(item)
             } label: {
                 Text("-")
                     .font(.title2)
@@ -64,13 +77,14 @@ struct CartItemView: View {
             .buttonStyle(PlainButtonStyle())
             .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
             
-            Text("\(vm.cartItems.filter { $0._id == item._id }.count)")
+//            Text("\(vm.cartItems.filter { $0._id == item._id }.count)")
+            Text(qty.description)
                 .frame(width: 42, height: 28, alignment: .center)
                 .font(.subheadline)
                 .background(.white)
             
             Button {
-                vm.addItemToCart(item)
+//                vm.addItemToCart(item)
             } label: {
                 Text("+")
                     .font(.title2)
@@ -84,10 +98,12 @@ struct CartItemView: View {
         } //: HStack
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.neoOverDark, lineWidth: 0.5))
+        .listRowBackground(Color.clear)
+
     }
 }
 
 
-#Preview {
-    CartItemView(ItemEntity.item1)
-}
+//#Preview {
+//    CartItemView(ItemEntity.item1)
+//}

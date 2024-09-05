@@ -21,10 +21,27 @@ import RealmSwift
     var taxAmount: Double { cartSubtotal * taxRate / 100 }
     var total: Double { cartSubtotal + taxAmount }
     
-//    var cartItemCount: Int { cartItems.count }
-
     @Published var cartDisplayMode: CartState = .sidebar
     // Instead of pushing confirmSale from here, only toggle the cartDisplayMode. Then listen for cartDisplayMode changes from the view you need to push confirmSale from.
+    
+    @Published var saleItems: [CartItem] = []
+    
+    func setQty(of itemId: ObjectId, to qty: Int) {
+        if let index = saleItems.firstIndex(where: { $0.id == itemId }) {
+            print("Item in cart at index: \(index)")
+            saleItems[index].qtyInCart = qty
+        } else {
+            print("Item not in cart")
+        }
+    }
+    
+    func addItemToCart(_ item: CartItem) {
+        if let index = saleItems.firstIndex(where: { $0.id == item.id }) {
+            saleItems[index].qtyInCart += 1
+        } else {
+            saleItems.append(item)
+        }
+    }
     
     
     /// Toggle between hidden and sidebar cart state. Only called from regular horizontal size class devices.
@@ -50,6 +67,11 @@ import RealmSwift
     
     func addItemToCart(_ item: ItemEntity) {
         cartItems.append(item)
+        
+        // New
+//        let newItem = CartItem(id: item._id, name: item.name, attribute: item.attribute, price: item.retailPrice, qtyInCart: 1)
+        let newItem = CartItem(from: item)
+        saleItems.append(newItem)
     }
     
     func removeItemFromCart(_ item: ItemEntity) {

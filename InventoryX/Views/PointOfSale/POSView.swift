@@ -31,11 +31,13 @@ struct POSView: View {
     
     @State var showCartAlert: Bool = false
     
+//    @Binding var cartItems: Binding<[CartItem]> = []
+    
     func continueTapped() {
         if vm.cartItems.isEmpty {
             showCartAlert.toggle()
         } else {
-            LSXService.shared.update(newDisplay: .confirmSale(vm.cartItems))
+            LSXService.shared.update(newDisplay: .confirmSale(vm.saleItems))
         }
     }
     
@@ -72,7 +74,18 @@ struct POSView: View {
                         .padding(vSize == .regular ? 12 : 8)
                         
                         ItemGridView(items: selDept != nil ? Array(selDept?.items ?? .init()) : Array(items)) { item in
-                            vm.addItemToCart(item)
+//                            vm.addItemToCart(item)
+                            
+                            vm.addItemToCart(CartItem(from: item))
+                            
+//                            if let itemInCart = vm.saleItems.first(where: { $0.id == item._id }) {
+//                                print(itemInCart)
+//                                vm.setQty(of: item._id, to: itemInCart.qtyInCart + 1)
+//                            } else {
+//                                vm.saleItems.append(CartItem(from: item))
+////                                let newItem = CartItem(from: item)
+////                                vm.saleItems.append(newItem)
+//                            }
                         }
                     } //: VStack
                     .padding(.horizontal, hSize == .regular ? 12 : 4)
@@ -110,14 +123,14 @@ struct POSView: View {
                             .opacity(0.8)
                             
                             
-                            List(vm.cartItems) { item in
-                                CartItemView(item)
+                            List(vm.saleItems) { item in
+                                CartItemView(item: item, qty: item.qtyInCart)
                                     .listRowBackground(Color.clear)
                                     .environmentObject(vm)
-                                
                             }
                             .frame(maxHeight: .infinity)
                             .listStyle(PlainListStyle())
+
                             
                             
                             // MARK: - Cart Totals
@@ -156,10 +169,6 @@ struct POSView: View {
                         .alert("Your cart is empty.", isPresented: $showCartAlert) {
                             Button("Okay", role: .cancel) { }
                         }
-                        //TODO: Company data doesn't need to be fetched every time this appears. Just save it in POS VM
-                        .onAppear {
-                            vm.fetchCompany()
-                        }
                     } //: ZStack
                     .frame(maxWidth: vm.cartDisplayMode.idealWidth)
                     .offset(x: vm.cartDisplayMode == .hidden ? 320 : 0)
@@ -171,7 +180,9 @@ struct POSView: View {
             .background(.bg)
             .navigationBarTitleDisplayMode(.inline)
             .overlay(!isHorizontalLayout ? checkoutButton : nil, alignment: .bottom)
+            //TODO: Company data doesn't need to be fetched every time this appears. Just save it in POS VM
             .onAppear {
+                vm.fetchCompany()
                 if hSize == .regular {
                     vm.showCartSidebar()
                 } else {
@@ -207,13 +218,13 @@ struct POSView: View {
                 Text("Checkout")
                 Spacer()
                 Text(vm.total.formatAsCurrencyString())
+                    .frame(maxWidth: .infinity, maxHeight: 32)
             }
-            .frame(maxWidth: .infinity, maxHeight: 32)
             .font(.subheadline)
             .fontWeight(.semibold)
             .fontDesign(.rounded)
         }
-        .padding(.horizontal)
+//        .padding(.horizontal)
         .buttonStyle(ThemeButtonStyle())
     }
     

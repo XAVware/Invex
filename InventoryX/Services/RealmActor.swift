@@ -186,6 +186,7 @@ actor RealmActor {
         }
     }
     
+//    @MainActor func adjustStock(for item: ItemEntity, by amt: Int) async throws {
     @MainActor func adjustStock(for item: ItemEntity, by amt: Int) async throws {
         if let invItem = item.thaw() {
             let newOnHandQty = invItem.onHandQty - amt

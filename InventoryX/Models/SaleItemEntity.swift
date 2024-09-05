@@ -25,4 +25,11 @@ class SaleItemEntity: Object, ObjectKeyIdentifiable {
         self.attribute = item.attribute
         self.retailPrice = item.retailPrice
     }
+    
+    convenience init(item: CartItem) {
+        self.init()
+        self.name = item.name
+        self.attribute = item.attribute
+        self.retailPrice = item.retailPrice
+    }
 }
