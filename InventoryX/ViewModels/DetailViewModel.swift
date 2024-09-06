@@ -11,10 +11,15 @@ import RealmSwift
 @MainActor class DetailViewModel: ObservableObject {
     @Published var errorMessage: String = ""
     
-    func getFirstDept() async -> DepartmentEntity?  {
-        let departments = try? await RealmActor().fetchDepartments()
-        return departments?.first ?? nil
-    }
+//    func getFirstDept() async -> DepartmentEntity?  {
+//        let departments = try? await RealmActor().fetchDepartments()
+//        return departments?.first ?? nil
+//    }
+    
+//    func getDepartmentNames() async -> [String]  {
+//        let departments = try? await RealmActor().fetchDepartments()
+//        return Array(departments.map({ $0.name }))
+//    }
     
     func saveItem(dept: DepartmentEntity?, name: String, att: String, qty: String, price: String, cost: String, completion: @escaping ((Error?) -> Void)) async {
         do {

@@ -23,6 +23,10 @@ struct CartItem: Identifiable, Hashable {
         self.qtyInCart = 1
     }
     
+    func convertToSaleItem() -> SaleItemEntity {
+        return SaleItemEntity(item: self)
+    }
+    
 }
 
 struct CartItemView: View {

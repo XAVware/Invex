@@ -37,40 +37,41 @@ struct ConfirmSaleView: View {
         self.cartItems = cartItems
     }
     
-    
     func finalizeSale() async throws {
-        /// Update the on-hand quantity for each unique item in the cart.
-        ///     - Looping through the unique items performs better than looping through all items.
-//        for index in 0...uniqueItems.count - 1 {
-//            let tempItem = uniqueItems[index]
-//            let cartQty = items.filter { $0._id == tempItem._id }.count
-//            try await RealmActor().adjustStock(for: tempItem, by: cartQty)
-//        }
+        let realm = try await Realm()
+        let newSale = SaleEntity(timestamp: Date(), total: self.total)
         
-//        for index in 0...cartItems.count - 1 {
-//            let tempItem = cartItems[index]
-//            let cartQty = tempItem.qtyInCart
-////            let cartQty = items.filter { $0._id == tempItem._id }.count
-//            try await RealmActor().adjustStock(for: tempItem, by: cartQty)
-//        }
-        
-        for item in cartItems {
-            if let realmItem = realmItems.first(where: { $0._id == item.id })?.thaw() {
-                let realm = try await Realm()
-                try realm.write {
-                    realmItem.onHandQty = realmItem.onHandQty - item.qtyInCart
-                }
-                print("Finished updating stock")
-            } else {
-                print("Could not find item: \(item)")
+        try realm.write {
+            realm.add(newSale)
+            newSale.items.append(objectsIn: cartItems.map { $0.convertToSaleItem() })
+            
+            try cartItems.forEach { item in
+                guard let realmItem = realm.object(ofType: ItemEntity.self, forPrimaryKey: item.id) else { throw AppError.thawingItemError }
+                let origQty = realmItem.onHandQty
+                realmItem.onHandQty = origQty - item.qtyInCart
+                print("Item '\(realmItem.name)' quantity changed: \(origQty) -> \(realmItem.onHandQty)")
             }
+            print("Finished saving sale and updating stock. There are \(sales.count) sales.")
+            cartItems.removeAll()
         }
+        
+        
+//        for item in cartItems {
+////            guard let realmItem = realmItems.first(where: { $0._id == item.id })?.thaw() else { throw AppError.thawingItemError }
+//            guard let realmItem = realm.object(ofType: ItemEntity.self, forPrimaryKey: item.id) else { throw AppError.thawingItemError }
+//            try realm.write {
+//            }
+//        }
                 
-        /// Convert ItemEntities to SaleItemEntities so they can be used in the sale, without
-        /// risking losing an item record on delete.
-        let saleItems = Array(cartItems.map( { SaleItemEntity(item: $0) } ))
-        try await RealmActor().saveSale(items: saleItems, total: self.total)
-        cartItems.removeAll()
+        
+        
+        /// CartItem is initialized with an ItemEntity but it only stores the properties that it needs. It would be too cumbersome to store all of the ItemEntity properties.
+        ///     - The 'live' version of a SaleItemEntity before the sale is finalized.
+        /// When the sale is finalized, the CartItems are converted to SaleItems.
+        /// ItemEntity and SaleItemEntity are intentionally separate to avoid losing records when an ItemEntity is deleted.
+//        let saleItems = Array(cartItems.map( { SaleItemEntity(item: $0) } ))
+//        try await RealmActor().saveSale(items: saleItems, total: self.total)
+        
     }
 
     

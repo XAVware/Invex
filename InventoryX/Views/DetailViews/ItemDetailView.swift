@@ -13,6 +13,9 @@ struct ItemDetailView: View {
     @StateObject var vm: DetailViewModel = DetailViewModel()
     
     @State private var selectedDepartment: DepartmentEntity?
+//    @State private var selectedDepartment: String = "-- Select --"
+//    @State private var departmentNames: [String] = ["-- Select --"]
+//    @State private var selectedDeptName: String = "-- Select --"
     @State private var itemName: String = ""
     @State private var attribute: String = ""
     @State private var quantity: String = ""
@@ -42,6 +45,7 @@ struct ItemDetailView: View {
         focus = nil
         let price = retailPrice.replacingOccurrences(of: "$", with: "")
         let cost = unitCost.replacingOccurrences(of: "$", with: "")
+ 
         
         Task {
             
@@ -106,21 +110,20 @@ struct ItemDetailView: View {
                             
                             FieldDivider()
                             
-                            HStack {
-                                Picker("Department:", selection: $selectedDepartment) {
-                                    ForEach(departments) { department in
-                                        Text(department.name)
-                                            .font(.subheadline) 
-                                    }
+                            
+                            Picker("Department:", selection: $selectedDepartment) {
+                                ForEach(departments) { dept in
+                                    Text(dept.name)
+                                        .tag(DepartmentEntity?.none)
+                                        .font(.subheadline)
                                 }
-                                .pickerStyle(NavigationLinkPickerStyle())
-//                                .font(.subheadline)
-                            } //: HStack
+                            }
+                            .pickerStyle(NavigationLinkPickerStyle())
                             .foregroundStyle(Color.textPrimary)
                             .tint(Color.textPrimary)
                             .font(.subheadline)
                             .padding()
-                            
+                         
                             FieldDivider()
                             
                             ThemeTextField(boundTo: $attribute,
@@ -207,9 +210,6 @@ struct ItemDetailView: View {
             .padding()
             .onTapGesture {
                 self.focus = nil
-            }
-            .task {
-                self.selectedDepartment = await vm.getFirstDept()
             }
             .onAppear {
                 if let selectedItem = selectedItem {
