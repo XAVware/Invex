@@ -9,12 +9,17 @@ import SwiftUI
 import Combine
 
 class LSXService {
-    let pathView = PassthroughSubject<(LSXDisplay, LSXViewType), Never>()
+    let pathView = PassthroughSubject<(LSXDisplay?, LSXViewType?), Never>()
 
     static let shared = LSXService()
 
     // Pass this a display, add the display to its corresponding path based on its DisplayMode and ViewType
-    func update(newDisplay: LSXDisplay, overrideLocation: LSXViewType? = nil) {
+    func update(newDisplay: LSXDisplay?, overrideLocation: LSXViewType? = nil) {
+        guard let newDisplay = newDisplay else {
+            pathView.send((nil, .primary))
+            return
+        }
+        
         if let loc = overrideLocation {
             pathView.send((newDisplay, loc))
         } else {

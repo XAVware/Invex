@@ -50,6 +50,11 @@ import Combine
         navService.pathView
             .filter({ $0.1 == .primary })
             .sink { [weak self] (view, prefColumn) in
+                guard let view = view else {
+                    self?.primaryPath.removeLast()
+                    return
+                }
+                
                 if LSXDisplay.allCases.contains(view) {
                     self?.changeDisplay(to: view)
                 } else {
@@ -62,6 +67,10 @@ import Combine
         navService.pathView
             .filter({ $0.1 == .detail })
             .sink { [weak self] (display, prefColumn) in
+                guard let display = display else {
+                    print("LSXService: No display")
+                    return
+                }
                 self?.pushDetail(display)
             }.store(in: &cancellables)
     }

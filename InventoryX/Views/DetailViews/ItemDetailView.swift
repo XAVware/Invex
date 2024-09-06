@@ -13,9 +13,6 @@ struct ItemDetailView: View {
     @StateObject var vm: DetailViewModel = DetailViewModel()
     
     @State private var selectedDepartment: DepartmentEntity?
-//    @State private var selectedDepartment: String = "-- Select --"
-//    @State private var departmentNames: [String] = ["-- Select --"]
-//    @State private var selectedDeptName: String = "-- Select --"
     @State private var itemName: String = ""
     @State private var attribute: String = ""
     @State private var quantity: String = ""

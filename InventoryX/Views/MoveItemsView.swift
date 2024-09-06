@@ -13,6 +13,15 @@ struct MoveItemsView: View {
     @State var fromDepartment: DepartmentEntity?
     @State var toDepartment: DepartmentEntity?
     
+    func moveItems() {
+        Task {
+            await vm.moveItems(from: fromDepartment, to: toDepartment) { error in
+                guard error == nil else { return }
+                dismiss()
+            }
+        }
+    }
+    
     var body: some View {
         VStack {
             VStack(alignment: .leading, spacing: 8) {
@@ -56,19 +65,11 @@ struct MoveItemsView: View {
             
             Spacer()
             
-            Button {
-                Task {
-                    await vm.moveItems(from: fromDepartment, to: toDepartment) { error in
-                        guard error == nil else { return }
-                        dismiss()
-                    }
-                }
-            } label: {
-                Spacer()
+            Button(action: moveItems) {
                 Text("Move Items")
-                Spacer()
+                    .frame(maxWidth: .infinity)
             }
-            .modifier(PrimaryButtonMod())
+            .buttonStyle(ThemeButtonStyle())
             .disabled(fromDepartment == nil || toDepartment == nil )
             Spacer()
         } //: VStack

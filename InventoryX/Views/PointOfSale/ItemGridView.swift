@@ -60,10 +60,6 @@ struct ItemGridView: View {
 
                             
                         }
-
-                        
-                        
-                        
                     } //: ForEach
                 } //: LazyVGrid
                 .padding(2)
@@ -73,66 +69,6 @@ struct ItemGridView: View {
     } //: Body
     
     
-    struct GridButtonMod: ViewModifier {
-        @Environment(\.colorScheme) private var colorScheme
-        func body(content: Content) -> some View {
-            switch colorScheme {
-            case .dark:
-                content
-                    .background(
-                        ZStack {
-                            Color.darkButtonGradientBase
-                            LinearGradient(colors: [Color.darkButtonGradient1,
-                                                    Color.darkButtonGradientBase,
-                                                    Color.darkButtonGradient3],
-                                           startPoint: .topLeading,
-                                           endPoint: .bottomTrailing)
-                            .opacity(0.2)
-                            
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(LinearGradient(colors: [Color.darkButtonStroke1,
-                                                                Color.darkButtonStroke2],
-                                                       startPoint: .topLeading,
-                                                       endPoint: .bottomTrailing), lineWidth: 4)
-                        }
-                            .opacity(0.9)
-                            .blur(radius: 3)
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .shadow(color: Color.darkButtonStroke1, radius: 3, x: 2, y: 2)
-                    .shadow(color: Color.darkButtonStroke2, radius: 3, x: -3, y: -3)
-                    .opacity(0.6)
-                
-            default:
-                content
-                    .background(
-                        ZStack {
-                            Color.lightButtonGradientBase
-                            
-                            LinearGradient(colors: [Color.lightButtonStroke1,
-                                                    //                                                    Color.lightButtonGradientBase,
-                                                    Color.lightButtonStroke2],
-                                           startPoint: .topLeading,
-                                           endPoint: .bottomTrailing)
-                            .opacity(0.4)
-                            
-                            
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(LinearGradient(colors: [Color.lightButtonStroke1,
-                                                                Color.lightButtonStroke2.opacity(0.8)],
-                                                       startPoint: .topLeading,
-                                                       endPoint: .bottomTrailing), lineWidth: 4)
-                        } //: ZStack
-                            .blur(radius: 2)
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .shadow(color: .lightButtonStroke1, radius: 2, x: 2, y: 2)
-                    .shadow(color: .lightButtonStroke2, radius: 2, x: -2, y: -2)
-                
-            }
-            
-        }
-    }
 }
 
 

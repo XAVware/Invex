@@ -32,15 +32,9 @@ struct CartItem: Identifiable, Hashable {
 struct CartItemView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var vm: PointOfSaleViewModel
-//    @State var item: ItemEntity
-//    
-//    init(_ item: ItemEntity) {
-//        self.item = item
-//    }
-    
+
     @State var item: CartItem
     let qty: Int
-    
     
     var body: some View {
         VStack(spacing: 12) {

@@ -19,24 +19,19 @@ struct ConfirmSaleView: View {
     @State var saleNumber: Int = -2
     @State var taxRate: Double = 0
     @State var cartItems: [CartItem]
-    
-    
-    /// Computed array of unique items in the cart. `CartView` uses this to display a section for each item,
-    /// without re-ordering them. The array of `@Published cartItems` in `PointOfSaleViewModel` can then be
-    /// queried by the view to find data on each unique item such as the quantity in cart and its subtotal.
-    /// This allows for re-use of `ItemEntity`. `.uniqued()` requires `Swift Algorithms.`
-//    var uniqueItems: [ItemEntity] { Array(items.uniqued()) }
-    
+
     var cartSubtotal: Double { cartItems.reduce(0) { $0 + $1.retailPrice } }
     var taxAmount: Double { cartSubtotal * taxRate / 100 }
     var total: Double { cartSubtotal + taxAmount }
-    
-//    var cartItemCount: Int { items.count }
-    
+        
     init(cartItems: [CartItem]) {
         self.cartItems = cartItems
     }
     
+    /// CartItem is initialized with an ItemEntity but it only stores the properties that it needs.
+    ///     - The 'live' version of a SaleItemEntity before the sale is finalized.
+    /// When the sale is finalized, the CartItems are converted to SaleItems.
+    /// ItemEntity and SaleItemEntity are intentionally separate to avoid losing records when an ItemEntity is deleted.
     func finalizeSale() async throws {
         let realm = try await Realm()
         let newSale = SaleEntity(timestamp: Date(), total: self.total)
@@ -54,24 +49,6 @@ struct ConfirmSaleView: View {
             print("Finished saving sale and updating stock. There are \(sales.count) sales.")
             cartItems.removeAll()
         }
-        
-        
-//        for item in cartItems {
-////            guard let realmItem = realmItems.first(where: { $0._id == item.id })?.thaw() else { throw AppError.thawingItemError }
-//            guard let realmItem = realm.object(ofType: ItemEntity.self, forPrimaryKey: item.id) else { throw AppError.thawingItemError }
-//            try realm.write {
-//            }
-//        }
-                
-        
-        
-        /// CartItem is initialized with an ItemEntity but it only stores the properties that it needs. It would be too cumbersome to store all of the ItemEntity properties.
-        ///     - The 'live' version of a SaleItemEntity before the sale is finalized.
-        /// When the sale is finalized, the CartItems are converted to SaleItems.
-        /// ItemEntity and SaleItemEntity are intentionally separate to avoid losing records when an ItemEntity is deleted.
-//        let saleItems = Array(cartItems.map( { SaleItemEntity(item: $0) } ))
-//        try await RealmActor().saveSale(items: saleItems, total: self.total)
-        
     }
 
     
@@ -80,7 +57,7 @@ struct ConfirmSaleView: View {
         Task {
             do {
                 try await finalizeSale()
-//                LazySplitService.shared.popPrimary()
+                LSXService.shared.update(newDisplay: nil)
             } catch {
                 debugPrint("Error saving sale: \(error)")
             }
@@ -143,53 +120,59 @@ struct ConfirmSaleView: View {
                     
                     // MARK: - Summary View
                     VStack(spacing: 16) {
-                        VStack(alignment: .leading, spacing: !isCondensed ? 16 : 8) {
-                            if !isCondensed {
-                                Text("Order Summary")
-                                    .fontWeight(.semibold)
-                                    .font(verSize == .regular ? .title2 : .title3)
-                                    .padding(.bottom)
-                            }
-                            
-                            VStack(spacing: 16) {
-                                HStack {
-                                    Text("Subtotal:")
-                                    Spacer()
-                                    Text("\(cartSubtotal.formatAsCurrencyString())")
-                                } //: HStack
+                        ZStack {
+                            NeomorphicCardView(layer: .under)
+                            VStack(alignment: .leading, spacing: !isCondensed ? 16 : 8) {
+                                if !isCondensed {
+                                    Text("Order Summary")
+                                        .fontWeight(.semibold)
+                                        .font(verSize == .regular ? .title2 : .title3)
+                                        .padding(.bottom)
+                                }
+                                
+                                VStack(spacing: 16) {
+                                    HStack {
+                                        Text("Subtotal:")
+                                        Spacer()
+                                        Text("\(cartSubtotal.formatAsCurrencyString())")
+                                    } //: HStack
+                                    
+                                    HStack {
+                                        Text("Tax: (\(taxRate.toPercentageString())%)")
+                                        Spacer()
+                                        Text("\(taxAmount.formatAsCurrencyString())")
+                                    } //: HStack
+                                } //: VStack
+                                .font(.subheadline)
+                                
+                                Divider()
                                 
                                 HStack {
-                                    Text("Tax: (\(taxRate.toPercentageString())%)")
+                                    Text("Total:")
                                     Spacer()
-                                    Text("\(taxAmount.formatAsCurrencyString())")
+                                    Text(total.formatAsCurrencyString())
                                 } //: HStack
+                                .fontWeight(.semibold)
+                                .font(.title3)
+                                .padding(.vertical, 4)
                             } //: VStack
-                            .font(.subheadline)
-                            
-                            Divider()
-                            
-                            HStack {
-                                Text("Total:")
-                                Spacer()
-                                Text(total.formatAsCurrencyString())
-                            } //: HStack
-                            .fontWeight(.semibold)
-                            .font(.title3)
-                            .padding(.vertical, 4)
-                        } //: VStack
-                        .padding(.vertical, 16)
-                        .padding(.horizontal)
-                        .background(Color.bg.opacity(0.6))
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .padding()
+//                            .background(Color.bg.opacity(0.6))
+//                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                        } //ZStack
                         
-                        Button {
-                            continueTapped()
-                        } label: {
-                            Spacer()
-                            Text("Confirm Sale")
-                            Spacer()
+                        Button(action: continueTapped) {
+                            Text("Confirm Sale").frame(maxWidth: .infinity)
                         }
-                        .modifier(PrimaryButtonMod())
+                        .buttonStyle(ThemeButtonStyle())
+//                        Button {
+//                            continueTapped()
+//                        } label: {
+//                            Spacer()
+//                            Text("Confirm Sale")
+//                            Spacer()
+//                        }
+//                        .modifier(PrimaryButtonMod())
                         
                     } //: VStack - Order Summary
                     .frame(minWidth: 220, maxWidth: 420, maxHeight: max(h * 0.33, 360))
@@ -197,6 +180,7 @@ struct ConfirmSaleView: View {
             } //: VStack
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding()
+            .background(Color.bg)
             .navigationTitle("Confirm Sale")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
@@ -216,10 +200,10 @@ struct ConfirmSaleView: View {
 }
 
 
-//#Preview {
-//    NavigationStack {
-//        ConfirmSaleView()
-//            .navigationTitle("Confirm Sale")
-//            .environmentObject(PointOfSaleViewModel())
-//    }
-//}
+#Preview {
+    NavigationStack {
+        ConfirmSaleView(cartItems: [CartItem(from: ItemEntity.item1)])
+            .navigationTitle("Confirm Sale")
+            .environmentObject(PointOfSaleViewModel())
+    }
+}
