@@ -13,8 +13,6 @@
 		9421895C2C2375AD00C78586 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890B2C2375AC00C78586 /* String+Ext.swift */; };
 		9421895D2C2375AD00C78586 /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890C2C2375AC00C78586 /* View+Ext.swift */; };
 		9421895E2C2375AD00C78586 /* DepartmentButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890E2C2375AC00C78586 /* DepartmentButton-Mod.swift */; };
-		9421895F2C2375AD00C78586 /* PrimaryButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890F2C2375AC00C78586 /* PrimaryButton-Mod.swift */; };
-		942189602C2375AD00C78586 /* TableStyle-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189102C2375AC00C78586 /* TableStyle-Mod.swift */; };
 		942189612C2375AD00C78586 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189132C2375AC00C78586 /* DetailViewModel.swift */; };
 		942189642C2375AD00C78586 /* InventoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189162C2375AC00C78586 /* InventoryListViewModel.swift */; };
 		942189652C2375AD00C78586 /* MoveItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189172C2375AC00C78586 /* MoveItemsViewModel.swift */; };
@@ -62,7 +60,6 @@
 		942189942C2375AD00C78586 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189532C2375AD00C78586 /* AuthService.swift */; };
 		942189952C2375AD00C78586 /* RealmActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189542C2375AD00C78586 /* RealmActor.swift */; };
 		942189962C2375AD00C78586 /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189552C2375AD00C78586 /* RealmMigrator.swift */; };
-		943AACD12C6B224C005056F0 /* Section-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943AACD02C6B224C005056F0 /* Section-Mod.swift */; };
 		944F670A2C89448F00828875 /* CartItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F67092C89448F00828875 /* CartItemView.swift */; };
 		9453BEC42BB3C79F007C63A4 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 9453BEC32BB3C79F007C63A4 /* Algorithms */; };
 		9454FEF92C843A0E00F8B6D2 /* NeomorphicSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */; };
@@ -77,7 +74,7 @@
 		94E10E382C80EAB00091ABBF /* NeomorphicCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E10E372C80EAB00091ABBF /* NeomorphicCardView.swift */; };
 		94E1853F2C7F30CB0011A3F8 /* SaleItemEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E1853E2C7F30CB0011A3F8 /* SaleItemEntity.swift */; };
 		94E185412C7FD1880011A3F8 /* LandingHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E185402C7FD1880011A3F8 /* LandingHighlight.swift */; };
-		94FA6CCB2C6C01BE001D3CA8 /* NeoUnderShadow-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCA2C6C01BE001D3CA8 /* NeoUnderShadow-Mod.swift */; };
+		94EB7B282C8AD2ED00C1D31A /* TabTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94EB7B272C8AD2ED00C1D31A /* TabTest.swift */; };
 		94FA6CD12C6D2D54001D3CA8 /* LSXViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCC2C6D2D54001D3CA8 /* LSXViewModel.swift */; };
 		94FA6CD22C6D2D54001D3CA8 /* LSXDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCD2C6D2D54001D3CA8 /* LSXDisplay.swift */; };
 		94FA6CD32C6D2D54001D3CA8 /* UIColorOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCE2C6D2D54001D3CA8 /* UIColorOverride.swift */; };
@@ -94,8 +91,6 @@
 		9421890B2C2375AC00C78586 /* String+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		9421890C2C2375AC00C78586 /* View+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
 		9421890E2C2375AC00C78586 /* DepartmentButton-Mod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DepartmentButton-Mod.swift"; sourceTree = "<group>"; };
-		9421890F2C2375AC00C78586 /* PrimaryButton-Mod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PrimaryButton-Mod.swift"; sourceTree = "<group>"; };
-		942189102C2375AC00C78586 /* TableStyle-Mod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TableStyle-Mod.swift"; sourceTree = "<group>"; };
 		942189132C2375AC00C78586 /* DetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		942189162C2375AC00C78586 /* InventoryListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryListViewModel.swift; sourceTree = "<group>"; };
 		942189172C2375AC00C78586 /* MoveItemsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveItemsViewModel.swift; sourceTree = "<group>"; };
@@ -144,7 +139,6 @@
 		942189542C2375AD00C78586 /* RealmActor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmActor.swift; sourceTree = "<group>"; };
 		942189552C2375AD00C78586 /* RealmMigrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		942189972C23766600C78586 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		943AACD02C6B224C005056F0 /* Section-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Section-Mod.swift"; sourceTree = "<group>"; };
 		944F67092C89448F00828875 /* CartItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemView.swift; sourceTree = "<group>"; };
 		9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicSection.swift; sourceTree = "<group>"; };
 		945C28872C8689A10041836D /* ExternalLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinks.swift; sourceTree = "<group>"; };
@@ -156,7 +150,7 @@
 		94E10E372C80EAB00091ABBF /* NeomorphicCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicCardView.swift; sourceTree = "<group>"; };
 		94E1853E2C7F30CB0011A3F8 /* SaleItemEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleItemEntity.swift; sourceTree = "<group>"; };
 		94E185402C7FD1880011A3F8 /* LandingHighlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingHighlight.swift; sourceTree = "<group>"; };
-		94FA6CCA2C6C01BE001D3CA8 /* NeoUnderShadow-Mod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NeoUnderShadow-Mod.swift"; sourceTree = "<group>"; };
+		94EB7B272C8AD2ED00C1D31A /* TabTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTest.swift; sourceTree = "<group>"; };
 		94FA6CCC2C6D2D54001D3CA8 /* LSXViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSXViewModel.swift; sourceTree = "<group>"; };
 		94FA6CCD2C6D2D54001D3CA8 /* LSXDisplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSXDisplay.swift; sourceTree = "<group>"; };
 		94FA6CCE2C6D2D54001D3CA8 /* UIColorOverride.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorOverride.swift; sourceTree = "<group>"; };
@@ -230,10 +224,6 @@
 			isa = PBXGroup;
 			children = (
 				9421890E2C2375AC00C78586 /* DepartmentButton-Mod.swift */,
-				9421890F2C2375AC00C78586 /* PrimaryButton-Mod.swift */,
-				942189102C2375AC00C78586 /* TableStyle-Mod.swift */,
-				943AACD02C6B224C005056F0 /* Section-Mod.swift */,
-				94FA6CCA2C6C01BE001D3CA8 /* NeoUnderShadow-Mod.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -355,6 +345,7 @@
 				942189442C2375AD00C78586 /* ItemData.swift */,
 				942189452C2375AD00C78586 /* RealmActor_Ext.swift */,
 				942189462C2375AD00C78586 /* SaleData.swift */,
+				94EB7B272C8AD2ED00C1D31A /* TabTest.swift */,
 			);
 			path = Dev;
 			sourceTree = "<group>";
@@ -520,10 +511,8 @@
 				9421898B2C2375AD00C78586 /* SaleData.swift in Sources */,
 				94815B572C6B32640085EE3C /* FieldDivider.swift in Sources */,
 				942189642C2375AD00C78586 /* InventoryListViewModel.swift in Sources */,
-				9421895F2C2375AD00C78586 /* PrimaryButton-Mod.swift in Sources */,
 				94FA6CD52C6D2D54001D3CA8 /* LSXService.swift in Sources */,
 				9421895D2C2375AD00C78586 /* View+Ext.swift in Sources */,
-				94FA6CCB2C6C01BE001D3CA8 /* NeoUnderShadow-Mod.swift in Sources */,
 				9421898D2C2375AD00C78586 /* CompanyEntity.swift in Sources */,
 				9421897E2C2375AD00C78586 /* POSView.swift in Sources */,
 				94FA6CD22C6D2D54001D3CA8 /* LSXDisplay.swift in Sources */,
@@ -546,6 +535,7 @@
 				94797A892C8295C600B9CDD8 /* ThemeButtonStyle.swift in Sources */,
 				942189802C2375AD00C78586 /* MenuView.swift in Sources */,
 				942189822C2375AD00C78586 /* OnboardingView.swift in Sources */,
+				94EB7B282C8AD2ED00C1D31A /* TabTest.swift in Sources */,
 				9421896A2C2375AD00C78586 /* CartState.swift in Sources */,
 				9421898E2C2375AD00C78586 /* DepartmentEntity.swift in Sources */,
 				942189852C2375AD00C78586 /* SettingsView.swift in Sources */,
@@ -553,7 +543,6 @@
 				942189782C2375AD00C78586 /* InventoryListView.swift in Sources */,
 				942189842C2375AD00C78586 /* RootView.swift in Sources */,
 				94FA6CD12C6D2D54001D3CA8 /* LSXViewModel.swift in Sources */,
-				942189602C2375AD00C78586 /* TableStyle-Mod.swift in Sources */,
 				9421896D2C2375AD00C78586 /* InventoryXApp.swift in Sources */,
 				944F670A2C89448F00828875 /* CartItemView.swift in Sources */,
 				942189742C2375AD00C78586 /* CompanyDetailView.swift in Sources */,
@@ -564,7 +553,6 @@
 				94797A862C8294EC00B9CDD8 /* Hexagon.swift in Sources */,
 				94797A842C8294E100B9CDD8 /* LandingHighlightTextView.swift in Sources */,
 				9421895A2C2375AD00C78586 /* Date+Ext.swift in Sources */,
-				943AACD12C6B224C005056F0 /* Section-Mod.swift in Sources */,
 				9421895B2C2375AD00C78586 /* Double+Ext.swift in Sources */,
 				945C28882C8689A10041836D /* ExternalLinks.swift in Sources */,
 				94797A8B2C82964F00B9CDD8 /* HexImage.swift in Sources */,

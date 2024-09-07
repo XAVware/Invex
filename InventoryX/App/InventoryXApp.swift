@@ -54,7 +54,8 @@ struct InventoryXApp: SwiftUI.App {
     
     var body: some Scene {
         WindowGroup {
-            RootView()
+//            RootView()
+            TabTest()
                 .onAppear {
                     Task {
                         try await RealmActor().setUpForDebug()

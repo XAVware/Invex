@@ -74,18 +74,7 @@ struct POSView: View {
                         .padding(vSize == .regular ? 12 : 8)
                         
                         ItemGridView(items: selDept != nil ? Array(selDept?.items ?? .init()) : Array(items)) { item in
-//                            vm.addItemToCart(item)
-                            
                             vm.addItemToCart(CartItem(from: item))
-                            
-//                            if let itemInCart = vm.saleItems.first(where: { $0.id == item._id }) {
-//                                print(itemInCart)
-//                                vm.setQty(of: item._id, to: itemInCart.qtyInCart + 1)
-//                            } else {
-//                                vm.saleItems.append(CartItem(from: item))
-////                                let newItem = CartItem(from: item)
-////                                vm.saleItems.append(newItem)
-//                            }
                         }
                     } //: VStack
                     .padding(.horizontal, hSize == .regular ? 12 : 4)
