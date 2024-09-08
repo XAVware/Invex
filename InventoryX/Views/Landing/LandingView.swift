@@ -139,7 +139,7 @@ struct LandingView: View {
             
             Button {
                 if index == highlights.count - 1 {
-                    path.append(LSXDisplay.company(CompanyEntity(), .onboarding))
+                    path.append(LSXDisplay.company)
                 } else {
                     withAnimation(.snappy) {
                         index += 1

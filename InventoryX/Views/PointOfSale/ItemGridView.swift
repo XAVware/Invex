@@ -10,6 +10,7 @@ import SwiftUI
 struct ItemGridView: View {
     @Environment(\.horizontalSizeClass) var horSize
     @Environment(\.verticalSizeClass) var verSize
+    @Environment(\.colorScheme) var colorScheme
     let onSelect: ((ItemEntity) -> Void)
     let items: Array<ItemEntity>
     let colSpacing: CGFloat = 8
@@ -34,6 +35,7 @@ struct ItemGridView: View {
                         } label: {
                             ZStack {
                                 NeomorphicCardView(layer: .over)
+                                    .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
                                 VStack(alignment: .leading, spacing: 0) {
                                     Text(item.name)
                                         .font(.headline)

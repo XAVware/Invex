@@ -18,11 +18,12 @@ struct OnboardingView: View {
             LandingView(path: $path)
                 .navigationDestination(for: LSXDisplay.self) { view in
                     switch view {
-                    case .company(let c, let t):
-                        CompanyDetailView(company: c, detailType: t) {
+                    case .company:
+                        CompanyDetailView {
                             path.append(LSXDisplay.passcodePad([.set]))
                         }
-                        
+                        .background(Color.bg.ignoresSafeArea())
+
                     case .passcodePad(let p):
                         PasscodeView(processes: p) {
                             path.append(LSXDisplay.department(nil, .onboarding))

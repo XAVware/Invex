@@ -172,10 +172,9 @@ struct POSView: View {
             //TODO: Company data doesn't need to be fetched every time this appears. Just save it in POS VM
             .onAppear {
                 vm.fetchCompany()
-                if hSize == .regular {
-                    vm.showCartSidebar()
-                } else {
-                    vm.hideCartSidebar()
+                switch hSize {
+                case .regular:  vm.showCartSidebar()
+                default:        vm.hideCartSidebar()
                 }
             }
             .toolbar {
@@ -194,6 +193,13 @@ struct POSView: View {
                     } else {
                         EmptyView()
                     }
+                }
+            }
+            .onChange(of: hSize) { _, hSize in
+                print("Root: On Change - hSize")
+                switch hSize {
+                case .regular:  vm.showCartSidebar()
+                default:        vm.hideCartSidebar()
                 }
             }
             

@@ -13,30 +13,22 @@ import RealmSwift
 struct CompanyDetailView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: DetailViewModel = DetailViewModel()
-    let company: CompanyEntity?
+    
+    @State var company: CompanyEntity?
     @State private var companyName: String = ""
     @State private var taxRate: String = ""
-    let detailType: DetailType
+    
     private enum Focus { case name, taxRate }
     @FocusState private var focus: Focus?
     
     let onSuccess: (() -> Void)?
     
-    init(company: CompanyEntity?, detailType: DetailType, onSuccess: (() -> Void)? = nil) {
+    @ObservedResults(CompanyEntity.self) var companies
+    @State var showDeleteConfirmation: Bool = false
+    
+    init(onSuccess: (() -> Void)? = nil) {
         self._vm = StateObject(wrappedValue: DetailViewModel())
-        self.detailType = detailType
-        
-        if let company = company {
-            self.companyName = company.name
-            if company.taxRate > 0 {
-                self.taxRate = company.formattedTaxRate
-            }
-        }
-        
-        self.company = company
-        
         self.onSuccess = onSuccess
-
     }
     
     private func continueTapped() {
@@ -93,34 +85,75 @@ struct CompanyDetailView: View {
                         self.taxRate = tax.toPercentageString()
                     }
                 }
-               
-                Spacer()
                 
-                Button(action: continueTapped) {
-                    Text("Continue")
-                        .frame(maxWidth: .infinity)
+                
+                Button {
+                    //                LSXService.shared.popDetail()
+                    showDeleteConfirmation = true
+                    
+                } label: {
+                    HStack(spacing: 24) {
+                        Text("Delete Account")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        Image(systemName: "trash")
+                    }
+                    .foregroundStyle(Color.red)
                 }
-                .buttonStyle(ThemeButtonStyle())
+                .buttonStyle(MenuButtonStyle())
                 
-                Spacer()
+                
+                
+                
+//                Button(action: continueTapped) {
+//                    Text("Continue")
+//                        .frame(maxWidth: .infinity)
+//                }
+//                .buttonStyle(ThemeButtonStyle())
+                
             } //: VStack
-            .navigationTitle("Company info")
-            .navigationBarTitleDisplayMode(.large)
+            //            .navigationTitle("Company info")
+            //            .navigationBarTitleDisplayMode(.large)
             .frame(maxWidth: 720)
             .padding()
             .onTapGesture {
                 self.focus = nil
             }
         } //: Scroll
-        .frame(maxWidth: .infinity, maxHeight: .infinity) 
+        .navigationTitle("Account")
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .scrollIndicators(.hidden)
         .background(Color.bg.ignoresSafeArea())
+        .onAppear {
+            print("Found \(companies.count) companies")
+            if let company = companies.first {
+                self.company = company
+                self.companyName = company.name
+                if company.taxRate > 0 {
+                    self.taxRate = company.formattedTaxRate
+                }
+            } else {
+                self.company = CompanyEntity(name: "")
+            }
+        }
+        .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
+            Button("Go back", role: .cancel) { }
+            Button("Yes, delete account", role: .destructive) {
+                //                LSXService.shared.primaryRoot = .makeASale
+                //                LSXService.shared.detailRoot =  nil
+                //                LSXService.shared.primaryPath = .init()
+                //                LSXService.shared.detailPath = .init()
+                
+                Task {
+                    await vm.deleteAccount()
+                }
+            }
+        }
     } //: Body
     
 }
 
 
 #Preview {
-    CompanyDetailView(company: nil, detailType: .onboarding) {}
-        .background(Color.bg) 
+    CompanyDetailView() {}
+        .background(Color.bg)
 }

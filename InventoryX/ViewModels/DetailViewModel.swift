@@ -78,6 +78,15 @@ extension DetailViewModel {
             completion(error)
         }
     }
+    
+    func deleteAccount() async {
+        do {
+            try await RealmActor().deleteAll()
+            AuthService.shared.deleteAll()
+        } catch {
+            print("Error deleting account: \(error.localizedDescription)")
+        }
+    }
 
 }
 

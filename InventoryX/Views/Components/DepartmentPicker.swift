@@ -31,7 +31,7 @@ struct DepartmentPicker: View {
                         .frame(width: 48)
                     
                     Image(systemName: "building.2.fill")
-                        .foregroundStyle(Color("lightAccent"))
+//                        .foregroundStyle(Color("lightAccent"))
                         .font(.subheadline)
                         .fontDesign(.rounded)
                 } //: ZStack
@@ -50,7 +50,7 @@ struct DepartmentPicker: View {
                 .shadow(color: Color.bg, radius: 4, x: -3, y: -3)
         )
         .clipShape(RoundedRectangle(cornerRadius: 6))
-        .shadow(color: Color("ShadowColor"), radius: 4, x: 0, y: 0)
+//        .shadow(color: Color("ShadowColor"), radius: 4, x: 0, y: 0)
         .frame(minWidth: 190, maxWidth: 256, alignment: .trailing)
     } //: Body
     

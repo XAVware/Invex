@@ -160,17 +160,19 @@ struct PasscodeView: View {
     }
     
     var body: some View {
-        ViewThatFits {
-            verLayout
-            horLayout
-        }
-        .padding()
-        .background(.bg)
-        .navigationTitle(navTitle)
-        .navigationBarTitleDisplayMode(.large)
-        .onAppear {
-            if vm.processes.isEmpty {
-                vm.processes = constProc
+        ZStack {
+            Color.bg.ignoresSafeArea()
+            ViewThatFits {
+                verLayout
+                horLayout
+            }
+            .padding()
+            .navigationTitle(navTitle)
+            .navigationBarTitleDisplayMode(.large)
+            .onAppear {
+                if vm.processes.isEmpty {
+                    vm.processes = constProc
+                }
             }
         }
     } //: Body
@@ -194,6 +196,7 @@ struct PasscodeView: View {
                 }
         } //: VStack
         .padding(.vertical, 32)
+
     }
     
     private var horLayout: some View {
@@ -216,6 +219,7 @@ struct PasscodeView: View {
                     passcodeChanged(to: newPasscode)
                 }
         } //: HStack
+
     }
     
     private var circleIndicator: some View {

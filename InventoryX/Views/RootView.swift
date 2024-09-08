@@ -40,7 +40,7 @@ struct RootView: View {
     
     var body: some View {
         ZStack {
-            content
+            lsxContent
                 .onReceive(rootVM.$companyExists) { exists in
                     print("Root: Company Received")
                     //                self.showOnboarding = !exists
@@ -48,7 +48,7 @@ struct RootView: View {
         } //: ZStack
     } //: Body
     
-    @ViewBuilder private var content: some View {
+    @ViewBuilder private var lsxContent: some View {
         switch showOnboarding {
         case true:
             OnboardingView()
@@ -68,7 +68,7 @@ struct RootView: View {
                 switch lsxVM.detailRoot {
                 case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
                 case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
-                case .company(let c, let t):    CompanyDetailView(company: c, detailType: t)
+                case .company:    CompanyDetailView()
                 case .passcodePad(let p):       PasscodeView(processes: p) { }
                 default:                        Color.bg.ignoresSafeArea()
                 }

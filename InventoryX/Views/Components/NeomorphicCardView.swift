@@ -7,23 +7,25 @@
 
 import SwiftUI
 
-struct NeomorphicCardView: View {
-    @Environment(\.colorScheme) var colorScheme
-    enum Layer { 
-        case under
-        case over
-        var defaultCornerRadius: CGFloat {
-            switch self {
-            case .under: 18
-            case .over: 12
-            }
+enum NeomorphicLayer {
+    case under
+    case over
+    var defaultCornerRadius: CGFloat {
+        switch self {
+        case .under: 18
+        case .over: 12
         }
     }
+}
+
+struct NeomorphicCardView: View {
+    @Environment(\.colorScheme) var colorScheme
     
-    @State var layer: Layer
+    
+    @State var layer: NeomorphicLayer
     @State var cornerRadius: CGFloat
     
-    init(layer: Layer, cornerRadius: CGFloat? = nil) {
+    init(layer: NeomorphicLayer, cornerRadius: CGFloat? = nil) {
         self.layer = layer
         if let r = cornerRadius {
             self.cornerRadius = r
@@ -47,8 +49,8 @@ struct NeomorphicCardView: View {
                     .shadow(.inner(color: .neoOverLight, radius: 3, x: 2, y: 2 ))
                     .shadow(.inner(color: .neoOverDark, radius: 2, x: -2, y: -2))
                 )
-                .foregroundColor(.bg)
-                .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
+                .foregroundColor(.neoOverBg)
+//                .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
         }
     }
 }

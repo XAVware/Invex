@@ -23,11 +23,13 @@ enum LSXDisplay: Hashable, CaseIterable {
     case inventoryList
     case settings
     
-    case company(CompanyEntity, DetailType)
+    case company
     case passcodePad([PasscodeViewState])
     case department(DepartmentEntity?, DetailType)
     case item(ItemEntity?, DetailType)
     case confirmSale([CartItem])
+    
+    case lock
 
     var displayMode: LSXDisplayMode {
         return switch self {
@@ -42,6 +44,15 @@ enum LSXDisplay: Hashable, CaseIterable {
         case .inventoryList: .primary
         case .settings:     .primary
         default:            .detail
+        }
+    }
+    
+    var tabId: Int {
+        return switch self {
+        case .pos: 0
+        case .inventoryList: 1
+        case .settings: 2
+        default: -1
         }
     }
 }

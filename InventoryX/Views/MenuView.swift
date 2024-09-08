@@ -23,7 +23,6 @@ struct MenuView: View {
     }
     
     var body: some View {
-        ZStack {
             VStack {
                 ZStack {
                     NeomorphicCardView(layer: .over)
@@ -83,10 +82,7 @@ struct MenuView: View {
                 .font(.caption2)
                 .padding(.top, 24)
                 .foregroundStyle(.accent)
-                .opacity(0.6)
-//                .font(.caption2)
-//                .padding()
-                
+                .opacity(0.6)                
             } //: VStack
             .padding(.vertical)
             .padding(.leading)
@@ -98,7 +94,6 @@ struct MenuView: View {
                     .background(Color.bg)
             }
             
-        } //: Body
         
     }
 }
