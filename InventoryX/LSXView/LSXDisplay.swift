@@ -47,12 +47,13 @@ enum LSXDisplay: Hashable, CaseIterable {
         }
     }
     
-    var tabId: Int {
-        return switch self {
-        case .pos: 0
-        case .inventoryList: 1
-        case .settings: 2
-        default: -1
-        }
-    }
+    
+//    var tabId: Int {
+//        return switch self {
+//        case .pos: 0
+//        case .inventoryList: 1
+//        case .settings: 2
+//        default: -1
+//        }
+//    }
 }

@@ -10,6 +10,7 @@ import RealmSwift
 
 
 struct InventoryListView: View {
+    @Environment(NavigationService.self) var navService
     @Environment(\.horizontalSizeClass) var hSize
 
     @ObservedResults(ItemEntity.self) var items
@@ -26,7 +27,7 @@ struct InventoryListView: View {
     
     @State var showRemoveItemsAlert: Bool = false
     @State var showDeleteConfirmation: Bool = false
-    @State var selectedTableType: TableType = .items
+    @State var tableType: TableType = .items
     
     enum TableType: String, CaseIterable, Identifiable {
         case items
@@ -34,55 +35,64 @@ struct InventoryListView: View {
         var id: TableType { return self}
     }
     
+    private func addButtonTapped() {
+        let navItem: LSXDisplay = tableType == .items ? .item(nil, .create) : .department(nil, .create)
+        navService.path.append(navItem)
+    }
+    
     var body: some View {
-        ZStack(alignment: .center) {
-            Color.bg.ignoresSafeArea()
+        
+        VStack(spacing: 16) {
+            Picker("Table Type", selection: $tableType) {
+                ForEach(TableType.allCases) { type in
+                    Text(type.rawValue.capitalized)
+                }
+            }
+            .pickerStyle(.segmented)
             
-            NeomorphicCardView(layer: .under)
-            VStack(alignment: .leading, spacing: 0) {
-                VStack {
-                    HStack {
-                        Picker("Table Type", selection: $selectedTableType) {
-                            ForEach(TableType.allCases) { type in
-                                Text(type.rawValue.capitalized)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        
-                        Spacer()
-                        
-                        Button("Add", systemImage: "plus") {
-                            if selectedTableType == .items {
-                                LSXService.shared.update(newDisplay: .item(nil, .create))
-                            } else {
-                                LSXService.shared.update(newDisplay: .department(nil, .create))
-                            }
-                        }
-                    }
-                    
-                    Divider()
-                } //: VStack
-                .padding(.horizontal)
-                .padding(.vertical, 8)
-                
-                if selectedTableType == .items {
+            
+            ZStack(alignment: .center) {
+                Color.bg.ignoresSafeArea()
+                NeomorphicCardView(layer: .under)
+                if tableType == .items {
                     ItemTableView(items: self.$items)
                 } else {
                     DepartmentTableView(depts: self.$departments)
                 }
-            } //: VStack
-            //        .clipShape(RoundedRectangle(cornerRadius: 8))
-            //        .overlay(
-            //            RoundedRectangle(cornerRadius: 8)
-            //                .stroke(Color("GrayTextColor").opacity(0.4), lineWidth: 0.5)
-            //        )
-            .navigationTitle(selectedTableType == .items ? "Inventory" : "Departments")
-            .padding()
-        } //: ZStack
+            } //: ZStack
+        } //: VStack
+        .navigationTitle(tableType == .items ? "Item List" : "Departments")
+        .overlay(addButton, alignment: .bottomTrailing)
         .padding(.bottom)
-        .padding(.horizontal, hSize == .regular ? 12 : 4)
-        .background(.bg)
+//        .padding(.horizontal, hSize == .regular ? 12 : 4)
+        .background(.clear)
     } //: Body
+    
+    private var addButton: some View {
+        Button(action: addButtonTapped) {
+            HStack {
+                Image(systemName: "plus")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 18, height: 18)
+//                    .fontWeight(.bold)
+                
+                if hSize == .regular {
+                    Text("New Item")
+//                        .padding(6)
+                }
+            }
+            .padding(6)
+//            .frame(maxHeight: 28)
+            .font(.headline)
+//            .fontWeight(.semibold)
+//            .fontDesign(.rounded)
+        }
+        .buttonStyle(ThemeButtonStyle())
+//        .frame(maxWidth: 320)
+        .padding()
+        .cornerRadius(48)
+    }
     
     @ViewBuilder private var departmentMenu: some View {
         if let dept = selectedDepartment {
@@ -123,9 +133,9 @@ struct InventoryListView: View {
     
 }
 
-//#Preview {
-//    NavigationStack {
-//        InventoryListView()
-//            .environment(\.realm, DepartmentEntity.previewRealm)
-//    }
-//}
+#Preview {
+    NavigationStack {
+        InventoryListView()
+            .environment(\.realm, DepartmentEntity.previewRealm)
+    }
+}

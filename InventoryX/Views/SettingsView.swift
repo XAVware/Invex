@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct SettingsView: View {
+    @Environment(NavigationService.self) var navService
     @Environment(\.verticalSizeClass) var vSize
     @Environment(\.horizontalSizeClass) var hSize
     @StateObject var settingsVM: SettingsViewModel = SettingsViewModel()
@@ -15,66 +17,73 @@ struct SettingsView: View {
     @State var showPasscodeView: Bool = false
     @State var showDeleteConfirmation: Bool = false
     
-    @State var colVis: NavigationSplitViewVisibility = .doubleColumn
-    @State var prefCol: NavigationSplitViewColumn = .content
+    @State var colVis: NavigationSplitViewVisibility = .automatic
+    @State var prefCol: NavigationSplitViewColumn = .sidebar
     
+    @ObservedResults(CompanyEntity.self) var companies
+    
+    // This could be causing lock screen to dismiss on orientation change.
+    @State var showingLockScreen: Bool = false
+    
+//    @Binding var path: NavigationPath
     enum Detail { case account, passcode }
     @State var currentDetail: Detail?
     
+    private func lockTapped() {
+        showingLockScreen.toggle()
+    }
+    
     var body: some View {
-        NavigationSplitView(columnVisibility: $colVis, preferredCompactColumn: $prefCol) {
             ZStack {
-                NeomorphicCardView(layer: .over)
+                Color.bg.ignoresSafeArea()
+                NeomorphicCardView(layer: .under)
                 
-                VStack(alignment: .leading, spacing: 16) {
+                VStack {
                     
-                    NavigationLink {
-                        CompanyDetailView()
-                            .toolbar(vSize == .regular && hSize == .regular ? .visible : .hidden, for: .tabBar)
-                    } label: {
-                        HStack(spacing: 24) {
-                            Text("Company Info")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Image(systemName: "chevron.right")
+                    VStack(alignment: .leading) {
+                        Button("Company Info", systemImage: "chevron.right") {
+                            navService.path.append(LSXDisplay.company)
                         }
-                        .foregroundStyle(Color.textPrimary.opacity(0.9))
-                    }
-                    .buttonStyle(MenuButtonStyle())
-                    
-                    
-                    NavigationLink {
-                        PasscodeView(processes: [.confirm, .set]) { }
-                    } label: {
-                        HStack(spacing: 24) {
-                            Text("Change Passcode")
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Image(systemName: "chevron.right")
+                        .buttonStyle(MenuButtonStyle())
+                        
+                        
+                        Button("Change Passcode", systemImage: "chevron.right") {
+                            navService.path.append(LSXDisplay.passcodePad([.confirm, .set]))
                         }
-                        .foregroundStyle(Color.textPrimary.opacity(0.9))
-                    }
-                    .buttonStyle(MenuButtonStyle())
+                        .buttonStyle(MenuButtonStyle())
+                        
+                        Button("Lock Screen", systemImage: "lock", action: lockTapped)
+                            .buttonStyle(MenuButtonStyle())
+                    } //: VStack
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     
                     Spacer()
                     
+                    VStack(spacing: 8) {
+                        Text("© 2024 XAVware, LLC. All Rights Reserved.")
+                        HStack(spacing: 6) {
+                            Link("Terms of Service", destination: K.termsOfServiceURL)
+                            Text("-")
+                            Link("Privacy Policy", destination: K.privacyPolicyURL)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                    }
+                    .font(.caption2)
+                    .foregroundStyle(.accent)
+                    .opacity(0.7)
                 } //: VStack
                 .padding()
-
             } //: ZStack
+            .navigationTitle("Account")
             .padding()
-            .background(Color.bg)
-            .navigationTitle("Settings")
-            .toolbar(removing: .sidebarToggle)
-            .toolbar(.visible, for: .tabBar)
-        } detail: {
-            if hSize == .regular {
-                CompanyDetailView()
+            .fullScreenCover(isPresented: $showingLockScreen) {
+                LockScreenView()
+                    .frame(maxHeight: .infinity)
+                    .background(Color.bg)
             }
-        }
-        .navigationSplitViewStyle(.balanced)
-        
-        
-        
     } //: Body
+    
     
 }
 

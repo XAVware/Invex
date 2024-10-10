@@ -82,7 +82,7 @@ struct MenuView: View {
                 .font(.caption2)
                 .padding(.top, 24)
                 .foregroundStyle(.accent)
-                .opacity(0.6)                
+                .opacity(0.6) 
             } //: VStack
             .padding(.vertical)
             .padding(.leading)

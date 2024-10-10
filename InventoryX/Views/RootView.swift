@@ -61,7 +61,7 @@ struct RootView: View {
                 switch lsxVM.mainDisplay {
                 case .pos:              POSView().environmentObject(posVM)
                 case .inventoryList:    InventoryListView()
-                case .settings:         SettingsView()
+//                case .settings:         SettingsView()
                 default:                EmptyView()
                 }
             } detail: {

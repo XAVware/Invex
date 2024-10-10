@@ -15,6 +15,7 @@ import Algorithms
  */
 
 struct POSView: View {
+    @Environment(NavigationService.self) var navService
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
     @Environment(\.colorScheme) var colorScheme
@@ -41,11 +42,19 @@ struct POSView: View {
         }
     }
     
+    func toggleSidebar() {
+        if vm.cartDisplayMode == .hidden {
+            vm.showCartSidebar()
+        } else {
+            vm.hideCartSidebar()
+        }
+    }
+    
     
     var body: some View {
         GeometryReader { geo in
             let isLandscape: Bool = geo.size.width > geo.size.height
-            let isHorizontalLayout: Bool = isLandscape || hSize == .regular
+            let isHorizontalLayout: Bool = isLandscape /*|| hSize == .regular*/
             HStack {
                 ZStack(alignment: .center) {
                     NeomorphicCardView(layer: .under)
@@ -79,25 +88,24 @@ struct POSView: View {
                     } //: VStack
                     .padding(.horizontal, hSize == .regular ? 12 : 4)
                     .animation(.interpolatingSpring, value: true)
-                    
+//                    .overlay(!isHorizontalLayout ? checkoutButton : nil, alignment: .bottom)
                 } //: ZStack
-                .padding(.bottom, !isHorizontalLayout ? 48 : 0)
+//                .padding(.bottom, !isHorizontalLayout ? 48 : 0)
                 .frame(maxWidth: .infinity)
+                
                 
                 // MARK: - Cart Sidebar
                 if isHorizontalLayout {
                     ZStack {
-                        RoundedRectangle(cornerRadius: 18)
-                            .fill(
-                                .shadow(.inner(color: .neoUnderDark, radius: 3, x: 1, y: 1))
-                                .shadow(.inner(color: .neoUnderLight, radius: 2, x: -3, y: -2))
-                            )
-                            .foregroundColor(.neoUnderBg)
-                            .overlay(
-                                Color.accent.opacity(0.02)
-                                    .clipShape(RoundedRectangle(cornerRadius: 18))
-                                
-                            )
+                        NeomorphicCardView(layer: .under)
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 18)
+//                                    .fill(Color.accent.opacity(0.013))
+//                                    .border(Color.accent.opacity(0.1), width: 0.5)
+//                                   
+////                                Color.accent.opacity(0.013)
+////                                    .clipShape(RoundedRectangle(cornerRadius: 18))
+//                            )
                         
                         VStack {
                             HStack {
@@ -159,16 +167,15 @@ struct POSView: View {
                             Button("Okay", role: .cancel) { }
                         }
                     } //: ZStack
-                    .frame(maxWidth: vm.cartDisplayMode.idealWidth)
-                    .offset(x: vm.cartDisplayMode == .hidden ? 320 : 0)
+                    .frame(maxWidth: geo.size.width * 0.33)
+//                    .offset(x: vm.cartDisplayMode == .hidden ? 320 : 0)
                     .ignoresSafeArea(edges: [.bottom])
                 }
             } //: HStack
+            .overlay(checkoutButton, alignment: .bottomTrailing)
             .padding(.bottom)
             .padding(.horizontal, hSize == .regular ? 12 : 4)
             .background(.bg)
-            .navigationBarTitleDisplayMode(.inline)
-            .overlay(!isHorizontalLayout ? checkoutButton : nil, alignment: .bottom)
             //TODO: Company data doesn't need to be fetched every time this appears. Just save it in POS VM
             .onAppear {
                 vm.fetchCompany()
@@ -177,32 +184,17 @@ struct POSView: View {
                 default:        vm.hideCartSidebar()
                 }
             }
-            .toolbar {
-                // Only show cart toolbar button when menu isn't open
-                ToolbarItem(placement: .topBarTrailing) {
-                    if hSize == .regular {
-                        Button {
-                            if vm.cartDisplayMode == .hidden {
-                                vm.showCartSidebar()
-                            } else {
-                                vm.hideCartSidebar()
-                            }
-                        } label: {
-                            Image(systemName: "chevron.forward.2")
-                        }
-                    } else {
-                        EmptyView()
-                    }
-                }
-            }
             .onChange(of: hSize) { _, hSize in
-                print("Root: On Change - hSize")
                 switch hSize {
                 case .regular:  vm.showCartSidebar()
                 default:        vm.hideCartSidebar()
                 }
             }
-            
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("", systemImage: "chevron.forward.2", action: toggleSidebar)
+                }
+            }
         } //: Geometry Reader
         
     } //: Body
@@ -210,17 +202,20 @@ struct POSView: View {
     private var checkoutButton: some View {
         Button(action: continueTapped) {
             HStack {
+                Image(systemName: "cart")
                 Text("Checkout")
                 Spacer()
                 Text(vm.total.formatAsCurrencyString())
-                    .frame(maxWidth: .infinity, maxHeight: 32)
             }
+            .frame(maxHeight: 28)
             .font(.subheadline)
             .fontWeight(.semibold)
             .fontDesign(.rounded)
         }
-//        .padding(.horizontal)
         .buttonStyle(ThemeButtonStyle())
+        .frame(maxWidth: 320)
+        .padding()
+        .cornerRadius(48)
     }
     
     
