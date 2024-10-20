@@ -35,7 +35,7 @@ struct LockScreenView: View {
     }
 }
 
-//#Preview {
-//    LockScreenView()
-//    
-//}
+#Preview {
+    LockScreenView()
+    
+}

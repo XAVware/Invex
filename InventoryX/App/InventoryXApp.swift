@@ -56,15 +56,15 @@ struct InventoryXApp: SwiftUI.App {
         WindowGroup {
 //            RootView()
             TabRoot()
-//                .onAppear {
-//                    Task {
-//                        try await RealmActor().setUpForDebug()
-////                        let h = AuthService.shared.hashString("1234")
-////                        await AuthService.shared.savePasscode(hash: h)
-//                        AuthService.shared.exists = true
-//                        
-//                    }
-//                }
+                .onAppear {
+                    Task {
+                        try await RealmActor().setUpForDebug()
+//                        let h = AuthService.shared.hashString("1234")
+//                        await AuthService.shared.savePasscode(hash: h)
+                        AuthService.shared.exists = true
+                        
+                    }
+                }
         }
     }
 }

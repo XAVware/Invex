@@ -21,7 +21,7 @@ import RealmSwift
     var taxAmount: Double { cartSubtotal * taxRate / 100 }
     var total: Double { cartSubtotal + taxAmount }
     
-    @Published var cartDisplayMode: CartState = .sidebar
+//    @Published var cartDisplayMode: CartState = .sidebar
     // Instead of pushing confirmSale from here, only toggle the cartDisplayMode. Then listen for cartDisplayMode changes from the view you need to push confirmSale from.
     
     @Published var saleItems: [CartItem] = []
@@ -43,27 +43,7 @@ import RealmSwift
         }
     }
     
-    
-    /// Toggle between hidden and sidebar cart state. Only called from regular horizontal size class devices.
-    func toggleCart() {
-        if cartDisplayMode == .hidden {
-            hideCartSidebar()
-        } else {
-            showCartSidebar()
-        }
-    }
-    
-    func hideCartSidebar() {
-        withAnimation {
-            cartDisplayMode = .hidden
-        }
-    }
-    
-    func showCartSidebar() {
-        withAnimation {
-            cartDisplayMode = .sidebar
-        }
-    }
+
     
     func addItemToCart(_ item: ItemEntity) {
         cartItems.append(item)
@@ -117,5 +97,15 @@ import RealmSwift
         let saleItems = cartItems.map( { SaleItemEntity(item: $0) } )
         try await RealmActor().saveSale(items: saleItems, total: self.total)
         cartItems.removeAll()
+    }
+    
+    @Published var showCartAlert: Bool = false
+    
+    func checkoutTapped() {
+        if cartItems.isEmpty {
+            showCartAlert.toggle()
+        } else {
+            LSXService.shared.update(newDisplay: .confirmSale(saleItems))
+        }
     }
 }

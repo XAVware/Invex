@@ -59,7 +59,7 @@ struct RootView: View {
                 MenuView()
             } content: {
                 switch lsxVM.mainDisplay {
-                case .pos:              POSView().environmentObject(posVM)
+//                case .pos:              POSView().environmentObject(posVM)
                 case .inventoryList:    InventoryListView()
 //                case .settings:         SettingsView()
                 default:                EmptyView()
@@ -73,21 +73,21 @@ struct RootView: View {
                 default:                        Color.bg.ignoresSafeArea()
                 }
             } //: LSX View
-            .onAppear {
-                print("Root: On Appear") 
-                // Setup cart sidebar
-                switch hSize {
-                case .regular:  posVM.showCartSidebar()
-                default:        posVM.hideCartSidebar()
-                }
-            }
-            .onChange(of: hSize) { _, hSize in
-                print("Root: On Change - hSize")
-                switch hSize {
-                case .regular:  posVM.showCartSidebar()
-                default:        posVM.hideCartSidebar()
-                }
-            }
+//            .onAppear {
+//                print("Root: On Appear") 
+//                // Setup cart sidebar
+//                switch hSize {
+//                case .regular:  posVM.showCartSidebar()
+//                default:        posVM.hideCartSidebar()
+//                }
+//            }
+//            .onChange(of: hSize) { _, hSize in
+//                print("Root: On Change - hSize")
+//                switch hSize {
+//                case .regular:  posVM.showCartSidebar()
+//                default:        posVM.hideCartSidebar()
+//                }
+//            }
             
         default: ProgressView()
         }

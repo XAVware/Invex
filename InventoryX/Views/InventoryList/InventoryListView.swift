@@ -12,7 +12,7 @@ import RealmSwift
 struct InventoryListView: View {
     @Environment(NavigationService.self) var navService
     @Environment(\.horizontalSizeClass) var hSize
-
+    
     @ObservedResults(ItemEntity.self) var items
     @ObservedResults(DepartmentEntity.self) var departments
     @StateObject var vm = InventoryListViewModel()
@@ -41,32 +41,38 @@ struct InventoryListView: View {
     }
     
     var body: some View {
+        table
         
-        VStack(spacing: 16) {
-            Picker("Table Type", selection: $tableType) {
-                ForEach(TableType.allCases) { type in
-                    Text(type.rawValue.capitalized)
+            .overlay(addButton, alignment: .bottomTrailing)
+            .padding(.bottom)
+            .background(.fafafa)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Picker("Table Type", selection: $tableType) {
+                        ForEach(TableType.allCases) { type in
+                            Text(type.rawValue.capitalized)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(maxWidth: 320)
                 }
             }
-            .pickerStyle(.segmented)
-            
-            
-            ZStack(alignment: .center) {
-                Color.bg.ignoresSafeArea()
-                NeomorphicCardView(layer: .under)
-                if tableType == .items {
-                    ItemTableView(items: self.$items)
-                } else {
-                    DepartmentTableView(depts: self.$departments)
-                }
-            } //: ZStack
-        } //: VStack
-        .navigationTitle(tableType == .items ? "Item List" : "Departments")
-        .overlay(addButton, alignment: .bottomTrailing)
-        .padding(.bottom)
-//        .padding(.horizontal, hSize == .regular ? 12 : 4)
-        .background(.clear)
     } //: Body
+    
+    @ViewBuilder private var table: some View {
+        switch tableType {
+        case .items:
+            ItemTableView(items: self.$items)
+            //                .background(.fafafa)
+                .navigationTitle("Items")
+            
+        case .department:
+            DepartmentTableView(depts: self.$departments)
+            //                .background(.fafafa)
+                .navigationTitle("Departments")
+            
+        }
+    }
     
     private var addButton: some View {
         Button(action: addButtonTapped) {
@@ -75,21 +81,15 @@ struct InventoryListView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 18, height: 18)
-//                    .fontWeight(.bold)
                 
                 if hSize == .regular {
                     Text("New Item")
-//                        .padding(6)
                 }
             }
             .padding(6)
-//            .frame(maxHeight: 28)
             .font(.headline)
-//            .fontWeight(.semibold)
-//            .fontDesign(.rounded)
         }
         .buttonStyle(ThemeButtonStyle())
-//        .frame(maxWidth: 320)
         .padding()
         .cornerRadius(48)
     }

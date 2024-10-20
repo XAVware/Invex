@@ -41,10 +41,9 @@ struct NeomorphicCardView: View {
                     .shadow(.inner(color: .neoUnderLight, radius: 2, x: -3, y: -2))
                 )
                 .foregroundColor(.neoUnderBg)
-            
                 .overlay(
                     RoundedRectangle(cornerRadius: cornerRadius)
-                        .stroke(Color.accentColor.opacity(0.2), lineWidth: 0.5)
+                        .stroke(.e0E0E0, lineWidth: 0.5)
                         .blur(radius: 0.5)
                 )
         case .over:

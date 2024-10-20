@@ -25,7 +25,7 @@ struct SettingsView: View {
     // This could be causing lock screen to dismiss on orientation change.
     @State var showingLockScreen: Bool = false
     
-//    @Binding var path: NavigationPath
+    //    @Binding var path: NavigationPath
     enum Detail { case account, passcode }
     @State var currentDetail: Detail?
     
@@ -34,54 +34,51 @@ struct SettingsView: View {
     }
     
     var body: some View {
-            ZStack {
-                Color.bg.ignoresSafeArea()
-                NeomorphicCardView(layer: .under)
-                
-                VStack {
-                    
-                    VStack(alignment: .leading) {
-                        Button("Company Info", systemImage: "chevron.right") {
-                            navService.path.append(LSXDisplay.company)
-                        }
-                        .buttonStyle(MenuButtonStyle())
-                        
-                        
-                        Button("Change Passcode", systemImage: "chevron.right") {
-                            navService.path.append(LSXDisplay.passcodePad([.confirm, .set]))
-                        }
-                        .buttonStyle(MenuButtonStyle())
-                        
-                        Button("Lock Screen", systemImage: "lock", action: lockTapped)
-                            .buttonStyle(MenuButtonStyle())
-                    } //: VStack
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    Spacer()
-                    
-                    VStack(spacing: 8) {
-                        Text("© 2024 XAVware, LLC. All Rights Reserved.")
-                        HStack(spacing: 6) {
-                            Link("Terms of Service", destination: K.termsOfServiceURL)
-                            Text("-")
-                            Link("Privacy Policy", destination: K.privacyPolicyURL)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        
+        ZStack {
+            Color.bg.ignoresSafeArea()
+            NeomorphicCardView(layer: .under)
+            
+            VStack {
+                VStack(alignment: .leading) {
+                    Button("Company Info", systemImage: "chevron.right") {
+                        navService.path.append(LSXDisplay.company)
                     }
-                    .font(.caption2)
-                    .foregroundStyle(.accent)
-                    .opacity(0.7)
+                    .buttonStyle(MenuButtonStyle())
+                    
+                    Button("Change Passcode", systemImage: "chevron.right") {
+                        navService.path.append(LSXDisplay.passcodePad([.confirm, .set]))
+                    }
+                    .buttonStyle(MenuButtonStyle())
+                    
+                    Button("Lock Screen", systemImage: "lock", action: lockTapped)
+                        .buttonStyle(MenuButtonStyle())
                 } //: VStack
-                .padding()
-            } //: ZStack
-            .navigationTitle("Account")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                Spacer()
+                
+                VStack(spacing: 8) {
+                    Text("© 2024 XAVware, LLC. All Rights Reserved.")
+                    HStack(spacing: 6) {
+                        Link("Terms of Service", destination: K.termsOfServiceURL)
+                        Text("-")
+                        Link("Privacy Policy", destination: K.privacyPolicyURL)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                } //: VStack
+                .font(.caption2)
+                .foregroundStyle(.accent)
+                .opacity(0.7)
+            } //: VStack
             .padding()
-            .fullScreenCover(isPresented: $showingLockScreen) {
-                LockScreenView()
-                    .frame(maxHeight: .infinity)
-                    .background(Color.bg)
-            }
+        } //: ZStack
+        .navigationTitle("Account")
+        .padding()
+        .fullScreenCover(isPresented: $showingLockScreen) {
+            LockScreenView()
+                .frame(maxHeight: .infinity)
+                .background(Color.bg)
+        }
     } //: Body
     
     
