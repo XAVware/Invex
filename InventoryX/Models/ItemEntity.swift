@@ -41,4 +41,8 @@ class ItemEntity: Object, ObjectKeyIdentifiable {
         guard let dept = department.first else { return "" }
         return onHandQty < dept.restockNumber ? "⚠️" : ""
     }
+    
+    func sell(qty: Int) {
+        self.onHandQty -= qty
+    }
 }

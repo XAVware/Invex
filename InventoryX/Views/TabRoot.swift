@@ -127,7 +127,7 @@ struct TabRoot: View {
                                             Image(systemName: isSelected ? data.selectedIconName : data.unselectedIconName)
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(height: 21)
+//                                                .frame(height: 21)
                                             
                                             Text(data.title)
                                                 .padding(4)
@@ -136,7 +136,7 @@ struct TabRoot: View {
                                         .padding(.vertical, 2)
                                     }
                                     .opacity(isSelected ? 1 : 0.6)
-                                    
+                                    .frame(maxHeight: 48)
                                     Spacer()
                                 } //: For Each
                                 
@@ -148,7 +148,6 @@ struct TabRoot: View {
                             .background(Color.accentColor.opacity(0.007))
                             .padding(.bottom, geo.safeAreaInsets.bottom / 2)
                         } //: VStack
-                        .environment(navService)
                         .background(Color.bg)
                         .navigationBarTitleDisplayMode(.inline)
                         .navigationDestination(for: LSXDisplay.self) { detail in
@@ -157,78 +156,26 @@ struct TabRoot: View {
                             case .passcodePad(let p):       PasscodeView(processes: p) { }
                             case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
                             case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
-                            case .confirmSale(let items):   ConfirmSaleView(cartItems: items)
+                            case .confirmSale(let items):
+                                ConfirmSaleView(/*cartItems: items*/)
+                                    .environmentObject(posVM)
+                                    .environment(navService)
                             default: Color.red
                             }
                         }
                         .onAppear {
-                            if hSize == .regular {
-                                navService.sidebarVisibility = .showing
-                            } else {
-                                navService.sidebarVisibility = nil
-                            }
+                            navService.sidebarVisibility = hSize == .regular ? .showing : nil
                         }
                         .ignoresSafeArea(edges: [.bottom])
                         
-                        // MARK: - SIDE BAR
-                        if navService.sidebarWidth ?? 0 > 180 {
-                            HStack {
-                                Spacer()
-                                ZStack {
-                                    NeomorphicCardView(layer: .under)
-                                    
-                                    VStack {
-                                        HStack {
-                                            Image(systemName: "cart")
-                                            Text("Cart")
-                                                .padding(.horizontal)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                        }
-                                        .padding([.top, .horizontal])
-                                        .font(.headline)
-                                        .foregroundStyle(.accent)
-                                        .opacity(0.8)
-                                        
-                                        List(posVM.saleItems) { item in
-                                            CartItemView(item: item, qty: item.qtyInCart)
-                                                .listRowBackground(Color.clear)
-                                                .environmentObject(posVM)
-                                        }
-                                        .frame(maxHeight: .infinity)
-                                        .listStyle(PlainListStyle())
-                                        
-                                        // MARK: - Cart Totals
-                                        VStack(spacing: 4) {
-                                            HStack {
-                                                Text("Subtotal:")
-                                                Spacer()
-                                                Text("\(posVM.cartSubtotal.formatAsCurrencyString())")
-                                            } //: HStack
-                                            
-                                            HStack {
-                                                Text("Tax:")
-                                                Spacer()
-                                                Text("\(posVM.taxAmount.formatAsCurrencyString())")
-                                            } //: HStack
-                                        } //: VStack
-                                        .font(.subheadline)
-                                        .padding()
-                                        
-                                        Spacer()
-                                            .frame(height: 42)
-                                    } //: VStack
-                                    .alert("Your cart is empty.", isPresented: $posVM.showCartAlert) {
-                                        Button("Okay", role: .cancel) { }
-                                    }
-                                    
-                                } //: ZStack
-                                .frame(maxWidth: navService.sidebarWidth ?? 500)
-                                .offset(x: navService.sidebarVisibility != .showing ? navService.sidebarWidth ?? 500 : 0)
-                            } //: HStack
-                            .overlay(navService.sidebarVisibility != nil ? checkoutButton : nil, alignment: .bottomTrailing)
-                            .padding(.trailing, geo.safeAreaInsets.trailing == 0 ? 4 : 0)
+                        if navService.sidebarWidth ?? 0 > 180 && lsxVM.mainDisplay == .pos {
+                            CartSidebarView(vm: posVM)
+                                .ignoresSafeArea(edges: [.top])
+                                .padding(.trailing, geo.safeAreaInsets.trailing == 0 ? 4 : 0)
+                                .environmentObject(posVM)
                         }
                     } //: ZStack
+                    .environment(navService)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
                             if navService.sidebarVisibility != nil {
@@ -249,29 +196,7 @@ struct TabRoot: View {
         }
     } //: Body
     
-    private var checkoutButton: some View {
-        Button(action: posVM.checkoutTapped) {
-            HStack {
-                Image(systemName: "cart")
-                Text("Checkout")
-                Spacer()
-                Text(posVM.total.formatAsCurrencyString())
-            }
-            .padding(6)
-            .padding(.horizontal, 10)
-            .frame(maxWidth: navService.sidebarWidth ?? 320, maxHeight: 48)
-        }
-        .font(.subheadline)
-        .fontWeight(.semibold)
-        .fontDesign(.rounded)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.accent.gradient)
-                .padding(4)
-        )
-        .foregroundColor(Color.primaryButtonText)
-        .shadow(radius: 1)
-    }
+    
     
 }
 

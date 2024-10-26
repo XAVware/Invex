@@ -25,6 +25,21 @@
  
  */
 
+
+/*
+ PointOfSaleViewModel is initialized in the root so a user's cart is not lost when
+ they switch screens. If it were initialized in PointOfSaleView, it will re-initialize
+ every time the user goes to the point of sale view, resetting the cart.
+ 
+ Menu shouldn't be open while cart is a sidebar and vice versa.
+ 
+ Future features:
+     - Try to find pattern in pricing/percentage data added by user and change
+     pickers/sliders to behave accordingly
+         -> i.e. if all prices end in 0, price pickers should not default to increments
+         less than 0.1
+ */
+
 import SwiftUI
 import RealmSwift
 
@@ -54,17 +69,16 @@ struct InventoryXApp: SwiftUI.App {
     
     var body: some Scene {
         WindowGroup {
-//            RootView()
             TabRoot()
-                .onAppear {
-                    Task {
-                        try await RealmActor().setUpForDebug()
-//                        let h = AuthService.shared.hashString("1234")
-//                        await AuthService.shared.savePasscode(hash: h)
-                        AuthService.shared.exists = true
-                        
-                    }
-                }
+//                .onAppear {
+//                    Task {
+//                        try await RealmActor().setUpForDebug()
+////                        let h = AuthService.shared.hashString("1234")
+////                        await AuthService.shared.savePasscode(hash: h)
+//                        AuthService.shared.exists = true
+//                        
+//                    }
+//                }
         }
     }
 }

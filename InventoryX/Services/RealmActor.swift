@@ -186,7 +186,6 @@ actor RealmActor {
         }
     }
     
-//    @MainActor func adjustStock(for item: ItemEntity, by amt: Int) async throws {
     @MainActor func adjustStock(for item: ItemEntity, by amt: Int) async throws {
         if let invItem = item.thaw() {
             let newOnHandQty = invItem.onHandQty - amt
@@ -195,6 +194,24 @@ actor RealmActor {
                 invItem.onHandQty = newOnHandQty
             }
         }
+    }
+    
+    @MainActor func sellItem(withId itemId: ObjectId, by amt: Int) async throws {
+        let realm = try await Realm()
+        if let invItem = realm.object(ofType: ItemEntity.self, forPrimaryKey: itemId) {
+            let newOnHandQty = invItem.onHandQty - amt
+            try await realm.asyncWrite {
+                invItem.onHandQty = newOnHandQty
+            }
+        }
+        
+//        if let invItem = item.thaw() {
+//            let newOnHandQty = invItem.onHandQty - amt
+//            let realm = try await Realm()
+//            try await realm.asyncWrite {
+//                invItem.onHandQty = newOnHandQty
+//            }
+//        }
     }
     
     /// Try to get the number of sales, otherwise return 0

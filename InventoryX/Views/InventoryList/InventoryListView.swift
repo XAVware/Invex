@@ -42,7 +42,6 @@ struct InventoryListView: View {
     
     var body: some View {
         table
-        
             .overlay(addButton, alignment: .bottomTrailing)
             .padding(.bottom)
             .background(.fafafa)

@@ -20,7 +20,6 @@
 		942189672C2375AD00C78586 /* RootViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189192C2375AC00C78586 /* RootViewModel.swift */; };
 		942189682C2375AD00C78586 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421891A2C2375AC00C78586 /* SettingsViewModel.swift */; };
 		942189692C2375AD00C78586 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421891C2C2375AC00C78586 /* AppError.swift */; };
-		9421896A2C2375AD00C78586 /* CartState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421891D2C2375AC00C78586 /* CartState.swift */; };
 		9421896C2C2375AD00C78586 /* PasscodeViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421891F2C2375AC00C78586 /* PasscodeViewState.swift */; };
 		9421896D2C2375AD00C78586 /* InventoryXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189212C2375AC00C78586 /* InventoryXApp.swift */; };
 		9421896E2C2375AD00C78586 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 942189222C2375AC00C78586 /* LaunchScreen.storyboard */; };
@@ -45,7 +44,6 @@
 		942189812C2375AD00C78586 /* MoveItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893A2C2375AC00C78586 /* MoveItemsView.swift */; };
 		942189822C2375AD00C78586 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893B2C2375AC00C78586 /* OnboardingView.swift */; };
 		942189832C2375AD00C78586 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893C2C2375AC00C78586 /* PasscodeView.swift */; };
-		942189842C2375AD00C78586 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893D2C2375AC00C78586 /* RootView.swift */; };
 		942189852C2375AD00C78586 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893E2C2375AC00C78586 /* SettingsView.swift */; };
 		942189882C2375AD00C78586 /* DepartmentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189432C2375AD00C78586 /* DepartmentData.swift */; };
 		942189892C2375AD00C78586 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189442C2375AD00C78586 /* ItemData.swift */; };
@@ -79,7 +77,6 @@
 		94FA6CD12C6D2D54001D3CA8 /* LSXViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCC2C6D2D54001D3CA8 /* LSXViewModel.swift */; };
 		94FA6CD22C6D2D54001D3CA8 /* LSXDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCD2C6D2D54001D3CA8 /* LSXDisplay.swift */; };
 		94FA6CD32C6D2D54001D3CA8 /* UIColorOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCE2C6D2D54001D3CA8 /* UIColorOverride.swift */; };
-		94FA6CD42C6D2D54001D3CA8 /* LSXView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCF2C6D2D54001D3CA8 /* LSXView.swift */; };
 		94FA6CD52C6D2D54001D3CA8 /* LSXService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CD02C6D2D54001D3CA8 /* LSXService.swift */; };
 		94FA6CE02C6E64CD001D3CA8 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CDF2C6E64CD001D3CA8 /* LandingView.swift */; };
 /* End PBXBuildFile section */
@@ -99,7 +96,6 @@
 		942189192C2375AC00C78586 /* RootViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootViewModel.swift; sourceTree = "<group>"; };
 		9421891A2C2375AC00C78586 /* SettingsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		9421891C2C2375AC00C78586 /* AppError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
-		9421891D2C2375AC00C78586 /* CartState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartState.swift; sourceTree = "<group>"; };
 		9421891F2C2375AC00C78586 /* PasscodeViewState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeViewState.swift; sourceTree = "<group>"; };
 		942189212C2375AC00C78586 /* InventoryXApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryXApp.swift; sourceTree = "<group>"; };
 		942189222C2375AC00C78586 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -124,7 +120,6 @@
 		9421893A2C2375AC00C78586 /* MoveItemsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveItemsView.swift; sourceTree = "<group>"; };
 		9421893B2C2375AC00C78586 /* OnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		9421893C2C2375AC00C78586 /* PasscodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
-		9421893D2C2375AC00C78586 /* RootView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		9421893E2C2375AC00C78586 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		942189432C2375AD00C78586 /* DepartmentData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentData.swift; sourceTree = "<group>"; };
 		942189442C2375AD00C78586 /* ItemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemData.swift; sourceTree = "<group>"; };
@@ -156,7 +151,6 @@
 		94FA6CCC2C6D2D54001D3CA8 /* LSXViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSXViewModel.swift; sourceTree = "<group>"; };
 		94FA6CCD2C6D2D54001D3CA8 /* LSXDisplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSXDisplay.swift; sourceTree = "<group>"; };
 		94FA6CCE2C6D2D54001D3CA8 /* UIColorOverride.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorOverride.swift; sourceTree = "<group>"; };
-		94FA6CCF2C6D2D54001D3CA8 /* LSXView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSXView.swift; sourceTree = "<group>"; };
 		94FA6CD02C6D2D54001D3CA8 /* LSXService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSXService.swift; sourceTree = "<group>"; };
 		94FA6CDF2C6E64CD001D3CA8 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -257,7 +251,6 @@
 			isa = PBXGroup;
 			children = (
 				9421891C2C2375AC00C78586 /* AppError.swift */,
-				9421891D2C2375AC00C78586 /* CartState.swift */,
 				9421894F2C2375AD00C78586 /* DetailType.swift */,
 				9421891F2C2375AC00C78586 /* PasscodeViewState.swift */,
 			);
@@ -334,7 +327,6 @@
 				9421893A2C2375AC00C78586 /* MoveItemsView.swift */,
 				9421893B2C2375AC00C78586 /* OnboardingView.swift */,
 				9421893C2C2375AC00C78586 /* PasscodeView.swift */,
-				9421893D2C2375AC00C78586 /* RootView.swift */,
 				9421893E2C2375AC00C78586 /* SettingsView.swift */,
 				94750FF92C8CC1FA009562A7 /* TabRoot.swift */,
 				94750FFB2C8D56BC009562A7 /* NewMenuView.swift */,
@@ -379,7 +371,6 @@
 			children = (
 				94FA6CCD2C6D2D54001D3CA8 /* LSXDisplay.swift */,
 				94FA6CD02C6D2D54001D3CA8 /* LSXService.swift */,
-				94FA6CCF2C6D2D54001D3CA8 /* LSXView.swift */,
 				94FA6CCC2C6D2D54001D3CA8 /* LSXViewModel.swift */,
 				94FA6CCE2C6D2D54001D3CA8 /* UIColorOverride.swift */,
 			);
@@ -509,7 +500,6 @@
 				942189692C2375AD00C78586 /* AppError.swift in Sources */,
 				94FA6CD32C6D2D54001D3CA8 /* UIColorOverride.swift in Sources */,
 				942189812C2375AD00C78586 /* MoveItemsView.swift in Sources */,
-				94FA6CD42C6D2D54001D3CA8 /* LSXView.swift in Sources */,
 				942189942C2375AD00C78586 /* AuthService.swift in Sources */,
 				9421898B2C2375AD00C78586 /* SaleData.swift in Sources */,
 				94815B572C6B32640085EE3C /* FieldDivider.swift in Sources */,
@@ -539,13 +529,11 @@
 				94797A892C8295C600B9CDD8 /* ThemeButtonStyle.swift in Sources */,
 				942189802C2375AD00C78586 /* MenuView.swift in Sources */,
 				942189822C2375AD00C78586 /* OnboardingView.swift in Sources */,
-				9421896A2C2375AD00C78586 /* CartState.swift in Sources */,
 				9421898E2C2375AD00C78586 /* DepartmentEntity.swift in Sources */,
 				942189852C2375AD00C78586 /* SettingsView.swift in Sources */,
 				942189752C2375AD00C78586 /* DepartmentDetailView.swift in Sources */,
 				94750FFA2C8CC1FA009562A7 /* TabRoot.swift in Sources */,
 				942189782C2375AD00C78586 /* InventoryListView.swift in Sources */,
-				942189842C2375AD00C78586 /* RootView.swift in Sources */,
 				94FA6CD12C6D2D54001D3CA8 /* LSXViewModel.swift in Sources */,
 				9421896D2C2375AD00C78586 /* InventoryXApp.swift in Sources */,
 				944F670A2C89448F00828875 /* CartItemView.swift in Sources */,

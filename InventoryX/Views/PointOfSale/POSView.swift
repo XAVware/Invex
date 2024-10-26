@@ -11,7 +11,6 @@ import Algorithms
 
 /*
  8.29.24 - A warning is being thrown for breaking constraints on startup on regular width devices. I thought it was related to POSView but it only happens when OnboardingView is being displayed as a full screen cover. Going to toggle onboarding with an optional isOnboarding variable in the root.
- 
  */
 
 enum SidebarState {
@@ -79,7 +78,11 @@ struct POSView: View {
     } //: Body
     
     private var checkoutButton: some View {
-        PrimaryOverlayButton(action: vm.checkoutTapped) {
+        PrimaryOverlayButton(action: {
+            vm.checkoutTapped {
+                navService.path.append(LSXDisplay.confirmSale(vm.cartItems))
+            }
+        }) {
             HStack {
                 Image(systemName: "cart")
                 Text("Checkout")
@@ -116,8 +119,8 @@ struct PrimaryOverlayButton<Label: View>: View {
     }
 }
 
-//#Preview {
-//    POSView()
-//        .environmentObject(PointOfSaleViewModel())
-//        .environment(\.realm, DepartmentEntity.previewRealm)
-//}
+#Preview {
+    POSView()
+        .environmentObject(PointOfSaleViewModel())
+        .environment(\.realm, DepartmentEntity.previewRealm)
+}
