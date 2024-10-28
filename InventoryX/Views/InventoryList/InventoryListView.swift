@@ -45,6 +45,12 @@ struct InventoryListView: View {
             .overlay(addButton, alignment: .bottomTrailing)
             .padding(.bottom)
             .background(.fafafa)
+            .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color.gray.opacity(0.4))
+//                        .shadow(color: .gray, radius: 2)
+            )
+            .padding(.horizontal)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Picker("Table Type", selection: $tableType) {
@@ -133,8 +139,9 @@ struct InventoryListView: View {
 }
 
 #Preview {
-    NavigationStack {
+//    NavigationStack {
         InventoryListView()
             .environment(\.realm, DepartmentEntity.previewRealm)
-    }
+
+//    }
 }

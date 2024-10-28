@@ -64,9 +64,9 @@ struct TabRoot: View {
     @State var showOnboarding = false // For Dev
     
     @State var tabButtons: [TabButtonModel] = [
+        TabButtonModel(destination: .settings, unselectedIconName: "person", selectedIconName: "person.fill", title: "Account"),
         TabButtonModel(destination: .inventoryList, unselectedIconName: "tray.full", selectedIconName: "tray.full.fill", title: "Inventory"),
-        TabButtonModel(destination: .pos, unselectedIconName: "dollarsign", selectedIconName: "dollarsign.circle.fill", title: "Make a Sale"),
-        TabButtonModel(destination: .settings, unselectedIconName: "person", selectedIconName: "person.fill", title: "Account")
+        TabButtonModel(destination: .pos, unselectedIconName: "dollarsign", selectedIconName: "dollarsign.circle.fill", title: "Make a Sale")
     ]
     
     
@@ -147,6 +147,7 @@ struct TabRoot: View {
                             .frame(maxHeight: 56)
                             .background(Color.accentColor.opacity(0.007))
                             .padding(.bottom, geo.safeAreaInsets.bottom / 2)
+                            .overlay(tabBarDivider, alignment: .top)
                         } //: VStack
                         .background(Color.bg)
                         .navigationBarTitleDisplayMode(.inline)
@@ -178,11 +179,22 @@ struct TabRoot: View {
                     .environment(navService)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
-                            if navService.sidebarVisibility != nil {
-                                Button("", systemImage: "chevron.forward.2", action: navService.toggleSidebar)
+                            if let sidebarVis = navService.sidebarVisibility {
+                                Button {
+                                    navService.toggleSidebar()
+                                } label: {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "cart")
+                                        Image(systemName: sidebarVis == .hidden ? "chevron.backward.2" : "chevron.forward.2")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 16)
+                                    }
+                                }
                             } else {
                                 Spacer()
                             }
+                            
                         }
                     }
                 } //: Navigation Stack
@@ -196,7 +208,12 @@ struct TabRoot: View {
         }
     } //: Body
     
-    
+    @ViewBuilder var tabBarDivider: some View {
+        if lsxVM.mainDisplay.showsTabBarDivider {
+            Divider()
+                .background(Color.accentColor.opacity(0.01))
+        }
+    }
     
 }
 

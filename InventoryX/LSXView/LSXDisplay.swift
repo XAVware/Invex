@@ -47,6 +47,13 @@ enum LSXDisplay: Hashable, CaseIterable {
         }
     }
     
+    var showsTabBarDivider: Bool {
+        return switch self {
+        case .pos, .settings: true
+        default: false
+        }
+    }
+    
     
 //    var tabId: Int {
 //        return switch self {

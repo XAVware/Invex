@@ -21,19 +21,21 @@ struct CartSidebarView: View {
         HStack {
             Spacer()
             ZStack {
-                NeomorphicCardView(layer: .under)
+                NeomorphicCardView(layer: .under, cornerRadius: 8)
                 
                 VStack {
-                    HStack {
-                        Image(systemName: "cart")
-                        Text("Cart")
-                            .padding(.horizontal)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .padding([.top, .horizontal])
-                    .font(.headline)
-                    .foregroundStyle(.accent)
-                    .opacity(0.8)
+//                    HStack {
+//                        Image(systemName: "cart")
+//                        Text("Cart")
+//                            .padding(.horizontal)
+//                            .frame(maxWidth: .infinity, alignment: .leading)
+//                    }
+//                    .padding([.top, .horizontal])
+//                    .font(.headline)
+//                    .foregroundStyle(.accent)
+//                    .opacity(0.8)
+                    
+//                    Text("Items")
                     
                     List(vm.cartItems) { item in
                         CartItemView(item: item, qty: item.qtyInCart)

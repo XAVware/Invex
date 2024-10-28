@@ -58,6 +58,7 @@
 		942189942C2375AD00C78586 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189532C2375AD00C78586 /* AuthService.swift */; };
 		942189952C2375AD00C78586 /* RealmActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189542C2375AD00C78586 /* RealmActor.swift */; };
 		942189962C2375AD00C78586 /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189552C2375AD00C78586 /* RealmMigrator.swift */; };
+		943946C92CCC749600DB23C3 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943946C82CCC749600DB23C3 /* SwiftUIView.swift */; };
 		944F670A2C89448F00828875 /* CartItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F67092C89448F00828875 /* CartItemView.swift */; };
 		9453BEC42BB3C79F007C63A4 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 9453BEC32BB3C79F007C63A4 /* Algorithms */; };
 		9454FEF92C843A0E00F8B6D2 /* NeomorphicSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */; };
@@ -135,6 +136,7 @@
 		942189542C2375AD00C78586 /* RealmActor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmActor.swift; sourceTree = "<group>"; };
 		942189552C2375AD00C78586 /* RealmMigrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		942189972C23766600C78586 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		943946C82CCC749600DB23C3 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		944F67092C89448F00828875 /* CartItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemView.swift; sourceTree = "<group>"; };
 		9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicSection.swift; sourceTree = "<group>"; };
 		945C28872C8689A10041836D /* ExternalLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinks.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				942189352C2375AC00C78586 /* ItemGridView.swift */,
 				942189362C2375AC00C78586 /* POSView.swift */,
 				944F67092C89448F00828875 /* CartItemView.swift */,
+				943946C82CCC749600DB23C3 /* SwiftUIView.swift */,
 			);
 			path = PointOfSale;
 			sourceTree = "<group>";
@@ -489,6 +492,7 @@
 			files = (
 				942189912C2375AD00C78586 /* DetailType.swift in Sources */,
 				942189762C2375AD00C78586 /* ItemDetailView.swift in Sources */,
+				943946C92CCC749600DB23C3 /* SwiftUIView.swift in Sources */,
 				942189902C2375AD00C78586 /* SaleEntity.swift in Sources */,
 				942189672C2375AD00C78586 /* RootViewModel.swift in Sources */,
 				942189772C2375AD00C78586 /* DepartmentTableView.swift in Sources */,
