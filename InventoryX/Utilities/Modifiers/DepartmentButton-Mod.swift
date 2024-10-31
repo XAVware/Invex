@@ -23,5 +23,14 @@ struct DepartmentButtonMod: ViewModifier {
     }
 }
 
-
-
+struct RoundedOutlineMod: ViewModifier {
+    let cornerRadius: CGFloat
+    func body(content: Content) -> some View {
+        content
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .overlay(
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(Color.gray.opacity(0.25))
+            )
+    }
+}

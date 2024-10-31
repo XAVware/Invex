@@ -43,14 +43,10 @@ struct InventoryListView: View {
     var body: some View {
         table
             .overlay(addButton, alignment: .bottomTrailing)
-            .padding(.bottom)
+            .modifier(RoundedOutlineMod(cornerRadius: 6))
+            .padding()
             .background(.fafafa)
-            .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(Color.gray.opacity(0.4))
-//                        .shadow(color: .gray, radius: 2)
-            )
-            .padding(.horizontal)
+//            .padding(.horizontal)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Picker("Table Type", selection: $tableType) {

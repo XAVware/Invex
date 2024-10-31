@@ -26,22 +26,30 @@ import RealmSwift
     
     @Published var cartItems: [CartItem] = []
     
-    func setQty(of itemId: ObjectId, to qty: Int) {
-        if let index = cartItems.firstIndex(where: { $0.id == itemId }) {
-            print("Item in cart at index: \(index)")
-            cartItems[index].qtyInCart = qty
-        } else {
-            print("Item not in cart")
-        }
-    }
+//    func setQty(of itemId: ObjectId, to qty: Int) {
+//        if let index = cartItems.firstIndex(where: { $0.id == itemId }) {
+//            print("Item in cart at index: \(index)")
+//            cartItems[index].qtyInCart = qty
+//        } else {
+//            print("Item not in cart")
+//        }
+//    }
     
-    func addItemToCart(_ item: CartItem) {
+    func adjustStock(of item: CartItem, by qty: Int) {
         if let index = cartItems.firstIndex(where: { $0.id == item.id }) {
-            cartItems[index].qtyInCart += 1
+            cartItems[index].qtyInCart += qty
         } else {
             cartItems.append(item)
         }
     }
+    
+//    func addItemToCart(_ item: CartItem) {
+//        if let index = cartItems.firstIndex(where: { $0.id == item.id }) {
+//            cartItems[index].qtyInCart += 1
+//        } else {
+//            cartItems.append(item)
+//        }
+//    }
     
 
     

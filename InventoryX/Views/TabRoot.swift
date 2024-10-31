@@ -77,43 +77,17 @@ struct TabRoot: View {
                 .environmentObject(lsxVM)
             
         case false:
-            NavigationStack(path: $navService.path) {
-                GeometryReader { geo in
-                    let isLandscape: Bool = geo.size.width > geo.size.height
+            GeometryReader { geo in
+                let isLandscape: Bool = geo.size.width > geo.size.height
+                
+                NavigationStack(path: $navService.path) {
+                    /// The VStack needs to be inside a ZStack in order for the POSView's sidebar to offset the TabBar's buttons.
                     ZStack {
                         VStack(spacing: 0) {
-                            TabView(selection: $lsxVM.mainDisplay) {
-                                POSView()
-                                    .environmentObject(posVM)
-                                    .tag(LSXDisplay.pos)
-                                    .onAppear {
-                                        if isLandscape && hSize == .regular {
-                                            navService.sidebarVisibility = .showing
-                                            navService.sidebarWidth = min(geo.size.width / 3, 320)
-                                        } else {
-                                            navService.sidebarVisibility = nil
-                                            navService.sidebarWidth = 0
-                                        }
-                                    }
-                                    .onChange(of: isLandscape) { _, isLandscape in
-                                        if isLandscape && hSize == .regular {
-                                            navService.sidebarVisibility = .showing
-                                            navService.sidebarWidth = min(geo.size.width / 3, 320)
-                                        } else {
-                                            navService.sidebarVisibility = nil
-                                            navService.sidebarWidth = 0
-                                        }
-                                    }
-                                
-                                InventoryListView()
-                                    .tag(LSXDisplay.inventoryList)
-                                
-                                SettingsView()
-                                    .tag(LSXDisplay.settings)
-                                
-                            } //: Tab
-                            .tabViewStyle(.page(indexDisplayMode: .never))
-                            .tint(Color.accentColor)
+                            primaryContent
+
+                            
+                            
                             
                             HStack {
                                 Spacer()
@@ -127,7 +101,6 @@ struct TabRoot: View {
                                             Image(systemName: isSelected ? data.selectedIconName : data.unselectedIconName)
                                                 .resizable()
                                                 .scaledToFit()
-//                                                .frame(height: 21)
                                             
                                             Text(data.title)
                                                 .padding(4)
@@ -140,9 +113,11 @@ struct TabRoot: View {
                                     Spacer()
                                 } //: For Each
                                 
-                                Spacer()
-                                    .frame(maxWidth: navService.sidebarVisibility != nil ? navService.sidebarWidth ?? 320 : 0)
-                                    .ignoresSafeArea(edges: [.trailing])
+                                if lsxVM.mainDisplay == .pos {
+                                    Spacer()
+                                        .frame(maxWidth: navService.sidebarWidth ?? 500)
+                                        .ignoresSafeArea(edges: [.trailing])
+                                }
                             } //: HStack
                             .frame(maxHeight: 56)
                             .background(Color.accentColor.opacity(0.007))
@@ -161,52 +136,110 @@ struct TabRoot: View {
                                 ConfirmSaleView(/*cartItems: items*/)
                                     .environmentObject(posVM)
                                     .environment(navService)
+                                
                             default: Color.red
                             }
-                        }
-                        .onAppear {
-                            navService.sidebarVisibility = hSize == .regular ? .showing : nil
                         }
                         .ignoresSafeArea(edges: [.bottom])
                         
                         if navService.sidebarWidth ?? 0 > 180 && lsxVM.mainDisplay == .pos {
                             CartSidebarView(vm: posVM)
                                 .ignoresSafeArea(edges: [.top])
-                                .padding(.trailing, geo.safeAreaInsets.trailing == 0 ? 4 : 0)
+                                .padding(/*.trailing, geo.safeAreaInsets.trailing == 0 ? 4 : */0)
                                 .environmentObject(posVM)
                         }
                     } //: ZStack
-                    .environment(navService)
+                    .background(.bg)
                     .toolbar {
+//                        ToolbarItem(placement: .topBarLeading) {
+//                            Button {
+//                                lsxVM.mainDisplay = .settings
+//                            } label: {
+//                                Image(systemName: "person.circle")
+//                            }
+//                        }
+                        
                         ToolbarItem(placement: .topBarTrailing) {
-                            if let sidebarVis = navService.sidebarVisibility {
-                                Button {
-                                    navService.toggleSidebar()
-                                } label: {
-                                    HStack(spacing: 4) {
-                                        Image(systemName: "cart")
-                                        Image(systemName: sidebarVis == .hidden ? "chevron.backward.2" : "chevron.forward.2")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 16)
+                            switch lsxVM.mainDisplay {
+                            case .pos:
+                                if navService.sidebarVisibility != nil {
+                                    Button {
+                                        navService.toggleSidebar()
+                                    } label: {
+                                        HStack(spacing: 4) {
+                                            Image(systemName: "cart")
+                                            Image(systemName: navService.sidebarVisibility == .hidden ? "chevron.backward.2" : "chevron.forward.2")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 16)
+                                        }
                                     }
+                                } else {
+                                    Spacer()
                                 }
-                            } else {
-                                Spacer()
+                                
+                            default: EmptyView()
                             }
-                            
                         }
                     }
                 } //: Navigation Stack
+                .toolbar(removing: .sidebarToggle)
                 .onReceive(rootVM.$companyExists) { exists in
                     print("Root: Company Received")
                     //                self.showOnboarding = !exists
                 }
+                .onAppear {
+                    if isLandscape && hSize == .regular {
+                        navService.sidebarVisibility = .showing
+                        navService.sidebarWidth = min(geo.size.width / 3, 280)
+                    } else {
+                        navService.sidebarVisibility = nil
+                        navService.sidebarWidth = 0
+                    }
+                }
+                .onChange(of: isLandscape) { _, isLandscape in
+                    if isLandscape && hSize == .regular {
+                        navService.sidebarVisibility = .showing
+                        navService.sidebarWidth = min(geo.size.width / 3, 280)
+                    } else {
+                        navService.sidebarVisibility = nil
+                        navService.sidebarWidth = 0
+                    }
+                }
                 
+                //                } //: NavigationSplitView
+                .environment(navService)
+                .onAppear {
+                    navService.sidebarVisibility = hSize == .regular ? .showing : nil
+                }
             }
         default: ProgressView()
         }
     } //: Body
+    
+    @ViewBuilder var primaryContent: some View {
+        switch lsxVM.mainDisplay {
+        case .pos:
+            HStack {
+                POSView()
+                    .environmentObject(posVM)
+                    .tag(LSXDisplay.pos)
+                Spacer()
+                    .frame(maxWidth: navService.sidebarVisibility != .showing ? 0 : navService.sidebarWidth ?? 500)
+            } //: HStack
+            
+        case .inventoryList:
+            InventoryListView()
+                .tag(LSXDisplay.inventoryList)
+            
+        case .settings:
+            SettingsView()
+                .tag(LSXDisplay.settings)
+                .environmentObject(lsxVM)
+            
+        default: EmptyView()
+        }
+    }
     
     @ViewBuilder var tabBarDivider: some View {
         if lsxVM.mainDisplay.showsTabBarDivider {

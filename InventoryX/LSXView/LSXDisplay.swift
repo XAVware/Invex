@@ -40,17 +40,22 @@ enum LSXDisplay: Hashable, CaseIterable {
 
     var defaultViewType: LSXViewType {
         return switch self {
-        case .pos:         .primary
-        case .inventoryList: .primary
-        case .settings:     .primary
-        default:            .detail
+        case .pos, .inventoryList, .settings:   .primary
+        default:                                .detail
         }
     }
     
     var showsTabBarDivider: Bool {
         return switch self {
-        case .pos, .settings: true
-        default: false
+        case .pos, .settings:   true
+        default:                false
+        }
+    }
+    
+    var canShowSidebar: Bool {
+        return switch self {
+        case .pos:  true
+        default:    false
         }
     }
     

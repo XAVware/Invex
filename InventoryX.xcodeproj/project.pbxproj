@@ -58,6 +58,7 @@
 		942189942C2375AD00C78586 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189532C2375AD00C78586 /* AuthService.swift */; };
 		942189952C2375AD00C78586 /* RealmActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189542C2375AD00C78586 /* RealmActor.swift */; };
 		942189962C2375AD00C78586 /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189552C2375AD00C78586 /* RealmMigrator.swift */; };
+		94241CA52CD34EB800C7FC55 /* MenuButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94241CA42CD34EB800C7FC55 /* MenuButtonStyle.swift */; };
 		943946C92CCC749600DB23C3 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943946C82CCC749600DB23C3 /* SwiftUIView.swift */; };
 		944F670A2C89448F00828875 /* CartItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F67092C89448F00828875 /* CartItemView.swift */; };
 		9453BEC42BB3C79F007C63A4 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 9453BEC32BB3C79F007C63A4 /* Algorithms */; };
@@ -136,6 +137,7 @@
 		942189542C2375AD00C78586 /* RealmActor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmActor.swift; sourceTree = "<group>"; };
 		942189552C2375AD00C78586 /* RealmMigrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		942189972C23766600C78586 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		94241CA42CD34EB800C7FC55 /* MenuButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButtonStyle.swift; sourceTree = "<group>"; };
 		943946C82CCC749600DB23C3 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		944F67092C89448F00828875 /* CartItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemView.swift; sourceTree = "<group>"; };
 		9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicSection.swift; sourceTree = "<group>"; };
@@ -404,6 +406,7 @@
 		94797A872C8295B400B9CDD8 /* Styles */ = {
 			isa = PBXGroup;
 			children = (
+				94241CA42CD34EB800C7FC55 /* MenuButtonStyle.swift */,
 				94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */,
 			);
 			path = Styles;
@@ -511,6 +514,7 @@
 				94FA6CD52C6D2D54001D3CA8 /* LSXService.swift in Sources */,
 				9421895D2C2375AD00C78586 /* View+Ext.swift in Sources */,
 				9421898D2C2375AD00C78586 /* CompanyEntity.swift in Sources */,
+				94241CA52CD34EB800C7FC55 /* MenuButtonStyle.swift in Sources */,
 				9421897E2C2375AD00C78586 /* POSView.swift in Sources */,
 				94FA6CD22C6D2D54001D3CA8 /* LSXDisplay.swift in Sources */,
 				942189652C2375AD00C78586 /* MoveItemsViewModel.swift in Sources */,
@@ -708,7 +712,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
@@ -749,7 +753,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
-				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.4;

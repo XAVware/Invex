@@ -24,6 +24,7 @@ struct CartSidebarView: View {
                 NeomorphicCardView(layer: .under, cornerRadius: 8)
                 
                 VStack {
+                    Spacer().frame(height: 54)
 //                    HStack {
 //                        Image(systemName: "cart")
 //                        Text("Cart")

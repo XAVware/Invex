@@ -21,6 +21,20 @@ import Combine
 
     @Published var detailRoot: LSXDisplay?
     
+    
+    @Published var sidebarVisibility: SidebarState?
+    
+    /// Toggle between hidden and sidebar cart state. Only called from regular horizontal size class devices.
+    func toggleRightSidebar() {
+        withAnimation {
+            if sidebarVisibility == .hidden {
+                sidebarVisibility = .showing
+            } else {
+                sidebarVisibility = .hidden
+            }
+        }
+    }
+    
     private var isCompact: Bool = false
     
     private var cancellables = Set<AnyCancellable>()

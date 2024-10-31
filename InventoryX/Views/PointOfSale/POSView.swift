@@ -34,7 +34,7 @@ struct POSView: View {
     //    @Binding var cartItems: Binding<[CartItem]> = []
     
     var body: some View {
-        HStack {
+//        HStack {
             VStack(spacing: 0) {
                 // MARK: - Department Picker
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -59,20 +59,21 @@ struct POSView: View {
                 .padding(vSize == .regular ? 12 : 8)
                 
                 ItemGridView(items: selDept != nil ? Array(selDept?.items ?? .init()) : Array(items)) { item in
-                    vm.addItemToCart(CartItem(from: item))
+//                    vm.addItemToCart(CartItem(from: item))
+                    vm.adjustStock(of: CartItem(from: item), by: 1)
                 }
             } //: VStack
             .padding(.horizontal, hSize == .regular ? 12 : 4)
             .animation(.interpolatingSpring, value: true)
             
-            Spacer()
-                .frame(maxWidth: navService.sidebarVisibility != .showing ? 0 : navService.sidebarWidth ?? 500)
+//            Spacer()
+//                .frame(maxWidth: navService.sidebarVisibility != .showing ? 0 : navService.sidebarWidth ?? 500)
             
-        } //: HStack
-        .overlay(navService.sidebarVisibility == nil ? checkoutButton : nil, alignment: .bottom)
+//        } //: HStack
+            .overlay(navService.sidebarVisibility == nil ? checkoutButton : nil, alignment: .bottom)
         .background(.bg)
 //        .background(.fafafa)
-        .navigationTitle("Make a sale")
+        .navigationBarTitleDisplayMode(.inline)
         .ignoresSafeArea(edges: [.bottom, .trailing])
         
     } //: Body
@@ -90,6 +91,7 @@ struct POSView: View {
                 Text(vm.total.formatAsCurrencyString())
             }
         }
+        .padding()
     }
     
 }

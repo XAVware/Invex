@@ -62,7 +62,7 @@ struct CartItemView: View {
     private var stepper: some View {
         HStack(spacing: 0) {
             Button {
-                vm.setQty(of: item.id, to: item.qtyInCart - 1)
+                vm.adjustStock(of: item, by: -1)
 //                vm.removeItemFromCart(item)
             } label: {
                 Text("-")
@@ -83,6 +83,7 @@ struct CartItemView: View {
             
             Button {
 //                vm.addItemToCart(item)
+                vm.adjustStock(of: item, by: 1)
             } label: {
                 Text("+")
                     .font(.title2)
