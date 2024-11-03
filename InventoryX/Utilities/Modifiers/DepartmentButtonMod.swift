@@ -22,15 +22,3 @@ struct DepartmentButtonMod: ViewModifier {
             .overlay(isSelected ? Rectangle().fill(.accent).frame(height: 3) : nil, alignment: .bottom)
     }
 }
-
-struct RoundedOutlineMod: ViewModifier {
-    let cornerRadius: CGFloat
-    func body(content: Content) -> some View {
-        content
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-            .overlay(
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(Color.gray.opacity(0.25))
-            )
-    }
-}
