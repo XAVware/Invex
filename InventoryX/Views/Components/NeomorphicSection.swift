@@ -18,17 +18,17 @@ struct NeomorphicSection<C: View>: View {
     
     var body: some View {
         Section {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(
-                        .shadow(.inner(color: .neoUnderDark, radius: 3, x: 1, y: 1))
-                        .shadow(.inner(color: .neoUnderLight, radius: 2, x: -3, y: -2))
-                    )
-                    .foregroundColor(.neoUnderBg)
+//            ZStack {
+//                RoundedRectangle(cornerRadius: 12)
+//                    .fill(
+//                        .shadow(.inner(color: .neoUnderDark, radius: 3, x: 1, y: 1))
+//                        .shadow(.inner(color: .neoUnderLight, radius: 2, x: -3, y: -2))
+//                    )
+//                    .foregroundColor(.neoUnderBg)
                 
                 content
                     .padding(.vertical, 6)
-            }
+//            }
         } header: {
             Text(headerText)
                 .padding(.horizontal, 10)

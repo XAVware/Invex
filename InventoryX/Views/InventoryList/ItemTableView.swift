@@ -9,17 +9,19 @@ import SwiftUI
 import RealmSwift
 
 struct ItemTableView: View {
+    @Environment(NavigationService.self) var navService
     @Environment(\.horizontalSizeClass) var horSize
     @ObservedResults(ItemEntity.self) var items
     
     @State private var sortOrder: [KeyPathComparator<ItemEntity>] = []
     
     func onSelect(_ item: ItemEntity) {
-        LSXService.shared.update(newDisplay: .item(item, .update))
+        print("Tapped")
+        navService.path.append(LSXDisplay.item(item, .update))
     }
     
     var body: some View {
-        VStack {
+//        VStack {
             
             Table(of: ItemEntity.self) {
                 TableColumn("Name"/*, value: \.name*/) { item in
@@ -97,11 +99,12 @@ struct ItemTableView: View {
             .padding(.vertical, 6)
             .frame(maxWidth: .infinity)
 
-        }
+//        }
     }
 }
 
-//#Preview {
-//    ItemTableView()
-//        .environment(\.realm, DepartmentEntity.previewRealm)
-//}
+#Preview {
+    ItemTableView()
+        .environment(\.realm, DepartmentEntity.previewRealm)
+        .environment(NavigationService())
+}

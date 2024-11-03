@@ -12,7 +12,7 @@
 		9421895B2C2375AD00C78586 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890A2C2375AC00C78586 /* Double+Ext.swift */; };
 		9421895C2C2375AD00C78586 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890B2C2375AC00C78586 /* String+Ext.swift */; };
 		9421895D2C2375AD00C78586 /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890C2C2375AC00C78586 /* View+Ext.swift */; };
-		9421895E2C2375AD00C78586 /* DepartmentButton-Mod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890E2C2375AC00C78586 /* DepartmentButton-Mod.swift */; };
+		9421895E2C2375AD00C78586 /* DepartmentButtonMod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890E2C2375AC00C78586 /* DepartmentButtonMod.swift */; };
 		942189612C2375AD00C78586 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189132C2375AC00C78586 /* DetailViewModel.swift */; };
 		942189642C2375AD00C78586 /* InventoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189162C2375AC00C78586 /* InventoryListViewModel.swift */; };
 		942189652C2375AD00C78586 /* MoveItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189172C2375AC00C78586 /* MoveItemsViewModel.swift */; };
@@ -40,7 +40,6 @@
 		9421897D2C2375AD00C78586 /* ItemGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189352C2375AC00C78586 /* ItemGridView.swift */; };
 		9421897E2C2375AD00C78586 /* POSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189362C2375AC00C78586 /* POSView.swift */; };
 		9421897F2C2375AD00C78586 /* LockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189382C2375AC00C78586 /* LockScreenView.swift */; };
-		942189802C2375AD00C78586 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189392C2375AC00C78586 /* MenuView.swift */; };
 		942189812C2375AD00C78586 /* MoveItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893A2C2375AC00C78586 /* MoveItemsView.swift */; };
 		942189822C2375AD00C78586 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893B2C2375AC00C78586 /* OnboardingView.swift */; };
 		942189832C2375AD00C78586 /* PasscodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893C2C2375AC00C78586 /* PasscodeView.swift */; };
@@ -65,7 +64,6 @@
 		9454FEF92C843A0E00F8B6D2 /* NeomorphicSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */; };
 		945C28882C8689A10041836D /* ExternalLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945C28872C8689A10041836D /* ExternalLinks.swift */; };
 		94750FFA2C8CC1FA009562A7 /* TabRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94750FF92C8CC1FA009562A7 /* TabRoot.swift */; };
-		94750FFC2C8D56BC009562A7 /* NewMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94750FFB2C8D56BC009562A7 /* NewMenuView.swift */; };
 		94797A842C8294E100B9CDD8 /* LandingHighlightTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */; };
 		94797A862C8294EC00B9CDD8 /* Hexagon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A852C8294EC00B9CDD8 /* Hexagon.swift */; };
 		94797A892C8295C600B9CDD8 /* ThemeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */; };
@@ -76,6 +74,8 @@
 		94E10E382C80EAB00091ABBF /* NeomorphicCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E10E372C80EAB00091ABBF /* NeomorphicCardView.swift */; };
 		94E1853F2C7F30CB0011A3F8 /* SaleItemEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E1853E2C7F30CB0011A3F8 /* SaleItemEntity.swift */; };
 		94E185412C7FD1880011A3F8 /* LandingHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94E185402C7FD1880011A3F8 /* LandingHighlight.swift */; };
+		94F968DA2CD4926000242D27 /* ThemePageMod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F968D92CD4926000242D27 /* ThemePageMod.swift */; };
+		94F968DC2CD4933100242D27 /* RoundedOutlineMod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F968DB2CD4933100242D27 /* RoundedOutlineMod.swift */; };
 		94FA6CD12C6D2D54001D3CA8 /* LSXViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCC2C6D2D54001D3CA8 /* LSXViewModel.swift */; };
 		94FA6CD22C6D2D54001D3CA8 /* LSXDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCD2C6D2D54001D3CA8 /* LSXDisplay.swift */; };
 		94FA6CD32C6D2D54001D3CA8 /* UIColorOverride.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94FA6CCE2C6D2D54001D3CA8 /* UIColorOverride.swift */; };
@@ -90,7 +90,7 @@
 		9421890A2C2375AC00C78586 /* Double+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
 		9421890B2C2375AC00C78586 /* String+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		9421890C2C2375AC00C78586 /* View+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
-		9421890E2C2375AC00C78586 /* DepartmentButton-Mod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DepartmentButton-Mod.swift"; sourceTree = "<group>"; };
+		9421890E2C2375AC00C78586 /* DepartmentButtonMod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentButtonMod.swift; sourceTree = "<group>"; };
 		942189132C2375AC00C78586 /* DetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		942189162C2375AC00C78586 /* InventoryListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryListViewModel.swift; sourceTree = "<group>"; };
 		942189172C2375AC00C78586 /* MoveItemsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveItemsViewModel.swift; sourceTree = "<group>"; };
@@ -118,7 +118,6 @@
 		942189352C2375AC00C78586 /* ItemGridView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemGridView.swift; sourceTree = "<group>"; };
 		942189362C2375AC00C78586 /* POSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POSView.swift; sourceTree = "<group>"; };
 		942189382C2375AC00C78586 /* LockScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockScreenView.swift; sourceTree = "<group>"; };
-		942189392C2375AC00C78586 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		9421893A2C2375AC00C78586 /* MoveItemsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveItemsView.swift; sourceTree = "<group>"; };
 		9421893B2C2375AC00C78586 /* OnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		9421893C2C2375AC00C78586 /* PasscodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeView.swift; sourceTree = "<group>"; };
@@ -143,7 +142,6 @@
 		9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicSection.swift; sourceTree = "<group>"; };
 		945C28872C8689A10041836D /* ExternalLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinks.swift; sourceTree = "<group>"; };
 		94750FF92C8CC1FA009562A7 /* TabRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRoot.swift; sourceTree = "<group>"; };
-		94750FFB2C8D56BC009562A7 /* NewMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMenuView.swift; sourceTree = "<group>"; };
 		94797A832C8294E100B9CDD8 /* LandingHighlightTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingHighlightTextView.swift; sourceTree = "<group>"; };
 		94797A852C8294EC00B9CDD8 /* Hexagon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hexagon.swift; sourceTree = "<group>"; };
 		94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButtonStyle.swift; sourceTree = "<group>"; };
@@ -152,6 +150,8 @@
 		94E10E372C80EAB00091ABBF /* NeomorphicCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicCardView.swift; sourceTree = "<group>"; };
 		94E1853E2C7F30CB0011A3F8 /* SaleItemEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleItemEntity.swift; sourceTree = "<group>"; };
 		94E185402C7FD1880011A3F8 /* LandingHighlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingHighlight.swift; sourceTree = "<group>"; };
+		94F968D92CD4926000242D27 /* ThemePageMod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePageMod.swift; sourceTree = "<group>"; };
+		94F968DB2CD4933100242D27 /* RoundedOutlineMod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedOutlineMod.swift; sourceTree = "<group>"; };
 		94FA6CCC2C6D2D54001D3CA8 /* LSXViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSXViewModel.swift; sourceTree = "<group>"; };
 		94FA6CCD2C6D2D54001D3CA8 /* LSXDisplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LSXDisplay.swift; sourceTree = "<group>"; };
 		94FA6CCE2C6D2D54001D3CA8 /* UIColorOverride.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorOverride.swift; sourceTree = "<group>"; };
@@ -223,7 +223,9 @@
 		942189112C2375AC00C78586 /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
-				9421890E2C2375AC00C78586 /* DepartmentButton-Mod.swift */,
+				94F968D92CD4926000242D27 /* ThemePageMod.swift */,
+				94F968DB2CD4933100242D27 /* RoundedOutlineMod.swift */,
+				9421890E2C2375AC00C78586 /* DepartmentButtonMod.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -327,14 +329,12 @@
 				9421892D2C2375AC00C78586 /* DetailViews */,
 				942189312C2375AC00C78586 /* InventoryList */,
 				942189372C2375AC00C78586 /* PointOfSale */,
-				942189392C2375AC00C78586 /* MenuView.swift */,
 				942189382C2375AC00C78586 /* LockScreenView.swift */,
 				9421893A2C2375AC00C78586 /* MoveItemsView.swift */,
 				9421893B2C2375AC00C78586 /* OnboardingView.swift */,
 				9421893C2C2375AC00C78586 /* PasscodeView.swift */,
 				9421893E2C2375AC00C78586 /* SettingsView.swift */,
 				94750FF92C8CC1FA009562A7 /* TabRoot.swift */,
-				94750FFB2C8D56BC009562A7 /* NewMenuView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -513,6 +513,7 @@
 				942189642C2375AD00C78586 /* InventoryListViewModel.swift in Sources */,
 				94FA6CD52C6D2D54001D3CA8 /* LSXService.swift in Sources */,
 				9421895D2C2375AD00C78586 /* View+Ext.swift in Sources */,
+				94F968DA2CD4926000242D27 /* ThemePageMod.swift in Sources */,
 				9421898D2C2375AD00C78586 /* CompanyEntity.swift in Sources */,
 				94241CA52CD34EB800C7FC55 /* MenuButtonStyle.swift in Sources */,
 				9421897E2C2375AD00C78586 /* POSView.swift in Sources */,
@@ -520,7 +521,7 @@
 				942189652C2375AD00C78586 /* MoveItemsViewModel.swift in Sources */,
 				942189662C2375AD00C78586 /* PointOfSaleViewModel.swift in Sources */,
 				9421895C2C2375AD00C78586 /* String+Ext.swift in Sources */,
-				9421895E2C2375AD00C78586 /* DepartmentButton-Mod.swift in Sources */,
+				9421895E2C2375AD00C78586 /* DepartmentButtonMod.swift in Sources */,
 				942189722C2375AD00C78586 /* NumberPadView.swift in Sources */,
 				942189702C2375AD00C78586 /* DateTimeLabel.swift in Sources */,
 				94E1853F2C7F30CB0011A3F8 /* SaleItemEntity.swift in Sources */,
@@ -528,14 +529,12 @@
 				942189712C2375AD00C78586 /* DepartmentPicker.swift in Sources */,
 				9421897A2C2375AD00C78586 /* CartItemListView.swift in Sources */,
 				94E185412C7FD1880011A3F8 /* LandingHighlight.swift in Sources */,
-				94750FFC2C8D56BC009562A7 /* NewMenuView.swift in Sources */,
 				942189792C2375AD00C78586 /* ItemTableView.swift in Sources */,
 				9421897D2C2375AD00C78586 /* ItemGridView.swift in Sources */,
 				94FA6CE02C6E64CD001D3CA8 /* LandingView.swift in Sources */,
 				9421897C2C2375AD00C78586 /* ConfirmSaleView.swift in Sources */,
 				94E10E382C80EAB00091ABBF /* NeomorphicCardView.swift in Sources */,
 				94797A892C8295C600B9CDD8 /* ThemeButtonStyle.swift in Sources */,
-				942189802C2375AD00C78586 /* MenuView.swift in Sources */,
 				942189822C2375AD00C78586 /* OnboardingView.swift in Sources */,
 				9421898E2C2375AD00C78586 /* DepartmentEntity.swift in Sources */,
 				942189852C2375AD00C78586 /* SettingsView.swift in Sources */,
@@ -549,6 +548,7 @@
 				9454FEF92C843A0E00F8B6D2 /* NeomorphicSection.swift in Sources */,
 				942189732C2375AD00C78586 /* ThemeTextField.swift in Sources */,
 				9421898F2C2375AD00C78586 /* ItemEntity.swift in Sources */,
+				94F968DC2CD4933100242D27 /* RoundedOutlineMod.swift in Sources */,
 				9421897F2C2375AD00C78586 /* LockScreenView.swift in Sources */,
 				94797A862C8294EC00B9CDD8 /* Hexagon.swift in Sources */,
 				94797A842C8294E100B9CDD8 /* LandingHighlightTextView.swift in Sources */,

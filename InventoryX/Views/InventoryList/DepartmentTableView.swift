@@ -62,6 +62,8 @@ struct DepartmentTableView: View {
     
 }
 
-//#Preview {
-//    DepartmentTableView()
-//}
+#Preview {
+    DepartmentTableView()
+        .environment(\.realm, DepartmentEntity.previewRealm)
+        .environment(NavigationService())
+}

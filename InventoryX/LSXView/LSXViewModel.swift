@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 @MainActor final class LSXViewModel: ObservableObject {
-    private let navService = LSXService.shared
+    private let lsxService = LSXService.shared
     
     @Published var colVis: NavigationSplitViewVisibility = .detailOnly
     @Published var prefCol: NavigationSplitViewColumn = .detail
@@ -61,7 +61,7 @@ import Combine
     
     func configNavSubscribers() {
         // Receive a main view
-        navService.pathView
+        lsxService.pathView
             .filter({ $0.1 == .primary })
             .sink { [weak self] (view, prefColumn) in
                 guard let view = view else {
@@ -78,7 +78,7 @@ import Combine
             }.store(in: &cancellables)
         
         // Receive a detail view
-        navService.pathView
+        lsxService.pathView
             .filter({ $0.1 == .detail })
             .sink { [weak self] (display, prefColumn) in
                 guard let display = display else {

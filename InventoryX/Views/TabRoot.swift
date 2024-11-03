@@ -55,6 +55,7 @@ struct TabRoot: View {
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
     
+    
     // MARK: - Root Properties
     // TODO: Try moving PosVM into POSView. Make sure cart isnt lost on view change
     @StateObject var posVM = PointOfSaleViewModel()
@@ -64,13 +65,12 @@ struct TabRoot: View {
     @State var showOnboarding = false // For Dev
     
     @State var tabButtons: [TabButtonModel] = [
-        TabButtonModel(destination: .settings, unselectedIconName: "person", selectedIconName: "person.fill", title: "Account"),
+        TabButtonModel(destination: .settings, unselectedIconName: "line.3.horizontal.circle", selectedIconName: "line.3.horizontal.circle.fill", title: "Menu"),
         TabButtonModel(destination: .inventoryList, unselectedIconName: "tray.full", selectedIconName: "tray.full.fill", title: "Inventory"),
         TabButtonModel(destination: .pos, unselectedIconName: "dollarsign", selectedIconName: "dollarsign.circle.fill", title: "Make a Sale")
     ]
     
-    
-    var body: some View {
+    var body: some View { 
         switch showOnboarding {
         case true:
             OnboardingView()
@@ -86,9 +86,6 @@ struct TabRoot: View {
                         VStack(spacing: 0) {
                             primaryContent
 
-                            
-                            
-                            
                             HStack {
                                 Spacer()
                                 
@@ -145,20 +142,12 @@ struct TabRoot: View {
                         if navService.sidebarWidth ?? 0 > 180 && lsxVM.mainDisplay == .pos {
                             CartSidebarView(vm: posVM)
                                 .ignoresSafeArea(edges: [.top])
-                                .padding(/*.trailing, geo.safeAreaInsets.trailing == 0 ? 4 : */0)
+                                .padding(0)
                                 .environmentObject(posVM)
                         }
                     } //: ZStack
                     .background(.bg)
                     .toolbar {
-//                        ToolbarItem(placement: .topBarLeading) {
-//                            Button {
-//                                lsxVM.mainDisplay = .settings
-//                            } label: {
-//                                Image(systemName: "person.circle")
-//                            }
-//                        }
-                        
                         ToolbarItem(placement: .topBarTrailing) {
                             switch lsxVM.mainDisplay {
                             case .pos:
@@ -183,7 +172,6 @@ struct TabRoot: View {
                         }
                     }
                 } //: Navigation Stack
-                .toolbar(removing: .sidebarToggle)
                 .onReceive(rootVM.$companyExists) { exists in
                     print("Root: Company Received")
                     //                self.showOnboarding = !exists
@@ -207,11 +195,7 @@ struct TabRoot: View {
                     }
                 }
                 
-                //                } //: NavigationSplitView
                 .environment(navService)
-                .onAppear {
-                    navService.sidebarVisibility = hSize == .regular ? .showing : nil
-                }
             }
         default: ProgressView()
         }

@@ -32,7 +32,7 @@ struct InventoryListView: View {
     enum TableType: String, CaseIterable, Identifiable {
         case items
         case department
-        var id: TableType { return self}
+        var id: TableType { return self }
     }
     
     private func addButtonTapped() {
@@ -45,8 +45,6 @@ struct InventoryListView: View {
             .overlay(addButton, alignment: .bottomTrailing)
             .modifier(RoundedOutlineMod(cornerRadius: 6))
             .padding()
-            .background(.fafafa)
-//            .padding(.horizontal)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Picker("Table Type", selection: $tableType) {
@@ -64,12 +62,10 @@ struct InventoryListView: View {
         switch tableType {
         case .items:
             ItemTableView(items: self.$items)
-            //                .background(.fafafa)
                 .navigationTitle("Items")
             
         case .department:
             DepartmentTableView(depts: self.$departments)
-            //                .background(.fafafa)
                 .navigationTitle("Departments")
             
         }
@@ -119,7 +115,7 @@ struct InventoryListView: View {
             .alert("You must remove the items from this department before you can delete it.", isPresented: $showRemoveItemsAlert) {
                 Button("Okay", role: .cancel) { }
             }
-            .alert("Are you sure you want to delete this department? This can't be done.", isPresented: $showDeleteConfirmation) {
+            .alert("Are you sure you want to delete this department? This can't be undone.", isPresented: $showDeleteConfirmation) {
                 Button("Go back", role: .cancel) { }
                 Button("Yes, delete department", role: .destructive) {
                     guard let dept = selectedDepartment else { return }
@@ -135,9 +131,7 @@ struct InventoryListView: View {
 }
 
 #Preview {
-//    NavigationStack {
-        InventoryListView()
-            .environment(\.realm, DepartmentEntity.previewRealm)
-
-//    }
+    InventoryListView()
+        .environment(\.realm, DepartmentEntity.previewRealm)
+        .environment(NavigationService())
 }
