@@ -20,62 +20,55 @@ enum SidebarState {
 
 struct POSView: View {
     @Environment(NavigationService.self) var navService
-    @Environment(\.horizontalSizeClass) var hSize
-    @Environment(\.verticalSizeClass) var vSize
-    
     @EnvironmentObject var vm: PointOfSaleViewModel
     
-    @ObservedResults(ItemEntity.self) var items
     @ObservedResults(DepartmentEntity.self) var departments
     
     /// When `selectedDepartment` is nil, the app displays all items in the view.
-    @State var selDept: DepartmentEntity?
+    @State var selectedDepartment: DepartmentEntity?
     
-    //    @Binding var cartItems: Binding<[CartItem]> = []
+    func departmentTapped(_ department: DepartmentEntity?) {
+        selectedDepartment = department
+    }
     
     var body: some View {
-//        HStack {
-            VStack(spacing: 0) {
-                // MARK: - Department Picker
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 16) {
-                        Button {
-                            selDept = nil
-                        } label: {
-                            Text("All")
-                                .modifier(DepartmentButtonMod(isSelected: selDept == nil))
-                        }
-                        
-                        ForEach(departments) { department in
-                            Button {
-                                selDept = department
-                            } label: {
-                                Text(department.name)
-                                    .modifier(DepartmentButtonMod(isSelected: selDept == department))
-                            }
-                        } //: For Each
-                    } //: HStack
-                } //: Scroll View
-                .padding(vSize == .regular ? 12 : 8)
+        VStack(spacing: 0) {
+            // MARK: - Department Picker
+            ScrollView(.horizontal, showsIndicators: false) {
+                Picker("Department", selection: $selectedDepartment) {
+                    Button("All", action: { departmentTapped(nil) })
+                        .modifier(DepartmentButtonMod(isSelected: selectedDepartment == nil))
+                        .tag(DepartmentEntity?.none)
+                    
+                    ForEach(departments) { dept in
+                        Button(dept.name, action: { departmentTapped(dept) })
+                            .modifier(DepartmentButtonMod(isSelected: selectedDepartment == dept))
+                            .tag(dept)
+                    }
+                } //: Picker
+                .padding(.horizontal)
+                .pickerStyle(.segmented)
+                .background(Color.bg)
+
+            } //: Scroll View
+
+            /// When 'All' is selected, `selectedDepartment` is nil and all items are displayed.
+            TabView(selection: $selectedDepartment) {
+                ItemGridView(department: nil) {
+                    vm.adjustStock(of: CartItem(from: $0), by: 1)
+                }.tag(DepartmentEntity?.none)
                 
-                ItemGridView(items: selDept != nil ? Array(selDept?.items ?? .init()) : Array(items)) { item in
-//                    vm.addItemToCart(CartItem(from: item))
-                    vm.adjustStock(of: CartItem(from: item), by: 1)
+                ForEach(departments) { dept in
+                    ItemGridView(department: dept) { item in
+                        vm.adjustStock(of: CartItem(from: item), by: 1)
+                    }.tag(dept)
                 }
-            } //: VStack
-            .padding(.horizontal, hSize == .regular ? 12 : 4)
-            .animation(.interpolatingSpring, value: true)
-            
-//            Spacer()
-//                .frame(maxWidth: navService.sidebarVisibility != .showing ? 0 : navService.sidebarWidth ?? 500)
-            
-//        } //: HStack
-            .overlay(navService.sidebarVisibility == nil ? checkoutButton : nil, alignment: .bottom)
-        .background(.bg)
-//        .background(.fafafa)
-        .navigationBarTitleDisplayMode(.inline)
-        .ignoresSafeArea(edges: [.bottom, .trailing])
-        
+            } //: Tab View
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .padding()
+            .frame(maxHeight: .infinity)
+        } //: VStack
+        .navigationTitle("New Sale")
     } //: Body
     
     private var checkoutButton: some View {
@@ -92,6 +85,20 @@ struct POSView: View {
             }
         }
         .padding()
+    }
+    
+    struct DepartmentButtonMod: ViewModifier {
+        let isSelected: Bool
+        func body(content: Content) -> some View {
+            content
+                .font(.headline)
+                .fontWeight(isSelected ? .semibold : .regular)
+                .foregroundStyle(.accent)
+                .opacity(isSelected ? 1.0 : 0.9)
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                .overlay(isSelected ? Rectangle().fill(.accent).frame(height: 3) : nil, alignment: .bottom)
+        }
     }
     
 }
@@ -124,5 +131,6 @@ struct PrimaryOverlayButton<Label: View>: View {
 #Preview {
     POSView()
         .environmentObject(PointOfSaleViewModel())
+        .environment(NavigationService())
         .environment(\.realm, DepartmentEntity.previewRealm)
 }

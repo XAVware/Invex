@@ -8,8 +8,6 @@
 import SwiftUI
 import RealmSwift
 
-/// Company detail view is being placed in the inner split view as the root of the NavigationStack, so the navigationDestinations for this funnel need to be included here. You need to use NavigationLink(value:label:) to push the detail views
-
 struct CompanyDetailView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: DetailViewModel = DetailViewModel()
@@ -83,26 +81,22 @@ struct CompanyDetailView: View {
                     self.taxRate = tax.toPercentageString()
                 }
                 
-                Spacer()
-                
-                Button {
-                    showDeleteConfirmation = true
-                } label: {
-                    HStack(spacing: 24) {
-                        Text("Delete Account")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        Image(systemName: "trash")
-                    }
-                    .foregroundStyle(Color.red)
-                }
-                .buttonStyle(MenuButtonStyle())
-            }
+            } //: Theme Section
+            
         } //: Theme Form
+        .overlay(
+            Button(action: continueTapped) {
+                Text("Continue")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(ThemeButtonStyle())
+            .padding()
+            
+        , alignment: .bottom)
         .onTapGesture {
             self.focus = nil
         }
         .onAppear {
-            print("Found \(companies.count) companies")
             if let company = companies.first {
                 self.company = company
                 self.companyName = company.name

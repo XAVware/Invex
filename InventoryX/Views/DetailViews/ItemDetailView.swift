@@ -88,151 +88,155 @@ struct ItemDetailView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                Text(vm.errorMessage)
-                    .foregroundStyle(.red)
-                
-                VStack(spacing: 16) {
-                    NeomorphicSection(header: "General") {
-                        VStack(alignment: .leading, spacing: 0) {
-                            ThemeTextField(boundTo: $itemName,
-                                           placeholder: "i.e. Gatorade",
-                                           title: "Item Name:",
-                                           hint: nil,
-                                           type: .text)
-                            .focused($focus, equals: .name)
-                            .submitLabel(.return)
-                            .onSubmit { focus = nil }
-                            
-                            FieldDivider()
-                            
-                            
-                            Picker("Department:", selection: $selectedDepartment) {
-                                ForEach(departments) { dept in
-                                    Text(dept.name)
-                                        .tag(DepartmentEntity?.none)
-                                        .font(.subheadline)
-                                }
+        ThemeForm {
+            Text(vm.errorMessage)
+                .foregroundStyle(.red)
+            
+//            VStack(spacing: 16) {
+                ThemeFormSection(title: "Company Info") {
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        ThemeTextField(boundTo: $itemName,
+                                       placeholder: "i.e. Gatorade",
+                                       title: "Item Name:",
+                                       hint: nil,
+                                       type: .text)
+                        .focused($focus, equals: .name)
+                        .submitLabel(.return)
+                        .onSubmit { focus = nil }
+                        
+                        FieldDivider()
+                        
+                        Picker("Department:", selection: $selectedDepartment) {
+                            ForEach(departments) { dept in
+                                Text(dept.name)
+                                    .tag(DepartmentEntity?.none)
+                                    .font(.subheadline)
                             }
-                            .pickerStyle(NavigationLinkPickerStyle())
-                            .foregroundStyle(Color.textPrimary)
-                            .tint(Color.textPrimary)
-                            .font(.subheadline)
-                            .padding()
-                         
-                            FieldDivider()
-                            
-                            ThemeTextField(boundTo: $attribute,
-                                           placeholder: "i.e. Blue",
-                                           title: "Attribute:",
-                                           hint: nil,
-                                           type: .text)
-                            .focused($focus, equals: .attribute)
-                            .submitLabel(.return)
-                            .onSubmit { focus = nil }
                         }
-                    }
-                    
-                    NeomorphicSection(header: "Stock") {
-                        VStack(alignment: .leading, spacing: 0) {
-                            ThemeTextField(boundTo: $quantity,
-                                           placeholder: "24",
-                                           title: "On-hand quantity:",
-                                           hint: nil,
-                                           type: .integer)
-                            .keyboardType(.numberPad)
-                            .focused($focus, equals: .onHandQty)
-                            .submitLabel(.return)
-                            .onSubmit { focus = nil }
-                        } //: VStack
-                    }
-                    
-                    NeomorphicSection(header: "Pricing") {
-                        VStack(alignment: .leading, spacing: 0) {
-                            ThemeTextField(boundTo: $retailPrice,
-                                           placeholder: "$ 2.00",
-                                           title: "Retail Price:",
-                                           hint: nil,
-                                           type: .price)
-                            .keyboardType(.numberPad)
-                            .focused($focus, equals: .price)
-                            .submitLabel(.return)
-                            .onSubmit { focus = nil }
-                            
-                            FieldDivider()
-                            
-                            ThemeTextField(boundTo: $unitCost,
-                                           placeholder: "$ 1.00",
-                                           title: "Unit Cost:",
-                                           hint: nil,
-                                           type: .price)
-                            .keyboardType(.numberPad)
-                            .focused($focus, equals: .unitCost)
-                            .submitLabel(.return)
-                            .onSubmit { focus = nil }
-                        } //: VStack
-                    }
-                    
-                } //: VStack
-                .onChange(of: focus) { _, newValue in
-                    if !retailPrice.isEmpty {
-                        if let price = Double(retailPrice) {
-                            self.retailPrice = price.formatAsCurrencyString()
-                        }
-                    }
-                    
-                    if !unitCost.isEmpty {
-                        if let cost = Double(unitCost) {
-                            self.unitCost = cost.formatAsCurrencyString()
-                        }
-                    }
-                    
-                    if let qty = Int(quantity) {
-                        self.quantity = String(describing: qty)
+                        .pickerStyle(NavigationLinkPickerStyle())
+                        .foregroundStyle(Color.textPrimary)
+                        .tint(Color.textPrimary)
+                        .font(.subheadline)
+                        .padding()
+                     
+                        FieldDivider()
+                        
+                        ThemeTextField(boundTo: $attribute,
+                                       placeholder: "i.e. Blue",
+                                       title: "Attribute:",
+                                       hint: nil,
+                                       type: .text)
+                        .focused($focus, equals: .attribute)
+                        .submitLabel(.return)
+                        .onSubmit { focus = nil }
                     }
                 }
                 
-                Spacer()
-                
-                Button(action: continueTapped) {
-                    Text("Continue")
-                        .frame(maxWidth: .infinity)
+                ThemeFormSection(title: "Stock") {
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        ThemeTextField(boundTo: $quantity,
+                                       placeholder: "24",
+                                       title: "On-hand quantity:",
+                                       hint: nil,
+                                       type: .integer)
+                        .keyboardType(.numberPad)
+                        .focused($focus, equals: .onHandQty)
+                        .submitLabel(.return)
+                        .onSubmit { focus = nil }
+                    } //: VStack
                 }
-                .buttonStyle(ThemeButtonStyle())
                 
-                Spacer()
-            } //: VStack
-            .frame(maxWidth: 720)
+                ThemeFormSection(title: "Pricing") {
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        ThemeTextField(boundTo: $retailPrice,
+                                       placeholder: "$ 2.00",
+                                       title: "Retail Price:",
+                                       hint: nil,
+                                       type: .price)
+                        .keyboardType(.numberPad)
+                        .focused($focus, equals: .price)
+                        .submitLabel(.return)
+                        .onSubmit { focus = nil }
+                        
+                        FieldDivider()
+                        
+                        ThemeTextField(boundTo: $unitCost,
+                                       placeholder: "$ 1.00",
+                                       title: "Unit Cost:",
+                                       hint: nil,
+                                       type: .price)
+                        .keyboardType(.numberPad)
+                        .focused($focus, equals: .unitCost)
+                        .submitLabel(.return)
+                        .onSubmit { focus = nil }
+                    } //: VStack
+                }
+                
+//            } //: VStack
+            .onChange(of: focus) { _, newValue in
+                if !retailPrice.isEmpty {
+                    if let price = Double(retailPrice) {
+                        self.retailPrice = price.formatAsCurrencyString()
+                    }
+                }
+                
+                if !unitCost.isEmpty {
+                    if let cost = Double(unitCost) {
+                        self.unitCost = cost.formatAsCurrencyString()
+                    }
+                }
+                
+                if let qty = Int(quantity) {
+                    self.quantity = String(describing: qty)
+                }
+            }
+            
+            Spacer()
+            
+            Button(action: continueTapped) {
+                Text("Continue")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(ThemeButtonStyle())
+            
+            Spacer()
+            
+        }
+        .onTapGesture {
+            self.focus = nil
+        }
+        .onAppear {
+            if let selectedItem = selectedItem {
+                itemName = selectedItem.name
+                attribute = selectedItem.attribute
+                
+                if selectedItem.onHandQty > 0 {
+                    quantity = String(describing: selectedItem.onHandQty)
+                }
+                
+                if selectedItem.retailPrice > 0 {
+                    retailPrice = selectedItem.retailPrice.formatAsCurrencyString()
+                }
+                
+                if selectedItem.unitCost > 0 {
+                    unitCost = selectedItem.unitCost.formatAsCurrencyString()
+                }
+            }
+        }
+        .navigationTitle(detailType == .update ? "Edit item" : "Add item")
+        .navigationBarTitleDisplayMode(.large)
+        .overlay(
+            Button(action: continueTapped) {
+                Text("Continue")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(ThemeButtonStyle())
             .padding()
-            .onTapGesture {
-                self.focus = nil
-            }
-            .onAppear {
-                if let selectedItem = selectedItem {
-                    itemName = selectedItem.name
-                    attribute = selectedItem.attribute
-                    
-                    if selectedItem.onHandQty > 0 {
-                        quantity = String(describing: selectedItem.onHandQty)
-                    }
-                    
-                    if selectedItem.retailPrice > 0 {
-                        retailPrice = selectedItem.retailPrice.formatAsCurrencyString()
-                    }
-                    
-                    if selectedItem.unitCost > 0 {
-                        unitCost = selectedItem.unitCost.formatAsCurrencyString()
-                    }
-                }
-            }
-            .navigationTitle(detailType == .update ? "Edit item" : "Add item")
-            .navigationBarTitleDisplayMode(.large)
-            .background(Color.clear)
-        } //: Scroll
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .scrollIndicators(.hidden)
-        .background(Color.bg.ignoresSafeArea())
+            
+        , alignment: .bottom)
         .alert("Are you sure? This can't be undone.", isPresented: $showDeleteConfirmation) {
             Button("Go back", role: .cancel) { }
             Button("Yes, delete Item", role: .destructive) {
@@ -268,6 +272,19 @@ struct ItemDetailView: View {
                 }
             }
         }
+        
+//        ScrollView {
+//            VStack(spacing: 16) {
+//                
+//            } //: VStack
+//            .frame(maxWidth: 720)
+//            .padding()
+//            
+//        } //: Scroll
+//        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .scrollIndicators(.hidden)
+//        .background(Color.bg.ignoresSafeArea())
+        
     } //: Body
     
     

@@ -8,7 +8,7 @@
 import SwiftUI
 import RealmSwift
 
-class DepartmentEntity: Object, ObjectKeyIdentifiable {
+class DepartmentEntity: Object, ObjectKeyIdentifiable, Identifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var name: String
     @Persisted var restockNumber: Int

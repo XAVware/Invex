@@ -67,12 +67,11 @@ struct DepartmentDetailView: View {
     
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
+        ThemeForm {
                 Text(vm.errorMessage)
                     .foregroundStyle(.red)
                 
-                NeomorphicSection(header: "General") {
+                ThemeFormSection(title: "General") {
                     VStack(alignment: .leading) {
                         ThemeTextField(boundTo: $name,
                                        placeholder: "i.e. Clothing",
@@ -114,18 +113,16 @@ struct DepartmentDetailView: View {
                     }
                 }
                 
-                Spacer()
-                
+            } //: VStack
+            .overlay(
                 Button(action: continueTapped) {
                     Text("Continue")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(ThemeButtonStyle())
+                .padding()
                 
-                Spacer()
-                
-            } //: VStack
-            .frame(maxWidth: 720)
+            , alignment: .bottom)
             .padding()
             .onAppear {
                 if let dept = department {
@@ -141,10 +138,10 @@ struct DepartmentDetailView: View {
             }
             .navigationTitle(detailType == .update ? "Edit department" : "Add department")
             .navigationBarTitleDisplayMode(.large)
-        } //: Scroll
-        .frame(maxWidth: .infinity, maxHeight: .infinity) 
-        .scrollIndicators(.hidden)
-        .background(Color.bg.ignoresSafeArea())
+//        } //: Scroll
+//        .frame(maxWidth: .infinity, maxHeight: .infinity) 
+//        .scrollIndicators(.hidden)
+//        .background(Color.bg.ignoresSafeArea())
         .toolbar {
             if detailType == .update {
                 deleteButton

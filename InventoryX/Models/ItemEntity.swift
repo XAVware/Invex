@@ -8,7 +8,7 @@
 import SwiftUI
 import RealmSwift
 
-class ItemEntity: Object, ObjectKeyIdentifiable {
+class ItemEntity: Object, ObjectKeyIdentifiable, Identifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted(originProperty: "items") var department: LinkingObjects<DepartmentEntity>
     

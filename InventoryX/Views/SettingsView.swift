@@ -11,7 +11,7 @@ import RealmSwift
 struct SettingsView: View {
     @Environment(NavigationService.self) var navService
 //    @Environment(\.verticalSizeClass) var vSize
-    @Environment(\.horizontalSizeClass) var hSize
+//    @Environment(\.horizontalSizeClass) var hSize
     @EnvironmentObject var lsxVM: LSXViewModel
 //    @StateObject var settingsVM: SettingsViewModel = SettingsViewModel()
     

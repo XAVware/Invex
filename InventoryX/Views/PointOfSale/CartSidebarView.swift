@@ -18,63 +18,70 @@ struct CartSidebarView: View {
     }
 
     var body: some View {
-        HStack {
-            Spacer()
-            ZStack {
-                NeomorphicCardView(layer: .under, cornerRadius: 8)
-                
-                VStack {
-                    Spacer().frame(height: 54)
-//                    HStack {
-//                        Image(systemName: "cart")
-//                        Text("Cart")
-//                            .padding(.horizontal)
-//                            .frame(maxWidth: .infinity, alignment: .leading)
-//                    }
-//                    .padding([.top, .horizontal])
-//                    .font(.headline)
-//                    .foregroundStyle(.accent)
-//                    .opacity(0.8)
+        GeometryReader { geo in
+            HStack {
+                Spacer()
+                ZStack {
+                    Rectangle()
+                        .fill(
+                            .shadow(.inner(color: .neoUnderDark, radius: 2, x: 1, y: 0))
+                        )
+                        .foregroundColor(.neoUnderBg)
                     
-//                    Text("Items")
-                    
-                    List(vm.cartItems) { item in
-                        CartItemView(item: item, qty: item.qtyInCart)
-                            .listRowBackground(Color.clear)
-                            .environmentObject(vm)
-                    }
-                    .frame(maxHeight: .infinity)
-                    .listStyle(PlainListStyle())
-                    
-                    // MARK: - Cart Totals
-                    VStack(spacing: 4) {
-                        HStack {
-                            Text("Subtotal:")
-                            Spacer()
-                            Text("\(vm.cartSubtotal.formatAsCurrencyString())")
-                        } //: HStack
+                    VStack {
+                        Spacer().frame(height: 54)
+                        //                    HStack {
+                        //                        Image(systemName: "cart")
+                        //                        Text("Cart")
+                        //                            .padding(.horizontal)
+                        //                            .frame(maxWidth: .infinity, alignment: .leading)
+                        //                    }
+                        //                    .padding([.top, .horizontal])
+                        //                    .font(.headline)
+                        //                    .foregroundStyle(.accent)
+                        //                    .opacity(0.8)
                         
-                        HStack {
-                            Text("Tax:")
-                            Spacer()
-                            Text("\(vm.taxAmount.formatAsCurrencyString())")
-                        } //: HStack
+                        //                    Text("Items")
+                        
+                        List(vm.cartItems) { item in
+                            CartItemView(item: item, qty: item.qtyInCart)
+                                .listRowBackground(Color.clear)
+                                .environmentObject(vm)
+                        }
+                        .frame(maxHeight: .infinity)
+                        .listStyle(PlainListStyle())
+                        
+                        // MARK: - Cart Totals
+                        VStack(spacing: 4) {
+                            HStack {
+                                Text("Subtotal:")
+                                Spacer()
+                                Text("\(vm.cartSubtotal.formatAsCurrencyString())")
+                            } //: HStack
+                            
+                            HStack {
+                                Text("Tax:")
+                                Spacer()
+                                Text("\(vm.taxAmount.formatAsCurrencyString())")
+                            } //: HStack
+                        } //: VStack
+                        .font(.subheadline)
+                        .padding()
+                        
+                        Spacer()
+                            .frame(height: 48)
                     } //: VStack
-                    .font(.subheadline)
-                    .padding()
+                    .alert("Your cart is empty.", isPresented: $vm.showCartAlert) {
+                        Button("Okay", role: .cancel) { }
+                    }
                     
-                    Spacer()
-                        .frame(height: 48)
-                } //: VStack
-                .alert("Your cart is empty.", isPresented: $vm.showCartAlert) {
-                    Button("Okay", role: .cancel) { }
-                }
-                
-            } //: ZStack
-            .frame(maxWidth: navService.sidebarWidth ?? 500)
-            .offset(x: navService.sidebarVisibility != .showing ? navService.sidebarWidth ?? 500 : 0)
-        } //: HStack
-        .overlay(navService.sidebarVisibility != nil ? checkoutButton : nil, alignment: .bottomTrailing)
+                } //: ZStack
+                .frame(maxWidth: navService.sidebarWidth ?? 500)
+                .offset(x: navService.sidebarVisibility != .showing ? navService.sidebarWidth ?? 500 : 0)
+            } //: HStack
+            .overlay(navService.sidebarVisibility != nil ? checkoutButton.padding(.bottom, geo.safeAreaInsets.bottom / 2) : nil, alignment: .bottomTrailing)
+            .ignoresSafeArea(edges: .bottom)
+        }
     } //: Body
 
     private var checkoutButton: some View {

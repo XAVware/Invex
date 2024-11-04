@@ -56,6 +56,7 @@ struct TabRoot: View {
     @Environment(\.verticalSizeClass) var vSize
     
     
+    
     // MARK: - Root Properties
     // TODO: Try moving PosVM into POSView. Make sure cart isnt lost on view change
     @StateObject var posVM = PointOfSaleViewModel()
@@ -85,7 +86,7 @@ struct TabRoot: View {
                     ZStack {
                         VStack(spacing: 0) {
                             primaryContent
-
+                                .background(Color.bg)
                             HStack {
                                 Spacer()
                                 

@@ -39,9 +39,9 @@ struct ThemeForm<C: View>: View {
             }
             .padding(hSize == .regular ? 48 : 16)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(.bg)
             .fontDesign(.rounded)
         }
+        .background(.bg)
         .scrollIndicators(.hidden)
         .overlay(
             Divider()
