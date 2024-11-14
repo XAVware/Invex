@@ -10,8 +10,8 @@ import SwiftUI
 struct FieldDivider: View {
     var body: some View {
         Divider()
-            .background(.bg)
-            .padding(.horizontal)
+            .background(.fafafa.opacity(0.5))
+//            .padding(.horizontal)
     }
 }
 

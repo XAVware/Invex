@@ -55,7 +55,9 @@ struct TabRoot: View {
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
     
-    
+    @ObservedResults(DepartmentEntity.self) var departments
+    @ObservedResults(CompanyEntity.self) var companies
+    @ObservedResults(ItemEntity.self) var items
     
     // MARK: - Root Properties
     // TODO: Try moving PosVM into POSView. Make sure cart isnt lost on view change
@@ -126,8 +128,9 @@ struct TabRoot: View {
                         .navigationBarTitleDisplayMode(.inline)
                         .navigationDestination(for: LSXDisplay.self) { detail in
                             switch detail {
-                            case .company:                  CompanyDetailView()
-                            case .passcodePad(let p):       PasscodeView(processes: p) { }
+                            case .company:
+                                CompanyDetailView(company: companies.first ?? CompanyEntity())
+//                            case .passcodePad(let p):       PasscodeView(processes: p) { }
                             case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
                             case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
                             case .confirmSale(let items):
@@ -175,9 +178,14 @@ struct TabRoot: View {
                 } //: Navigation Stack
                 .onReceive(rootVM.$companyExists) { exists in
                     print("Root: Company Received")
-                    //                self.showOnboarding = !exists
+//                    self.showOnboarding = !exists
                 }
                 .onAppear {
+                    guard items.count > 0 && departments.count > 0 && companies.count > 0 else {
+                        self.showOnboarding = true
+                        return
+                    }
+                    
                     if isLandscape && hSize == .regular {
                         navService.sidebarVisibility = .showing
                         navService.sidebarWidth = min(geo.size.width / 3, 280)

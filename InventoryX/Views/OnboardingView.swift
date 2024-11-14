@@ -10,7 +10,6 @@ import RealmSwift
 
 struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
-    
     @State var path: NavigationPath = .init()
     
     var body: some View {
@@ -19,15 +18,16 @@ struct OnboardingView: View {
                 .navigationDestination(for: LSXDisplay.self) { view in
                     switch view {
                     case .company:
-                        CompanyDetailView {
-                            path.append(LSXDisplay.passcodePad([.set]))
+                        CompanyDetailView(company: CompanyEntity()) {
+//                            path.append(LSXDisplay.passcodePad([.set]))
+                            path.append(LSXDisplay.department(nil, .onboarding))
                         }
                         .background(Color.bg.ignoresSafeArea())
 
-                    case .passcodePad(let p):
-                        PasscodeView(processes: p) {
-                            path.append(LSXDisplay.department(nil, .onboarding))
-                        }
+//                    case .passcodePad(let p):
+//                        PasscodeView(processes: p) {
+//                            path.append(LSXDisplay.department(nil, .onboarding))
+//                        }
                         
                     case .department(let d, let t):
                         DepartmentDetailView(department: d, detailType: t) {

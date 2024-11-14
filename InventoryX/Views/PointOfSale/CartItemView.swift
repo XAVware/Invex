@@ -39,7 +39,6 @@ struct CartItemView: View {
     var body: some View {
         VStack(spacing: 12) {
             HStack(alignment: .center) {
-                // MARK: - Item Name & Attribute
                 VStack(alignment: .leading) {
                     Text(item.name)
                     Text(item.attribute)
@@ -47,7 +46,7 @@ struct CartItemView: View {
                 } //: VStack
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Text($item.wrappedValue.retailPrice.formatAsCurrencyString())
+                Text($item.wrappedValue.retailPrice.toCurrencyString())
                     .font(.callout)
             } //: HStack
             
@@ -62,8 +61,8 @@ struct CartItemView: View {
     private var stepper: some View {
         HStack(spacing: 0) {
             Button {
+                
                 vm.adjustStock(of: item, by: -1)
-//                vm.removeItemFromCart(item)
             } label: {
                 Text("-")
                     .font(.title2)
@@ -79,7 +78,8 @@ struct CartItemView: View {
             Text(qty.description)
                 .frame(width: 42, height: 28, alignment: .center)
                 .font(.subheadline)
-                .background(.white)
+                .background(.fafafa)
+            
             
             Button {
 //                vm.addItemToCart(item)

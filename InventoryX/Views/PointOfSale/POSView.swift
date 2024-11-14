@@ -68,22 +68,29 @@ struct POSView: View {
             .padding()
             .frame(maxHeight: .infinity)
         } //: VStack
+        .overlay(navService.sidebarVisibility == nil ? checkoutButton : nil, alignment: .bottom)
         .navigationTitle("New Sale")
     } //: Body
     
     private var checkoutButton: some View {
-        PrimaryOverlayButton(action: {
+        Button {
             vm.checkoutTapped {
                 navService.path.append(LSXDisplay.confirmSale(vm.cartItems))
             }
-        }) {
+        } label: {
             HStack {
                 Image(systemName: "cart")
                 Text("Checkout")
                 Spacer()
-                Text(vm.total.formatAsCurrencyString())
+                Text(vm.total.toCurrencyString())
             }
+            .padding(.horizontal, 4)
+            .frame(maxWidth: 320, maxHeight: 26)
         }
+        .font(.subheadline)
+        .fontWeight(.semibold)
+        .fontDesign(.rounded)
+        .buttonStyle(ThemeButtonStyle())
         .padding()
     }
     
@@ -103,30 +110,30 @@ struct POSView: View {
     
 }
 
-struct PrimaryOverlayButton<Label: View>: View {
-    let action: () -> Void
-    let label: Label
-    
-    init(action: @escaping () -> Void, @ViewBuilder label: () -> Label) {
-        self.action = action
-        self.label = label()
-    }
-    
-    var body: some View {
-        Button(action: action) {
-            label
-                .padding(.horizontal, 4)
-                .frame(maxWidth: 320, maxHeight: 26)
-        }
-        .font(.subheadline)
-        .fontWeight(.semibold)
-        .fontDesign(.rounded)
-        .buttonStyle(ThemeButtonStyle())
-        //        .padding()
-        .shadow(radius: 1.5)
-        
-    }
-}
+//struct PrimaryOverlayButton<Label: View>: View {
+//    let action: () -> Void
+//    let label: Label
+//    
+//    init(action: @escaping () -> Void, @ViewBuilder label: () -> Label) {
+//        self.action = action
+//        self.label = label()
+//    }
+//    
+//    var body: some View {
+//        Button(action: action) {
+//            label
+//                .padding(.horizontal, 4)
+//                .frame(maxWidth: 320, maxHeight: 26)
+//        }
+//        .font(.subheadline)
+//        .fontWeight(.semibold)
+//        .fontDesign(.rounded)
+//        .buttonStyle(ThemeButtonStyle())
+//        //        .padding()
+////        .shadow(radius: 1.5)
+//        
+//    }
+//}
 
 #Preview {
     POSView()

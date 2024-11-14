@@ -12,7 +12,7 @@ import RealmSwift
 
 // If data has changed drastically and preview data needs to be updated, uncomment the block containing the deleteAll function, open preview, then recomment the function out.
 extension DepartmentEntity {
-    static let company: CompanyEntity = CompanyEntity(name: "Preview Co.", taxRate: 0.06)
+    static let company: CompanyEntity = CompanyEntity(name: "Preview Co.", taxRate: 0.0625)
     
     static let foodCategory: DepartmentEntity = DepartmentEntity(name: "Food", restockNum: 10, defMarkup: 7)
     static let foodItems: [ItemEntity] = ItemEntity.foodArray

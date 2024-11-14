@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 @MainActor class DetailViewModel: ObservableObject {
-    @Published var errorMessage: String = ""
+    @Published var errorMessage: String?
     
 //    func getFirstDept() async -> DepartmentEntity?  {
 //        let departments = try? await RealmActor().fetchDepartments()

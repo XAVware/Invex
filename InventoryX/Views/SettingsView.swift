@@ -37,50 +37,65 @@ struct SettingsView: View {
     }
     
     var body: some View {
-        ThemeForm {
+        FormX(title: "Settings", containers: []) {
 //            VStack(spacing: 16) {
                 
                 ThemeFormSection(title: "Profile") {
                     VStack(spacing: 0) {
                         Button("Account", systemImage: "person") { pushView(.company) }
                             .buttonStyle(MenuButtonStyle())
-                        FieldDivider()
-                        Button("Change Passcode", systemImage: "asterisk") { pushView(.passcodePad([.confirm, .set])) }
-                            .buttonStyle(MenuButtonStyle())
+//                        FieldDivider()
+//                        Button("Change Passcode", systemImage: "asterisk") { pushView(.passcodePad([.confirm, .set])) }
+//                            .buttonStyle(MenuButtonStyle())
                     } //: VStack
                 }
                 
                 ThemeFormSection(title: "Legal") {
-                    VStack(spacing: 0) {
-                        Link("Terms of Service", destination: K.termsOfServiceURL)
-                            .buttonStyle(MenuButtonStyle(trailingIcon: "arrow.up.right"))
-                        FieldDivider()
-                        Link("Privacy Policy", destination: K.privacyPolicyURL)
-                            .buttonStyle(MenuButtonStyle(trailingIcon: "arrow.up.right"))
-                    } //: VStack
+//                    VStack(spacing: 0) {
+                    Link(destination: K.termsOfServiceURL) {
+                        HStack {
+                            Image(systemName: "newspaper")
+                            Text("Terms of Service")
+                        }
+                    }
+                    .buttonStyle(MenuButtonStyle(trailingIcon: "arrow.up.right"))
+
+                    FieldDivider()
+                    
+                    Link(destination: K.privacyPolicyURL) {
+                        HStack {
+                            Image(systemName: "newspaper")
+                            Text("Privacy Policy")
+                        }
+                    }
+                    .buttonStyle(MenuButtonStyle(trailingIcon: "arrow.up.right"))
+//                        Link("Privacy Policy", destination: K.privacyPolicyURL)
+//                            .buttonStyle(MenuButtonStyle(trailingIcon: "arrow.up.right"))
+//                    } //: VStack
                 }
                 
                 
-            VStack(alignment: .leading, spacing: 8) {
-                Button {
-                    changeTab(to: .pos)
-                } label: {
-                    Text("Lock")
-                        .font(.headline)
-                        .underline()
-                }
-                .buttonStyle(.plain)
+//            VStack(alignment: .leading, spacing: 8) {
+//                Button {
+//                    changeTab(to: .pos)
+//                } label: {
+//                    Text("Lock")
+//                        .font(.headline)
+//                        .underline()
+//                }
+//                .buttonStyle(.plain)
                 
                 Text("© 2024 XAVware, LLC. All Rights Reserved.")
                     .font(.caption2)
                     .opacity(0.8)
                     .padding(.vertical)
-            }
-            .padding(.vertical)
+//            }
+//            .padding(.vertical)
             
         }
         .navigationTitle("Menu")
         .navigationBarTitleDisplayMode(.inline)
+        
     } //: Body
     
     

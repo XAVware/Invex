@@ -8,107 +8,91 @@
 import SwiftUI
 import RealmSwift
 
+
+struct ContainerXModel {
+    let id: UUID = UUID()
+    let title: String
+    let description: String
+}
+
 struct CompanyDetailView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: DetailViewModel = DetailViewModel()
-    
-    @State var company: CompanyEntity?
-    @State private var companyName: String = ""
-    @State private var taxRate: String = ""
-    
-    private enum Focus { case name, taxRate }
-    @FocusState private var focus: Focus?
+//    @State var formVM: XAVFormViewModel = XAVFormViewModel()
+    let isOnboarding: Bool
     
     let onSuccess: (() -> Void)?
     
-    @ObservedResults(CompanyEntity.self) var companies
+    @ObservedRealmObject var company: CompanyEntity
     @State var showDeleteConfirmation: Bool = false
     
-    init(onSuccess: (() -> Void)? = nil) {
-        self._vm = StateObject(wrappedValue: DetailViewModel())
+    init(company: CompanyEntity, onSuccess: (() -> Void)? = nil) {
+        self._company = ObservedRealmObject(wrappedValue: company)
         self.onSuccess = onSuccess
+        self.isOnboarding = company.name.count <= 0
     }
     
-    private func continueTapped() {
-        focus = nil
-        Task {
-            await vm.saveCompany(name: companyName, tax: taxRate) { error in
-                guard error == nil else { return }
-                if let onSuccess = onSuccess {
-                    onSuccess()
-                } else {
-                    dismiss()
-                }
-            }
+    func validateCompanyName(value: String) -> (Bool, String?) {
+        if value.isEmpty {
+            return (false, "Please enter a valid name.")
+        } else {
+            return (true, nil)
         }
     }
+    
+    func saveCompanyName(validName: String) {
+        do {
+            let realm = try Realm()
+            try realm.write {
+                $company.wrappedValue.name = validName
+            }
+        } catch {
+            print("Error saving name: \(error)")
+        }
+    }
+    
+    func saveTaxRate(validRate: Double) {
+        do {
+            let realm = try Realm()
+            try realm.write {
+                $company.wrappedValue.taxRate = validRate
+            }
+        } catch {
+            print("Error saving: \(error)")
+        }
+    }
+    
+    let containerData: [ContainerXModel] = [
+        ContainerXModel(title: "Business Name", description: "Your company name will appear on sales receipts."),
+        ContainerXModel(title: "Tax Rate", description: "We'll use this to calculate the tax on each sale.")
+    ]
     
     var body: some View {
-        ThemeForm {
-            ThemeFormSection(title: "Company Info") {
-                Text(vm.errorMessage)
-                    .foregroundStyle(.red)
-                
-                VStack(alignment: .leading) {
-                    
-                    ThemeTextField(boundTo: $companyName,
-                                   placeholder: "Business Name",
-                                   title: "Business Name:",
-                                   hint: nil,
-                                   type: .text)
-                    .autocorrectionDisabled()
-                    .focused($focus, equals: .name)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
-                    
-                    FieldDivider()
-                    
-                    ThemeTextField(boundTo: $taxRate,
-                                   placeholder: "0",
-                                   title: "Tax Rate:",
-                                   hint: "If you want us to calculate the tax on your sales, enter a tax rate here.",
-                                   type: .percentage)
-                    .keyboardType(.numberPad)
-                    .focused($focus, equals: .taxRate)
-                    .submitLabel(.return)
-                    .onSubmit { focus = nil }
-                    
-                } //: VStack
-                .onChange(of: focus) { _, newValue in
-                    guard !taxRate.isEmpty else { return }
-                    guard let tax = Double(taxRate) else { return }
-                    guard tax != 0 else { return }
-                    self.taxRate = tax.toPercentageString()
-                }
-                
-            } //: Theme Section
-            
-        } //: Theme Form
-        .overlay(
-            Button(action: continueTapped) {
-                Text("Continue")
-                    .frame(maxWidth: .infinity)
+        FormX(title: "Company Info", containers: containerData) {
+            // Company name container
+            ContainerX(data: containerData[0], value: company.name) {
+                TextFieldX(value: company.name, validate: { value in
+                    validateCompanyName(value: value)
+                }, save: { name in
+                    Task {
+                        saveCompanyName(validName: name)
+                    }
+                })
             }
-            .buttonStyle(ThemeButtonStyle())
-            .padding()
             
-        , alignment: .bottom)
-        .onTapGesture {
-            self.focus = nil
-        }
-        .onAppear {
-            if let company = companies.first {
-                self.company = company
-                self.companyName = company.name
-                if company.taxRate > 0 {
-                    self.taxRate = company.formattedTaxRate
+            // Tax rate container
+            ContainerX(data: containerData[1], value: company.taxRate.toPercentageString()) {
+                PercentagePickerX(tax: company.taxRate) { value in
+                    Task {
+                        saveTaxRate(validRate: value)
+                    }
                 }
-            } else {
-                self.company = CompanyEntity(name: "")
             }
-        }
+            
+        } //: FormX
         .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .topBarTrailing) {
+                if !isOnboarding {
                     Menu {
                         Button("Delete Account", systemImage: "trash", role: .destructive) {
                             showDeleteConfirmation = true
@@ -118,22 +102,20 @@ struct CompanyDetailView: View {
                             .rotationEffect(Angle(degrees: 90))
                     }
                     .foregroundStyle(.accent)
-                    
+                } else {
+                    Spacer()
                 }
+            }
         }
         .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
             Button("Go back", role: .cancel) { }
             Button("Yes, delete account", role: .destructive) {
-                //                LSXService.shared.primaryRoot = .makeASale
-                //                LSXService.shared.detailRoot =  nil
-                //                LSXService.shared.primaryPath = .init()
-                //                LSXService.shared.detailPath = .init()
-                
                 Task {
                     await vm.deleteAccount()
                 }
             }
         }
+
         
     } //: Body
     
@@ -141,6 +123,7 @@ struct CompanyDetailView: View {
 
 
 #Preview {
-    CompanyDetailView() {}
-        .background(Color.bg)
+    CompanyDetailView(company: CompanyEntity(name: "Preview Company", taxRate: 0.078)) {}
+        .environment(\.realm, DepartmentEntity.previewRealm)
+        .environment(XAVFormViewModel())
 }

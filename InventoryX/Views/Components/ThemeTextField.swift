@@ -20,6 +20,14 @@ struct ThemeTextField: View {
     
     @State var showingHint: Bool = false
     
+    init(boundTo: Binding<String>, placeholder: String, title: String, hint: String? = nil, type: FieldType) {
+        self._boundTo = boundTo
+        self.placeholder = placeholder
+        self.title = title
+        self.hint = hint
+        self.type = type
+    }
+    
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
             Text(title)

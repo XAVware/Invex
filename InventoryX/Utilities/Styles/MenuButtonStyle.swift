@@ -16,15 +16,17 @@ struct MenuButtonStyle: ButtonStyle {
     }
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .padding()
+            .frame(height: 42)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .background(
                 RoundedRectangle(cornerRadius: 0, style: .continuous)
                     .fill(Color.fafafa)
+//                    .frame(maxHeight: .infinity)
             )
+//            .padding(.vertical, 12)
             .font(.subheadline)
-            .frame(maxWidth: .infinity, alignment: .leading)
             .opacity(configuration.isPressed ? 0.7 : 1.0)
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
             .overlay(
                 Image(systemName: trailingIcon)

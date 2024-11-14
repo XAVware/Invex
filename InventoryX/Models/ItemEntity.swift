@@ -27,9 +27,9 @@ class ItemEntity: Object, ObjectKeyIdentifiable, Identifiable {
         self.onHandQty = onHandQty
     }
     
-    var formattedPrice: String { retailPrice.formatAsCurrencyString() }
+    var formattedPrice: String { retailPrice.toCurrencyString() }
     var formattedQty: String { String(describing: onHandQty) }
-    var formattedUnitCost: String { unitCost.formatAsCurrencyString() }
+    var formattedUnitCost: String { unitCost.toCurrencyString() }
     var departmentName: String { department.first?.name ?? "" }
     
     var showWarning: Bool {

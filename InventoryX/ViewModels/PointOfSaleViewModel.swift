@@ -62,13 +62,13 @@ import RealmSwift
 //        saleItems.append(newItem)
 //    }
     
-    func removeItemFromCart(_ item: ItemEntity) {
+//    func removeItemFromCart(_ item: ItemEntity) {
 //        if let itemIndex = saleItems.firstIndex(of: item) {
 //            saleItems.remove(at: itemIndex)
 //        } else {
 //            print(AppError.noItemFound.localizedDescription)
 //        }
-    }
+//    }
     
     func fetchCompany() {
         do {

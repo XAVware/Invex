@@ -40,75 +40,80 @@ struct InventoryListView: View {
         navService.path.append(navItem)
     }
     
+    private func editDepartmentTapped() {
+        editingDepartment = selectedDepartment
+    }
+    
+    private func moveItemsTapped() {
+        showMoveItems = true
+    }
+    
+    private func deleteDepartmentTapped() {
+        if let dept = selectedDepartment {
+            if !dept.items.isEmpty {
+                showRemoveItemsAlert = true
+            } else {
+                showDeleteConfirmation = true
+            }
+        }
+    }
+    
     var body: some View {
-        table
-            .overlay(addButton, alignment: .bottomTrailing)
+        VStack {
+            Picker("Table Type", selection: $tableType) {
+                ForEach(TableType.allCases) { type in
+                    Text(type.rawValue.capitalized)
+                }
+            }
+            .pickerStyle(.segmented)
+            .frame(maxWidth: 320)
+            
+            Group {
+                switch tableType {
+                case .items:
+                    ItemTableView(items: self.$items)
+                        .navigationTitle("Items")
+                    
+                case .department:
+                    DepartmentTableView(depts: self.$departments)
+                        .navigationTitle("Departments")
+                    
+                }
+            }
+//            .overlay(addButton, alignment: .bottomTrailing)
             .modifier(RoundedOutlineMod(cornerRadius: 6))
             .padding()
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Picker("Table Type", selection: $tableType) {
-                        ForEach(TableType.allCases) { type in
-                            Text(type.rawValue.capitalized)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .frame(maxWidth: 320)
-                }
+        } //: VStack
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Add", systemImage: "plus", action: addButtonTapped)
+//                Button(action: addButtonTapped) {
+//                    HStack {
+//                        Image(systemName: "plus")
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 18, height: 18)
+//                        
+//                        if hSize == .regular {
+//                            Text("New Item")
+//                        }
+//                    }
+//                    .padding(6)
+//                    .font(.headline)
+//                }
+//                .buttonStyle(ThemeButtonStyle())
+//                .padding()
+//                .cornerRadius(48)
             }
+        }
     } //: Body
-    
-    @ViewBuilder private var table: some View {
-        switch tableType {
-        case .items:
-            ItemTableView(items: self.$items)
-                .navigationTitle("Items")
-            
-        case .department:
-            DepartmentTableView(depts: self.$departments)
-                .navigationTitle("Departments")
-            
-        }
-    }
-    
-    private var addButton: some View {
-        Button(action: addButtonTapped) {
-            HStack {
-                Image(systemName: "plus")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 18, height: 18)
-                
-                if hSize == .regular {
-                    Text("New Item")
-                }
-            }
-            .padding(6)
-            .font(.headline)
-        }
-        .buttonStyle(ThemeButtonStyle())
-        .padding()
-        .cornerRadius(48)
-    }
     
     @ViewBuilder private var departmentMenu: some View {
         if let dept = selectedDepartment {
             Menu {
-                Button("Edit department", systemImage: "pencil") {
-                    editingDepartment = selectedDepartment
-                }
-                
-                Button("Move items") {
-                    showMoveItems = true
-                }
-                
-                Button("Delete department", systemImage: "trash", role: .destructive) {
-                    if !dept.items.isEmpty {
-                        showRemoveItemsAlert = true
-                    } else {
-                        showDeleteConfirmation = true
-                    }
-                }
+                Button("Edit department", systemImage: "pencil", action: editDepartmentTapped)
+                Button("Move items", action: moveItemsTapped)
+                Button("Delete department", systemImage: "trash", role: .destructive, action: deleteDepartmentTapped)
             } label: {
                 Image(systemName: "ellipsis.circle")
             }

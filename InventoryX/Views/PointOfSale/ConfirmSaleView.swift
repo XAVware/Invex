@@ -122,9 +122,9 @@ struct ConfirmSaleView: View {
                                         Spacer()
                                         
                                         VStack(alignment: .trailing) {
-                                            Text("\(item.retailPrice.formatAsCurrencyString()) / unit")
+                                            Text("\(item.retailPrice.toCurrencyString()) / unit")
                                             Spacer()
-                                            Text(itemSubtotal.formatAsCurrencyString())
+                                            Text(itemSubtotal.toCurrencyString())
                                         } //: VStack
                                     } //: HStack
                                     .padding(.vertical, 8)
@@ -154,13 +154,13 @@ struct ConfirmSaleView: View {
                                     HStack {
                                         Text("Subtotal:")
                                         Spacer()
-                                        Text("\(cartSubtotal.formatAsCurrencyString())")
+                                        Text("\(cartSubtotal.toCurrencyString())")
                                     } //: HStack
                                     
                                     HStack {
-                                        Text("Tax: (\(taxRate.toPercentageString())%)")
+                                        Text("Tax: (\(taxRate/*.toPercentageString()*/)%)")
                                         Spacer()
-                                        Text("\(taxAmount.formatAsCurrencyString())")
+                                        Text("\(taxAmount.toCurrencyString())")
                                     } //: HStack
                                 } //: VStack
                                 .font(.subheadline)
@@ -170,7 +170,7 @@ struct ConfirmSaleView: View {
                                 HStack {
                                     Text("Total:")
                                     Spacer()
-                                    Text(total.formatAsCurrencyString())
+                                    Text(total.toCurrencyString())
                                 } //: HStack
                                 .fontWeight(.semibold)
                                 .font(.title3)

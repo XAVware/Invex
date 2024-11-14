@@ -9,13 +9,13 @@ import SwiftUI
 import RealmSwift
 
 struct ItemGridView: View {
-    @ObservedResults(ItemEntity.self) var items
+    @ObservedResults(ItemEntity.self, sortDescriptor: SortDescriptor(keyPath: "name", ascending: true)) var items
     @State var department: DepartmentEntity?
     let onSelect: ((ItemEntity) -> Void)
-
-    func getItems() -> [ItemEntity] {
+    
+    private func getItems() -> [ItemEntity] {
         if let department {
-            return Array(department.items)
+            return Array(department.items.sorted(by: \.name, ascending: true))
         } else {
             return Array(items)
         }
@@ -31,24 +31,24 @@ struct ItemGridView: View {
                         UIImpactFeedbackGenerator(style: .light).impactOccurred(intensity: 0.9)
                         onSelect(item)
                     } label: {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(item.name)
-                                        .fontWeight(.bold)
-                                    
-                                    Text(item.attribute)
-                                        .fontWeight(.regular)
-                                } //: VStack
-                                .font(.headline)
-                                .foregroundStyle(Color.textPrimary)
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(item.name)
+                                    .fontWeight(.bold)
                                 
-                                Spacer()
-                                
-                                Text(item.formattedPrice)
-                                    .foregroundStyle(Color.accentColor)
-                            } //: HStack
-                            .padding(12)
-                            .fontDesign(.rounded)
+                                Text(item.attribute)
+                                    .fontWeight(.regular)
+                            } //: VStack
+                            .font(.headline)
+                            .foregroundStyle(Color.textPrimary)
+                            
+                            Spacer()
+                            
+                            Text(item.formattedPrice)
+                                .foregroundStyle(Color.accentColor)
+                        } //: HStack
+                        .padding(12)
+                        .fontDesign(.rounded)
                         .background(.ultraThinMaterial)
                         .overlay(
                             RoundedRectangle(cornerRadius: 6)
@@ -60,7 +60,7 @@ struct ItemGridView: View {
             } //: LazyVGrid
             .padding(2)
         } //: Scroll
-        .background(Color.accentColor.opacity(0.007))
+//        .background(Color.accentColor.opacity(0.007))
         .scrollIndicators(.hidden)
     } //: Body
     
@@ -70,9 +70,9 @@ struct ItemGridView: View {
 
 //#Preview {
 //    ItemGridView(items: ItemEntity.drinkArray) { i in
-//        
+//
 //    }
 //    .padding()
 //    .environment(\.realm, DepartmentEntity.previewRealm)
-//    
+//
 //}

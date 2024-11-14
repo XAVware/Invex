@@ -24,7 +24,7 @@ enum LSXDisplay: Hashable, CaseIterable {
     case settings
     
     case company
-    case passcodePad([PasscodeViewState])
+//    case passcodePad([PasscodeViewState])
     case department(DepartmentEntity?, DetailType)
     case item(ItemEntity?, DetailType)
     case confirmSale([CartItem])

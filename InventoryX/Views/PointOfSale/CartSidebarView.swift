@@ -23,25 +23,11 @@ struct CartSidebarView: View {
                 Spacer()
                 ZStack {
                     Rectangle()
-                        .fill(
-                            .shadow(.inner(color: .neoUnderDark, radius: 2, x: 1, y: 0))
-                        )
+                        .fill(.shadow(.inner(color: .neoUnderDark, radius: 2, x: 1, y: 0)))
                         .foregroundColor(.neoUnderBg)
                     
                     VStack {
                         Spacer().frame(height: 54)
-                        //                    HStack {
-                        //                        Image(systemName: "cart")
-                        //                        Text("Cart")
-                        //                            .padding(.horizontal)
-                        //                            .frame(maxWidth: .infinity, alignment: .leading)
-                        //                    }
-                        //                    .padding([.top, .horizontal])
-                        //                    .font(.headline)
-                        //                    .foregroundStyle(.accent)
-                        //                    .opacity(0.8)
-                        
-                        //                    Text("Items")
                         
                         List(vm.cartItems) { item in
                             CartItemView(item: item, qty: item.qtyInCart)
@@ -52,21 +38,7 @@ struct CartSidebarView: View {
                         .listStyle(PlainListStyle())
                         
                         // MARK: - Cart Totals
-                        VStack(spacing: 4) {
-                            HStack {
-                                Text("Subtotal:")
-                                Spacer()
-                                Text("\(vm.cartSubtotal.formatAsCurrencyString())")
-                            } //: HStack
-                            
-                            HStack {
-                                Text("Tax:")
-                                Spacer()
-                                Text("\(vm.taxAmount.formatAsCurrencyString())")
-                            } //: HStack
-                        } //: VStack
-                        .font(.subheadline)
-                        .padding()
+                        CartTotalsView()
                         
                         Spacer()
                             .frame(height: 48)
@@ -94,7 +66,7 @@ struct CartSidebarView: View {
 //                Image(systemName: "cart")
                 Text("Checkout")
                 Spacer()
-                Text(vm.total.formatAsCurrencyString())
+                Text(vm.total.toCurrencyString())
             }
             .padding(6)
             .padding(.horizontal, 10)

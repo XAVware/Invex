@@ -67,81 +67,63 @@ struct DepartmentDetailView: View {
     
     
     var body: some View {
-        ThemeForm {
-                Text(vm.errorMessage)
-                    .foregroundStyle(.red)
-                
-                ThemeFormSection(title: "General") {
-                    VStack(alignment: .leading) {
-                        ThemeTextField(boundTo: $name,
-                                       placeholder: "i.e. Clothing",
-                                       title: "Department Name:",
-                                       hint: nil,
-                                       type: .text)
-                        .focused($focus, equals: .name)
-                        .submitLabel(.return)
-                        .onSubmit { focus = nil }
-                        
-                        FieldDivider()
-                        
-                        ThemeTextField(boundTo: $restockThreshold,
-                                       placeholder: "0",
-                                       title: "Restock Qty:",
-                                       hint: "This will help you quickly find items that need to be restocked.",
-                                       type: .integer)
-                        .keyboardType(.numberPad)
-                        .focused($focus, equals: .threshold)
-                        .submitLabel(.return)
-                        .onSubmit { focus = nil }
-                        
-                        FieldDivider()
-                        
-                        ThemeTextField(boundTo: $markup,
-                                       placeholder: "0",
-                                       title: "Default markup:",
-                                       hint: "When an item is added to this department it will be marked up by this percentage by default.",
-                                       type: .percentage)
-                        .keyboardType(.numberPad)
-                        .focused($focus, equals: .markup)
-                        .submitLabel(.return)
-                        .onSubmit { focus = nil }
-                    } //: VStack
-                    .onChange(of: focus) { _, newValue in
-                        guard !markup.isEmpty else { return }
-                        guard let markup = Double(markup) else { return }
-                        self.markup = markup.toPercentageString()
-                    }
-                }
-                
-            } //: VStack
-            .overlay(
-                Button(action: continueTapped) {
-                    Text("Continue")
-                        .frame(maxWidth: .infinity)
-                }
+        FormX(title: "Department", containers: []) {
+            ThemeFormSection(title: "General") {
+                    ThemeTextField(boundTo: $name, placeholder: "i.e. Clothing", title: "Department Name:", type: .text)
+                    .focused($focus, equals: .name)
+                    .submitLabel(.return)
+                    .onSubmit { focus = nil }
+                    
+                    FieldDivider()
+                    
+                    ThemeTextField(boundTo: $restockThreshold, placeholder: "0", title: "Restock Qty:",
+                                   hint: "This will help you quickly find items that need to be restocked.",
+                                   type: .integer)
+                    .keyboardType(.numberPad)
+                    .focused($focus, equals: .threshold)
+                    .submitLabel(.return)
+                    .onSubmit { focus = nil }
+                    
+                    FieldDivider()
+                    
+                    ThemeTextField(boundTo: $markup, placeholder: "0", title: "Default markup:",
+                                   hint: "When an item is added to this department it will be marked up by this percentage by default.",
+                                   type: .percentage)
+                    .keyboardType(.numberPad)
+                    .focused($focus, equals: .markup)
+                    .submitLabel(.return)
+                    .onSubmit { focus = nil }
+            } //: Theme Form Section
+            .onChange(of: focus) { _, newValue in
+                guard !markup.isEmpty else { return }
+                guard let markup = Double(markup) else { return }
+//                self.markup = markup.toPercentageString()
+            }
+            
+        } //: VStack
+        .overlay(
+            Button(action: continueTapped) {
+                Text("Continue")
+                    .frame(maxWidth: .infinity)
+            }
                 .buttonStyle(ThemeButtonStyle())
                 .padding()
-                
             , alignment: .bottom)
-            .padding()
-            .onAppear {
-                if let dept = department {
-                    name = dept.name
-                    if dept.restockNumber != 0 {
-                        restockThreshold = String(describing: dept.restockNumber)
-                    }
-                    
-                    if dept.defMarkup != 0 {
-                        markup = String(describing: dept.defMarkup)
-                    }
+//        .padding()
+        .onAppear {
+            if let dept = department {
+                name = dept.name
+                if dept.restockNumber != 0 {
+                    restockThreshold = String(describing: dept.restockNumber)
+                }
+                
+                if dept.defMarkup != 0 {
+                    markup = String(describing: dept.defMarkup)
                 }
             }
-            .navigationTitle(detailType == .update ? "Edit department" : "Add department")
-            .navigationBarTitleDisplayMode(.large)
-//        } //: Scroll
-//        .frame(maxWidth: .infinity, maxHeight: .infinity) 
-//        .scrollIndicators(.hidden)
-//        .background(Color.bg.ignoresSafeArea())
+        }
+        .navigationTitle(detailType == .update ? "Edit department" : "Add department")
+        .navigationBarTitleDisplayMode(.large)
         .toolbar {
             if detailType == .update {
                 deleteButton
@@ -188,7 +170,7 @@ struct DepartmentDetailView: View {
 
 #Preview {
     DepartmentDetailView(department: DepartmentEntity(), detailType: .create) {}
-        .background(Color.bg) 
+        .background(Color.bg)
 }
 
 

@@ -22,7 +22,7 @@ class DepartmentEntity: Object, ObjectKeyIdentifiable, Identifiable {
         self.defMarkup = defMarkup
     }
     
-    var formattedMarkup: String { defMarkup.toPercentageString() }
+    var formattedMarkup: String { defMarkup.toPercentageString(includeSymbol: false) }
     var formattedRestockNum: String { restockNumber.description }
     var itemCount: String { items.count.description }
 }
