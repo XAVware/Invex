@@ -36,7 +36,7 @@ struct InventoryListView: View {
     }
     
     private func addButtonTapped() {
-        let navItem: LSXDisplay = tableType == .items ? .item(nil, .create) : .department(nil, .create)
+        let navItem: LSXDisplay = tableType == .items ? .item(ItemEntity()) : .department(DepartmentEntity())
         navService.path.append(navItem)
     }
     
@@ -87,23 +87,6 @@ struct InventoryListView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Add", systemImage: "plus", action: addButtonTapped)
-//                Button(action: addButtonTapped) {
-//                    HStack {
-//                        Image(systemName: "plus")
-//                            .resizable()
-//                            .scaledToFit()
-//                            .frame(width: 18, height: 18)
-//                        
-//                        if hSize == .regular {
-//                            Text("New Item")
-//                        }
-//                    }
-//                    .padding(6)
-//                    .font(.headline)
-//                }
-//                .buttonStyle(ThemeButtonStyle())
-//                .padding()
-//                .cornerRadius(48)
             }
         }
     } //: Body

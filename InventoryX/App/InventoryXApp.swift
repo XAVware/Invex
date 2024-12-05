@@ -70,9 +70,14 @@ struct InventoryXApp: SwiftUI.App {
     
     var body: some Scene {
         WindowGroup {
-            TabRoot()
+            CurrencyFieldX(amount: 0, save: { val in
+                print(val)
+            })
+                .environment(FormXViewModel())
+//            TabRoot()
 //                .onAppear {
 //                    Task {
+//                        try await RealmActor().deleteAll()
 //                        try await RealmActor().setUpForDebug()
 ////                        let h = AuthService.shared.hashString("1234")
 ////                        await AuthService.shared.savePasscode(hash: h)

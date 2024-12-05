@@ -130,11 +130,10 @@ struct TabRoot: View {
                             switch detail {
                             case .company:
                                 CompanyDetailView(company: companies.first ?? CompanyEntity())
-//                            case .passcodePad(let p):       PasscodeView(processes: p) { }
-                            case .item(let i, let t):       ItemDetailView(item: i, detailType: t)
-                            case .department(let d, let t): DepartmentDetailView(department: d, detailType: t)
-                            case .confirmSale(let items):
-                                ConfirmSaleView(/*cartItems: items*/)
+                            case .item(let i):       ItemDetailView(item: i)
+                            case .department(let d):        DepartmentDetailView(department: d)
+                            case .confirmSale:
+                                ConfirmSaleView()
                                     .environmentObject(posVM)
                                     .environment(navService)
                                 
@@ -174,7 +173,7 @@ struct TabRoot: View {
                             default: EmptyView()
                             }
                         }
-                    }
+                    } 
                 } //: Navigation Stack
                 .onReceive(rootVM.$companyExists) { exists in
                     print("Root: Company Received")

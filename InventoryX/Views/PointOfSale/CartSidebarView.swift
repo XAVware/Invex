@@ -59,7 +59,7 @@ struct CartSidebarView: View {
     private var checkoutButton: some View {
         Button {
             vm.checkoutTapped {
-                navService.path.append(LSXDisplay.confirmSale(vm.cartItems))
+                navService.path.append(LSXDisplay.confirmSale)
             }
         } label: {
             HStack {

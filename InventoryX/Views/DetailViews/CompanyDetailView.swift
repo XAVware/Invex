@@ -18,18 +18,16 @@ struct ContainerXModel {
 struct CompanyDetailView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: DetailViewModel = DetailViewModel()
-//    @State var formVM: XAVFormViewModel = XAVFormViewModel()
-    let isOnboarding: Bool
     
-    let onSuccess: (() -> Void)?
-    
+    /// If the entity's name is empty when it is initially passed to the view, `isNew` is set to true
+    let isNew: Bool
+        
     @ObservedRealmObject var company: CompanyEntity
     @State var showDeleteConfirmation: Bool = false
     
-    init(company: CompanyEntity, onSuccess: (() -> Void)? = nil) {
+    init(company: CompanyEntity) {
         self._company = ObservedRealmObject(wrappedValue: company)
-        self.onSuccess = onSuccess
-        self.isOnboarding = company.name.count <= 0
+        self.isNew = company.name.isEmpty
     }
     
     func validateCompanyName(value: String) -> (Bool, String?) {
@@ -62,15 +60,30 @@ struct CompanyDetailView: View {
         }
     }
     
+    func createDefaultCompany() {
+        do {
+            let realm = try Realm()
+            let companies = realm.objects(CompanyEntity.self)
+            if companies.count == 0 && isNew {
+                try realm.write {
+                    realm.add(company)
+                }
+            }
+        } catch {
+            print("Error creating default company: \(error)")
+        }
+    }
+    
     let containerData: [ContainerXModel] = [
         ContainerXModel(title: "Business Name", description: "Your company name will appear on sales receipts."),
         ContainerXModel(title: "Tax Rate", description: "We'll use this to calculate the tax on each sale.")
     ]
     
     var body: some View {
-        FormX(title: "Company Info", containers: containerData) {
+        FormX(title: "Company Info") {
             // Company name container
             ContainerX(data: containerData[0], value: company.name) {
+                
                 TextFieldX(value: company.name, validate: { value in
                     validateCompanyName(value: value)
                 }, save: { name in
@@ -78,6 +91,7 @@ struct CompanyDetailView: View {
                         saveCompanyName(validName: name)
                     }
                 })
+                
             }
             
             // Tax rate container
@@ -90,9 +104,12 @@ struct CompanyDetailView: View {
             }
             
         } //: FormX
+        .onAppear {
+            createDefaultCompany()
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                if !isOnboarding {
+                if !isNew {
                     Menu {
                         Button("Delete Account", systemImage: "trash", role: .destructive) {
                             showDeleteConfirmation = true
@@ -123,7 +140,7 @@ struct CompanyDetailView: View {
 
 
 #Preview {
-    CompanyDetailView(company: CompanyEntity(name: "Preview Company", taxRate: 0.078)) {}
+    CompanyDetailView(company: CompanyEntity(name: "Preview Company", taxRate: 0.078))
         .environment(\.realm, DepartmentEntity.previewRealm)
-        .environment(XAVFormViewModel())
+        .environment(FormXViewModel())
 }

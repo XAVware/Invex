@@ -17,7 +17,7 @@ struct ItemTableView: View {
     
     func onSelect(_ item: ItemEntity) {
         print("Tapped")
-        navService.path.append(LSXDisplay.item(item, .update))
+        navService.path.append(LSXDisplay.item(item))
     }
     
     var body: some View {

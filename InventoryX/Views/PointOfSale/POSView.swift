@@ -32,10 +32,10 @@ struct POSView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 8) {
             // MARK: - Department Picker
             ScrollView(.horizontal, showsIndicators: false) {
-                Picker("Department", selection: $selectedDepartment) {
+                LazyHStack {
                     Button("All", action: { departmentTapped(nil) })
                         .modifier(DepartmentButtonMod(isSelected: selectedDepartment == nil))
                         .tag(DepartmentEntity?.none)
@@ -45,12 +45,12 @@ struct POSView: View {
                             .modifier(DepartmentButtonMod(isSelected: selectedDepartment == dept))
                             .tag(dept)
                     }
-                } //: Picker
-                .padding(.horizontal)
+                } //: Lazy H Stack
+                .padding(.horizontal, 6)
                 .pickerStyle(.segmented)
-                .background(Color.bg)
-
             } //: Scroll View
+            .background(Color.accentColor.opacity(0.007))
+            .frame(maxHeight: 48)
 
             /// When 'All' is selected, `selectedDepartment` is nil and all items are displayed.
             TabView(selection: $selectedDepartment) {
@@ -65,7 +65,7 @@ struct POSView: View {
                 }
             } //: Tab View
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .padding()
+            .padding(.horizontal, 8)
             .frame(maxHeight: .infinity)
         } //: VStack
         .overlay(navService.sidebarVisibility == nil ? checkoutButton : nil, alignment: .bottom)
@@ -75,7 +75,7 @@ struct POSView: View {
     private var checkoutButton: some View {
         Button {
             vm.checkoutTapped {
-                navService.path.append(LSXDisplay.confirmSale(vm.cartItems))
+                navService.path.append(LSXDisplay.confirmSale)
             }
         } label: {
             HStack {
@@ -84,8 +84,8 @@ struct POSView: View {
                 Spacer()
                 Text(vm.total.toCurrencyString())
             }
-            .padding(.horizontal, 4)
-            .frame(maxWidth: 320, maxHeight: 26)
+            .padding(.horizontal, 8)
+            .frame(maxWidth: 260, maxHeight: 32)
         }
         .font(.subheadline)
         .fontWeight(.semibold)
@@ -99,12 +99,21 @@ struct POSView: View {
         func body(content: Content) -> some View {
             content
                 .font(.headline)
+                .foregroundStyle(isSelected ? Color.bg : Color.accent)
                 .fontWeight(isSelected ? .semibold : .regular)
-                .foregroundStyle(.accent)
-                .opacity(isSelected ? 1.0 : 0.9)
-                .padding(.horizontal)
-                .padding(.vertical, 8)
-                .overlay(isSelected ? Rectangle().fill(.accent).frame(height: 3) : nil, alignment: .bottom)
+                .fontDesign(.rounded)
+                .frame(minWidth: 56)
+//                .foregroundStyle(.accent)
+                .opacity(isSelected ? 1.0 : 0.8)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(isSelected ? .accent : .clear)
+                .clipShape(RoundedRectangle(cornerRadius: 24))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 24)
+                        .stroke(.accent, lineWidth: 1)
+                )
+//                .overlay(isSelected ? Capsule().fill(.accent).frame(height: 3.5) : nil, alignment: .bottom)
         }
     }
     

@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct TextFieldX: View {
-    @Environment(XAVFormViewModel.self) var formVM
+    @Environment(FormXViewModel.self) var formVM
     @FocusState private var focus: Bool
     @State var value: String = ""
-    @State var errorMessage: String = ""
+    @State var errMsg: String = ""
     
     let validate: (String) -> (Bool, String?)
     let save: (String) -> Void
@@ -28,6 +28,14 @@ struct TextFieldX: View {
         }
     }
     
+    private var borderColor: Color {
+        if self.errMsg.isEmpty == false {
+            return Color.red.opacity(0.8)
+        } else {
+            return focus ? Color.textPrimary : Color.neoUnderDark
+        }
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 8) {
@@ -41,70 +49,56 @@ struct TextFieldX: View {
                         .autocorrectionDisabled()
                         .submitLabel(.return)
                         .onSubmit { focus = false }
-                }
+                } //: VStack
                 .padding(10)
                 .frame(height: 58)
-                .modifier(RoundedOutlineMod(cornerRadius: 7, borderColor: focus ? Color.black : Color.neoUnderDark))
+                .background(errMsg.isEmpty ? Color.clear : Color.red.opacity(0.1))
+                .modifier(RoundedOutlineMod(cornerRadius: 7, borderColor: self.borderColor))
                 .onTapGesture { setFocus(true) }
                 
-                HStack {
-                    if !errorMessage.isEmpty {
-                        Image(systemName: "info.circle")
-                    }
-                    Text(errorMessage)
-                }
-                .font(.footnote)
-                .foregroundStyle(Color.red)
+                Label(errMsg, systemImage: "info.circle")
+                    .font(.footnote)
+                    .foregroundStyle(Color.red)
+                    .opacity(errMsg.isEmpty ? 0 : 1)
+                
             } //: VStack
             .onChange(of: focus) { wasFocused, isFocused in
+                /// When the text field is no longer focused, run validation logic.
+                ///     - To no longer be in focus the user must have de-selected the field or tried to submit.
                 if !isFocused {
                     let validation = validate(value)
                     if !validation.0 {
-                        errorMessage = validation.1 ?? "Error"
+                        errMsg = validation.1 ?? "Error"
                     }
                 } else if wasFocused && isFocused {
-                    errorMessage = ""
+                    errMsg = ""
                 }
             }
             
-            HStack {
-                Button("Cancel") {
-                    setFocus(false)
-                    formVM.closeContainer(withValue: self.value)
+            Spacer()
+            
+            PrimaryButtonPanelX(onCancel: {
+                setFocus(false)
+                formVM.closeContainer(withValue: self.value)
+            }, onSave: {
+                setFocus(false)
+                let validation = validate(value)
+                if validation.0 == false {
+                    errMsg = validation.1 ?? "Error"
+                    return
                 }
-                .underline()
-                .buttonStyle(.plain)
-                
-                Spacer()
-                
-                Button {
-                    setFocus(false)
-                    let validation = validate(value)
-                    if validation.0 == false {
-                        errorMessage = validation.1 ?? "Error"
-                        return
-                    }
-                    save(value)
-                    formVM.forceClose()
-                } label: {
-                    Text("Save").font(.headline)
-                }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.roundedRectangle)
-                .controlSize(.large)
-            }
+                save(value)
+                formVM.forceClose()
+            })
+            
         } //: VStack
         .onAppear {
             setFocus(true)
-//            formVM.setOrigValue(self.value)
             formVM.onTapOutside = {
                 setFocus(false)
             }
-            
         }
-        
-        
-    }
+    } //: Body
     
 }
 
@@ -118,5 +112,6 @@ struct TextFieldX: View {
     }, save: { validString in
         print("Save: \(validString)")
     })
-    
+    .environment(FormXViewModel())
+    .padding()
 }

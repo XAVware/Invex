@@ -12,7 +12,7 @@ struct DepartmentTableView: View {
     @ObservedResults(DepartmentEntity.self) var depts
     
     func onSelect(_ dept: DepartmentEntity) {
-        LSXService.shared.update(newDisplay: .department(dept, .update))
+        LSXService.shared.update(newDisplay: .department(dept))
     }
     
     var body: some View {

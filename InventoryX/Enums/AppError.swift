@@ -42,7 +42,7 @@ enum AppError: Error {
         case .invalidItemName:              "Please enter a valid item name"
         case .invalidQuantity:              "Please enter a valid quantity"
         case .invalidPrice:                 "Please enter a valid price"
-        case .invalidCost:                  "Please enter a valid unity cost"
+        case .invalidCost:                  "Please enter a valid unit cost"
         case .numericThresholdRequired:     "Please enter a valid number for the restock threshold"
         case .noPasscodeProcesses:          "No processes set"
         case .noPasscodeFound:              "Attempting to confirm passcode but no initial passcode was found"

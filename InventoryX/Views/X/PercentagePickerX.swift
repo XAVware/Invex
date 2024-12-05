@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PercentagePickerX: View {
+    @Environment(FormXViewModel.self) var formVM
     private enum Component { case whole, hundredth }
     @State private var focus: Component = .whole
     @State private var wholeNumber: Int = 0
@@ -16,23 +17,23 @@ struct PercentagePickerX: View {
     let save: (Double) -> Void
     
     private var taxRate: Double {
-        return Double(wholeNumber) + Double(fractionalNumber) / 100.0
+        return (Double((wholeNumber * 100) + fractionalNumber) / 10000)
     }
     
     init(tax: Double, save: @escaping (Double) -> Void) {
-        let t = tax * 100
-        let w = floorl(t)
+        let w = floorl(tax * 100)
+        let d = (tax * 10000) - w * 100
         self.wholeNumber = Int(w)
-        self.fractionalNumber = Int(t.truncatingRemainder(dividingBy: w == 0 ? 1 : w) * 100)
+        self.fractionalNumber = Int(d)
         self.save = save
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .center, spacing: 16) {
             HStack(alignment: .bottom) {
                 Text("\(wholeNumber)")
                     .padding(8)
-                    .modifier(RoundedOutlineMod(cornerRadius: 7, borderColor: focus == .whole ? Color.black : Color.neoUnderDark, lineWidth: 1.5))
+                    .modifier(XOutlineMod(isSelected: focus == .whole))
                     .onTapGesture {
                         withAnimation {
                             focus = .whole
@@ -43,9 +44,7 @@ struct PercentagePickerX: View {
                 
                 Text(String(format: "%02d", fractionalNumber))
                     .padding(8)
-                    .modifier(RoundedOutlineMod(cornerRadius: 7,
-                                                borderColor: focus == .hundredth ? Color.black : Color.neoUnderDark,
-                                                lineWidth: 1.5))
+                    .modifier(XOutlineMod(isSelected: focus == .hundredth))
                     .onTapGesture {
                         withAnimation {
                             focus = .hundredth
@@ -65,6 +64,8 @@ struct PercentagePickerX: View {
                         }
                     }
                     .pickerStyle(WheelPickerStyle())
+                    .font(.largeTitle)
+
                 } else {
                     Picker("Fractional Number", selection: $fractionalNumber) {
                         ForEach(0 ..< 99) { value in
@@ -72,24 +73,23 @@ struct PercentagePickerX: View {
                         }
                     }
                     .pickerStyle(WheelPickerStyle())
+                    .font(.largeTitle)
                 }
-            } //: HStack
-            .frame(height: 120)
+            } //: Group
+            .frame(height: 180)
             .frame(maxWidth: 360)
-            .background(Color.fafafa)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
             
-            Button {
+            PrimaryButtonPanelX(onCancel: {
+                formVM.closeContainer(withValue: taxRate.toPercentageString())
+            }, onSave: {
                 save(taxRate)
-            } label: {
-                Text("Save").font(.headline)
-            }
-            .buttonStyle(.borderedProminent)
-            .buttonBorderShape(.roundedRectangle)
-            .controlSize(.large)
+                formVM.forceClose()
+            })
         } //: VStack
     }
 }
+
+
 
 
 #Preview {

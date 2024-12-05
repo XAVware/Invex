@@ -21,49 +21,56 @@ struct ItemGridView: View {
         }
     }
     
-    let columns: [GridItem] = [ GridItem(.adaptive(minimum: 240, maximum: .infinity), spacing: 16) ]
+    let columns: [GridItem] = [ GridItem(.adaptive(minimum: 160, maximum: .infinity), spacing: 12) ]
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 16) {
+            LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(getItems()) { item in
                     Button {
                         UIImpactFeedbackGenerator(style: .light).impactOccurred(intensity: 0.9)
                         onSelect(item)
                     } label: {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(item.name)
-                                    .fontWeight(.bold)
-                                
-                                Text(item.attribute)
-                                    .fontWeight(.regular)
-                            } //: VStack
-                            .font(.headline)
-                            .foregroundStyle(Color.textPrimary)
-                            
-                            Spacer()
-                            
-                            Text(item.formattedPrice)
-                                .foregroundStyle(Color.accentColor)
-                        } //: HStack
-                        .padding(12)
-                        .fontDesign(.rounded)
-                        .background(.ultraThinMaterial)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 6)
-                                .stroke(Color.accentColor.opacity(0.1), lineWidth: 1)
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        ItemGridButtonLabel(item: item)
                     }
                 } //: ForEach
             } //: LazyVGrid
             .padding(2)
         } //: Scroll
-//        .background(Color.accentColor.opacity(0.007))
+        //        .background(Color.accentColor.opacity(0.007))
         .scrollIndicators(.hidden)
     } //: Body
     
+    
+    struct ItemGridButtonLabel: View {
+        let item: ItemEntity
+        
+        var body: some View {
+            Grid(alignment: .leading) {
+                Text(item.name)
+                    .fontWeight(.semibold)
+                    .font(.headline)
+                
+                GridRow(alignment: .bottom) {
+                    Text(item.attribute)
+                        .fontWeight(.thin)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(item.formattedPrice)
+                        .foregroundStyle(Color.accentColor)
+                }
+                .font(.subheadline)
+            }
+            .padding(10)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .fontDesign(.rounded)
+            .background(.ultraThinMaterial)
+            .overlay(
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(Color.accentColor.opacity(0.1), lineWidth: 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+        }
+    }
     
 }
 

@@ -28,6 +28,6 @@ struct HexImage: View {
                 .padding(32)
                 .frame(maxWidth: 460)
                 .opacity(0.8)
-        }
+        } //: ZStack
     }
 }

@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct ContainerX<C: View>: View {
-    @Environment(XAVFormViewModel.self) var formVM
-    @State var showingAlert: Bool = false
+    @Environment(FormXViewModel.self) var formVM
     
     @State var title: String
     @State var description: String
@@ -28,12 +27,9 @@ struct ContainerX<C: View>: View {
     }
     
     var body: some View {
-        @Bindable var formVM: XAVFormViewModel = formVM
+        @Bindable var formVM: FormXViewModel = formVM
         contentView
-//            .onAppear {
-////                formVM.addContainer(id: self.id)
-//                formVM.setOrigValue(self.value)
-//            }
+            .padding(.vertical)
             .onTapGesture {
                 formVM.onTapOutside?()
             }
@@ -48,26 +44,30 @@ struct ContainerX<C: View>: View {
     @ViewBuilder private var contentView: some View {
         if isExpanded || formVM.expandedContainer == nil {
             VStack(alignment: .leading, spacing: 12) {
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack {
+                HStack(alignment: .center) {
+                    VStack(alignment: .leading, spacing: isExpanded ? 8 : 6) {
                         Text(title)
-//                            .font()
-                        Spacer()
+                            .font(isExpanded ? .largeTitle : .body)
+                                            
+                        Text((value.isEmpty || isExpanded) ? description : value)
+                            .opacity(0.5)
+                            .padding(.trailing, isExpanded ? 48 : 0)
+                            .font(isExpanded ? .headline : .body)
                         
-                        if !isExpanded {
-                            Button(value.isEmpty ? "Add" : "Edit") {
-                                formVM.expandContainer(id: self.id)
-                                formVM.setOrigValue(self.value)
-                            }
-                            .underline()
-                            .buttonStyle(.plain)
-                        }
-                    } //: HStack
+                    } //: VStack
                     
-                    Text((value.isEmpty || isExpanded) ? description : value)
-                        .opacity(0.5)
-                        .padding(.trailing, 42)
-                } //: VStack
+                    Spacer()
+                    
+                    if !isExpanded {
+                        Button(value.isEmpty ? "Add" : "Edit") {
+                            formVM.expandContainer(id: self.id)
+                            formVM.setOrigValue(self.value)
+                        }
+                        .frame(maxWidth: 48)
+                        .underline()
+                        .buttonStyle(.plain)
+                    }
+                } //: HStack
                 .fontWeight(.medium)
                 .fontDesign(.rounded)
                 
@@ -78,14 +78,13 @@ struct ContainerX<C: View>: View {
                 }
                 
             } //: VStack
-            .padding(.vertical)
         }
     } //: Content View
 }
 
 #Preview {
-    
     ContainerX(data: ContainerXModel(title: "Title", description: "Here's a Short description"), value: "XAV", content: {
         
     })
+    .environment(FormXViewModel())
 }

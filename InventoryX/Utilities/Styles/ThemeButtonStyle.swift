@@ -10,7 +10,31 @@ import SwiftUI
 struct ThemeButtonStyle: ButtonStyle {
     @Environment(\.verticalSizeClass) var vSize
     @Environment(\.horizontalSizeClass) var hSize
+    @State var style: ThemeButtonStyle
+    @State var radius: CGFloat
     
+    init(_ style: ThemeButtonStyle = .primary, cornerRadius: CGFloat = 32) {
+        self.style = style
+        self.radius = cornerRadius
+    }
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding(vSize == .compact || hSize == .compact ? 10 : 14)
+            .background(
+                RoundedRectangle(cornerRadius: radius, style: .continuous)
+                    .fill(style.bgColor)
+            )
+            .foregroundColor(style.fgColor)
+            .frame(maxWidth: 480, alignment: .center)
+            .opacity(configuration.isPressed ? 0.7 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+        
+    }
+}
+
+extension ThemeButtonStyle {
     /// Primary style appear with the accent color as the background, while secondary appears with accent as foreground
     enum ThemeButtonStyle {
         case primary
@@ -29,25 +53,5 @@ struct ThemeButtonStyle: ButtonStyle {
             case .secondary:    Color.accent
             }
         }
-    }
-    
-    @State var style: ThemeButtonStyle
-    
-    init(_ style: ThemeButtonStyle = .primary) {
-        self.style = style
-    }
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding(vSize == .compact || hSize == .compact ? 10 : 14)
-            .background(
-                RoundedRectangle(cornerRadius: 32, style: .continuous)
-                    .fill(style.bgColor)
-            )
-            .foregroundColor(style.fgColor)
-            .frame(maxWidth: 480, alignment: .center)
-            .opacity(configuration.isPressed ? 0.7 : 1.0)
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
