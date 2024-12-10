@@ -8,103 +8,221 @@
 import SwiftUI
 import RealmSwift
 
+@Observable
+class ItemTableViewModel {
+    var selectedItems: [ObjectId] = []
+    
+    func multiSelect(_ id: ObjectId) {
+        if selectedItems.contains(id) {
+            selectedItems.removeAll(where: { $0 == id })
+        } else {
+            selectedItems.append(id)
+        }
+    }
+    
+    func multiSelect(_ items: [ObjectId]) {
+        if selectedItems.isEmpty {
+            selectedItems.append(contentsOf: items)
+        } else {
+            selectedItems.removeAll()
+        }
+    }
+    
+    func deselectAll() {
+        selectedItems.removeAll()
+    }
+    
+}
+
 struct ItemTableView: View {
     @Environment(NavigationService.self) var navService
-    @Environment(\.horizontalSizeClass) var horSize
-    @ObservedResults(ItemEntity.self) var items
-    
+    @ObservedResults(DepartmentEntity.self) var departments
+    @State private var vm: ItemTableViewModel = .init()
     @State private var sortOrder: [KeyPathComparator<ItemEntity>] = []
     
-    func onSelect(_ item: ItemEntity) {
-        print("Tapped")
-        navService.path.append(LSXDisplay.item(item))
+    private var multiSelectPanel: some View {
+        HStack {
+            Button("Deselect All", systemImage: "xmark") {
+                vm.deselectAll()
+            }
+            
+            Spacer()
+            
+            Button {
+                
+            } label: {
+                Text("Move...")
+            }
+            
+            Divider()
+            
+            Button("Delete", systemImage: "trash", role: .destructive) {
+                
+            }
+
+//            Spacer()
+        }
+        .padding()
+        .background(Color.neoOverBg.shadow(radius: 2))
+        .frame(maxWidth: .infinity, maxHeight: 48)
+        
     }
     
     var body: some View {
-//        VStack {
+        ScrollView(.vertical, showsIndicators: false) {
+            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+                ForEach(departments) { dept in
+                    DepartmentSectionedView(department: dept)
+                        .environment(vm)
+                }
+            } //: Lazy V
+            .padding(8)
+        } // ScrollView
+        .navigationBarHidden(true)
+        .background(.bg)
+        .overlay(multiSelectPanel.padding(), alignment: .bottom)
+    } //: Body
+    
+    
+}
+
+struct DepartmentSectionedView: View {
+    @Environment(NavigationService.self) var navService
+    @Environment(ItemTableViewModel.self) var vm
+    @ObservedRealmObject var department: DepartmentEntity
+
+    func onSelect(_ item: ItemEntity) {
+        navService.path.append(LSXDisplay.item(item))
+    }
+    private var sectionContent: some View {
+        VStack(spacing: 0) {
             
-            Table(of: ItemEntity.self) {
-                TableColumn("Name"/*, value: \.name*/) { item in
-                    if horSize == .compact {
-                        Text("\(item.name) - \(item.attribute)")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .frame(height: 42)
-                            .contentShape(Rectangle())
-                            .onTapGesture { onSelect(item) }
-                    } else {
+            
+            ForEach(department.items.sorted(by: \.name, ascending: true)) { item in
+                HStack(spacing: 12) {
+                    Button {
+                        vm.multiSelect(item._id)
+                    } label: {
+                        Image(systemName: vm.selectedItems.contains(item._id) ? "checkmark.square.fill" : "square")
+                    }
+                    .foregroundStyle(Color.accentColor)
+                    
+                    HStack(spacing: 0) {
                         Text(item.name)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .frame(height: 42)
-                            .contentShape(Rectangle())
-                            .onTapGesture { onSelect(item) }
+                        
+                        Text(item.attribute)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        
+                        Text(item.onHandQty.description)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .foregroundStyle(item.showWarning ? Color.red : Color.textPrimary)
+                        
+                        Text(item.retailPrice.toCurrencyString())
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        
+                        Text(item.unitCost.toCurrencyString())
+                            .frame(maxWidth: .infinity, alignment: .center)
                     }
-                }
+                    
+                    HStack {
+                        
+                        Button("Edit", systemImage: "pencil", action: { onSelect(item) })
+                            .fontWeight(.semibold)
+                            .padding(8)
+                            .background(Color.bg)
+                            .modifier(RoundedOutlineMod(cornerRadius: 7, borderColor: Color.accentColor.opacity(0.07)))
+                        
+                        Button("Edit", systemImage: "ellipsis", action: { onSelect(item) })
+                            .rotationEffect(Angle(degrees: 90))
+                        
+                    } //: HStack
+                    .labelStyle(.iconOnly)
+                    .font(.system(.headline, design: .rounded))
+                    .frame(maxWidth: 64, alignment: .trailing)
+                } //: HStack
+                .padding(.vertical)
+                .padding(.horizontal, 8)
+                .environment(vm)
                 
-                TableColumn("Attribute"/*, value: \.attribute*/) { item in
-                    Text(item.attribute)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: 42)
-                        .contentShape(Rectangle())
-                        .onTapGesture { onSelect(item) }
-                }
+                    Divider().opacity(0.4)
                 
-                TableColumn("Stock"/*, value: \.onHandQty*/) { item in
-                    Text(item.formattedQty)
-                        .frame(height: 42)
-                        .contentShape(Rectangle())
-                        .onTapGesture { onSelect(item) }
-                }
-                .width(min: 96)
-                .alignment(.center)
+            }
+        } //: VStack
+        .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.bottomLeft, .bottomRight])
+        .background(Color.neoOverLight)
+    }
+    
+    var body: some View {
+        Section {
+            sectionContent
+        } header: {
+            VStack(spacing: 0) {
+                HStack {
+                    Text(department.name)
+                        .font(.system(.title2, design: .rounded, weight: .semibold))
+                        .padding(.horizontal)
+                    
+                    Spacer()
+                    Button("Department", systemImage: "gear", action: {
+                        LSXService.shared.update(newDisplay: .department(department))
+                    })
+                    .labelStyle(.iconOnly)
+                    .padding(8)
+                } //: HStack
+                .padding(.vertical, 8)
                 
-                TableColumn("Price"/*, value: \.retailPrice*/) { item in
-                    Text(item.formattedPrice)
-                        .frame(height: 42)
-                        .contentShape(Rectangle())
-                        .onTapGesture { onSelect(item) }
-                }
-                .width(max: 96)
-                .alignment(.center)
+                //                Divider()
                 
-                TableColumn("Cost"/*, value: \.unitCost*/) { item in
-                    Text(item.formattedUnitCost)
-                        .frame(height: 42)
-                        .contentShape(Rectangle())
-                        .onTapGesture { onSelect(item) }
-                }
-                .width(max: 96)
-                .alignment(.center)
+                HStack(spacing: 12) {
+                    Button {
+                        vm.multiSelect(department.items.map({$0._id}))
+                    } label: {
+                        Image(systemName: "square")
+                            .foregroundStyle(Color.accentColor)
+                    }
+                    .font(.system(.headline, design: .rounded, weight: .regular))
+                    
+                    HStack(spacing: 0) {
+                        Text("Item")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Text("Attribute")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        
+                        Text("Stock")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        
+                        Text("Price")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        
+                        Text("Cost")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    .frame(maxWidth: .infinity)
+                    
+                    Text("Actions")
+                        .frame(maxWidth: 64, alignment: .trailing)
+                    
+                } //: HStack
+                .padding(.vertical, 12)
+                .background(Color.bg)
+                .foregroundStyle(Color.textPrimary)
+                .padding(.horizontal, 8)
+                .font(.system(.callout, design: .rounded, weight: .regular))
+                .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.topLeft, .topRight])
                 
-                TableColumn("") { item in
-                    Text(item.restockWarning)
-                        .frame(height: 42)
-                        .contentShape(Rectangle())
-                        .onTapGesture { onSelect(item) }
-                }
-                .width(24)
-                .alignment(.center)
-            } rows: {
-                ForEach(items) {
-                    TableRow($0)
-                }
-            } //: Table
-            //        .onAppear {
-            //            sortOrder = [KeyPathComparator(\ItemEntity.name)]
-            //        }
-            //        .onChange(of: sortOrder) { _, sortOrder in
-            //            print(sortOrder.first == KeyPathComparator(\ItemEntity.name))
-            //            print(sortOrder.first)
-            //        }
-            .scrollContentBackground(.hidden)
-            .padding(.vertical, 6)
-            .frame(maxWidth: .infinity)
-
-//        }
+            } //: VStack
+            //            .padding(.horizontal, 8)
+            //            .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.topLeft, .topRight])
+            .padding(.top)
+        }
     }
 }
 
+
 #Preview {
-    ItemTableView()
+    InventoryListView()
         .environment(\.realm, DepartmentEntity.previewRealm)
         .environment(NavigationService())
 }

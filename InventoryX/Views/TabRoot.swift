@@ -128,10 +128,9 @@ struct TabRoot: View {
                         .navigationBarTitleDisplayMode(.inline)
                         .navigationDestination(for: LSXDisplay.self) { detail in
                             switch detail {
-                            case .company:
-                                CompanyDetailView(company: companies.first ?? CompanyEntity())
-                            case .item(let i):       ItemDetailView(item: i)
-                            case .department(let d):        DepartmentDetailView(department: d)
+                            case .company:              CompanyDetailView(company: companies.first ?? CompanyEntity())
+                            case .item(let i):          ItemDetailView(item: i)
+                            case .department(let d):    DepartmentDetailView(department: d)
                             case .confirmSale:
                                 ConfirmSaleView()
                                     .environmentObject(posVM)

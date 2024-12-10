@@ -60,18 +60,18 @@ struct InventoryListView: View {
     
     var body: some View {
         VStack {
-            Picker("Table Type", selection: $tableType) {
-                ForEach(TableType.allCases) { type in
-                    Text(type.rawValue.capitalized)
-                }
-            }
-            .pickerStyle(.segmented)
-            .frame(maxWidth: 320)
+//            Picker("Table Type", selection: $tableType) {
+//                ForEach(TableType.allCases) { type in
+//                    Text(type.rawValue.capitalized)
+//                }
+//            }
+//            .pickerStyle(.segmented)
+//            .frame(maxWidth: 320)
             
             Group {
                 switch tableType {
                 case .items:
-                    ItemTableView(items: self.$items)
+                    ItemTableView()
                         .navigationTitle("Items")
                     
                 case .department:
@@ -81,9 +81,10 @@ struct InventoryListView: View {
                 }
             }
 //            .overlay(addButton, alignment: .bottomTrailing)
-            .modifier(RoundedOutlineMod(cornerRadius: 6))
-            .padding()
+//            .modifier(RoundedOutlineMod(cornerRadius: 6))
+//            .padding()
         } //: VStack
+        
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Add", systemImage: "plus", action: addButtonTapped)

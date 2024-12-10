@@ -12,12 +12,12 @@ struct CurrencyFieldX: View {
     @State private var strValue: String = "0"
     @State private var toggleError: Bool = false
     @State private var errorMessage: String = ""
-    
-    let amount: Double
-    let save: (Double) -> Void
+    @State private var requiresPlaceholder: Bool
+    private let save: (Double) -> Void
     
     init(amount: Double, save: @escaping (Double) -> Void) {
-        self.amount = amount
+        let amt = amount.description
+        self.requiresPlaceholder = false
         self.save = save
     }
     
@@ -32,7 +32,7 @@ struct CurrencyFieldX: View {
         }
     }
     
-    var formattedInput: AttributedString {
+    private var formattedInput: AttributedString {
         let s: String = strValue
         var placeholders = AttributedString("")
         let parts = s.split(separator: ".")
