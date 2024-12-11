@@ -73,13 +73,8 @@ struct TabRoot: View {
         TabButtonModel(destination: .pos, unselectedIconName: "dollarsign", selectedIconName: "dollarsign.circle.fill", title: "Make a Sale")
     ]
     
-    var body: some View { 
-        switch showOnboarding {
-        case true:
-            OnboardingView()
-                .environmentObject(lsxVM)
-            
-        case false:
+    var body: some View {
+        if let company = companies.first, company.finishedOnboarding {
             GeometryReader { geo in
                 let isLandscape: Bool = geo.size.width > geo.size.height
                 
@@ -128,7 +123,30 @@ struct TabRoot: View {
                         .navigationBarTitleDisplayMode(.inline)
                         .navigationDestination(for: LSXDisplay.self) { detail in
                             switch detail {
-                            case .company:              CompanyDetailView(company: companies.first ?? CompanyEntity())
+                            case .company:
+                                CompanyDetailView(company: companies.first ?? CompanyEntity())
+//                                    .toolbar {
+//                                        ToolbarItem(placement: .topBarTrailing) {
+//                                            Menu {
+//                                                Button("Delete Account", systemImage: "trash", role: .destructive) {
+//                                                    showDeleteConfirmation = true
+//                                                }
+//                                            } label: {
+//                                                Image(systemName: "ellipsis")
+//                                                    .rotationEffect(Angle(degrees: 90))
+//                                            }
+//                                            .foregroundStyle(.accent)
+//                                        }
+//                                    }
+//                                    .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
+//                                        Button("Go back", role: .cancel) { }
+//                                        Button("Yes, delete account", role: .destructive) {
+//                                            Task {
+//                                                await vm.deleteAccount()
+//                                            }
+//                                        }
+//                                    }
+                                
                             case .item(let i):          ItemDetailView(item: i)
                             case .department(let d):    DepartmentDetailView(department: d)
                             case .confirmSale:
@@ -172,17 +190,22 @@ struct TabRoot: View {
                             default: EmptyView()
                             }
                         }
-                    } 
-                } //: Navigation Stack
-                .onReceive(rootVM.$companyExists) { exists in
-                    print("Root: Company Received")
-//                    self.showOnboarding = !exists
-                }
-                .onAppear {
-                    guard items.count > 0 && departments.count > 0 && companies.count > 0 else {
-                        self.showOnboarding = true
-                        return
                     }
+                } //: Navigation Stack
+//                .onChange(of: companies.first) { old, new in
+//                    if new == nil {
+//                        self.showOnboarding = true
+//                    }
+//                }
+//                .onReceive(rootVM.$companyExists) { exists in
+//                    print("Root: Company Received")
+//                    //                    self.showOnboarding = !exists
+//                }
+                .onAppear {
+//                    guard items.count > 0 && departments.count > 0 && companies.count > 0 else {
+//                        self.showOnboarding = true
+//                        return
+//                    }
                     
                     if isLandscape && hSize == .regular {
                         navService.sidebarVisibility = .showing
@@ -204,8 +227,18 @@ struct TabRoot: View {
                 
                 .environment(navService)
             }
-        default: ProgressView()
+        } else {
+            OnboardingView()
+                .environmentObject(lsxVM)
         }
+//        switch showOnboarding {
+//        case true:
+//            
+//            
+//        case false:
+//            
+//        default: ProgressView()
+//        }
     } //: Body
     
     @ViewBuilder var primaryContent: some View {

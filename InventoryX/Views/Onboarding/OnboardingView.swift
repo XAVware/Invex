@@ -8,211 +8,215 @@
 import SwiftUI
 import RealmSwift
 
+// MARK: - Models
 struct OnboardingStepModel: Identifiable, Equatable {
     let id: UUID = UUID()
     let condition: Bool
     let title: String
     let description: String
     let destination: LSXDisplay
+    let isEnabled: Bool
+}
+
+// MARK: - ViewModel
+class OnboardingViewModel: ObservableObject {
+    @Published private(set) var isSetupComplete = false
+    private let realm: Realm?
+    
+    init() {
+        realm = try? Realm()
+    }
+    
+    func setupDefaultObjects() {
+        guard let realm else { return }
+        
+        // Perform all writes in a single transaction
+        do {
+            try realm.write {
+                if realm.objects(CompanyEntity.self).isEmpty {
+                    realm.add(CompanyEntity())
+                }
+                
+                if realm.objects(DepartmentEntity.self).isEmpty {
+                    realm.add(DepartmentEntity())
+                }
+                
+                if realm.objects(ItemEntity.self).isEmpty {
+                    realm.add(ItemEntity())
+                }
+            }
+        } catch {
+            print("Error setting up default objects: \(error)")
+        }
+    }
+    
+    func finishOnboarding() {
+        guard let realm else { return }
+        guard let company = realm.objects(CompanyEntity.self).first else {
+            print("No company found")
+            return
+        }
+        
+        do {
+            // Thaw the frozen object if needed and update it
+            if let thawedCompany = company.thaw() {
+                try realm.write {
+                    thawedCompany.finishedOnboarding = true
+                }
+                isSetupComplete = true
+            }
+            
+            if let thawedDepartment = realm.objects(DepartmentEntity.self).first, let item = realm.objects(ItemEntity.self).first {
+                try realm.write {
+                    thawedDepartment.items.append(item)
+                }
+                print("\(item.name) saved to \(thawedDepartment.name)")
+            }
+        } catch {
+            print("Error finalizing onboarding: \(error)")
+        }
+    }
+    
 }
 
 struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
-    @State var path: NavigationPath = .init()
+    @StateObject private var viewModel = OnboardingViewModel()
+    @State private var path: NavigationPath = .init()
     
     @ObservedResults(DepartmentEntity.self) var departments
     @ObservedResults(CompanyEntity.self) var companies
     @ObservedResults(ItemEntity.self) var items
     
-    var companyComplete: Bool {
-        guard let c = companies.first else { return false }
-        return !c.name.isEmpty
+    private var companyComplete: Bool {
+        guard let company = companies.first else { return false }
+        return !company.name.isEmpty
     }
     
-    var departmentComplete: Bool { !departments.isEmpty }
-    var itemComplete: Bool { !items.isEmpty }
-    
-    private func createDefaultCompany() throws {
-        let realm = try Realm()
-        try realm.write {
-            realm.add(CompanyEntity())
-        }
+    private var departmentComplete: Bool {
+        guard let dept = departments.first else { return false }
+        return !dept.name.isEmpty
     }
     
-    private func createDefaultDepartment() throws {
-        let realm = try Realm()
-        try realm.write {
-            realm.add(DepartmentEntity())
-        }
+    private var itemComplete: Bool {
+        guard let item = items.first else { return false }
+        return !item.name.isEmpty
     }
     
-    private func createDefaultItem() throws {
-        let realm = try Realm()
-        try realm.write {
-            realm.add(ItemEntity())
-        }
-    }
-    
-    /// When the view appears, the first object in all collections if they do not already have an object.
-    private func setup() {
-        do {
-            if companies.isEmpty {
-                try createDefaultCompany()
-            }
+    private var steps: [OnboardingStepModel] {
+        [
+            .init(condition: companyComplete,
+                  title: "Add your company info",
+                  description: "This will be used when calculating and displaying your sales.",
+                  destination: .company,
+                  isEnabled: true),
             
-            if departments.isEmpty {
-                try createDefaultDepartment()
-            }
-            
-            if items.isEmpty {
-                try createDefaultItem()
-            }
-            
-        } catch {
-            print("Error creating default company: \(error)")
-        }
+            .init(condition: departmentComplete,
+                  title: "Add a department",
+                  description: "Your items will be grouped into departments.",
+                  destination: .department(DepartmentEntity()),
+                  isEnabled: true),
         
+            .init(condition: itemComplete,
+                  title: "Add an item",
+                  description: "You will be able to select items to add to the cart.",
+                  destination: .item(ItemEntity()),
+                  isEnabled: departmentComplete)
+        ]
     }
     
     var body: some View {
         NavigationStack(path: $path) {
-            let steps: [OnboardingStepModel] = [
-                .init(condition: companyComplete,
-                      title: "Add your company info",
-                      description: "This will be used when calculating and displaying your sales.",
-                      destination: .company),
-                
-                .init(condition: departmentComplete,
-                      title: "Add a department",
-                      description: "Your items will be grouped into departments.",
-                      destination: .department(DepartmentEntity())),
-                
-                .init(condition: itemComplete,
-                      title: "Add an item",
-                      description: "You will be able to select items to add to the cart.",
-                      destination: .item(ItemEntity()))
-                ]
-            
             FormX(title: "Setup") {
                 VStack(spacing: 16) {
                     ForEach(steps) { step in
-                        Button {
+                        OnboardingStepRow(step: step) {
                             path.append(step.destination)
-                        } label: {
-                            HStack(spacing: 16) {
-                                Image(systemName: step.condition ? "checkmark.square.fill" : "square")
-                                    .font(.title2)
-                                    .foregroundStyle(Color.accentColor)
-                                
-                                VStack(alignment: .leading) {
-                                    Text(step.title)
-                                        .font(.headline)
-                                    
-                                    Text(step.description)
-                                        .font(.subheadline)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .opacity(0.5)
-                                } //: VStack
-                                .fontWeight(.medium)
-                                .fontDesign(.rounded)
-                                
-                                Image(systemName: "chevron.right")
-                                    .font(.title3)
-                            } //: HStack
                         }
-                        .buttonStyle(.plain)
+                        .opacity(step.isEnabled ? 1.0 : 0.5)
+                        .disabled(!step.isEnabled)
                         
                         if step != steps.last {
                             Divider()
                         }
-                    } //: For Each
-                } //: VStack
-                
-                
-                
-            } //: Form X
-            .overlay(
+                    }
+                }
+            }
+            .overlay(alignment: .bottom) {
                 Button {
+                    viewModel.finishOnboarding()
                     dismiss()
                 } label: {
                     Text("Get Started")
-                        .frame(maxWidth: .infinity, maxHeight: 32, alignment: .center)
+                        .frame(maxWidth: 540, maxHeight: 32, alignment: .center)
                         .font(.headline)
                 }
                 .buttonStyle(.borderedProminent)
                 .padding()
-                , alignment: .bottom)
-            .navigationDestination(for: LSXDisplay.self) { view in
-                switch view {
-                case .company:
-                    CompanyDetailView(company: companies.first ?? CompanyEntity())
-                        .overlay(doneButton, alignment: .bottom)
-
-                case .department(_):
-                    DepartmentDetailView(department: departments.first ?? DepartmentEntity())
-                    
-                case .item(let i):
-                    ItemDetailView(item: i)
-                    
-                default: Color.black
-                }
-                
+                .disabled(!(companyComplete && departmentComplete && itemComplete))
             }
-        } //: Navigation Stack
-//        .onAppear {
-//            setup()
-//        }
-        
-        
-//        NavigationStack(path: $path) {
-//            LandingView(path: $path)
-//                .navigationDestination(for: LSXDisplay.self) { view in
-//                    switch view {
-//                    case .company:
-//                        CompanyDetailView(company: CompanyEntity()) {
-////                            path.append(LSXDisplay.passcodePad([.set]))
-//                            path.append(LSXDisplay.department(nil, .onboarding))
-//                        }
-//                        .background(Color.bg.ignoresSafeArea())
-//
-////                    case .passcodePad(let p):
-////                        PasscodeX(processes: p) {
-////                            path.append(LSXDisplay.department(nil, .onboarding))
-////                        }
-//                        
-//                    case .department(let d, let t):
-//                        DepartmentDetailView(department: d, detailType: t) {
-//                            path.append(LSXDisplay.item(nil, .onboarding))
-//                        }
-//                        
-//                    case .item(let i, let t):
-//                        ItemDetailView(item: i, detailType: t) {
-//                            dismiss()
-//                        }
-//                        
-//                    default: Color.black
-//                    }
-//                    
-//                }
-//        } //: Navigation Stack
-    } //: Body
-    
-    private var doneButton: some View {
-        Button {
-            path.removeLast()
-        } label: {
-            Text("Done")
-                .frame(maxWidth: .infinity, maxHeight: 32, alignment: .center)
-                .font(.headline)
+            .navigationDestination(for: LSXDisplay.self) { view in
+                destinationView(for: view)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: { path.removeLast() }) {
+                                Text("Done")
+                            }
+                        }
+                    }
+            }
         }
-        .buttonStyle(.borderedProminent)
-        .padding()
+        .task {
+            viewModel.setupDefaultObjects()
+        }
         
-
+    }
+    
+    @ViewBuilder private func destinationView(for display: LSXDisplay) -> some View {
+        switch display {
+        case .company:
+            CompanyDetailView(company: companies.first ?? CompanyEntity())
+            
+        case .department:
+            DepartmentDetailView(department: departments.first ?? DepartmentEntity())
+            
+        case .item(let item):
+            ItemDetailView(item: items.first ?? ItemEntity())
+            
+        default:
+            Color.clear
+        }
     }
 }
 
-#Preview {
-    OnboardingView()
-//        .environment(\.realm, DepartmentEntity.previewRealm)
+// MARK: - Supporting Views
+struct OnboardingStepRow: View {
+    let step: OnboardingStepModel
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 16) {
+                Image(systemName: step.condition ? "checkmark.square.fill" : "square")
+                    .font(.title2)
+                    .foregroundStyle(Color.accentColor)
+                
+                VStack(alignment: .leading) {
+                    Text(step.title)
+                        .font(.headline)
+                    
+                    Text(step.description)
+                        .font(.subheadline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .opacity(0.5)
+                }
+                .fontWeight(.medium)
+                .fontDesign(.rounded)
+                
+                Image(systemName: "chevron.right")
+                    .font(.title3)
+            }
+        }
+        .buttonStyle(.plain)
+    }
 }

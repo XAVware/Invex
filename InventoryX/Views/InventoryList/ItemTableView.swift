@@ -11,6 +11,9 @@ import RealmSwift
 @Observable
 class ItemTableViewModel {
     var selectedItems: [ObjectId] = []
+    var showingMoveItems: Bool = false
+    var showingDeleteAlert: Bool = false
+    var showingRemoveItemsAlert: Bool = false
     
     func multiSelect(_ id: ObjectId) {
         if selectedItems.contains(id) {
@@ -32,72 +35,100 @@ class ItemTableViewModel {
         selectedItems.removeAll()
     }
     
-}
-
-struct ItemTableView: View {
-    @Environment(NavigationService.self) var navService
-    @ObservedResults(DepartmentEntity.self) var departments
-    @State private var vm: ItemTableViewModel = .init()
-    @State private var sortOrder: [KeyPathComparator<ItemEntity>] = []
+    func showMoveItems() {
+        showingMoveItems = true
+    }
     
-    private var multiSelectPanel: some View {
-        HStack {
-            Button("Deselect All", systemImage: "xmark") {
-                vm.deselectAll()
-            }
-            
-            Spacer()
-            
-            Button {
-                
-            } label: {
-                Text("Move...")
-            }
-            
-            Divider()
-            
-            Button("Delete", systemImage: "trash", role: .destructive) {
-                
-            }
-
-//            Spacer()
-        }
-        .padding()
-        .background(Color.neoOverBg.shadow(radius: 2))
-        .frame(maxWidth: .infinity, maxHeight: 48)
+    func showDeleteAlert() {
+        showingDeleteAlert = true
+    }
+    
+    func moveItemsTo(_ dept: DepartmentEntity) {
         
     }
     
-    var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
-                ForEach(departments) { dept in
-                    DepartmentSectionedView(department: dept)
-                        .environment(vm)
-                }
-            } //: Lazy V
-            .padding(8)
-        } // ScrollView
-        .navigationBarHidden(true)
-        .background(.bg)
-        .overlay(multiSelectPanel.padding(), alignment: .bottom)
-    } //: Body
-    
-    
+    func deleteDepartment(withId id: RealmSwift.ObjectId, completion: @escaping ((Error?) -> Void)) async {
+        do {
+            try await RealmActor().deleteDepartment(id: id)
+            completion(nil)
+        } catch let error as AppError {
+            completion(error)
+        } catch {
+            completion(error)
+        }
+    }
 }
+
+//struct ItemTableView: View {
+//    @Environment(NavigationService.self) var navService
+//    @ObservedResults(DepartmentEntity.self) var departments
+//    @State private var vm: ItemTableViewModel = .init()
+//    @State private var sortOrder: [KeyPathComparator<ItemEntity>] = []
+//    @State var panelOffset: CGFloat = -96
+//    private var multiSelectPanel: some View {
+//        HStack(spacing: 16) {
+//            Button("Deselect All", systemImage: "xmark", action: vm.deselectAll)
+//            Spacer()
+//            
+//            Menu("Move...") {
+//                Text("Select new department:")
+//                ForEach(departments) { dept in
+//                    Button(dept.name) {
+//                        vm.moveItemsTo(dept)
+//                    }
+//                }
+//            }
+//
+//            Divider()
+//            
+//            Button("Delete", systemImage: "trash", role: .destructive, action: vm.showDeleteAlert)
+//                .alert("Are you sure?", isPresented: $vm.showingDeleteAlert) {
+//                    Button("Go back", role: .cancel) { }
+//                    Button("Yes, delete", role: .destructive) {
+//                        
+//                    }
+//                }
+//        } //: HStack
+//        .padding()
+//        .background(
+//            Color.neoOverBg
+//                .clipShape(RoundedRectangle(cornerRadius: 8))
+//                .shadow(radius: 2)
+//        )
+//        .frame(maxWidth: 540, maxHeight: 48)
+//        .offset(y: panelOffset)
+//        .onChange(of: vm.selectedItems) { _, newValue in
+//            withAnimation(.bouncy(duration: 0.25)) {
+//                panelOffset = newValue.isEmpty ? -96 : 0
+//            }
+//        }
+//    }
+//    
+//    var body: some View {
+//        ScrollView(.vertical, showsIndicators: false) {
+//            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+//                ForEach(departments) { dept in
+//                    DepartmentSectionedView(department: dept)
+//                        .environment(vm)
+//                }
+//            } //: Lazy V
+//            .padding(8)
+//        } // ScrollView
+//        .navigationBarHidden(true)
+//        .background(.bg)
+//        .overlay(multiSelectPanel.padding(), alignment: .top)
+//    } //: Body
+//    
+//    
+//}
 
 struct DepartmentSectionedView: View {
     @Environment(NavigationService.self) var navService
     @Environment(ItemTableViewModel.self) var vm
     @ObservedRealmObject var department: DepartmentEntity
-
-    func onSelect(_ item: ItemEntity) {
-        navService.path.append(LSXDisplay.item(item))
-    }
+    
     private var sectionContent: some View {
         VStack(spacing: 0) {
-            
-            
             ForEach(department.items.sorted(by: \.name, ascending: true)) { item in
                 HStack(spacing: 12) {
                     Button {
@@ -126,16 +157,26 @@ struct DepartmentSectionedView: View {
                     }
                     
                     HStack {
-                        
-                        Button("Edit", systemImage: "pencil", action: { onSelect(item) })
+                        Button("Edit", systemImage: "pencil", action: {
+                            onSelect(item)
+                        })
                             .fontWeight(.semibold)
                             .padding(8)
                             .background(Color.bg)
                             .modifier(RoundedOutlineMod(cornerRadius: 7, borderColor: Color.accentColor.opacity(0.07)))
                         
-                        Button("Edit", systemImage: "ellipsis", action: { onSelect(item) })
-                            .rotationEffect(Angle(degrees: 90))
-                        
+                        Menu {
+                            Button("Edit Item", systemImage: "pencil") {
+                                onSelect(item)
+                            }
+                            
+                            Button("Delete Item", systemImage: "trash", role: .destructive) {
+                                
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis")
+                                .rotationEffect(Angle(degrees: 90))
+                        }
                     } //: HStack
                     .labelStyle(.iconOnly)
                     .font(.system(.headline, design: .rounded))
@@ -145,38 +186,50 @@ struct DepartmentSectionedView: View {
                 .padding(.horizontal, 8)
                 .environment(vm)
                 
-                    Divider().opacity(0.4)
+                Divider().opacity(0.4)
                 
             }
         } //: VStack
+        .background(Color.bg200)
         .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.bottomLeft, .bottomRight])
-        .background(Color.neoOverLight)
     }
     
     var body: some View {
+        @Bindable var vm = self.vm
         Section {
             sectionContent
         } header: {
-            VStack(spacing: 0) {
-                HStack {
-                    Text(department.name)
-                        .font(.system(.title2, design: .rounded, weight: .semibold))
-                        .padding(.horizontal)
-                    
-                    Spacer()
-                    Button("Department", systemImage: "gear", action: {
-                        LSXService.shared.update(newDisplay: .department(department))
-                    })
-                    .labelStyle(.iconOnly)
+            VStack(alignment: .leading, spacing: 0) {
+//                HStack {
+                    Menu {
+                        Button("Edit department", systemImage: "pencil") {
+                            editDepartmentTapped(dept: department)
+                        }
+                        
+                        Button("Delete department", systemImage: "trash", role: .destructive) {
+                            deleteDepartmentTapped(dept: department)
+                        }
+                    } label: {
+                        Text(department.name)
+                            .font(.system(.title2, design: .rounded, weight: .semibold))
+                        
+                        Image(systemName: "ellipsis")
+                            .rotationEffect(Angle(degrees: 90))
+                        
+                        
+                    }
                     .padding(8)
-                } //: HStack
-                .padding(.vertical, 8)
-                
-                //                Divider()
+                    .alert("There are items in this department. Move them to a different department first.", isPresented: $vm.showingRemoveItemsAlert) {
+                        Button("Okay", role: .cancel) { }
+                    }
+//                    Spacer()
+
+//                } //: HStack
+//                .padding(.vertical, 8)
                 
                 HStack(spacing: 12) {
                     Button {
-                        vm.multiSelect(department.items.map({$0._id}))
+                        vm.multiSelect(department.items.map({ $0._id }))
                     } label: {
                         Image(systemName: "square")
                             .foregroundStyle(Color.accentColor)
@@ -206,17 +259,38 @@ struct DepartmentSectionedView: View {
                     
                 } //: HStack
                 .padding(.vertical, 12)
-                .background(Color.bg)
+                .background(Color.bg300)
                 .foregroundStyle(Color.textPrimary)
                 .padding(.horizontal, 8)
                 .font(.system(.callout, design: .rounded, weight: .regular))
                 .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.topLeft, .topRight])
                 
             } //: VStack
-            //            .padding(.horizontal, 8)
-            //            .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.topLeft, .topRight])
             .padding(.top)
+            .background(Color.bg)
+            
+            
         }
+    }
+    
+    private func deleteDepartmentTapped(dept: DepartmentEntity) {
+        if dept.items.isEmpty {
+            Task {
+                await vm.deleteDepartment(withId: dept._id) { err in
+                    print(err)
+                }
+            }
+        } else {
+            vm.showMoveItems()
+        }
+    }
+    
+    private func editDepartmentTapped(dept: DepartmentEntity) {
+        navService.path.append(LSXDisplay.department(department))
+    }
+    
+    private func onSelect(_ item: ItemEntity) {
+        navService.path.append(LSXDisplay.item(item))
     }
 }
 

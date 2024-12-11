@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LandingView: View {
+    @Environment(\.dismiss) var dismiss
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
     var isIphone: Bool { hSize == .compact || vSize == .compact }
@@ -27,6 +28,7 @@ struct LandingView: View {
     
     private func nextTapped() {
         if index == highlights.count - 1 {
+            dismiss()
             path.append(LSXDisplay.company)
         } else {
             withAnimation(.snappy) {

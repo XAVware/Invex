@@ -12,6 +12,7 @@ class CompanyEntity: Object, ObjectKeyIdentifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted var name: String
     @Persisted var taxRate: Double
+    @Persisted var finishedOnboarding: Bool = false
 //    @Persisted var industry: String // Could be used for improving the app based on popular demand
 //    @Persisted var email: String
 //    @Persisted var streetAddress: String?

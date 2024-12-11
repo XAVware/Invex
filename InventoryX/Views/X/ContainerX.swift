@@ -6,6 +6,21 @@
 //
 
 import SwiftUI
+struct DividerX: View {
+    @Environment(FormXViewModel.self) var formVM
+    
+    var body: some View {
+        if formVM.expandedContainer == nil {
+            Divider()
+        }
+    }
+}
+
+struct ContainerXModel {
+    let id: UUID = UUID()
+    let title: String
+    let description: String
+}
 
 struct ContainerX<C: View>: View {
     @Environment(FormXViewModel.self) var formVM

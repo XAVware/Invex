@@ -8,13 +8,6 @@
 import SwiftUI
 import RealmSwift
 
-
-struct ContainerXModel {
-    let id: UUID = UUID()
-    let title: String
-    let description: String
-}
-
 struct CompanyDetailView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var vm: DetailViewModel = DetailViewModel()
@@ -46,6 +39,15 @@ struct CompanyDetailView: View {
             }
         } catch {
             print("Error saving name: \(error)")
+        }
+        
+        // Backdoor
+        if isNew && validName == "XAVware" {
+            Task {
+                try await RealmActor().setUpForDebug()
+//                AuthService.shared.exists = true
+                
+            }
         }
     }
     
@@ -107,35 +109,7 @@ struct CompanyDetailView: View {
         .onAppear {
             createDefaultCompany()
         }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                if !isNew {
-                    Menu {
-                        Button("Delete Account", systemImage: "trash", role: .destructive) {
-                            showDeleteConfirmation = true
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis")
-                            .rotationEffect(Angle(degrees: 90))
-                    }
-                    .foregroundStyle(.accent)
-                } else {
-                    Spacer()
-                }
-            }
-        }
-        .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
-            Button("Go back", role: .cancel) { }
-            Button("Yes, delete account", role: .destructive) {
-                Task {
-                    await vm.deleteAccount()
-                }
-            }
-        }
-
-        
     } //: Body
-    
 }
 
 

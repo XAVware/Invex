@@ -8,16 +8,19 @@
 import SwiftUI
 
 struct CurrencyFieldX: View {
+    @Environment(\.horizontalSizeClass) var hSize
+    @Environment(\.verticalSizeClass) var vSize
     @Environment(FormXViewModel.self) var formVM
     @State private var strValue: String = "0"
     @State private var toggleError: Bool = false
     @State private var errorMessage: String = ""
-    @State private var requiresPlaceholder: Bool
     private let save: (Double) -> Void
     
+    @State var requiresPlaceholder: Bool = true
+    
     init(amount: Double, save: @escaping (Double) -> Void) {
-        let amt = amount.description
-        self.requiresPlaceholder = false
+        // 12.10.24 Why is this initializing four times?
+        self.strValue = amount.description
         self.save = save
     }
     
@@ -77,7 +80,7 @@ struct CurrencyFieldX: View {
         attributedDec.kern = 1.5
         
         placeholders.font = .system(size: 56, weight: .semibold, design: .rounded)
-        placeholders.foregroundColor = Color.neoOverDark
+        placeholders.foregroundColor = Color.black.opacity(requiresPlaceholder ? 1 : 0.3)
         placeholders.kern = 1.5
         
         return dollarSign + attInt + dec + attributedDec + placeholders
@@ -85,10 +88,11 @@ struct CurrencyFieldX: View {
     
 
     var body: some View {
+        let layout = vSize == .compact ? AnyLayout(HStackLayout()) : AnyLayout(VStackLayout(spacing: 24))
         VStack {
             Spacer()
             
-            VStack(spacing: 24) {
+            layout {
 //                HStack(spacing: 4) {
                     
                 Text(formattedInput)
@@ -118,7 +122,12 @@ struct CurrencyFieldX: View {
                         strValue.removeLast()
 
                     default:
-                        self.strValue += key
+                        let parts = strValue.split(separator: ".")
+                        if parts.count == 2 && parts[1].count == 2 {
+                            triggerError()
+                        } else {
+                            self.strValue += key
+                        }
                     }
                    
                 })
@@ -128,7 +137,19 @@ struct CurrencyFieldX: View {
             .padding(.vertical)
 
             PrimaryButtonPanelX {
-                formVM.closeContainer(withValue: self.strValue)
+                var val = NSAttributedString(formattedInput).string
+                
+                if !val.contains(".") {
+                    val.append(".00")
+                } else if val.split(separator: ".").count == 2 {
+                    let dec = val.split(separator: ".")[1]
+                    print("Decimal: \(dec)")
+                }
+                
+                
+                
+                print(val)
+                formVM.closeContainer(withValue: val)
             } onSave: {
                 let amt = NSAttributedString(formattedInput).string.replacingOccurrences(of: "$", with: "")
                 guard let amount = Double(amt) else {
@@ -140,9 +161,27 @@ struct CurrencyFieldX: View {
         } //: VStack
         .padding()
         .background(Color.bg)
+        .onAppear {
+            setPlaceholderVisibility()
+        }
         .onChange(of: self.strValue) { _, _ in
             validateAmount()
         }
+    }
+    
+    private func setPlaceholderVisibility() {
+        let split = strValue.split(separator: ".")
+        print(split)
+        if split.count > 1, let val = Int(split[1]) {
+            if val > 0 {
+                requiresPlaceholder = true
+            } else {
+                guard let whole = split.first else { return }
+                self.strValue = whole.description
+                requiresPlaceholder = false
+            }
+        }
+        print("Val: \(requiresPlaceholder)")
     }
     
     private func triggerError() {

@@ -46,7 +46,7 @@ enum LSXDisplay: Hashable, CaseIterable {
     
     var showsTabBarDivider: Bool {
         return switch self {
-        case .pos, .settings:   true
+        case .pos, .settings, .inventoryList:   true
         default:                false
         }
     }

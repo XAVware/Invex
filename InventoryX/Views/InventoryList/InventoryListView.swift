@@ -11,111 +11,96 @@ import RealmSwift
 
 struct InventoryListView: View {
     @Environment(NavigationService.self) var navService
-    @Environment(\.horizontalSizeClass) var hSize
-    
-    @ObservedResults(ItemEntity.self) var items
     @ObservedResults(DepartmentEntity.self) var departments
-    @StateObject var vm = InventoryListViewModel()
+    @State private var vm: ItemTableViewModel = .init()
+    @State private var sortOrder: [KeyPathComparator<ItemEntity>] = []
+    @State var panelOffset: CGFloat = -48
     
-    @State var showMoveItems: Bool = false
-    
-    // For when a user taps edit department.
-    @State var editingDepartment: DepartmentEntity?
-    
-    // Department filter
-    @State var selectedDepartment: DepartmentEntity?
-    
-    @State var showRemoveItemsAlert: Bool = false
-    @State var showDeleteConfirmation: Bool = false
-    @State var tableType: TableType = .items
-    
-    enum TableType: String, CaseIterable, Identifiable {
-        case items
-        case department
-        var id: TableType { return self }
-    }
-    
-    private func addButtonTapped() {
-        let navItem: LSXDisplay = tableType == .items ? .item(ItemEntity()) : .department(DepartmentEntity())
-        navService.path.append(navItem)
-    }
-    
-    private func editDepartmentTapped() {
-        editingDepartment = selectedDepartment
-    }
-    
-    private func moveItemsTapped() {
-        showMoveItems = true
-    }
-    
-    private func deleteDepartmentTapped() {
-        if let dept = selectedDepartment {
-            if !dept.items.isEmpty {
-                showRemoveItemsAlert = true
-            } else {
-                showDeleteConfirmation = true
-            }
-        }
-    }
-    
-    var body: some View {
-        VStack {
-//            Picker("Table Type", selection: $tableType) {
-//                ForEach(TableType.allCases) { type in
-//                    Text(type.rawValue.capitalized)
-//                }
-//            }
-//            .pickerStyle(.segmented)
-//            .frame(maxWidth: 320)
+    private var multiSelectPanel: some View {
+        HStack(spacing: 16) {
+            Button("Deselect All", systemImage: "xmark", action: vm.deselectAll)
+            Spacer()
             
-            Group {
-                switch tableType {
-                case .items:
-                    ItemTableView()
-                        .navigationTitle("Items")
-                    
-                case .department:
-                    DepartmentTableView(depts: self.$departments)
-                        .navigationTitle("Departments")
-                    
-                }
-            }
-//            .overlay(addButton, alignment: .bottomTrailing)
-//            .modifier(RoundedOutlineMod(cornerRadius: 6))
-//            .padding()
-        } //: VStack
-        
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("Add", systemImage: "plus", action: addButtonTapped)
-            }
-        }
-    } //: Body
-    
-    @ViewBuilder private var departmentMenu: some View {
-        if let dept = selectedDepartment {
-            Menu {
-                Button("Edit department", systemImage: "pencil", action: editDepartmentTapped)
-                Button("Move items", action: moveItemsTapped)
-                Button("Delete department", systemImage: "trash", role: .destructive, action: deleteDepartmentTapped)
-            } label: {
-                Image(systemName: "ellipsis.circle")
-            }
-            .alert("You must remove the items from this department before you can delete it.", isPresented: $showRemoveItemsAlert) {
-                Button("Okay", role: .cancel) { }
-            }
-            .alert("Are you sure you want to delete this department? This can't be undone.", isPresented: $showDeleteConfirmation) {
-                Button("Go back", role: .cancel) { }
-                Button("Yes, delete department", role: .destructive) {
-                    guard let dept = selectedDepartment else { return }
-                    Task {
-                        await vm.deleteDepartment(withId: dept._id)
-                        selectedDepartment = vm.departments.first
+            Menu("Move...") {
+                Text("Select new department:")
+                ForEach(departments) { dept in
+                    Button(dept.name) {
+                        vm.moveItemsTo(dept)
                     }
                 }
             }
+            
+            Divider()
+            
+            Button("Delete", systemImage: "trash", role: .destructive, action: vm.showDeleteAlert)
+                .alert("Are you sure?", isPresented: $vm.showingDeleteAlert) {
+                    Button("Go back", role: .cancel) { }
+                    Button("Yes, delete", role: .destructive) {
+                        
+                    }
+                }
+        } //: HStack
+        .padding()
+        .background(
+            Color.neoOverBg
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .shadow(radius: 2)
+        )
+        .frame(maxWidth: 540, maxHeight: 48)
+        .opacity(vm.selectedItems.isEmpty ? 0 : 1)
+        .offset(y: panelOffset)
+        .onChange(of: vm.selectedItems) { _, newValue in
+            withAnimation(.bouncy(duration: 0.25)) {
+                panelOffset = newValue.isEmpty ? -48 : 0
+            }
         }
-    } //: Delete Button
+        
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Text("Inventory")
+                    .font(.largeTitle)
+                    .fontDesign(.rounded)
+                    .padding(.top, 4)
+                Spacer()
+                Menu {
+                    Button("Add Item") {
+                        navService.path.append(LSXDisplay.item(ItemEntity()))
+                    }
+                    
+                    Button("Add Department") {
+                        navService.path.append(LSXDisplay.department(DepartmentEntity()))
+                    }
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.title)
+                }
+            }
+            .padding()
+            .frame(maxHeight: 48)
+            
+            ScrollView(.vertical, showsIndicators: false) {
+                LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+                    ForEach(departments) { dept in
+                        DepartmentSectionedView(department: dept)
+                            .environment(vm)
+                    }
+                } //: Lazy V
+                .padding(8)
+            } // ScrollView
+        } //: VStack
+        .navigationBarHidden(true)
+        .background(.bg)
+        .overlay(multiSelectPanel.padding(), alignment: .top)
+        .onAppear {
+            departments.forEach { dept in
+                print(dept.items.count)
+                print(dept.items)
+            }
+        }
+    } //: Body
     
 }
 

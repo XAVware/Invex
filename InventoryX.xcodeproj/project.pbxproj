@@ -71,6 +71,7 @@
 		94797A892C8295C600B9CDD8 /* ThemeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */; };
 		94797A8B2C82964F00B9CDD8 /* HexImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A8A2C82964F00B9CDD8 /* HexImage.swift */; };
 		94815B572C6B32640085EE3C /* FieldDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94815B562C6B32640085EE3C /* FieldDivider.swift */; };
+		9497738C2D08FCFB00646A87 /* DepartmentPickerX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9497738B2D08FCF700646A87 /* DepartmentPickerX.swift */; };
 		94A9D3F52CEAC871006650B1 /* PrimaryButtonPanelX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9D3F42CEAC86A006650B1 /* PrimaryButtonPanelX.swift */; };
 		94A9D3F72CEAC89A006650B1 /* XOutlineMod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9D3F62CEAC896006650B1 /* XOutlineMod.swift */; };
 		94A9D3F92CEAC8B1006650B1 /* NumberPickerX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9D3F82CEAC8AE006650B1 /* NumberPickerX.swift */; };
@@ -156,6 +157,7 @@
 		94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButtonStyle.swift; sourceTree = "<group>"; };
 		94797A8A2C82964F00B9CDD8 /* HexImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexImage.swift; sourceTree = "<group>"; };
 		94815B562C6B32640085EE3C /* FieldDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldDivider.swift; sourceTree = "<group>"; };
+		9497738B2D08FCF700646A87 /* DepartmentPickerX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentPickerX.swift; sourceTree = "<group>"; };
 		94A9D3F42CEAC86A006650B1 /* PrimaryButtonPanelX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonPanelX.swift; sourceTree = "<group>"; };
 		94A9D3F62CEAC896006650B1 /* XOutlineMod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XOutlineMod.swift; sourceTree = "<group>"; };
 		94A9D3F82CEAC8AE006650B1 /* NumberPickerX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberPickerX.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 		942189292C2375AC00C78586 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				9497738B2D08FCF700646A87 /* DepartmentPickerX.swift */,
 				942189252C2375AC00C78586 /* DateTimeLabel.swift */,
 				942189262C2375AC00C78586 /* DepartmentPicker.swift */,
 				942189272C2375AC00C78586 /* NumberPadView.swift */,
@@ -538,6 +541,7 @@
 				942189772C2375AD00C78586 /* DepartmentTableView.swift in Sources */,
 				94A9D3FB2CEB2FDB006650B1 /* CurrencyFieldX.swift in Sources */,
 				9421898A2C2375AD00C78586 /* RealmActor_Ext.swift in Sources */,
+				9497738C2D08FCFB00646A87 /* DepartmentPickerX.swift in Sources */,
 				942189952C2375AD00C78586 /* RealmActor.swift in Sources */,
 				942189962C2375AD00C78586 /* RealmMigrator.swift in Sources */,
 				942189612C2375AD00C78586 /* DetailViewModel.swift in Sources */,
