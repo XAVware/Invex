@@ -34,22 +34,22 @@ import Combine
 @Observable
 class NavigationService {
     var path: NavigationPath = .init()
-    var sidebarVisibility: SidebarState?
+    var sidebarVis: SidebarState?
     var sidebarWidth: CGFloat?
     /// Toggle between hidden and sidebar cart state. Only called from regular horizontal size class devices.
     func toggleSidebar() {
         withAnimation {
-            if sidebarVisibility == .hidden {
-                sidebarVisibility = .showing
+            if sidebarVis == .hidden {
+                sidebarVis = .showing
             } else {
-                sidebarVisibility = .hidden
+                sidebarVis = .hidden
             }
         }
     }
 }
 
 struct TabRoot: View {
-    @State private var navService: NavigationService = .init()
+    @State private var nav: NavigationService = .init()
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.horizontalSizeClass) var hSize
@@ -63,7 +63,7 @@ struct TabRoot: View {
     // TODO: Try moving PosVM into POSView. Make sure cart isnt lost on view change
     @StateObject var posVM = PointOfSaleViewModel()
     @StateObject var lsxVM: LSXViewModel = LSXViewModel()
-    @StateObject var rootVM = RootViewModel()
+//    @StateObject var rootVM = RootViewModel()
     
     @State var showOnboarding = false // For Dev
     
@@ -78,7 +78,7 @@ struct TabRoot: View {
             GeometryReader { geo in
                 let isLandscape: Bool = geo.size.width > geo.size.height
                 
-                NavigationStack(path: $navService.path) {
+                NavigationStack(path: $nav.path) {
                     /// The VStack needs to be inside a ZStack in order for the POSView's sidebar to offset the TabBar's buttons.
                     ZStack {
                         VStack(spacing: 0) {
@@ -112,7 +112,7 @@ struct TabRoot: View {
                                 
                                 if lsxVM.mainDisplay == .pos {
                                     Spacer()
-                                        .frame(maxWidth: navService.sidebarWidth ?? 500)
+                                        .frame(maxWidth: nav.sidebarWidth ?? 500)
                                         .ignoresSafeArea(edges: [.trailing])
                                 }
                             } //: HStack
@@ -122,26 +122,22 @@ struct TabRoot: View {
                             .overlay(DividerX(), alignment: .top)
                         } //: VStack
                         .background(Color.bg)
-                        .navigationBarTitleDisplayMode(.inline)
                         .navigationDestination(for: LSXDisplay.self) { detail in
                             switch detail {
-                            case .company:
-                                CompanyDetailView(company: companies.first ?? CompanyEntity())
-                                    
-                                
+                            case .company: CompanyDetailView(company: companies.first ?? CompanyEntity())
                             case .item(let i):          ItemDetailView(item: i)
                             case .department(let d):    DepartmentDetailView(department: d)
                             case .confirmSale:
                                 ConfirmSaleView()
                                     .environmentObject(posVM)
-                                    .environment(navService)
+                                    .environment(nav)
                                 
                             default: Color.red
                             }
                         }
                         .ignoresSafeArea(edges: [.bottom])
                         
-                        if navService.sidebarWidth ?? 0 > 180 && lsxVM.mainDisplay == .pos {
+                        if nav.sidebarWidth ?? 0 > 180 && lsxVM.mainDisplay == .pos {
                             CartSidebarView(vm: posVM)
                                 .ignoresSafeArea(edges: [.top])
                                 .padding(0)
@@ -153,13 +149,13 @@ struct TabRoot: View {
                         ToolbarItem(placement: .topBarTrailing) {
                             switch lsxVM.mainDisplay {
                             case .pos:
-                                if navService.sidebarVisibility != nil {
+                                if nav.sidebarVis != nil {
                                     Button {
-                                        navService.toggleSidebar()
+                                        nav.toggleSidebar()
                                     } label: {
                                         HStack(spacing: 4) {
                                             Image(systemName: "cart")
-                                            Image(systemName: navService.sidebarVisibility == .hidden ? "chevron.backward.2" : "chevron.forward.2")
+                                            Image(systemName: nav.sidebarVis == .hidden ? "chevron.backward.2" : "chevron.forward.2")
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 16)
@@ -174,46 +170,39 @@ struct TabRoot: View {
                         }
                     }
                 } //: Navigation Stack
-//                .onChange(of: companies.first) { old, new in
-//                    if new == nil {
-//                        self.showOnboarding = true
-//                    }
-//                }
-//                .onReceive(rootVM.$companyExists) { exists in
-//                    print("Root: Company Received")
-//                    //                    self.showOnboarding = !exists
-//                }
                 .onAppear {
-//                    guard items.count > 0 && departments.count > 0 && companies.count > 0 else {
-//                        self.showOnboarding = true
-//                        return
-//                    }
-                    
                     if isLandscape && hSize == .regular {
-                        navService.sidebarVisibility = .showing
+                        nav.sidebarVis = .showing
                         // Set the width to 280 at most, ideally 1/3 of the screen's width and slightly less when on compact vertical size device.
-                        navService.sidebarWidth = min(geo.size.width / 3 - (vSize == .compact ? 42 : 0), 280)
+                        nav.sidebarWidth = min(geo.size.width / 3 - (vSize == .compact ? 42 : 0), 280)
                     } else {
-                        navService.sidebarVisibility = nil
-                        navService.sidebarWidth = 0
+                        nav.sidebarVis = nil
+                        nav.sidebarWidth = 0
                     }
                 }
                 .onChange(of: isLandscape) { _, isLandscape in
                     if isLandscape && hSize == .regular {
-                        navService.sidebarVisibility = .showing
+                        nav.sidebarVis = .showing
                         // Set the width to 280 at most, ideally 1/3 of the screen's width and slightly less when on compact vertical size device.
-                        navService.sidebarWidth = min(geo.size.width / 3 - (vSize == .compact ? 42 : 0), 280)
+                        nav.sidebarWidth = min(geo.size.width / 3 - (vSize == .compact ? 42 : 0), 280)
                     } else {
-                        navService.sidebarVisibility = nil
-                        navService.sidebarWidth = 0
+                        nav.sidebarVis = nil
+                        nav.sidebarWidth = 0
                     }
                 }
                 
-                .environment(navService)
+                .environment(nav)
             }
         } else {
             OnboardingView()
                 .environmentObject(lsxVM)
+                .onAppear {
+                    lsxVM.mainDisplay = .pos
+                    nav.path = .init()
+                    posVM.clearCart()
+                    
+                    
+                }
         }
     } //: Body
     
@@ -225,12 +214,14 @@ struct TabRoot: View {
                     .environmentObject(posVM)
                     .tag(LSXDisplay.pos)
                 Spacer()
-                    .frame(maxWidth: navService.sidebarVisibility != .showing ? 0 : navService.sidebarWidth ?? 500)
+                    .frame(maxWidth: nav.sidebarVis != .showing ? 0 : nav.sidebarWidth ?? 500)
             } //: HStack
             
         case .inventoryList:
             InventoryListView()
                 .tag(LSXDisplay.inventoryList)
+                .navigationTitle("Inventory")
+                .navigationBarTitleDisplayMode(.large)
             
         case .settings:
             SettingsView()
@@ -240,13 +231,6 @@ struct TabRoot: View {
         default: EmptyView()
         }
     }
-    
-//    @ViewBuilder var tabBarDivider: some View {
-//        if lsxVM.mainDisplay.showsTabBarDivider {
-//            Divider()
-//                .background(Color.accentColor.opacity(0.01))
-//        }
-//    }
     
 }
 

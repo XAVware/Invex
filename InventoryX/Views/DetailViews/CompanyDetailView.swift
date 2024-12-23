@@ -130,6 +130,7 @@ struct CompanyDetailView: View {
             Button("Go back", role: .cancel) { }
             Button("Yes, delete account", role: .destructive) {
                 Task {
+                    dismiss()
                     await vm.deleteAccount()
                 }
             }

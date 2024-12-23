@@ -30,7 +30,7 @@
 		942189742C2375AD00C78586 /* CompanyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421892A2C2375AC00C78586 /* CompanyDetailView.swift */; };
 		942189752C2375AD00C78586 /* DepartmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421892B2C2375AC00C78586 /* DepartmentDetailView.swift */; };
 		942189762C2375AD00C78586 /* ItemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421892C2C2375AC00C78586 /* ItemDetailView.swift */; };
-		942189772C2375AD00C78586 /* DepartmentTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421892E2C2375AC00C78586 /* DepartmentTableView.swift */; };
+		942189772C2375AD00C78586 /* DepartmentItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421892E2C2375AC00C78586 /* DepartmentItemListView.swift */; };
 		942189782C2375AD00C78586 /* InventoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421892F2C2375AC00C78586 /* InventoryListView.swift */; };
 		942189792C2375AD00C78586 /* ItemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189302C2375AC00C78586 /* ItemTableView.swift */; };
 		9421897A2C2375AD00C78586 /* CartItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189322C2375AC00C78586 /* CartItemListView.swift */; };
@@ -117,7 +117,7 @@
 		9421892A2C2375AC00C78586 /* CompanyDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompanyDetailView.swift; sourceTree = "<group>"; };
 		9421892B2C2375AC00C78586 /* DepartmentDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentDetailView.swift; sourceTree = "<group>"; };
 		9421892C2C2375AC00C78586 /* ItemDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailView.swift; sourceTree = "<group>"; };
-		9421892E2C2375AC00C78586 /* DepartmentTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentTableView.swift; sourceTree = "<group>"; };
+		9421892E2C2375AC00C78586 /* DepartmentItemListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentItemListView.swift; sourceTree = "<group>"; };
 		9421892F2C2375AC00C78586 /* InventoryListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryListView.swift; sourceTree = "<group>"; };
 		942189302C2375AC00C78586 /* ItemTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableView.swift; sourceTree = "<group>"; };
 		942189322C2375AC00C78586 /* CartItemListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CartItemListView.swift; sourceTree = "<group>"; };
@@ -317,7 +317,7 @@
 		942189312C2375AC00C78586 /* InventoryList */ = {
 			isa = PBXGroup;
 			children = (
-				9421892E2C2375AC00C78586 /* DepartmentTableView.swift */,
+				9421892E2C2375AC00C78586 /* DepartmentItemListView.swift */,
 				9421892F2C2375AC00C78586 /* InventoryListView.swift */,
 				942189302C2375AC00C78586 /* ItemTableView.swift */,
 			);
@@ -541,7 +541,7 @@
 				943946C92CCC749600DB23C3 /* SwiftUIView.swift in Sources */,
 				942189902C2375AD00C78586 /* SaleEntity.swift in Sources */,
 				942189672C2375AD00C78586 /* RootViewModel.swift in Sources */,
-				942189772C2375AD00C78586 /* DepartmentTableView.swift in Sources */,
+				942189772C2375AD00C78586 /* DepartmentItemListView.swift in Sources */,
 				94A9D3FB2CEB2FDB006650B1 /* CurrencyFieldX.swift in Sources */,
 				9421898A2C2375AD00C78586 /* RealmActor_Ext.swift in Sources */,
 				9497738C2D08FCFB00646A87 /* DepartmentPickerX.swift in Sources */,

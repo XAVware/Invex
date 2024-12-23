@@ -49,12 +49,12 @@ struct CartSidebarView: View {
                 .background(Color.bg.ignoresSafeArea(edges: .trailing))
                 .overlay(DividerX(), alignment: .leading)
                 .frame(maxWidth: navService.sidebarWidth ?? 500)
-                .offset(x: navService.sidebarVisibility != .showing ? navService.sidebarWidth ?? 500 : 0)
+                .offset(x: navService.sidebarVis != .showing ? navService.sidebarWidth ?? 500 : 0)
                 .alert("Your cart is empty.", isPresented: $vm.showCartAlert) {
                     Button("Okay", role: .cancel) { }
                 }
             } //: HStack
-            .overlay(navService.sidebarVisibility != nil ? checkoutButton.padding(.bottom, geo.safeAreaInsets.bottom / 2) : nil, alignment: .bottomTrailing)
+            .overlay(navService.sidebarVis != nil ? checkoutButton.padding(.bottom, geo.safeAreaInsets.bottom / 2) : nil, alignment: .bottomTrailing)
             .ignoresSafeArea(edges: .bottom)
         }
     } //: Body

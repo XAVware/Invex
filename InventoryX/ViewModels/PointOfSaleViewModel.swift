@@ -5,36 +5,23 @@ import RealmSwift
 
 @MainActor class PointOfSaleViewModel: ObservableObject {
     let id = UUID()
-//    @Published var cartItems: Array<ItemEntity> = .init()
-//    @Published var cartItems: Array<ItemEntity> = [ItemEntity.item1, ItemEntity.item2]
-
     @Published var companyName: String = ""
     @Published var taxRate: Double = 0.0
-    
-    /// Computed array of unique items in the cart. `CartView` uses this to display a section for each item,
-    /// without re-ordering them. The array of `@Published cartItems` in `PointOfSaleViewModel` can then be
-    /// queried by the view to find data on each unique item such as the quantity in cart and its subtotal.
-    /// This allows for re-use of `ItemEntity`. `.uniqued()` requires `Swift Algorithms.`
-//    var uniqueItems: [ItemEntity] { Array(cartItems.uniqued()) }
-    
     @Published var cartSubtotal: Double = 0.0
-//    var cartSubtotal: Double { cartItems.reduce(0) { $0 + $1.retailPrice } }
     var taxAmount: Double { cartSubtotal * taxRate / 100 }
     var total: Double { cartSubtotal + taxAmount }
     
-//    @Published var cartDisplayMode: CartState = .sidebar
-    // Instead of pushing confirmSale from here, only toggle the cartDisplayMode. Then listen for cartDisplayMode changes from the view you need to push confirmSale from.
-    
     @Published var cartItems: [CartItem] = []
+    @Published var showCartAlert: Bool = false
     
-//    func setQty(of itemId: ObjectId, to qty: Int) {
-//        if let index = cartItems.firstIndex(where: { $0.id == itemId }) {
-//            print("Item in cart at index: \(index)")
-//            cartItems[index].qtyInCart = qty
-//        } else {
-//            print("Item not in cart")
-//        }
-//    }
+    func checkoutTapped(onSuccess: (() -> Void)?) {
+        guard !cartItems.isEmpty else {
+            showCartAlert.toggle()
+            return
+        }
+        
+        onSuccess?()
+    }
     
     func adjustStock(of item: CartItem, by qty: Int) {
         if let index = cartItems.firstIndex(where: { $0.id == item.id }) {
@@ -44,33 +31,6 @@ import RealmSwift
         }
         cartSubtotal += item.retailPrice * Double(qty)
     }
-    
-//    func addItemToCart(_ item: CartItem) {
-//        if let index = cartItems.firstIndex(where: { $0.id == item.id }) {
-//            cartItems[index].qtyInCart += 1
-//        } else {
-//            cartItems.append(item)
-//        }
-//    }
-    
-
-    
-//    func addNewItemToCart(_ item: ItemEntity) {
-////        cartItems.append(item)
-//        
-//        // New
-////        let newItem = CartItem(id: item._id, name: item.name, attribute: item.attribute, price: item.retailPrice, qtyInCart: 1)
-//        let newItem = CartItem(from: item)
-//        saleItems.append(newItem)
-//    }
-    
-//    func removeItemFromCart(_ item: ItemEntity) {
-//        if let itemIndex = saleItems.firstIndex(of: item) {
-//            saleItems.remove(at: itemIndex)
-//        } else {
-//            print(AppError.noItemFound.localizedDescription)
-//        }
-//    }
     
     func fetchCompany() {
         do {
@@ -89,6 +49,7 @@ import RealmSwift
     
     func clearCart() {
         self.cartItems.removeAll()
+        self.cartSubtotal = 0.0
     }
     
     // TODO: Maybe, Only call this when initialized. Then increment stored property.
@@ -119,14 +80,5 @@ import RealmSwift
 //        self.saleItems.removeAll()
 //    }
     
-    @Published var showCartAlert: Bool = false
     
-    func checkoutTapped(onSuccess: (() -> Void)?) {
-        guard !cartItems.isEmpty else {
-            showCartAlert.toggle()
-            return
-        }
-        
-        onSuccess?()
-    }
 }

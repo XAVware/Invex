@@ -7,18 +7,75 @@
 
 import SwiftUI
 
-enum PasscodeXState {
-    case set
-    case confirm
-    
-    var padTitle: String {
-        return switch self {
-        case .set:      "Enter a passcode"
-        case .confirm:  "Enter current passcode"
-        }
-    }
-    
-}
+////
+////  AuthService.swift
+////  InventoryX
+////
+////  Created by Ryan Smetana on 3/18/24.
+////
+//
+//import SwiftUI
+//import CryptoKit
+//
+//class AuthService {
+//    private let UDPasscodeKey = "passcode"
+//    @Published var exists: Bool
+//    @Published var passHash: String = ""
+//
+//    static let shared = AuthService()
+//
+//    init() {
+//        self.exists = UserDefaults.standard.object(forKey: UDPasscodeKey) != nil
+//
+//        if self.exists {
+//            self.passHash = getCurrentPasscode() ?? ""
+//        }
+//    }
+//
+//    func hashString(_ str: String) -> String {
+//        let data = Data(str.utf8)
+//        let digest = SHA256.hash(data: data)
+//        let hash = digest.compactMap { String(format: "%02x", $0)}.joined()
+//        return hash
+//    }
+//
+//    func savePasscode(hash: String) async {
+//        UserDefaults.standard.setValue(hash, forKey: UDPasscodeKey)
+//        self.passHash = hash
+//    }
+//
+//    func checkPasscode(hash: String) -> Bool {
+//        let savedPasscode = getCurrentPasscode()
+//        return savedPasscode == hash
+//    }
+//
+//    func getCurrentPasscode() -> String? {
+//        return UserDefaults.standard.value(forKey: UDPasscodeKey) as? String
+//    }
+//
+//    func deleteAll() {
+//        UserDefaults.standard.removeObject(forKey: UDPasscodeKey)
+//        self.passHash = ""
+//        self.exists = false
+//    }
+//}
+
+
+/*
+ 
+ enum PasscodeXState {
+ case set
+ case confirm
+ 
+ var padTitle: String {
+ return switch self {
+ case .set:      "Enter a passcode"
+ case .confirm:  "Enter current passcode"
+ }
+ }
+ 
+ }
+ */
 
 
 /*
@@ -62,6 +119,8 @@ enum PasscodeXState {
  match, remove `.confirm` from the process array and set `passcodeHash` to an empty string in
  case the user needs to set a new passcode immediately after.
  */
+
+/*
 
 @MainActor class PasscodeXViewModel: ObservableObject {
     @Published var authService: AuthService
@@ -262,3 +321,5 @@ struct PasscodeX: View {
 #Preview {
     PasscodeX(processes: [.set]) {}
 }
+
+*/

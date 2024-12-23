@@ -68,7 +68,7 @@ struct POSView: View {
             .padding(.horizontal, 8)
             .frame(maxHeight: .infinity)
         } //: VStack
-        .overlay(navService.sidebarVisibility == nil ? checkoutButton : nil, alignment: .bottom)
+        .overlay(navService.sidebarVis == nil ? checkoutButton : nil, alignment: .bottom)
         .navigationTitle("New Sale")
     } //: Body
     

@@ -70,7 +70,6 @@ struct SettingsView: View {
                 .opacity(0.8)
                 .padding(.vertical)
         }
-//        .navigationTitle("Menu")
         .navigationBarTitleDisplayMode(.inline)
     } //: Body
     

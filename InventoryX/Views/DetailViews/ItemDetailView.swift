@@ -206,9 +206,7 @@ struct ItemDetailView: View {
         .onAppear {
             createDefaultItem()
         }
-        .onDisappear {
-            
-        }
+        
     } //: Body
 }
 

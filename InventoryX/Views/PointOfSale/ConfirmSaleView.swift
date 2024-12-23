@@ -22,15 +22,15 @@ struct ConfirmSaleView: View {
     @State var saleNumber: Int = -2
     @State var taxRate: Double = 0
     
-    var cartSubtotal: Double { vm.cartItems.reduce(0) { $0 + $1.retailPrice } }
-    var taxAmount: Double { cartSubtotal * taxRate / 100 }
-    var total: Double { cartSubtotal + taxAmount }
+//    var cartSubtotal: Double { vm.cartItems.reduce(0) { $0 + $1.retailPrice } }
+//    var taxAmount: Double { cartSubtotal * taxRate / 100 }
+//    var total: Double { cartSubtotal + taxAmount }
     
     /// Finalizes the sale by adding the sale to Realm and updating ItemEntity quantities on hand.
     func finalizeSale() {
         guard !vm.cartItems.isEmpty else { return }
         
-        let newSale = SaleEntity(timestamp: Date(), total: self.total)
+        let newSale = SaleEntity(timestamp: Date(), total: vm.total)
         let saleItems = vm.cartItems.map { $0.convertToSaleItem() }
         newSale.items.append(objectsIn: saleItems)
         $sales.append(newSale)
@@ -122,13 +122,13 @@ struct ConfirmSaleView: View {
                                     HStack {
                                         Text("Subtotal:")
                                         Spacer()
-                                        Text("\(cartSubtotal.toCurrencyString())")
+                                        Text("\(vm.cartSubtotal.toCurrencyString())")
                                     } //: HStack
                                     
                                     HStack {
                                         Text("Tax:")
                                         Spacer()
-                                        Text("\(taxAmount.toCurrencyString())")
+                                        Text("\(vm.taxAmount.toCurrencyString())")
                                     } //: HStack
                                 } //: VStack
                                 .font(.subheadline)
@@ -138,10 +138,9 @@ struct ConfirmSaleView: View {
                                 HStack {
                                     Text("Total:")
                                     Spacer()
-                                    Text(total.toCurrencyString())
+                                    Text(vm.total.toCurrencyString())
                                 } //: HStack
-                                .fontWeight(.semibold)
-                                .font(.title3)
+                                .font(.system(.title3, design: .rounded, weight: .semibold))
                                 .padding(.vertical, 4)
                             } //: VStack
                             .padding()
