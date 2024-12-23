@@ -73,7 +73,7 @@ struct InventoryXApp: SwiftUI.App {
             TabRoot()
                 .onAppear {
                     Task {
-                        try await RealmActor().deleteAll()
+//                        try await RealmActor().deleteAll()
 //                        try await RealmActor().setUpForDebug()
 //                        let h = AuthService.shared.hashString("1234")
 //                        await AuthService.shared.savePasscode(hash: h)

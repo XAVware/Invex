@@ -84,6 +84,8 @@ struct TabRoot: View {
                         VStack(spacing: 0) {
                             primaryContent
                                 .background(Color.bg)
+                            
+                            // MARK: - Tab Bar
                             HStack {
                                 Spacer()
                                 
@@ -117,7 +119,7 @@ struct TabRoot: View {
                             .frame(maxHeight: 56)
                             .background(Color.accentColor.opacity(0.007))
                             .padding(.bottom, geo.safeAreaInsets.bottom / 2)
-                            .overlay(tabBarDivider, alignment: .top)
+                            .overlay(DividerX(), alignment: .top)
                         } //: VStack
                         .background(Color.bg)
                         .navigationBarTitleDisplayMode(.inline)
@@ -125,27 +127,7 @@ struct TabRoot: View {
                             switch detail {
                             case .company:
                                 CompanyDetailView(company: companies.first ?? CompanyEntity())
-//                                    .toolbar {
-//                                        ToolbarItem(placement: .topBarTrailing) {
-//                                            Menu {
-//                                                Button("Delete Account", systemImage: "trash", role: .destructive) {
-//                                                    showDeleteConfirmation = true
-//                                                }
-//                                            } label: {
-//                                                Image(systemName: "ellipsis")
-//                                                    .rotationEffect(Angle(degrees: 90))
-//                                            }
-//                                            .foregroundStyle(.accent)
-//                                        }
-//                                    }
-//                                    .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
-//                                        Button("Go back", role: .cancel) { }
-//                                        Button("Yes, delete account", role: .destructive) {
-//                                            Task {
-//                                                await vm.deleteAccount()
-//                                            }
-//                                        }
-//                                    }
+                                    
                                 
                             case .item(let i):          ItemDetailView(item: i)
                             case .department(let d):    DepartmentDetailView(department: d)
@@ -209,7 +191,8 @@ struct TabRoot: View {
                     
                     if isLandscape && hSize == .regular {
                         navService.sidebarVisibility = .showing
-                        navService.sidebarWidth = min(geo.size.width / 3, 280)
+                        // Set the width to 280 at most, ideally 1/3 of the screen's width and slightly less when on compact vertical size device.
+                        navService.sidebarWidth = min(geo.size.width / 3 - (vSize == .compact ? 42 : 0), 280)
                     } else {
                         navService.sidebarVisibility = nil
                         navService.sidebarWidth = 0
@@ -218,7 +201,8 @@ struct TabRoot: View {
                 .onChange(of: isLandscape) { _, isLandscape in
                     if isLandscape && hSize == .regular {
                         navService.sidebarVisibility = .showing
-                        navService.sidebarWidth = min(geo.size.width / 3, 280)
+                        // Set the width to 280 at most, ideally 1/3 of the screen's width and slightly less when on compact vertical size device.
+                        navService.sidebarWidth = min(geo.size.width / 3 - (vSize == .compact ? 42 : 0), 280)
                     } else {
                         navService.sidebarVisibility = nil
                         navService.sidebarWidth = 0
@@ -231,14 +215,6 @@ struct TabRoot: View {
             OnboardingView()
                 .environmentObject(lsxVM)
         }
-//        switch showOnboarding {
-//        case true:
-//            
-//            
-//        case false:
-//            
-//        default: ProgressView()
-//        }
     } //: Body
     
     @ViewBuilder var primaryContent: some View {
@@ -265,12 +241,12 @@ struct TabRoot: View {
         }
     }
     
-    @ViewBuilder var tabBarDivider: some View {
-        if lsxVM.mainDisplay.showsTabBarDivider {
-            Divider()
-                .background(Color.accentColor.opacity(0.01))
-        }
-    }
+//    @ViewBuilder var tabBarDivider: some View {
+//        if lsxVM.mainDisplay.showsTabBarDivider {
+//            Divider()
+//                .background(Color.accentColor.opacity(0.01))
+//        }
+//    }
     
 }
 

@@ -108,16 +108,16 @@ struct DepartmentDetailView: View {
                 }
             }
             
-            DividerX()
-            
-            // Markup Container
-            ContainerX(data: containerData[2], value: department.defMarkup.toPercentageString()) {
-                PercentagePickerX(tax: department.defMarkup) { value in
-                    Task {
-                        saveMarkup(validMarkup: value)
-                    }
-                }
-            }
+//            DividerX()
+//            
+//            // Markup Container
+//            ContainerX(data: containerData[2], value: department.defMarkup.toPercentageString()) {
+//                PercentagePickerX(tax: department.defMarkup) { value in
+//                    Task {
+//                        saveMarkup(validMarkup: value)
+//                    }
+//                }
+//            }
             
         } //: FormX
         .onAppear {

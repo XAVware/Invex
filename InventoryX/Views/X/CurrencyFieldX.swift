@@ -102,37 +102,16 @@ struct CurrencyFieldX: View {
                 .modifier(Shake(animatableData: toggleError ? 1 : 0))
                 
                 KeypadView(strValue: $strValue, tapKey: { key in
-                    /// If there were already two digits after the decimal, the only acceptable key is `< DELETE`
-                    if let pre = Decimal(string: strValue), pre.significantFractionalDecimalDigits == 2, key != "<"  {
-                        triggerError()
-                        return
-                    }
-                    
+                    guard prevalidate(key) else { return }
                     switch key {
-                    case ".":
-                        /// Confirm the string doesn't already contain a decimal before appending
-                        strValue.contains(".") ? triggerError() : strValue.append(".")
-
-                    case "<":
-                        /// Check that string is not empty before deleting character.
-                        guard !strValue.isEmpty else {
-                            triggerError()
-                            return
-                        }
-                        strValue.removeLast()
-
-                    default:
-                        let parts = strValue.split(separator: ".")
-                        if parts.count == 2 && parts[1].count == 2 {
-                            triggerError()
-                        } else {
-                            self.strValue += key
-                        }
+                    case ".":   decimalTapped()
+                    case "<":   deleteTapped()
+                    default:    numberTapped(key)
                     }
-                   
+                
                 })
-                    .frame(maxHeight: 420)
-                    .padding(.vertical)
+                .frame(maxWidth: 480, maxHeight: 420)
+                .padding(.vertical)
             } //: VStack
             .padding(.vertical)
 
@@ -169,9 +148,44 @@ struct CurrencyFieldX: View {
         }
     }
     
+    private func prevalidate(_ key: String) -> Bool {
+        /// If there were already two digits after the decimal, the only acceptable key is `< DELETE`
+        if let pre = Decimal(string: strValue), pre.significantFractionalDecimalDigits == 2, key != "<"  {
+            triggerError()
+            return false
+        }
+        return true
+    }
+    
+    // MARK: - Key Pad Functions
+    /// Check that string is not empty before deleting character.
+    private func deleteTapped() {
+        guard !strValue.isEmpty else {
+            triggerError()
+            return
+        }
+        strValue.removeLast()
+    }
+    
+    /// Confirm the string doesn't already contain a decimal before appending
+    private func decimalTapped() {
+        strValue.contains(".") ? triggerError() : strValue.append(".")
+    }
+    
+    private func numberTapped(_ key: String) {
+        // Before appending the character, confirm there won't be more than 2 decimal places.
+        let parts = strValue.split(separator: ".")
+        
+        guard !(parts.count == 2 && parts[1].count == 2) else {
+            triggerError()
+            return
+        }
+        
+        self.strValue += key
+    }
+    
     private func setPlaceholderVisibility() {
         let split = strValue.split(separator: ".")
-        print(split)
         if split.count > 1, let val = Int(split[1]) {
             if val > 0 {
                 requiresPlaceholder = true
@@ -181,7 +195,6 @@ struct CurrencyFieldX: View {
                 requiresPlaceholder = false
             }
         }
-        print("Val: \(requiresPlaceholder)")
     }
     
     private func triggerError() {

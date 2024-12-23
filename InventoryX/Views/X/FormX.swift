@@ -69,7 +69,7 @@ class FormXViewModel {
 struct FormX<C: View>: View {
     @Environment(\.horizontalSizeClass) var hSize
     @State var formVM: FormXViewModel = FormXViewModel()
-
+    
     let content: C
     let title: String
     
@@ -79,33 +79,30 @@ struct FormX<C: View>: View {
     }
     
     var body: some View {
-//        GeometryReader { geo in
-            ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
-                    if formVM.expandedContainer == nil {
-                        Text(title)
-                            .font(.largeTitle)
-                            .fontDesign(.rounded)
-                            .padding(.top, 4)
-                    }
-
-                    VStack(alignment: .leading, spacing: 12) {
-                        content
-                    }
-                    .padding(.vertical)
-                    .environment(formVM)
-                } //: VStack
-                .padding(hSize == .regular ? 48 : 16)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .fontDesign(.rounded)
-                .transition(.blurReplace)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                if formVM.expandedContainer == nil {
+                    Text(title)
+                        .font(.largeTitle)
+                        .fontDesign(.rounded)
+                        .padding(.top, 4)
+                }
                 
-            } //: Scroll View
-            .background(.bg)
-            .scrollIndicators(.hidden)
-            .toolbar(formVM.expandedContainer == nil ? .visible : .hidden, for: .navigationBar)
-            //        .overlay(Divider().background(Color.accentColor.opacity(0.01)), alignment: .top)
-//        }
+                VStack(alignment: .leading, spacing: 12) {
+                    content
+                }
+                .padding(.vertical)
+                .environment(formVM)
+            } //: VStack
+            .padding(hSize == .regular ? 48 : 16)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .fontDesign(.rounded)
+            .transition(.blurReplace)
+            
+        } //: Scroll View
+        .background(.bg)
+        .scrollIndicators(.hidden)
+        .toolbar(formVM.expandedContainer == nil ? .visible : .hidden, for: .navigationBar)
     }
     
 }
@@ -132,8 +129,10 @@ struct ThemeFormSection<C: View>: View {
             }
             .background(Color.fafafa)
         }
-        .padding()
-        .modifier(RoundedOutlineMod(cornerRadius: 9))
+        //        .padding()
+        //        .modifier(RoundedOutlineMod(cornerRadius: 9))
     }
     
 }
+
+

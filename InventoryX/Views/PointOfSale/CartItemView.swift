@@ -32,27 +32,26 @@ struct CartItem: Identifiable, Hashable {
 struct CartItemView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var vm: PointOfSaleViewModel
-
+    
     @State var item: CartItem
     let qty: Int
     
     var body: some View {
-        VStack(spacing: 12) {
-            HStack(alignment: .center) {
-                VStack(alignment: .leading) {
-                    Text(item.name)
-                    Text(item.attribute)
-                        .font(.caption)
-                } //: VStack
-                .frame(maxWidth: .infinity, alignment: .leading)
-                
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text(item.name)
+                Text("(\(item.attribute))")
+                Spacer()
                 Text($item.wrappedValue.retailPrice.toCurrencyString())
-                    .font(.callout)
-            } //: HStack
+                    .fontWeight(.semibold)
+                
+            }
+            .font(.callout)
+            .fontDesign(.rounded)
             
             HStack {
-                Spacer()
                 stepper
+                Spacer()
             } //: HStack
         } //: VStack
         .padding(.vertical, 6)
@@ -61,7 +60,6 @@ struct CartItemView: View {
     private var stepper: some View {
         HStack(spacing: 0) {
             Button {
-                
                 vm.adjustStock(of: item, by: -1)
             } label: {
                 Text("-")
@@ -73,8 +71,8 @@ struct CartItemView: View {
             .frame(width: 26, height: 28, alignment: .center)
             .buttonStyle(PlainButtonStyle())
             .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
+            .disabled(qty == 0)
             
-//            Text("\(vm.cartItems.filter { $0._id == item._id }.count)")
             Text(qty.description)
                 .frame(width: 42, height: 28, alignment: .center)
                 .font(.subheadline)
@@ -82,7 +80,6 @@ struct CartItemView: View {
             
             
             Button {
-//                vm.addItemToCart(item)
                 vm.adjustStock(of: item, by: 1)
             } label: {
                 Text("+")
@@ -98,11 +95,12 @@ struct CartItemView: View {
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.neoOverDark, lineWidth: 0.5))
         .listRowBackground(Color.clear)
-
+        
     }
 }
 
 
-//#Preview {
-//    CartItemView(ItemEntity.item1)
-//}
+#Preview {
+    CartItemView(item: CartItem(from: ItemEntity.item1), qty: 2)
+        .padding()
+}

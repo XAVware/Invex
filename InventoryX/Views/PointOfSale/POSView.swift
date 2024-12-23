@@ -87,9 +87,7 @@ struct POSView: View {
             .padding(.horizontal, 8)
             .frame(maxWidth: 260, maxHeight: 32)
         }
-        .font(.subheadline)
-        .fontWeight(.semibold)
-        .fontDesign(.rounded)
+        .font(.system(.subheadline, design: .rounded, weight: .semibold))
         .buttonStyle(ThemeButtonStyle())
         .padding()
     }

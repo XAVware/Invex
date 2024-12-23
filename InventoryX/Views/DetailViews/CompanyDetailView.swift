@@ -109,6 +109,31 @@ struct CompanyDetailView: View {
         .onAppear {
             createDefaultCompany()
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if company.finishedOnboarding {
+                    Menu {
+                        Button("Delete Account", systemImage: "trash", role: .destructive) {
+                            showDeleteConfirmation = true
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis")
+                            .rotationEffect(Angle(degrees: 90))
+                    }
+                    .foregroundStyle(.accent)
+                } else {
+                    EmptyView()
+                }
+            }
+        }
+        .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
+            Button("Go back", role: .cancel) { }
+            Button("Yes, delete account", role: .destructive) {
+                Task {
+                    await vm.deleteAccount()
+                }
+            }
+        }
     } //: Body
 }
 

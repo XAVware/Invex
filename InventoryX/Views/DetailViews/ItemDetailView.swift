@@ -195,13 +195,13 @@ struct ItemDetailView: View {
                 })
             }
             
-            DividerX()
-            
-            ContainerX(data: containerData[4], value: item.unitCost.toCurrencyString()) {
-                CurrencyFieldX(amount: item.unitCost, save: { validCost in
-                    saveUnitCost(validCost: validCost)
-                })
-            }
+//            DividerX()
+//            
+//            ContainerX(data: containerData[4], value: item.unitCost.toCurrencyString()) {
+//                CurrencyFieldX(amount: item.unitCost, save: { validCost in
+//                    saveUnitCost(validCost: validCost)
+//                })
+//            }
         } //: FormX
         .onAppear {
             createDefaultItem()

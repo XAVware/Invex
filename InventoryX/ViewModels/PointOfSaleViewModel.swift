@@ -17,7 +17,8 @@ import RealmSwift
     /// This allows for re-use of `ItemEntity`. `.uniqued()` requires `Swift Algorithms.`
 //    var uniqueItems: [ItemEntity] { Array(cartItems.uniqued()) }
     
-    var cartSubtotal: Double { cartItems.reduce(0) { $0 + $1.retailPrice } }
+    @Published var cartSubtotal: Double = 0.0
+//    var cartSubtotal: Double { cartItems.reduce(0) { $0 + $1.retailPrice } }
     var taxAmount: Double { cartSubtotal * taxRate / 100 }
     var total: Double { cartSubtotal + taxAmount }
     
@@ -41,6 +42,7 @@ import RealmSwift
         } else {
             cartItems.append(item)
         }
+        cartSubtotal += item.retailPrice * Double(qty)
     }
     
 //    func addItemToCart(_ item: CartItem) {

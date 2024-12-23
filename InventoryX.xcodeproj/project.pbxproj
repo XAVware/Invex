@@ -72,6 +72,7 @@
 		94797A8B2C82964F00B9CDD8 /* HexImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A8A2C82964F00B9CDD8 /* HexImage.swift */; };
 		94815B572C6B32640085EE3C /* FieldDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94815B562C6B32640085EE3C /* FieldDivider.swift */; };
 		9497738C2D08FCFB00646A87 /* DepartmentPickerX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9497738B2D08FCF700646A87 /* DepartmentPickerX.swift */; };
+		94A0BF1E2D19BB34008D6CEE /* DividerX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A0BF1D2D19BB32008D6CEE /* DividerX.swift */; };
 		94A9D3F52CEAC871006650B1 /* PrimaryButtonPanelX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9D3F42CEAC86A006650B1 /* PrimaryButtonPanelX.swift */; };
 		94A9D3F72CEAC89A006650B1 /* XOutlineMod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9D3F62CEAC896006650B1 /* XOutlineMod.swift */; };
 		94A9D3F92CEAC8B1006650B1 /* NumberPickerX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9D3F82CEAC8AE006650B1 /* NumberPickerX.swift */; };
@@ -158,6 +159,7 @@
 		94797A8A2C82964F00B9CDD8 /* HexImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexImage.swift; sourceTree = "<group>"; };
 		94815B562C6B32640085EE3C /* FieldDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldDivider.swift; sourceTree = "<group>"; };
 		9497738B2D08FCF700646A87 /* DepartmentPickerX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentPickerX.swift; sourceTree = "<group>"; };
+		94A0BF1D2D19BB32008D6CEE /* DividerX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DividerX.swift; sourceTree = "<group>"; };
 		94A9D3F42CEAC86A006650B1 /* PrimaryButtonPanelX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonPanelX.swift; sourceTree = "<group>"; };
 		94A9D3F62CEAC896006650B1 /* XOutlineMod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XOutlineMod.swift; sourceTree = "<group>"; };
 		94A9D3F82CEAC8AE006650B1 /* NumberPickerX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberPickerX.swift; sourceTree = "<group>"; };
@@ -326,13 +328,13 @@
 			isa = PBXGroup;
 			children = (
 				942189322C2375AC00C78586 /* CartItemListView.swift */,
+				944F67092C89448F00828875 /* CartItemView.swift */,
 				942189332C2375AC00C78586 /* CartSidebarView.swift */,
+				946D2F6F2CD9B84800F3FA81 /* CartTotalsView.swift */,
 				942189342C2375AC00C78586 /* ConfirmSaleView.swift */,
 				942189352C2375AC00C78586 /* ItemGridView.swift */,
 				942189362C2375AC00C78586 /* POSView.swift */,
-				944F67092C89448F00828875 /* CartItemView.swift */,
 				943946C82CCC749600DB23C3 /* SwiftUIView.swift */,
-				946D2F6F2CD9B84800F3FA81 /* CartTotalsView.swift */,
 			);
 			path = PointOfSale;
 			sourceTree = "<group>";
@@ -421,6 +423,7 @@
 		946FB6272CE990F900B9F73C /* X */ = {
 			isa = PBXGroup;
 			children = (
+				94A0BF1D2D19BB32008D6CEE /* DividerX.swift */,
 				94CAB68E2CF6D915002AE31E /* Keypads */,
 				946D2F772CE2E95000F3FA81 /* ContainerX.swift */,
 				94A9D3FA2CEB2FD5006650B1 /* CurrencyFieldX.swift */,
@@ -565,6 +568,7 @@
 				942189662C2375AD00C78586 /* PointOfSaleViewModel.swift in Sources */,
 				946D2F742CE2E84600F3FA81 /* PercentagePickerX.swift in Sources */,
 				9421895C2C2375AD00C78586 /* String+Ext.swift in Sources */,
+				94A0BF1E2D19BB34008D6CEE /* DividerX.swift in Sources */,
 				9421895E2C2375AD00C78586 /* DepartmentButtonMod.swift in Sources */,
 				942189722C2375AD00C78586 /* NumberPadView.swift in Sources */,
 				942189702C2375AD00C78586 /* DateTimeLabel.swift in Sources */,

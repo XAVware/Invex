@@ -175,6 +175,38 @@ actor RealmActor {
         }
     }
     
+    // New
+    @MainActor
+    func moveItems(withIds itemIds: [ObjectId], toDepartmentId: ObjectId) async throws {
+        let realm = try await Realm()
+        guard let targetDept = realm.object(ofType: DepartmentEntity.self, forPrimaryKey: toDepartmentId) else {
+            return
+        }
+        
+        try await realm.asyncWrite {
+            for itemId in itemIds {
+                if let item = realm.object(ofType: ItemEntity.self, forPrimaryKey: itemId),
+                   let sourceDept = item.department.first {
+                    sourceDept.items.remove(at: sourceDept.items.firstIndex(of: item)!)
+                    targetDept.items.append(item)
+                }
+            }
+        }
+    }
+    
+    // New
+    @MainActor
+    func deleteItems(withIds itemIds: [ObjectId]) async throws {
+        let realm = try await Realm()
+        try await realm.asyncWrite {
+            for itemId in itemIds {
+                if let item = realm.object(ofType: ItemEntity.self, forPrimaryKey: itemId) {
+                    realm.delete(item)
+                }
+            }
+        }
+    }
+    
     // MARK: - SALES
     func saveSale(items: Array<SaleItemEntity>, total: Double) async throws {
         let newSale = SaleEntity(timestamp: Date(), total: total)

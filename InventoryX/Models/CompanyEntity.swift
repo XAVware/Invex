@@ -26,8 +26,4 @@ class CompanyEntity: Object, ObjectKeyIdentifiable {
         self.taxRate = taxRate
     }
     
-//    var formattedTaxRate: String {
-//        return taxRate.toPercentageString()
-//        
-//    }
 }

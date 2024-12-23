@@ -23,8 +23,7 @@ struct CartTotalsView: View {
                 Text("\(vm.taxAmount.toCurrencyString())")
             } //: HStack
         } //: VStack
-        .font(.subheadline)
-        .padding()
+        .font(.caption)
     }
 }
 

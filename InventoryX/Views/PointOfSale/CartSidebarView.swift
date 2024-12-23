@@ -9,53 +9,57 @@ import SwiftUI
 import RealmSwift
 
 struct CartSidebarView: View {
+    @Environment(\.verticalSizeClass) var vSize
     @Environment(NavigationService.self) var navService
-
+    
     @StateObject var vm: PointOfSaleViewModel
-
+    
     init(vm: PointOfSaleViewModel) {
         self._vm = StateObject(wrappedValue: vm)
     }
-
+    
     var body: some View {
         GeometryReader { geo in
             HStack {
                 Spacer()
-                ZStack {
-                    Rectangle()
-                        .fill(.shadow(.inner(color: .neoUnderDark, radius: 2, x: 1, y: 0)))
-                        .foregroundColor(.neoUnderBg)
+                VStack {
+                    Text("Cart")
+                        .font(.system(.callout, design: .rounded, weight: .medium))
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 54)
                     
-                    VStack {
-                        Spacer().frame(height: 54)
-                        
-                        List(vm.cartItems) { item in
-                            CartItemView(item: item, qty: item.qtyInCart)
-                                .listRowBackground(Color.clear)
-                                .environmentObject(vm)
-                        }
-                        .frame(maxHeight: .infinity)
-                        .listStyle(PlainListStyle())
-                        
-                        // MARK: - Cart Totals
-                        CartTotalsView()
-                        
-                        Spacer()
-                            .frame(height: 48)
-                    } //: VStack
-                    .alert("Your cart is empty.", isPresented: $vm.showCartAlert) {
-                        Button("Okay", role: .cancel) { }
+                    List(vm.cartItems) { item in
+                        CartItemView(item: item, qty: item.qtyInCart)
+                            .listRowBackground(Color.clear)
+                            .padding(.vertical, 8)
                     }
+                    .frame(maxHeight: .infinity)
+                    .listStyle(PlainListStyle())
+                    .environmentObject(vm)
                     
-                } //: ZStack
+                    // MARK: - Cart Totals
+                    CartTotalsView()
+                        .padding()
+                    
+                    // Height should be bottom safe area plus tab bar height - if its ignoring safe areas
+                    Spacer()
+                        .frame(height: geo.safeAreaInsets.bottom + (vSize == .compact ? 32 : 48))
+                } //: VStack
+                .background(Color.bg.ignoresSafeArea(edges: .trailing))
+                .overlay(DividerX(), alignment: .leading)
                 .frame(maxWidth: navService.sidebarWidth ?? 500)
                 .offset(x: navService.sidebarVisibility != .showing ? navService.sidebarWidth ?? 500 : 0)
+                .alert("Your cart is empty.", isPresented: $vm.showCartAlert) {
+                    Button("Okay", role: .cancel) { }
+                }
             } //: HStack
             .overlay(navService.sidebarVisibility != nil ? checkoutButton.padding(.bottom, geo.safeAreaInsets.bottom / 2) : nil, alignment: .bottomTrailing)
             .ignoresSafeArea(edges: .bottom)
         }
     } //: Body
-
+    
+    
     private var checkoutButton: some View {
         Button {
             vm.checkoutTapped {
@@ -63,26 +67,25 @@ struct CartSidebarView: View {
             }
         } label: {
             HStack {
-//                Image(systemName: "cart")
                 Text("Checkout")
                 Spacer()
                 Text(vm.total.toCurrencyString())
+                    .fontWeight(.semibold)
             }
-            .padding(6)
-            .padding(.horizontal, 10)
-            .frame(maxWidth: navService.sidebarWidth ?? 320, maxHeight: 56)
+            .font(.system(.callout, design: .rounded))
+            .padding(8)
+            .padding(.horizontal, 12)
+            .frame(maxWidth: navService.sidebarWidth ?? 320, maxHeight: 48)
         }
-        .font(.subheadline)
-        .fontWeight(.semibold)
-        .fontDesign(.rounded)
         .background(
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
                 .fill(Color.accent.gradient)
-                .padding(2)
+                .padding(.horizontal, 8)
         )
         .foregroundColor(Color.primaryButtonText)
-        .shadow(radius: 1)
+        .padding(.vertical, vSize == .regular ? 2 : 0)
     }
+    
 }
 
 //#Preview {
