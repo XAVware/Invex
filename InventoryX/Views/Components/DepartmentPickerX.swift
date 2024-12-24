@@ -14,11 +14,13 @@ struct DepartmentPickerX: View {
     @Binding var selectedDepartment: DepartmentEntity?
     @State var title: String
     @State var description: String
-    
-    init(dept: Binding<DepartmentEntity?>, title: String, description: String) {
+    let onChange: (DepartmentEntity) -> Void
+
+    init(dept: Binding<DepartmentEntity?>, title: String, description: String, onChange: @escaping (DepartmentEntity) -> Void) {
         self._selectedDepartment = dept
         self.title = title
         self.description = description
+        self.onChange = onChange
     }
     
     var body: some View {
@@ -30,15 +32,34 @@ struct DepartmentPickerX: View {
                         .opacity(0.5)
                     
                 } //: VStack
+                
                 Spacer()
-                Picker("", selection: $selectedDepartment) {
+                
+                Menu {
                     ForEach(departments) { dept in
-                        Text(dept.name)
-                            .tag(DepartmentEntity?.none)
+                        Button(dept.name) {
+                            onChange(dept)
+                        }
+                        .tag(dept)
+                        
                     }
+                } label: {
+                    HStack {
+                        Text(selectedDepartment?.name ?? "Select")
+                        Image(systemName: "chevron.up.chevron.down")
+                    }
+                    .foregroundStyle(.black)
                 }
-                .pickerStyle(MenuPickerStyle())
-                .tint(Color.textPrimary)
+                
+                
+//                Picker("", selection: $selectedDepartment) {
+//                    ForEach(departments) { dept in
+//                        Text(dept.name)
+//                            .tag(DepartmentEntity?.none)
+//                    }
+//                }
+//                .pickerStyle(MenuPickerStyle())
+//                .tint(Color.textPrimary)
             } //: HStack
             .padding(.vertical)
         }

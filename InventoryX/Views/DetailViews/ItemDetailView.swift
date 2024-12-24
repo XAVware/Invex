@@ -68,32 +68,26 @@ struct ItemDetailView: View {
         }
     }
     
-//    func saveDepartment(department: DepartmentEntity?) {
-//        do {
-//            let realm = try Realm()
-//            print("Saving to: \(department)")
-//            // First remove the item from any existing department
-//            if let currentDept = self.item.department.first {
-//                try realm.write {
-//                    if let index = currentDept.thaw()?.items.index(of: item) {
-//                        currentDept.thaw()?.items.remove(at: index)
-//                        print("Removed item from \(currentDept)")
-//                    }
-//                }
-//            }
-//            
-//            // Then add it to the new department
-//            if let newDept = department {
-//                try realm.write {
-//                    newDept.thaw()?.items.append(item)
-//                    print("Added to \(newDept)")
-//                }
-//            }
-//            print("Finished")
-//        } catch {
-//            print("Error saving department: \(error)")
-//        }
-//    }
+    func saveDepartment(department: DepartmentEntity?) {
+        guard let thawedItem = item.thaw() else { return }
+        
+        do {
+            let realm = try Realm()
+            try realm.write {
+                if let currentDept = thawedItem.department.first {
+                    if let index = currentDept.items.index(of: thawedItem) {
+                        currentDept.items.remove(at: index)
+                    }
+                }
+                
+                if let newDept = department?.thaw() {
+                    newDept.items.append(thawedItem)
+                }
+            }
+        } catch {
+            print("Error saving department: \(error)")
+        }
+    }
     
     func saveItemAttribute(validAttribute: String) {
         do {
@@ -162,8 +156,12 @@ struct ItemDetailView: View {
             
             DividerX()
             
-            DepartmentPickerX(dept: $selectedDepartment, title: "Department:", description: "Which department is this item in?")
-            
+            DepartmentPickerX(dept: $selectedDepartment, title: "Department:", description: "Which department is this item in?") { newDept in
+//                print(newDept.name)
+                selectedDepartment = newDept
+                saveDepartment(department: newDept)
+            }
+                
             
             DividerX()
             
