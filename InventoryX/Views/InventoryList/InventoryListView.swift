@@ -31,7 +31,7 @@ struct InventoryListView: View {
             } // ScrollView
 //        } //: VStack
         .background(.bg)
-        .overlay(multiSelectPanel.padding(), alignment: .top)
+        .overlay(multiSelectPanel, alignment: .bottom)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
@@ -87,9 +87,10 @@ struct InventoryListView: View {
         .offset(y: panelOffset)
         .onChange(of: vm.selectedItems) { _, newValue in
             withAnimation(.bouncy(duration: 0.25)) {
-                panelOffset = newValue.isEmpty ? -48 : 0
+                panelOffset = newValue.isEmpty ? -48 : 12
             }
         }
+        .padding()
         
     } //: Multi Select Panel
     

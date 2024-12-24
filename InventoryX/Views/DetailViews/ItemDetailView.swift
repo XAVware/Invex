@@ -59,9 +59,6 @@ struct ItemDetailView: View {
             let realm = try Realm()
             try realm.write {
                 $item.wrappedValue.name = validName
-//                if let selectedDepartment = selectedDepartment {
-//                    $item.wrappedValue.department = selectedDepartment
-//                }
             }
         } catch {
             print("Error saving name: \(error)")
@@ -157,7 +154,6 @@ struct ItemDetailView: View {
             DividerX()
             
             DepartmentPickerX(dept: $selectedDepartment, title: "Department:", description: "Which department is this item in?") { newDept in
-//                print(newDept.name)
                 selectedDepartment = newDept
                 saveDepartment(department: newDept)
             }

@@ -52,10 +52,7 @@ class OnboardingViewModel: ObservableObject {
     
     func finishOnboarding() {
         guard let realm else { return }
-        guard let company = realm.objects(CompanyEntity.self).first else {
-            print("No company found")
-            return
-        }
+        guard let company = realm.objects(CompanyEntity.self).first else { return }
         
         do {
             // Thaw the frozen object if needed and update it
@@ -103,25 +100,24 @@ struct OnboardingView: View {
         return !item.name.isEmpty
     }
     
-    private var steps: [OnboardingStepModel] {
-        [
-            .init(condition: companyComplete,
-                  title: "Add your company info",
-                  description: "This will be used when calculating and displaying your sales.",
-                  destination: .company,
-                  isEnabled: true),
+    private var steps: [OnboardingStepModel] {[
+        .init(condition: companyComplete,
+              title: "Add your company info",
+              description: "This will be used when calculating and displaying your sales.",
+              destination: .company,
+              isEnabled: true),
             
-            .init(condition: departmentComplete,
-                  title: "Add a department",
-                  description: "Your items will be grouped into departments.",
-                  destination: .department(DepartmentEntity()),
-                  isEnabled: true),
-        
-            .init(condition: itemComplete,
-                  title: "Add an item",
-                  description: "You will be able to select items to add to the cart.",
-                  destination: .item(ItemEntity()),
-                  isEnabled: departmentComplete)
+        .init(condition: departmentComplete,
+              title: "Add a department",
+              description: "Your items will be grouped into departments.",
+              destination: .department(DepartmentEntity()),
+              isEnabled: true),
+            
+        .init(condition: itemComplete,
+              title: "Add an item",
+              description: "You will be able to select items to add to the cart.",
+              destination: .item(ItemEntity()),
+              isEnabled: departmentComplete)
         ]
     }
     
@@ -140,8 +136,8 @@ struct OnboardingView: View {
                             Divider()
                         }
                     }
-                }
-            }
+                } //: VStack
+            } //: Form X
             .overlay(alignment: .bottom) {
                 Button {
                     viewModel.finishOnboarding()
@@ -159,13 +155,11 @@ struct OnboardingView: View {
                 destinationView(for: view)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: { path.removeLast() }) {
-                                Text("Done")
-                            }
+                            Button("Done", action: { path.removeLast() })
                         }
                     }
             }
-        }
+        } //: Navigation Stack
         .task {
             viewModel.setupDefaultObjects()
         }
@@ -180,7 +174,7 @@ struct OnboardingView: View {
         case .department:
             DepartmentDetailView(department: departments.first ?? DepartmentEntity())
             
-        case .item(let item):
+        case .item:
             ItemDetailView(item: items.first ?? ItemEntity())
             
         default:
@@ -209,13 +203,13 @@ struct OnboardingStepRow: View {
                         .font(.subheadline)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .opacity(0.5)
-                }
+                } //: VStack
                 .fontWeight(.medium)
                 .fontDesign(.rounded)
                 
                 Image(systemName: "chevron.right")
                     .font(.title3)
-            }
+            } //: HStack
         }
         .buttonStyle(.plain)
     }

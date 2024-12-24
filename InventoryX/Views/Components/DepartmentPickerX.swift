@@ -50,16 +50,6 @@ struct DepartmentPickerX: View {
                     }
                     .foregroundStyle(.black)
                 }
-                
-                
-//                Picker("", selection: $selectedDepartment) {
-//                    ForEach(departments) { dept in
-//                        Text(dept.name)
-//                            .tag(DepartmentEntity?.none)
-//                    }
-//                }
-//                .pickerStyle(MenuPickerStyle())
-//                .tint(Color.textPrimary)
             } //: HStack
             .padding(.vertical)
         }

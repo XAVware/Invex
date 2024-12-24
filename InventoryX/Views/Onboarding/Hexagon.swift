@@ -14,7 +14,6 @@ struct Hexagon: Shape {
         var path = Path()
         
         let center = CGPoint(x: rect.midX, y: rect.midY)
-        //        let width = rect.width
         let width = min(rect.width, rect.height * Self.aspectRatio)
         let size = width / 2
         let corners = (0 ..< 6)

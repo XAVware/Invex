@@ -14,7 +14,7 @@ struct LandingView: View {
     var isIphone: Bool { hSize == .compact || vSize == .compact }
     
     @State var index: Int = 0
-    @Binding var path: NavigationPath
+    @State var path: NavigationPath = .init()
     
     let highlights: [LandingHighlight] = [
         LandingHighlight(imageName: "LandingImage", title: "Welcome!", caption: "Transform your workflow with Invex - Point of Sale designed for cash-run businesses."),
@@ -99,6 +99,7 @@ struct LandingView: View {
     
     private var navigationPanel: some View {
         HStack {
+            
             Button("Back", systemImage: "chevron.left", action: backTapped)
                 .buttonStyle(ThemeButtonStyle(.secondary))
                 .opacity(index == 0 ? 0 : 1)
@@ -147,10 +148,10 @@ struct LandingView: View {
     }
 }
 
-#Preview {
-    LandingView(path: .constant(.init()))
-}
-
+//#Preview {
+//    LandingView(path: .constant(.init()))
+//}
+//
 
 
 

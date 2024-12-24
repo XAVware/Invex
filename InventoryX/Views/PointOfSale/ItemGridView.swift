@@ -37,7 +37,6 @@ struct ItemGridView: View {
             } //: LazyVGrid
             .padding(2)
         } //: Scroll
-        //        .background(Color.accentColor.opacity(0.007))
         .scrollIndicators(.hidden)
     } //: Body
     
@@ -56,10 +55,10 @@ struct ItemGridView: View {
                         .fontWeight(.thin)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text(item.formattedPrice)
-                        .foregroundStyle(Color.accentColor)
                 }
                 .font(.subheadline)
             }
+            .foregroundStyle(Color.textPrimary)
             .padding(10)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .fontDesign(.rounded)

@@ -200,8 +200,9 @@ struct TabRoot: View {
                     lsxVM.mainDisplay = .pos
                     nav.path = .init()
                     posVM.clearCart()
-                    
-                    
+                }
+                .fullScreenCover(isPresented: .constant(true)) {
+                    LandingView()
                 }
         }
     } //: Body
