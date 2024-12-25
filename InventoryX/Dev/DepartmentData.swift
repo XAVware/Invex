@@ -35,6 +35,7 @@ extension DepartmentEntity {
                     // MARK: - CREATE PREVIEW DATA
                     debugPrint("Creating preview data")
                     try realm.write {
+                        company.finishedOnboarding = true
                         realm.add(company)
                         
                         realm.add(foodCategory)

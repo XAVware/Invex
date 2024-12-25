@@ -50,8 +50,6 @@ class NavigationService {
 
 struct TabRoot: View {
     @State private var nav: NavigationService = .init()
-    
-    @Environment(\.dismiss) var dismiss
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
     
@@ -63,10 +61,7 @@ struct TabRoot: View {
     // TODO: Try moving PosVM into POSView. Make sure cart isnt lost on view change
     @StateObject var posVM = PointOfSaleViewModel()
     @StateObject var lsxVM: LSXViewModel = LSXViewModel()
-//    @StateObject var rootVM = RootViewModel()
-    
-    @State var showOnboarding = false // For Dev
-    
+        
     @State var tabButtons: [TabButtonModel] = [
         TabButtonModel(destination: .settings, unselectedIconName: "line.3.horizontal.circle", selectedIconName: "line.3.horizontal.circle.fill", title: "Menu"),
         TabButtonModel(destination: .inventoryList, unselectedIconName: "tray.full", selectedIconName: "tray.full.fill", title: "Inventory"),
@@ -122,6 +117,7 @@ struct TabRoot: View {
                             .overlay(DividerX(), alignment: .top)
                         } //: VStack
                         .background(Color.bg)
+                        .navigationBarTitleDisplayMode(.inline) // Commenting this out makes the back button on ConfirmSaleView not work...
                         .navigationDestination(for: LSXDisplay.self) { detail in
                             switch detail {
                             case .company: CompanyDetailView(company: companies.first ?? CompanyEntity())
@@ -144,7 +140,7 @@ struct TabRoot: View {
                                 .environmentObject(posVM)
                         }
                     } //: ZStack
-                    .background(.bg)
+                    .background(Color.bg)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
                             switch lsxVM.mainDisplay {
@@ -201,9 +197,7 @@ struct TabRoot: View {
                     nav.path = .init()
                     posVM.clearCart()
                 }
-                .fullScreenCover(isPresented: .constant(true)) {
-                    LandingView()
-                }
+                
         }
     } //: Body
     
@@ -221,8 +215,6 @@ struct TabRoot: View {
         case .inventoryList:
             InventoryListView()
                 .tag(LSXDisplay.inventoryList)
-                .navigationTitle("Inventory")
-                .navigationBarTitleDisplayMode(.large)
             
         case .settings:
             SettingsView()
@@ -238,15 +230,6 @@ struct TabRoot: View {
 #Preview {
     TabRoot()
         .environment(\.realm, DepartmentEntity.previewRealm)
-    //        .onAppear {
-    //            Task {
-    //                try await RealmActor().setUpForDebug()
-    ////                        let h = AuthService.shared.hashString("1234")
-    ////                        await AuthService.shared.savePasscode(hash: h)
-    //                AuthService.shared.exists = true
-    //
-    //            }
-    //        }
 }
 
 

@@ -150,17 +150,12 @@ struct ItemDetailView: View {
                     }
                 })
             }
-            
-            DividerX()
-            
+                        
             DepartmentPickerX(dept: $selectedDepartment, title: "Department:", description: "Which department is this item in?") { newDept in
                 selectedDepartment = newDept
                 saveDepartment(department: newDept)
             }
                 
-            
-            DividerX()
-            
             // Attribute Container
             ContainerX(data: containerData[1], value: item.attribute) {
                 TextFieldX(value: item.attribute, validate: { value in
@@ -171,26 +166,20 @@ struct ItemDetailView: View {
                     }
                 })
             }
-            
-            DividerX()
-            
+                        
             // On hand quantity container
             ContainerX(data: containerData[2], value: item.onHandQty.description) {
                 NumberPickerX(number: item.onHandQty) { value in
                     saveOnHandQty(validQty: value)
                 }
             }
-            
-            DividerX()
-            
+                        
             ContainerX(data: containerData[3], value: item.retailPrice.toCurrencyString()) {
                 CurrencyFieldX(amount: item.retailPrice, save: { validPrice in
                     saveRetailPrice(validPrice: validPrice)
                 })
             }
-            
-//            DividerX()
-//            
+                  
 //            ContainerX(data: containerData[4], value: item.unitCost.toCurrencyString()) {
 //                CurrencyFieldX(amount: item.unitCost, save: { validCost in
 //                    saveUnitCost(validCost: validCost)

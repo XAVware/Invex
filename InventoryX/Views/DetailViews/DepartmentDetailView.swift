@@ -99,7 +99,7 @@ struct DepartmentDetailView: View {
                 
             }
             
-            DividerX()
+//            DividerX()
             
             // Restock Quantity Container
             ContainerX(data: containerData[1], value: department.restockNumber.description) {

@@ -47,25 +47,6 @@ import RealmSwift
 struct InventoryXApp: SwiftUI.App {
     @Environment(\.verticalSizeClass) var vSize
     let migrator: RealmMigrator = RealmMigrator()
-
-    init() {
-//        UIColor.classInit
-//        UINavigationBar.appearance().backgroundColor = UIColor(resource: .bg)
-         /*
-          TODO: Document this in LazySplitX
-          I added this to change the color of the page indicator dots in a Tab View Page style. It seems to cause the default tinting of all components, including buttons, table headers, and LazySplitX toolbar buttons, to revert back to blue.
-          
-          UIPageControl.appearance().currentPageIndicatorTintColor = .accent.withAlphaComponent(0.8)
-          UIPageControl.appearance().pageIndicatorTintColor = .accent.withAlphaComponent(0.2)
-          
-          Changing the navigation bar background color with this:
-          
-          UINavigationBar.appearance().backgroundColor = UIColor(resource: .bg)
-          
-          means you need to add .tint(.accent) to LSXView
-          */
-         
-    }
     
     
     var body: some Scene {

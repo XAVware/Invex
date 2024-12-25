@@ -26,6 +26,7 @@ struct POSView: View {
     
     /// When `selectedDepartment` is nil, the app displays all items in the view.
     @State var selectedDepartment: DepartmentEntity?
+    @State var showCartAlert: Bool = false
     
     func departmentTapped(_ department: DepartmentEntity?) {
         selectedDepartment = department
@@ -70,13 +71,18 @@ struct POSView: View {
         } //: VStack
         .overlay(navService.sidebarVis == nil ? checkoutButton : nil, alignment: .bottom)
         .navigationTitle("New Sale")
+        .alert("Your cart is empty.", isPresented: $showCartAlert) {
+            Button("Okay", role: .cancel) { }
+        }
     } //: Body
     
     private var checkoutButton: some View {
         Button {
-            vm.checkoutTapped {
-                navService.path.append(LSXDisplay.confirmSale)
+            guard !vm.cartItems.isEmpty else {
+                showCartAlert.toggle()
+                return
             }
+            navService.path.append(LSXDisplay.confirmSale)
         } label: {
             HStack {
                 Image(systemName: "cart")
@@ -111,36 +117,10 @@ struct POSView: View {
                     RoundedRectangle(cornerRadius: 24)
                         .stroke(.accent, lineWidth: 1)
                 )
-//                .overlay(isSelected ? Capsule().fill(.accent).frame(height: 3.5) : nil, alignment: .bottom)
         }
     }
     
 }
-
-//struct PrimaryOverlayButton<Label: View>: View {
-//    let action: () -> Void
-//    let label: Label
-//    
-//    init(action: @escaping () -> Void, @ViewBuilder label: () -> Label) {
-//        self.action = action
-//        self.label = label()
-//    }
-//    
-//    var body: some View {
-//        Button(action: action) {
-//            label
-//                .padding(.horizontal, 4)
-//                .frame(maxWidth: 320, maxHeight: 26)
-//        }
-//        .font(.subheadline)
-//        .fontWeight(.semibold)
-//        .fontDesign(.rounded)
-//        .buttonStyle(ThemeButtonStyle())
-//        //        .padding()
-////        .shadow(radius: 1.5)
-//        
-//    }
-//}
 
 #Preview {
     POSView()

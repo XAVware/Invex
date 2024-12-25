@@ -72,14 +72,11 @@ class InventoryViewModel {
         }
     }
     
-    func deleteDepartment(withId id: RealmSwift.ObjectId, completion: @escaping ((Error?) -> Void)) async {
+    func deleteDepartment(withId id: RealmSwift.ObjectId) async {
         do {
             try await RealmActor().deleteDepartment(id: id)
-            completion(nil)
-        } catch let error as AppError {
-            completion(error)
         } catch {
-            completion(error)
+            print("Error deleting department: \(error)")
         }
     }
 }

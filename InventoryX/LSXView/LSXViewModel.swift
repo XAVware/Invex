@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 @MainActor final class LSXViewModel: ObservableObject {
-    private let lsxService = LSXService.shared
+//    private let lsxService = LSXService.shared
     
     @Published var colVis: NavigationSplitViewVisibility = .detailOnly
     @Published var prefCol: NavigationSplitViewColumn = .detail
@@ -39,9 +39,9 @@ import Combine
     
     private var cancellables = Set<AnyCancellable>()
     
-    init() {
-        configNavSubscribers()
-    }
+//    init() {
+//        configNavSubscribers()
+//    }
     
     func sidebarToggleTapped() {
         colVis = colVis == .doubleColumn ? .detailOnly : .doubleColumn
@@ -59,36 +59,36 @@ import Combine
         prefCol = .detail
     }
     
-    func configNavSubscribers() {
-        // Receive a main view
-        lsxService.pathView
-            .filter({ $0.1 == .primary })
-            .sink { [weak self] (view, prefColumn) in
-                guard let view = view else {
-                    self?.primaryPath.removeLast()
-                    return
-                }
-                
-                if LSXDisplay.allCases.contains(view) {
-                    self?.changeDisplay(to: view)
-                } else {
-                    self?.pushPrimary(view)
-                }
-                
-            }.store(in: &cancellables)
-        
-        // Receive a detail view
-        lsxService.pathView
-            .filter({ $0.1 == .detail })
-            .sink { [weak self] (display, prefColumn) in
-                guard let display = display else {
-                    print("LSXService: No display")
-                    return
-                }
-                self?.pushDetail(display)
-            }.store(in: &cancellables)
-    }
-    
+//    func configNavSubscribers() {
+//        // Receive a main view
+//        lsxService.pathView
+//            .filter({ $0.1 == .primary })
+//            .sink { [weak self] (view, prefColumn) in
+//                guard let view = view else {
+//                    self?.primaryPath.removeLast()
+//                    return
+//                }
+//                
+//                if LSXDisplay.allCases.contains(view) {
+//                    self?.changeDisplay(to: view)
+//                } else {
+//                    self?.pushPrimary(view)
+//                }
+//                
+//            }.store(in: &cancellables)
+//        
+//        // Receive a detail view
+//        lsxService.pathView
+//            .filter({ $0.1 == .detail })
+//            .sink { [weak self] (display, prefColumn) in
+//                guard let display = display else {
+//                    print("LSXService: No display")
+//                    return
+//                }
+//                self?.pushDetail(display)
+//            }.store(in: &cancellables)
+//    }
+//    
     
     /// Changes the root view to one of LSXDisplay.allCases
     private func changeDisplay(to newDisplay: LSXDisplay) {
@@ -103,17 +103,17 @@ import Combine
         primaryPath.append(display)
     }
     
-    private func pushDetail(_ display: LSXDisplay) {
-        if isCompact || mainDisplay.displayMode == .detailOnly || primaryPath.count != 0 {
-            self.pushPrimary(display)
-        } else {
-            if detailRoot == nil {
-                detailRoot = display
-            } else {
-                detailPath.append(display)
-            }
-        }
-    }
+//    private func pushDetail(_ display: LSXDisplay) {
+//        if isCompact || mainDisplay.displayMode == .detailOnly || primaryPath.count != 0 {
+//            self.pushPrimary(display)
+//        } else {
+//            if detailRoot == nil {
+//                detailRoot = display
+//            } else {
+//                detailPath.append(display)
+//            }
+//        }
+//    }
     
     func setHorIsCompact(isCompact: Bool) {
         self.isCompact = isCompact

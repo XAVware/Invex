@@ -39,59 +39,60 @@ actor RealmActor {
     /// Company data saves differently than departments and items. Since there can only be one company
     /// there's no need to track create/modify states. When the save button is tapped, check if a
     /// company exists, if yes then `modify/update` otherwise `create`.
-    func saveCompany(name: String, tax: String) async throws {
-        let name = name.replacingOccurrences(of: " ", with: "")
-        guard !name.isEmpty                 else { throw AppError.invalidCompanyName }
-        guard let taxRate = Double(tax)     else { throw AppError.invalidTaxPercentage }
-        
-        let company = CompanyEntity(name: name, taxRate: taxRate)
-        let realm = try await Realm()
-        
-        try await realm.asyncWrite {
-            if let company = realm.objects(CompanyEntity.self).first {
-                // Company exists, update record
-                company.name = name
-                company.taxRate = taxRate
-            } else {
-                // Company doesn't exist. Create record
-                realm.add(company)
-            }
-        }
-    }
+//    func saveCompany(name: String, tax: String) async throws {
+//        let name = name.replacingOccurrences(of: " ", with: "")
+//        guard !name.isEmpty                 else { throw AppError.invalidCompanyName }
+//        guard let taxRate = Double(tax)     else { throw AppError.invalidTaxPercentage }
+//        
+//        let company = CompanyEntity(name: name, taxRate: taxRate)
+//        let realm = try await Realm()
+//        
+//        try await realm.asyncWrite {
+//            if let company = realm.objects(CompanyEntity.self).first {
+//                // Company exists, update record
+//                company.name = name
+//                company.taxRate = taxRate
+//            } else {
+//                // Company doesn't exist. Create record
+//                realm.add(company)
+//            }
+//        }
+//    }
     
     // MARK: - DEPARTMENTS
     /// Fetch all departments
-    @MainActor func fetchDepartments() async throws -> Results<DepartmentEntity> {
-        let realm = try await Realm()
-        return realm.objects(DepartmentEntity.self)
-    }
+//    @MainActor func fetchDepartments() async throws -> Results<DepartmentEntity> {
+//        let realm = try await Realm()
+//        return realm.objects(DepartmentEntity.self)
+//    }
     
     /// Create a new department
-    func addDepartment(name: String, restockThresh: String, markup: String) async throws {
-        guard let restockThresh = Int(restockThresh)    else { throw AppError.numericThresholdRequired }
-        guard let markup = Double(markup)               else { throw AppError.invalidMarkup }
-        let realm = try await Realm()
-        let department = DepartmentEntity(name: name, restockNum: restockThresh, defMarkup: markup)
-        try await realm.asyncWrite {
-            realm.add(department)
-        }
-    }
+//    func addDepartment(name: String, restockThresh: String, markup: String) async throws {
+//        guard let restockThresh = Int(restockThresh)    else { throw AppError.numericThresholdRequired }
+//        guard let markup = Double(markup)               else { throw AppError.invalidMarkup }
+//        let realm = try await Realm()
+//        let department = DepartmentEntity(name: name, restockNum: restockThresh, defMarkup: markup)
+//        try await realm.asyncWrite {
+//            realm.add(department)
+//        }
+//    }
     
     /// Update an existing department
-    @MainActor func updateDepartment(dept: DepartmentEntity, newName: String, thresh: String, markup: String) async throws {
-        guard let thresh = Int(thresh)      else { throw AppError.numericThresholdRequired }
-        guard let markup = Double(markup)   else { throw AppError.invalidMarkup }
-        guard let dept = dept.thaw()        else { throw AppError.thawingDepartmentError }
-        
-        let realm = try await Realm()
-        try await realm.asyncWrite {
-            dept.name = newName
-            dept.restockNumber = thresh
-            dept.defMarkup = markup
-        }
-    }
+//    @MainActor func updateDepartment(dept: DepartmentEntity, newName: String, thresh: String, markup: String) async throws {
+//        guard let thresh = Int(thresh)      else { throw AppError.numericThresholdRequired }
+//        guard let markup = Double(markup)   else { throw AppError.invalidMarkup }
+//        guard let dept = dept.thaw()        else { throw AppError.thawingDepartmentError }
+//        
+//        let realm = try await Realm()
+//        try await realm.asyncWrite {
+//            dept.name = newName
+//            dept.restockNumber = thresh
+//            dept.defMarkup = markup
+//        }
+//    }
     
-    @MainActor func deleteDepartment(id: RealmSwift.ObjectId) async throws {
+    @MainActor
+    func deleteDepartment(id: RealmSwift.ObjectId) async throws {
         let realm = try await Realm()
         guard let dept = realm.object(ofType: DepartmentEntity.self,
                                       forPrimaryKey: id) else { throw AppError.departmentDoesNotExist }
@@ -103,63 +104,63 @@ actor RealmActor {
     }
     
     /// Sales use a SaleEntity model instead of ItemEntity, so there's no risk of losing sale data.
-    @MainActor func deleteItem(withId id: ObjectId) async throws {
-        // Make sure item is not currently in cart.
-        let realm = try await Realm()
-        guard let item = realm.object(ofType: ItemEntity.self, forPrimaryKey: id) else { throw AppError.noItemFound }
-        
-        try await realm.asyncWrite {
-            realm.delete(item)
-        }
-    }
+//    @MainActor func deleteItem(withId id: ObjectId) async throws {
+//        // Make sure item is not currently in cart.
+//        let realm = try await Realm()
+//        guard let item = realm.object(ofType: ItemEntity.self, forPrimaryKey: id) else { throw AppError.noItemFound }
+//        
+//        try await realm.asyncWrite {
+//            realm.delete(item)
+//        }
+//    }
     
     // MARK: - ITEMS
-    @MainActor func fetchAllItems() throws -> Results<ItemEntity> {
-        let realm = try Realm()
-        return realm.objects(ItemEntity.self)
-    }
-    
-    @MainActor func fetchItem(withId id: ObjectId) throws -> ItemEntity {
-        let realm = try Realm()
-        return realm.object(ofType: ItemEntity.self, forPrimaryKey: id) ?? ItemEntity()
-    }
+//    @MainActor func fetchAllItems() throws -> Results<ItemEntity> {
+//        let realm = try Realm()
+//        return realm.objects(ItemEntity.self)
+//    }
+//    
+//    @MainActor func fetchItem(withId id: ObjectId) throws -> ItemEntity {
+//        let realm = try Realm()
+//        return realm.object(ofType: ItemEntity.self, forPrimaryKey: id) ?? ItemEntity()
+//    }
     
     // TODO: Change to only request ID
-    func saveItem(dept: DepartmentEntity?, name: String, att: String, qty: String, price: String, cost: String) async throws {
-        guard let dept = dept           else { throw AppError.invalidDepartment }
-        guard name.isNotEmpty           else { throw AppError.invalidItemName }
-        guard let price = Double(price) else { throw AppError.invalidPrice }
-                
-        let cost = Double(cost) ?? 0
-        let qty = Int(qty) ?? 0
-        
-        let newItem = ItemEntity(name: name, attribute: att, retailPrice: price, avgCostPer: cost, onHandQty: qty)
-        let realm = try await Realm()
-        try await realm.asyncWrite {
-            realm.objects(DepartmentEntity.self).first(where: { $0._id == dept._id })?.items.append(newItem)
-        }
-    } //: Save Item
-    
-    @MainActor func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) async throws {
-        let price = price.replacingOccurrences(of: "$", with: "")
-        let cost = cost.replacingOccurrences(of: "$", with: "")
-        
-        guard name.isNotEmpty                   else { throw AppError.invalidItemName }
-        guard let qty = Int(qty)                else { throw AppError.invalidQuantity }
-        guard let price = Double(price)         else { throw AppError.invalidPrice }
-        guard let cost = Double(cost)           else { throw AppError.invalidCost }
-        guard let existingItem = item.thaw()    else { throw AppError.thawingItemError }
-        
-        let realm = try await Realm()
-        try await realm.asyncWrite {
-            existingItem.name = name
-            existingItem.attribute = att
-            existingItem.onHandQty = qty
-            existingItem.retailPrice = price
-            existingItem.unitCost = cost
-        }
-        
-    }
+//    func saveItem(dept: DepartmentEntity?, name: String, att: String, qty: String, price: String, cost: String) async throws {
+//        guard let dept = dept           else { throw AppError.invalidDepartment }
+//        guard name.isNotEmpty           else { throw AppError.invalidItemName }
+//        guard let price = Double(price) else { throw AppError.invalidPrice }
+//                
+//        let cost = Double(cost) ?? 0
+//        let qty = Int(qty) ?? 0
+//        
+//        let newItem = ItemEntity(name: name, attribute: att, retailPrice: price, avgCostPer: cost, onHandQty: qty)
+//        let realm = try await Realm()
+//        try await realm.asyncWrite {
+//            realm.objects(DepartmentEntity.self).first(where: { $0._id == dept._id })?.items.append(newItem)
+//        }
+//    } //: Save Item
+//    
+//    @MainActor func updateItem(item: ItemEntity, name: String, att: String, qty: String, price: String, cost: String) async throws {
+//        let price = price.replacingOccurrences(of: "$", with: "")
+//        let cost = cost.replacingOccurrences(of: "$", with: "")
+//        
+//        guard name.isNotEmpty                   else { throw AppError.invalidItemName }
+//        guard let qty = Int(qty)                else { throw AppError.invalidQuantity }
+//        guard let price = Double(price)         else { throw AppError.invalidPrice }
+//        guard let cost = Double(cost)           else { throw AppError.invalidCost }
+//        guard let existingItem = item.thaw()    else { throw AppError.thawingItemError }
+//        
+//        let realm = try await Realm()
+//        try await realm.asyncWrite {
+//            existingItem.name = name
+//            existingItem.attribute = att
+//            existingItem.onHandQty = qty
+//            existingItem.retailPrice = price
+//            existingItem.unitCost = cost
+//        }
+//        
+//    }
     
     @MainActor func moveItems(from fromDept: DepartmentEntity, to toDept: DepartmentEntity) async throws {
         let realm = try await Realm()
@@ -175,7 +176,6 @@ actor RealmActor {
         }
     }
     
-    // New
     @MainActor
     func moveItems(withIds itemIds: [ObjectId], toDepartmentId: ObjectId) async throws {
         let realm = try await Realm()
@@ -194,7 +194,6 @@ actor RealmActor {
         }
     }
     
-    // New
     @MainActor
     func deleteItems(withIds itemIds: [ObjectId]) async throws {
         let realm = try await Realm()
@@ -218,24 +217,24 @@ actor RealmActor {
         }
     }
     
-    @MainActor func adjustStock(for item: ItemEntity, by amt: Int) async throws {
-        if let invItem = item.thaw() {
-            let newOnHandQty = invItem.onHandQty - amt
-            let realm = try await Realm()
-            try await realm.asyncWrite {
-                invItem.onHandQty = newOnHandQty
-            }
-        }
-    }
+//    @MainActor func adjustStock(for item: ItemEntity, by amt: Int) async throws {
+//        if let invItem = item.thaw() {
+//            let newOnHandQty = invItem.onHandQty - amt
+//            let realm = try await Realm()
+//            try await realm.asyncWrite {
+//                invItem.onHandQty = newOnHandQty
+//            }
+//        }
+//    }
     
-    @MainActor func sellItem(withId itemId: ObjectId, by amt: Int) async throws {
-        let realm = try await Realm()
-        if let invItem = realm.object(ofType: ItemEntity.self, forPrimaryKey: itemId) {
-            let newOnHandQty = invItem.onHandQty - amt
-            try await realm.asyncWrite {
-                invItem.onHandQty = newOnHandQty
-            }
-        }
+//    @MainActor func sellItem(withId itemId: ObjectId, by amt: Int) async throws {
+//        let realm = try await Realm()
+//        if let invItem = realm.object(ofType: ItemEntity.self, forPrimaryKey: itemId) {
+//            let newOnHandQty = invItem.onHandQty - amt
+//            try await realm.asyncWrite {
+//                invItem.onHandQty = newOnHandQty
+//            }
+//        }
         
 //        if let invItem = item.thaw() {
 //            let newOnHandQty = invItem.onHandQty - amt
@@ -244,14 +243,14 @@ actor RealmActor {
 //                invItem.onHandQty = newOnHandQty
 //            }
 //        }
-    }
+//    }
     
     /// Try to get the number of sales, otherwise return 0
-    @MainActor func getSalesCount() -> Int {
-        let realm = try? Realm()
-        let count = realm?.objects(SaleEntity.self).count ?? 0
-        return count + 1
-    }
+//    @MainActor func getSalesCount() -> Int {
+//        let realm = try? Realm()
+//        let count = realm?.objects(SaleEntity.self).count ?? 0
+//        return count + 1
+//    }
     
     func deleteAll() async throws {
         let realm = try await Realm()

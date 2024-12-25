@@ -55,7 +55,6 @@ class OnboardingViewModel: ObservableObject {
         guard let company = realm.objects(CompanyEntity.self).first else { return }
         
         do {
-            // Thaw the frozen object if needed and update it
             if let thawedCompany = company.thaw() {
                 try realm.write {
                     thawedCompany.finishedOnboarding = true
@@ -76,10 +75,13 @@ class OnboardingViewModel: ObservableObject {
     
 }
 
+// MARK: - Onboarding View
+
 struct OnboardingView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel = OnboardingViewModel()
     @State private var path: NavigationPath = .init()
+    @State private var isShowingLanding: Bool = false
     
     @ObservedResults(DepartmentEntity.self) var departments
     @ObservedResults(CompanyEntity.self) var companies
@@ -106,19 +108,19 @@ struct OnboardingView: View {
               description: "This will be used when calculating and displaying your sales.",
               destination: .company,
               isEnabled: true),
-            
-        .init(condition: departmentComplete,
-              title: "Add a department",
-              description: "Your items will be grouped into departments.",
-              destination: .department(DepartmentEntity()),
-              isEnabled: true),
-            
-        .init(condition: itemComplete,
-              title: "Add an item",
-              description: "You will be able to select items to add to the cart.",
-              destination: .item(ItemEntity()),
-              isEnabled: departmentComplete)
-        ]
+        
+            .init(condition: departmentComplete,
+                  title: "Add a department",
+                  description: "Your items will be grouped into departments.",
+                  destination: .department(DepartmentEntity()),
+                  isEnabled: true),
+        
+            .init(condition: itemComplete,
+                  title: "Add an item",
+                  description: "You will be able to select items to add to the cart.",
+                  destination: .item(ItemEntity()),
+                  isEnabled: departmentComplete)
+    ]
     }
     
     var body: some View {
@@ -163,7 +165,14 @@ struct OnboardingView: View {
         .task {
             viewModel.setupDefaultObjects()
         }
-        
+        .onAppear {
+            // Don't show landing if they've already begun onboarding
+            if companyComplete || departmentComplete || itemComplete { return }
+            isShowingLanding = true
+        }
+        .fullScreenCover(isPresented: $isShowingLanding) {
+            LandingView()
+        }
     }
     
     @ViewBuilder private func destinationView(for display: LSXDisplay) -> some View {
@@ -177,13 +186,12 @@ struct OnboardingView: View {
         case .item:
             ItemDetailView(item: items.first ?? ItemEntity())
             
-        default:
-            Color.clear
+        default: Color.clear
         }
     }
 }
 
-// MARK: - Supporting Views
+// MARK: - Onboarding Step View
 struct OnboardingStepRow: View {
     let step: OnboardingStepModel
     let action: () -> Void

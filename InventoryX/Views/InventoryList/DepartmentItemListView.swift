@@ -55,7 +55,8 @@ struct DepartmentItemListView: View {
                 Button {
                     vm.multiSelect(department.items.map({ $0 }))
                 } label: {
-                    Image(systemName: hasSelectedItems ? "checkmark.square.fill" : "square")                        .foregroundStyle(Color.accentColor)
+                    Image(systemName: hasSelectedItems ? "checkmark.square.fill" : "square")
+                        .foregroundStyle(Color.accentColor)
                 }
                 .font(.system(.headline, design: .rounded, weight: .regular))
                 
@@ -147,9 +148,7 @@ struct DepartmentItemListView: View {
     private func deleteDepartmentTapped(dept: DepartmentEntity) {
         if dept.items.isEmpty {
             Task {
-                await vm.deleteDepartment(withId: dept._id) { err in
-                    print(err)
-                }
+                await vm.deleteDepartment(withId: dept._id)
             }
         } else {
             vm.showMoveItems()

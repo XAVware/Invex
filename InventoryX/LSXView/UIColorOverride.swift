@@ -15,15 +15,15 @@ import SwiftUI
  LazySplitX: Fixes background color animation that appears in innerSplit when menu appears.
  */
 
-extension UIColor {
-    static let classInit: Void = {
-        let orig = class_getClassMethod(UIColor.self, #selector(getter: opaqueSeparator))
-        let new = class_getClassMethod(UIColor.self, #selector(getter: customDividerColor))
-        method_exchangeImplementations(orig!, new!)
-    }()
-
-    /// Replaces the `orig` color with a clear color.
-    @objc open class var customDividerColor: UIColor {
-        return UIColor(Color.bg)
-    }
-}
+//extension UIColor {
+//    static let classInit: Void = {
+//        let orig = class_getClassMethod(UIColor.self, #selector(getter: opaqueSeparator))
+//        let new = class_getClassMethod(UIColor.self, #selector(getter: customDividerColor))
+//        method_exchangeImplementations(orig!, new!)
+//    }()
+//
+//    /// Replaces the `orig` color with a clear color.
+//    @objc open class var customDividerColor: UIColor {
+//        return UIColor(Color.bg)
+//    }
+//}

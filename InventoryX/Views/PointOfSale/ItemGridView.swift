@@ -39,38 +39,38 @@ struct ItemGridView: View {
         } //: Scroll
         .scrollIndicators(.hidden)
     } //: Body
+}
+
+// MARK: - Item Grid Button Label
+
+struct ItemGridButtonLabel: View {
+    let item: ItemEntity
     
-    
-    struct ItemGridButtonLabel: View {
-        let item: ItemEntity
-        
-        var body: some View {
-            Grid(alignment: .leading) {
-                Text(item.name)
-                    .fontWeight(.semibold)
-                    .font(.headline)
-                
-                GridRow(alignment: .bottom) {
-                    Text(item.attribute)
-                        .fontWeight(.thin)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(item.formattedPrice)
-                }
-                .font(.subheadline)
+    var body: some View {
+        Grid(alignment: .leading) {
+            Text(item.name)
+                .fontWeight(.semibold)
+                .font(.headline)
+            
+            GridRow(alignment: .bottom) {
+                Text(item.attribute)
+                    .fontWeight(.thin)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text(item.formattedPrice)
             }
-            .foregroundStyle(Color.textPrimary)
-            .padding(10)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .fontDesign(.rounded)
-            .background(.ultraThinMaterial)
-            .overlay(
-                RoundedRectangle(cornerRadius: 6)
-                    .stroke(Color.accentColor.opacity(0.1), lineWidth: 1)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .font(.subheadline)
         }
+        .foregroundStyle(Color.textPrimary)
+        .padding(10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .fontDesign(.rounded)
+        .background(.ultraThinMaterial)
+        .overlay(
+            RoundedRectangle(cornerRadius: 6)
+                .stroke(Color.accentColor.opacity(0.1), lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 6))
     }
-    
 }
 
 

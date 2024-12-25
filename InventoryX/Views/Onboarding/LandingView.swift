@@ -11,10 +11,9 @@ struct LandingView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
-    var isIphone: Bool { hSize == .compact || vSize == .compact }
+//    var isIphone: Bool { hSize == .compact || vSize == .compact }
     
     @State var index: Int = 0
-    @State var path: NavigationPath = .init()
     
     let highlights: [LandingHighlight] = [
         LandingHighlight(imageName: "LandingImage", title: "Welcome!", caption: "Transform your workflow with Invex - Point of Sale designed for cash-run businesses."),
@@ -29,7 +28,6 @@ struct LandingView: View {
     private func nextTapped() {
         if index == highlights.count - 1 {
             dismiss()
-            path.append(LSXDisplay.company)
         } else {
             withAnimation(.snappy) {
                 index += 1
@@ -38,6 +36,7 @@ struct LandingView: View {
     }
     
     private func backTapped() {
+        guard index != 0 else { return }
         withAnimation(.snappy) {
             index -= 1
         }
@@ -46,52 +45,42 @@ struct LandingView: View {
     var body: some View {
         GeometryReader { geo in
             let isLandscape = geo.size.width > geo.size.height
-            
-            VStack {
+            let layout = isLandscape ? AnyLayout(HStackLayout(alignment: .center)) : AnyLayout(VStackLayout(alignment: .leading))
+            VStack(spacing: 0) {
+                let fontStyle = vSize == .regular ? Font.TextStyle.largeTitle : Font.TextStyle.title2
                 Text("Invex")
-                    .font(vSize == .regular ? .largeTitle : .title2)
-                    .fontWeight(.semibold)
+                    .font(.system(fontStyle, design: .rounded, weight: .semibold))
                     .foregroundStyle(.accent)
-                    .fontDesign(.rounded)
-                    .padding(.top)
+                    .padding(.vertical)
+                
+                DividerX()
                 
                 TabView(selection: $index.animation(.snappy)) {
                     ForEach(highlights) { highlight in
                         VStack {
-                            if isLandscape {
-                                HStack(alignment: .center) {
-                                    HexImage(imageName: highlight.imageName)
-                                        .padding()
-                                        .frame(maxWidth: 540, maxHeight: 540)
-                                    Spacer()
-                                    LandingHighlightTextView(highlight: highlight)
-                                        .padding()
-                                        .frame(maxWidth: 540, maxHeight: 240)
-                                } //: HStack
-                                .frame(maxWidth: 1150)
-                            } else {
-                                VStack(alignment: .leading) {
-                                    HexImage(imageName: highlight.imageName)
-                                        .padding()
-                                        .frame(maxWidth: 540, maxHeight: 540)
-                                    
-                                    LandingHighlightTextView(highlight: highlight)
-                                        .padding()
-                                        .frame(maxWidth: 540, maxHeight: 240)
-                                } //: VStack
+                            layout {
+                                HexImage(imageName: highlight.imageName)
+                                    .padding()
+                                    .frame(maxWidth: 540, maxHeight: 540)
+                                Spacer()
+                                LandingHighlightTextView(highlight: highlight)
+                                    .padding()
+                                    .frame(maxWidth: 540, maxHeight: 240)
                             }
                         } //: VStack
                         .padding(.leading, max(8, geo.safeAreaInsets.leading)) // Padding on side of NeoCard. Use the width of safe areas unless they're less than 8
                         .padding(.trailing, max(8, geo.safeAreaInsets.trailing))
                         .tag(highlights.firstIndex(of: highlight)!)
-                        
                     } //: For Each
                 } //: TabView
                 .ignoresSafeArea()
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .overlay(index == highlights.count - 1 ? disclaimer : nil, alignment: .bottom)
                 
+                DividerX()
+
                 navigationPanel
+                    .padding()
             } //: VStack
             .frame(maxWidth: .infinity)
         } //: Geometry Reader
@@ -99,36 +88,33 @@ struct LandingView: View {
     
     private var navigationPanel: some View {
         HStack {
-            
             Button("Back", systemImage: "chevron.left", action: backTapped)
-                .buttonStyle(ThemeButtonStyle(.secondary))
+                .buttonStyle(.borderless)
+                .padding(12)
                 .opacity(index == 0 ? 0 : 1)
             
-            HStack(alignment: .center) {
-                Spacer()
-                ForEach(highlights) { highlight in
-                    let isCurrent = highlight.id == highlights[index].id
-                    Circle()
-                        .fill(Color.accent)
-                        .frame(width: isCurrent ? 12 : 10, height: isCurrent ? 12 : 11)
-                        .opacity(isCurrent ? 1 : 0.25)
-                    
-                }
-                Spacer()
-            } //: HStack
+            Spacer()
             
-            Button {
-                backTapped()
-            } label: {
-                HStack {
-                    Text(index == highlights.count - 1 ? "Sign Up" : "Next")
-                    Image(systemName: "chevron.right")
-                }
+            ForEach(highlights) { highlight in
+                let isCurrent = highlight.id == highlights[index].id
+                Circle()
+                    .fill(Color.accent)
+                    .frame(width: isCurrent ? 12 : 10, height: isCurrent ? 12 : 11)
+                    .opacity(isCurrent ? 1 : 0.25)
             }
-            .buttonStyle(ThemeButtonStyle(cornerRadius: 8))
+            
+            Spacer()
+            
+            let nextBtnText: String = index == highlights.count - 1 ? "Sign Up" : "Next"
+            Button(nextBtnText, systemImage: "chevron.right", action: nextTapped)
+                .font(.headline)
+                .buttonStyle(.borderedProminent)
+                .labelStyle(.trailingImage)
         } //: HStack
-        .frame(height: 48)
-        .frame(maxWidth: .infinity)
+        .buttonBorderShape(.roundedRectangle)
+        .controlSize(.large)
+        .frame(maxWidth: .infinity, maxHeight: 54)
+        .fontDesign(.rounded)
     }
     
     private var disclaimer: some View {
@@ -143,15 +129,15 @@ struct LandingView: View {
             }
             .buttonStyle(PlainButtonStyle())
         } //: VStack
-        .font(.caption2)
+        .font(.system(.caption2, design: .rounded))
         .padding()
     }
 }
 
-//#Preview {
-//    LandingView(path: .constant(.init()))
-//}
-//
+#Preview {
+    LandingView()
+}
+
 
 
 

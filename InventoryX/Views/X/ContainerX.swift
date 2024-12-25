@@ -6,15 +6,6 @@
 //
 
 import SwiftUI
-//struct DividerX: View {
-//    @Environment(FormXViewModel.self) var formVM
-//    
-//    var body: some View {
-//        if formVM.expandedContainer == nil {
-//            Divider()
-//        }
-//    }
-//}
 
 struct ContainerXModel {
     let id: UUID = UUID()
@@ -41,6 +32,10 @@ struct ContainerX<C: View>: View {
         self.content = content()
     }
     
+    private var divider: some View {
+        DividerX().opacity(formVM.expandedContainer == nil ? 1 : 0)
+    }
+    
     var body: some View {
         @Bindable var formVM: FormXViewModel = formVM
         contentView
@@ -54,6 +49,7 @@ struct ContainerX<C: View>: View {
                     formVM.forceClose()
                 }
             })
+            .overlay(divider, alignment: .bottom)
     } //: Body
     
     @ViewBuilder private var contentView: some View {

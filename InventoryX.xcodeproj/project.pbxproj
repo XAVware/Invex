@@ -51,12 +51,9 @@
 		9421898E2C2375AD00C78586 /* DepartmentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421894B2C2375AD00C78586 /* DepartmentEntity.swift */; };
 		9421898F2C2375AD00C78586 /* ItemEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421894C2C2375AD00C78586 /* ItemEntity.swift */; };
 		942189902C2375AD00C78586 /* SaleEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421894D2C2375AD00C78586 /* SaleEntity.swift */; };
-		942189912C2375AD00C78586 /* DetailType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421894F2C2375AD00C78586 /* DetailType.swift */; };
-		942189942C2375AD00C78586 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189532C2375AD00C78586 /* AuthService.swift */; };
 		942189952C2375AD00C78586 /* RealmActor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189542C2375AD00C78586 /* RealmActor.swift */; };
 		942189962C2375AD00C78586 /* RealmMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189552C2375AD00C78586 /* RealmMigrator.swift */; };
 		94241CA52CD34EB800C7FC55 /* MenuButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94241CA42CD34EB800C7FC55 /* MenuButtonStyle.swift */; };
-		943946C92CCC749600DB23C3 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943946C82CCC749600DB23C3 /* SwiftUIView.swift */; };
 		944F670A2C89448F00828875 /* CartItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944F67092C89448F00828875 /* CartItemView.swift */; };
 		9453BEC42BB3C79F007C63A4 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 9453BEC32BB3C79F007C63A4 /* Algorithms */; };
 		9454FEF92C843A0E00F8B6D2 /* NeomorphicSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */; };
@@ -71,7 +68,7 @@
 		94797A892C8295C600B9CDD8 /* ThemeButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */; };
 		94797A8B2C82964F00B9CDD8 /* HexImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94797A8A2C82964F00B9CDD8 /* HexImage.swift */; };
 		94815B572C6B32640085EE3C /* FieldDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94815B562C6B32640085EE3C /* FieldDivider.swift */; };
-		9489734C2D1B4AA000FF30E0 /* LeadingImageLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9489734B2D1B4A8F00FF30E0 /* LeadingImageLabelStyle.swift */; };
+		9489734C2D1B4AA000FF30E0 /* TrailingImageLabelStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9489734B2D1B4A8F00FF30E0 /* TrailingImageLabelStyle.swift */; };
 		9497738C2D08FCFB00646A87 /* DepartmentPickerX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9497738B2D08FCF700646A87 /* DepartmentPickerX.swift */; };
 		94A0BF1E2D19BB34008D6CEE /* DividerX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A0BF1D2D19BB32008D6CEE /* DividerX.swift */; };
 		94A9D3F52CEAC871006650B1 /* PrimaryButtonPanelX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94A9D3F42CEAC86A006650B1 /* PrimaryButtonPanelX.swift */; };
@@ -139,13 +136,10 @@
 		9421894B2C2375AD00C78586 /* DepartmentEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentEntity.swift; sourceTree = "<group>"; };
 		9421894C2C2375AD00C78586 /* ItemEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemEntity.swift; sourceTree = "<group>"; };
 		9421894D2C2375AD00C78586 /* SaleEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SaleEntity.swift; sourceTree = "<group>"; };
-		9421894F2C2375AD00C78586 /* DetailType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailType.swift; sourceTree = "<group>"; };
-		942189532C2375AD00C78586 /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		942189542C2375AD00C78586 /* RealmActor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmActor.swift; sourceTree = "<group>"; };
 		942189552C2375AD00C78586 /* RealmMigrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmMigrator.swift; sourceTree = "<group>"; };
 		942189972C23766600C78586 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94241CA42CD34EB800C7FC55 /* MenuButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButtonStyle.swift; sourceTree = "<group>"; };
-		943946C82CCC749600DB23C3 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		944F67092C89448F00828875 /* CartItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemView.swift; sourceTree = "<group>"; };
 		9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeomorphicSection.swift; sourceTree = "<group>"; };
 		945C28872C8689A10041836D /* ExternalLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalLinks.swift; sourceTree = "<group>"; };
@@ -159,7 +153,7 @@
 		94797A882C8295C600B9CDD8 /* ThemeButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeButtonStyle.swift; sourceTree = "<group>"; };
 		94797A8A2C82964F00B9CDD8 /* HexImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HexImage.swift; sourceTree = "<group>"; };
 		94815B562C6B32640085EE3C /* FieldDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldDivider.swift; sourceTree = "<group>"; };
-		9489734B2D1B4A8F00FF30E0 /* LeadingImageLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeadingImageLabelStyle.swift; sourceTree = "<group>"; };
+		9489734B2D1B4A8F00FF30E0 /* TrailingImageLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrailingImageLabelStyle.swift; sourceTree = "<group>"; };
 		9497738B2D08FCF700646A87 /* DepartmentPickerX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentPickerX.swift; sourceTree = "<group>"; };
 		94A0BF1D2D19BB32008D6CEE /* DividerX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DividerX.swift; sourceTree = "<group>"; };
 		94A9D3F42CEAC86A006650B1 /* PrimaryButtonPanelX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButtonPanelX.swift; sourceTree = "<group>"; };
@@ -232,7 +226,7 @@
 		9421890D2C2375AC00C78586 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				9489734B2D1B4A8F00FF30E0 /* LeadingImageLabelStyle.swift */,
+				9489734B2D1B4A8F00FF30E0 /* TrailingImageLabelStyle.swift */,
 				942189092C2375AC00C78586 /* Date+Ext.swift */,
 				9421890A2C2375AC00C78586 /* Double+Ext.swift */,
 				9421890B2C2375AC00C78586 /* String+Ext.swift */,
@@ -277,7 +271,6 @@
 			isa = PBXGroup;
 			children = (
 				9421891C2C2375AC00C78586 /* AppError.swift */,
-				9421894F2C2375AD00C78586 /* DetailType.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -295,7 +288,6 @@
 		942189292C2375AC00C78586 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				9497738B2D08FCF700646A87 /* DepartmentPickerX.swift */,
 				942189252C2375AC00C78586 /* DateTimeLabel.swift */,
 				942189262C2375AC00C78586 /* DepartmentPicker.swift */,
 				942189272C2375AC00C78586 /* NumberPadView.swift */,
@@ -337,7 +329,6 @@
 				942189342C2375AC00C78586 /* ConfirmSaleView.swift */,
 				942189352C2375AC00C78586 /* ItemGridView.swift */,
 				942189362C2375AC00C78586 /* POSView.swift */,
-				943946C82CCC749600DB23C3 /* SwiftUIView.swift */,
 			);
 			path = PointOfSale;
 			sourceTree = "<group>";
@@ -404,7 +395,6 @@
 		942189562C2375AD00C78586 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				942189532C2375AD00C78586 /* AuthService.swift */,
 				942189542C2375AD00C78586 /* RealmActor.swift */,
 				942189552C2375AD00C78586 /* RealmMigrator.swift */,
 			);
@@ -430,6 +420,7 @@
 				94CAB68E2CF6D915002AE31E /* Keypads */,
 				946D2F772CE2E95000F3FA81 /* ContainerX.swift */,
 				94A9D3FA2CEB2FD5006650B1 /* CurrencyFieldX.swift */,
+				9497738B2D08FCF700646A87 /* DepartmentPickerX.swift */,
 				94F968D92CD4926000242D27 /* FormX.swift */,
 				94A9D3F82CEAC8AE006650B1 /* NumberPickerX.swift */,
 				94A9D3F42CEAC86A006650B1 /* PrimaryButtonPanelX.swift */,
@@ -539,9 +530,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				942189912C2375AD00C78586 /* DetailType.swift in Sources */,
 				942189762C2375AD00C78586 /* ItemDetailView.swift in Sources */,
-				943946C92CCC749600DB23C3 /* SwiftUIView.swift in Sources */,
 				942189902C2375AD00C78586 /* SaleEntity.swift in Sources */,
 				942189672C2375AD00C78586 /* RootViewModel.swift in Sources */,
 				942189772C2375AD00C78586 /* DepartmentItemListView.swift in Sources */,
@@ -550,14 +539,13 @@
 				9497738C2D08FCFB00646A87 /* DepartmentPickerX.swift in Sources */,
 				942189952C2375AD00C78586 /* RealmActor.swift in Sources */,
 				942189962C2375AD00C78586 /* RealmMigrator.swift in Sources */,
-				9489734C2D1B4AA000FF30E0 /* LeadingImageLabelStyle.swift in Sources */,
+				9489734C2D1B4AA000FF30E0 /* TrailingImageLabelStyle.swift in Sources */,
 				942189612C2375AD00C78586 /* DetailViewModel.swift in Sources */,
 				946D2F702CD9B84800F3FA81 /* CartTotalsView.swift in Sources */,
 				946D2F722CDB3A3A00F3FA81 /* TextFieldX.swift in Sources */,
 				942189692C2375AD00C78586 /* AppError.swift in Sources */,
 				94FA6CD32C6D2D54001D3CA8 /* UIColorOverride.swift in Sources */,
 				942189812C2375AD00C78586 /* MoveItemsView.swift in Sources */,
-				942189942C2375AD00C78586 /* AuthService.swift in Sources */,
 				9421898B2C2375AD00C78586 /* SaleData.swift in Sources */,
 				94815B572C6B32640085EE3C /* FieldDivider.swift in Sources */,
 				942189642C2375AD00C78586 /* InventoryListViewModel.swift in Sources */,

@@ -104,7 +104,6 @@ struct CompanyDetailView: View {
                     }
                 }
             }
-            
         } //: FormX
         .onAppear {
             createDefaultCompany()
@@ -137,7 +136,6 @@ struct CompanyDetailView: View {
         }
     } //: Body
 }
-
 
 #Preview {
     CompanyDetailView(company: CompanyEntity(name: "Preview Company", taxRate: 0.078))

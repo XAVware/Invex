@@ -23,6 +23,10 @@ struct DepartmentPickerX: View {
         self.onChange = onChange
     }
     
+    private var divider: some View {
+        DividerX().opacity(formVM.expandedContainer == nil ? 1 : 0)
+    }
+    
     var body: some View {
         if formVM.expandedContainer == nil {
             HStack {
@@ -48,10 +52,16 @@ struct DepartmentPickerX: View {
                         Text(selectedDepartment?.name ?? "Select")
                         Image(systemName: "chevron.up.chevron.down")
                     }
-                    .foregroundStyle(.black)
+                    .foregroundStyle(Color.textPrimary)
                 }
             } //: HStack
             .padding(.vertical)
+            .overlay(divider, alignment: .bottom)
+            .onAppear {
+                if selectedDepartment == nil {
+                    selectedDepartment = departments.first
+                }
+            }
         }
     }
 }
