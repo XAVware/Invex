@@ -54,3 +54,34 @@ enum AppError: Error {
         }
     }
 }
+
+extension AppError {
+    private func authError(_ origError: Error) -> AppError {
+        if let error = origError as? AppError {
+            return switch error {
+            case .departmentAlreadyExists:      AppError.departmentAlreadyExists
+            case .departmentHasItems:           AppError.departmentHasItems
+            case .departmentDoesNotExist:       AppError.departmentDoesNotExist
+            case .departmentIsNil:              AppError.departmentIsNil
+            case .invalidTaxPercentage:         AppError.invalidTaxPercentage
+            case .invalidMarkup:                AppError.invalidMarkup
+            case .invalidCompanyName:           AppError.invalidCompanyName
+            case .invalidDepartment:            AppError.invalidDepartment
+            case .invalidItemName:              AppError.invalidItemName
+            case .invalidQuantity:              AppError.invalidQuantity
+            case .invalidPrice:                 AppError.invalidPrice
+            case .invalidCost:                  AppError.invalidCost
+            case .numericThresholdRequired:     AppError.numericThresholdRequired
+            case .noPasscodeProcesses:          AppError.noPasscodeProcesses
+            case .noPasscodeFound:              AppError.noPasscodeFound
+            case .noItemFound:                  AppError.noItemFound
+            case .passcodesDoNotMatch:          AppError.passcodesDoNotMatch
+            case .thawingDepartmentError:       AppError.thawingDepartmentError
+            case .thawingItemError:             AppError.thawingItemError
+            default:                            AppError.otherError(origError)
+            }
+        } else {
+            return AppError.otherError(origError)
+        }
+    }
+}

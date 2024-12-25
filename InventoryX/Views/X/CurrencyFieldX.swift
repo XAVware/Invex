@@ -62,7 +62,7 @@ struct CurrencyFieldX: View {
         
         var dollarSign = AttributedString("$")
         dollarSign.font = .system(size: 36, weight: .light, design: .rounded)
-        dollarSign.foregroundColor = Color.neoOverDark
+        dollarSign.foregroundColor = Color.neoOverLight
         dollarSign.baselineOffset = 18
         dollarSign.kern = 6
         
@@ -80,7 +80,7 @@ struct CurrencyFieldX: View {
         attributedDec.kern = 1.5
         
         placeholders.font = .system(size: 56, weight: .semibold, design: .rounded)
-        placeholders.foregroundColor = Color.black.opacity(requiresPlaceholder ? 1 : 0.3)
+        placeholders.foregroundColor = Color.textPrimary.opacity(requiresPlaceholder ? 1 : 0.3)
         placeholders.kern = 1.5
         
         return dollarSign + attInt + dec + attributedDec + placeholders
@@ -92,9 +92,7 @@ struct CurrencyFieldX: View {
         VStack {
             Spacer()
             
-            layout {
-//                HStack(spacing: 4) {
-                    
+            layout {                    
                 Text(formattedInput)
                     .animation(.interactiveSpring, value: formattedInput)
                 .animation(.spring(), value: toggleError)
@@ -124,10 +122,6 @@ struct CurrencyFieldX: View {
                     let dec = val.split(separator: ".")[1]
                     print("Decimal: \(dec)")
                 }
-                
-                
-                
-                print(val)
                 formVM.closeContainer(withValue: val)
             } onSave: {
                 let amt = NSAttributedString(formattedInput).string.replacingOccurrences(of: "$", with: "")

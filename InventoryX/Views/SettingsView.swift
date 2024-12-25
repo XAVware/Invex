@@ -10,14 +10,8 @@ import RealmSwift
 
 struct SettingsView: View {
     @Environment(NavigationService.self) var navService
-    //    @Environment(\.verticalSizeClass) var vSize
-    //    @Environment(\.horizontalSizeClass) var hSize
     @EnvironmentObject var lsxVM: LSXViewModel
-    //    @StateObject var settingsVM: SettingsViewModel = SettingsViewModel()
-    
-    //    @State var showPasscodeView: Bool = false
-    //    @State var showDeleteConfirmation: Bool = false
-    
+
     @ObservedResults(CompanyEntity.self) var companies
     
     // This could be causing lock screen to dismiss on orientation change.

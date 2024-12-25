@@ -10,7 +10,7 @@ import RealmSwift
 
 struct ItemDetailView: View {
     @Environment(\.dismiss) var dismiss
-    @StateObject var vm: DetailViewModel = DetailViewModel()
+//    @StateObject var vm: DetailViewModel = DetailViewModel()
     @ObservedResults(DepartmentEntity.self) var departments
     @State private var selectedDepartment: DepartmentEntity?
     /// If the entity's name is empty when it is initially passed to the view, `isNew` is set to true

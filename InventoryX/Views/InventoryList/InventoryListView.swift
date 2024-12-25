@@ -8,18 +8,15 @@
 import SwiftUI
 import RealmSwift
 
-
 struct InventoryListView: View {
     private enum EntityType { case item, department }
     @Environment(NavigationService.self) var navService
     @ObservedResults(DepartmentEntity.self) var departments
     @State private var vm: InventoryViewModel = .init()
     @State private var sortOrder: [KeyPathComparator<ItemEntity>] = []
-    @State var panelOffset: CGFloat = -48
     
     
     var body: some View {
-//        VStack(spacing: 0) {
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                     ForEach(departments) { dept in
@@ -29,8 +26,7 @@ struct InventoryListView: View {
                 } //: Lazy V
                 .padding(8)
             } // ScrollView
-//        } //: VStack
-        .background(.bg)
+        .background(Color.bg)
         .overlay(multiSelectPanel, alignment: .bottom)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -77,19 +73,17 @@ struct InventoryListView: View {
                 }
         } //: HStack
         .padding()
-        .background(
-            Color.neoOverBg
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .shadow(radius: 2)
+        .background(.ultraThinMaterial)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.accentColor.opacity(0.2), lineWidth: 1)
         )
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .shadow(color: Color.textPrimary.opacity(0.15), radius: 3)
         .frame(maxWidth: 540, maxHeight: 48)
         .opacity(vm.selectedItems.isEmpty ? 0 : 1)
-        .offset(y: panelOffset)
-        .onChange(of: vm.selectedItems) { _, newValue in
-            withAnimation(.bouncy(duration: 0.25)) {
-                panelOffset = newValue.isEmpty ? -48 : 12
-            }
-        }
+        .offset(y: vm.selectedItems.isEmpty ? 96 : -12)
+        .animation(.interactiveSpring, value: vm.selectedItems.isEmpty)
         .padding()
         
     } //: Multi Select Panel

@@ -10,15 +10,8 @@ import Foundation
 @MainActor class SettingsViewModel: ObservableObject {
     @Published var companyName: String = ""
     @Published var taxRateStr: String = ""
-    
-//    @Published var passHash: String
-    
+        
     init() {
-//        if let currentPassHash = AuthService.shared.getCurrentPasscode()  {
-//            passHash = currentPassHash
-//        } else {
-//            passHash = ""
-//        }
         fetchCompanyData()
     }
     
@@ -36,7 +29,6 @@ import Foundation
     func deleteAccount() async {
         do {
             try await RealmActor().deleteAll()
-//            AuthService.shared.deleteAll()
         } catch {
             print("Error deleting account: \(error.localizedDescription)")
         }

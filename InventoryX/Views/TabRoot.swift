@@ -31,6 +31,10 @@ import Combine
  
  */
 
+@MainActor final class LSXViewModel: ObservableObject {
+    @Published var mainDisplay: LSXDisplay = .pos
+}
+
 @Observable
 class NavigationService {
     var path: NavigationPath = .init()

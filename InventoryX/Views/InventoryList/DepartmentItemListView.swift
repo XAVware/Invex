@@ -133,8 +133,12 @@ struct DepartmentItemListView: View {
                     .font(.system(.headline, design: .rounded))
                     .frame(maxWidth: 64, alignment: .trailing)
                 } //: HStack
+                .background(Color.bg200)
                 .padding(.vertical)
                 .padding(.horizontal, 8)
+                .onTapGesture {
+                    onSelect(item)
+                }
                 .environment(vm)
                 
                 Divider().opacity(0.4)

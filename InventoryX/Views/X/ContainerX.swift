@@ -77,6 +77,7 @@ struct ContainerX<C: View>: View {
                         .frame(maxWidth: 48)
                         .underline()
                         .buttonStyle(.plain)
+                        .background(Color.bg.opacity(0.001).padding(-14))
                     }
                 } //: HStack
                 .fontWeight(.medium)
