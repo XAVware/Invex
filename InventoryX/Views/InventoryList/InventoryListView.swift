@@ -17,15 +17,15 @@ struct InventoryListView: View {
     
     
     var body: some View {
-            ScrollView(.vertical, showsIndicators: false) {
-                LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
-                    ForEach(departments) { dept in
-                        DepartmentItemListView(department: dept)
-                            .environment(vm)
-                    }
-                } //: Lazy V
-                .padding(8)
-            } // ScrollView
+        ScrollView(.vertical, showsIndicators: false) {
+            LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
+                ForEach(departments) { dept in
+                    DepartmentItemListView(department: dept)
+                        .environment(vm)
+                }
+            } //: Lazy V
+            .padding(8)
+        } // ScrollView
         .background(Color.bg)
         .overlay(multiSelectPanel, alignment: .bottom)
         .toolbar {

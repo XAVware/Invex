@@ -47,7 +47,7 @@ struct DepartmentItemListView: View {
                 
             }
             .padding(8)
-            .alert("There are items in this department. Move them to a different department first.", isPresented: $vm.showingRemoveItemsFromDeptAlert) {
+            .alert("There are items in this department. Move them to a different department first.", isPresented: $vm.showingMoveItems) {
                 Button("Okay", role: .cancel) { }
             }
             

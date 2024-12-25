@@ -25,40 +25,40 @@ extension DepartmentEntity {
     
     static let categoryArray = [foodCategory, drinkCategory, frozenCategory]
     static var previewRealm: Realm {
-//        let migrator: RealmMigrator = RealmMigrator()
+        //        let migrator: RealmMigrator = RealmMigrator()
         var realm: Realm
         let identifier = "previewRealm"
         let config = Realm.Configuration(inMemoryIdentifier: identifier)
         do {
             realm = try Realm(configuration: config)
-                if realm.isEmpty {
-                    // MARK: - CREATE PREVIEW DATA
-                    debugPrint("Creating preview data")
-                    try realm.write {
-                        company.finishedOnboarding = true
-                        realm.add(company)
-                        
-                        realm.add(foodCategory)
-                        
-                        foodCategory.items.append(objectsIn: ItemEntity.foodArray)
-                        
-                        
-                        realm.add(drinkCategory)
-                        drinkCategory.items.append(objectsIn: ItemEntity.drinkArray)
-                        
-                        realm.add(frozenCategory)
-                        frozenCategory.items.append(objectsIn: ItemEntity.frozenArray)
-                    }
-                    return realm
-                } else {
-                    debugPrint("Deleting preview data")
-                    let realm = try Realm()
-                    try realm.write {
-                        realm.deleteAll()
-                    }
-                    return realm
+            if realm.isEmpty {
+                // MARK: - CREATE PREVIEW DATA
+                debugPrint("Creating preview data")
+                try realm.write {
+                    company.finishedOnboarding = true
+                    realm.add(company)
                     
+                    realm.add(foodCategory)
+                    
+                    foodCategory.items.append(objectsIn: ItemEntity.foodArray)
+                    
+                    
+                    realm.add(drinkCategory)
+                    drinkCategory.items.append(objectsIn: ItemEntity.drinkArray)
+                    
+                    realm.add(frozenCategory)
+                    frozenCategory.items.append(objectsIn: ItemEntity.frozenArray)
                 }
+                return realm
+            } else {
+                debugPrint("Deleting preview data")
+                let realm = try Realm()
+                try realm.write {
+                    realm.deleteAll()
+                }
+                return realm
+                
+            }
             
             
         } catch {

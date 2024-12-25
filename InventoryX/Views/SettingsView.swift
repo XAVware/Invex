@@ -32,14 +32,14 @@ struct SettingsView: View {
     var body: some View {
         FormX(title: "Settings") {
             
-            ThemeFormSection(title: "Profile") {
+            FormSectionX(title: "Profile") {
                 VStack(spacing: 0) {
                     Button("Account", systemImage: "person") { pushView(.company) }
                         .buttonStyle(MenuButtonStyle())
                 } //: VStack
             }
             
-            ThemeFormSection(title: "Legal") {
+            FormSectionX(title: "Legal") {
                 Link(destination: K.termsOfServiceURL) {
                     HStack {
                         Image(systemName: "newspaper")

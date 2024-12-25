@@ -11,19 +11,15 @@
 		942189032C23757200C78586 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 942189022C23757200C78586 /* .gitignore */; };
 		9421895A2C2375AD00C78586 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189092C2375AC00C78586 /* Date+Ext.swift */; };
 		9421895B2C2375AD00C78586 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890A2C2375AC00C78586 /* Double+Ext.swift */; };
-		9421895C2C2375AD00C78586 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890B2C2375AC00C78586 /* String+Ext.swift */; };
 		9421895D2C2375AD00C78586 /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890C2C2375AC00C78586 /* View+Ext.swift */; };
-		9421895E2C2375AD00C78586 /* DepartmentButtonMod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890E2C2375AC00C78586 /* DepartmentButtonMod.swift */; };
 		942189612C2375AD00C78586 /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189132C2375AC00C78586 /* DetailViewModel.swift */; };
 		942189642C2375AD00C78586 /* InventoryListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189162C2375AC00C78586 /* InventoryListViewModel.swift */; };
-		942189652C2375AD00C78586 /* MoveItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189172C2375AC00C78586 /* MoveItemsViewModel.swift */; };
 		942189662C2375AD00C78586 /* PointOfSaleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189182C2375AC00C78586 /* PointOfSaleViewModel.swift */; };
 		942189682C2375AD00C78586 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421891A2C2375AC00C78586 /* SettingsViewModel.swift */; };
 		942189692C2375AD00C78586 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421891C2C2375AC00C78586 /* AppError.swift */; };
 		9421896D2C2375AD00C78586 /* InventoryXApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189212C2375AC00C78586 /* InventoryXApp.swift */; };
 		9421896E2C2375AD00C78586 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 942189222C2375AC00C78586 /* LaunchScreen.storyboard */; };
 		9421896F2C2375AD00C78586 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 942189242C2375AC00C78586 /* Assets.xcassets */; };
-		942189702C2375AD00C78586 /* DateTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189252C2375AC00C78586 /* DateTimeLabel.swift */; };
 		942189712C2375AD00C78586 /* DepartmentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189262C2375AC00C78586 /* DepartmentPicker.swift */; };
 		942189742C2375AD00C78586 /* CompanyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421892A2C2375AC00C78586 /* CompanyDetailView.swift */; };
 		942189752C2375AD00C78586 /* DepartmentDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421892B2C2375AC00C78586 /* DepartmentDetailView.swift */; };
@@ -36,7 +32,6 @@
 		9421897E2C2375AD00C78586 /* POSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189362C2375AC00C78586 /* POSView.swift */; };
 		942189812C2375AD00C78586 /* MoveItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893A2C2375AC00C78586 /* MoveItemsView.swift */; };
 		942189822C2375AD00C78586 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893B2C2375AC00C78586 /* OnboardingView.swift */; };
-		942189832C2375AD00C78586 /* PasscodeX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893C2C2375AC00C78586 /* PasscodeX.swift */; };
 		942189852C2375AD00C78586 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421893E2C2375AC00C78586 /* SettingsView.swift */; };
 		942189882C2375AD00C78586 /* DepartmentData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189432C2375AD00C78586 /* DepartmentData.swift */; };
 		942189892C2375AD00C78586 /* ItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189442C2375AD00C78586 /* ItemData.swift */; };
@@ -87,19 +82,15 @@
 		942189022C23757200C78586 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		942189092C2375AC00C78586 /* Date+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		9421890A2C2375AC00C78586 /* Double+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
-		9421890B2C2375AC00C78586 /* String+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		9421890C2C2375AC00C78586 /* View+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
-		9421890E2C2375AC00C78586 /* DepartmentButtonMod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentButtonMod.swift; sourceTree = "<group>"; };
 		942189132C2375AC00C78586 /* DetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		942189162C2375AC00C78586 /* InventoryListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryListViewModel.swift; sourceTree = "<group>"; };
-		942189172C2375AC00C78586 /* MoveItemsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveItemsViewModel.swift; sourceTree = "<group>"; };
 		942189182C2375AC00C78586 /* PointOfSaleViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointOfSaleViewModel.swift; sourceTree = "<group>"; };
 		9421891A2C2375AC00C78586 /* SettingsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		9421891C2C2375AC00C78586 /* AppError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		942189212C2375AC00C78586 /* InventoryXApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InventoryXApp.swift; sourceTree = "<group>"; };
 		942189222C2375AC00C78586 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		942189242C2375AC00C78586 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		942189252C2375AC00C78586 /* DateTimeLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTimeLabel.swift; sourceTree = "<group>"; };
 		942189262C2375AC00C78586 /* DepartmentPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentPicker.swift; sourceTree = "<group>"; };
 		9421892A2C2375AC00C78586 /* CompanyDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompanyDetailView.swift; sourceTree = "<group>"; };
 		9421892B2C2375AC00C78586 /* DepartmentDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentDetailView.swift; sourceTree = "<group>"; };
@@ -112,7 +103,6 @@
 		942189362C2375AC00C78586 /* POSView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POSView.swift; sourceTree = "<group>"; };
 		9421893A2C2375AC00C78586 /* MoveItemsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoveItemsView.swift; sourceTree = "<group>"; };
 		9421893B2C2375AC00C78586 /* OnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		9421893C2C2375AC00C78586 /* PasscodeX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasscodeX.swift; sourceTree = "<group>"; };
 		9421893E2C2375AC00C78586 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		942189432C2375AD00C78586 /* DepartmentData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DepartmentData.swift; sourceTree = "<group>"; };
 		942189442C2375AD00C78586 /* ItemData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemData.swift; sourceTree = "<group>"; };
@@ -210,7 +200,6 @@
 				9489734B2D1B4A8F00FF30E0 /* TrailingImageLabelStyle.swift */,
 				942189092C2375AC00C78586 /* Date+Ext.swift */,
 				9421890A2C2375AC00C78586 /* Double+Ext.swift */,
-				9421890B2C2375AC00C78586 /* String+Ext.swift */,
 				9421890C2C2375AC00C78586 /* View+Ext.swift */,
 			);
 			path = Extensions;
@@ -220,7 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				94F968DB2CD4933100242D27 /* RoundedOutlineMod.swift */,
-				9421890E2C2375AC00C78586 /* DepartmentButtonMod.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -240,7 +228,6 @@
 			children = (
 				942189132C2375AC00C78586 /* DetailViewModel.swift */,
 				942189162C2375AC00C78586 /* InventoryListViewModel.swift */,
-				942189172C2375AC00C78586 /* MoveItemsViewModel.swift */,
 				942189182C2375AC00C78586 /* PointOfSaleViewModel.swift */,
 				9421891A2C2375AC00C78586 /* SettingsViewModel.swift */,
 			);
@@ -269,7 +256,6 @@
 		942189292C2375AC00C78586 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				942189252C2375AC00C78586 /* DateTimeLabel.swift */,
 				942189262C2375AC00C78586 /* DepartmentPicker.swift */,
 				94E10E372C80EAB00091ABBF /* NeomorphicCardView.swift */,
 				9454FEF82C843A0E00F8B6D2 /* NeomorphicSection.swift */,
@@ -409,7 +395,6 @@
 			isa = PBXGroup;
 			children = (
 				94CAB68F2CF6DA21002AE31E /* KeypadView.swift */,
-				9421893C2C2375AC00C78586 /* PasscodeX.swift */,
 			);
 			path = Keypads;
 			sourceTree = "<group>";
@@ -517,13 +502,9 @@
 				9421898D2C2375AD00C78586 /* CompanyEntity.swift in Sources */,
 				94241CA52CD34EB800C7FC55 /* MenuButtonStyle.swift in Sources */,
 				9421897E2C2375AD00C78586 /* POSView.swift in Sources */,
-				942189652C2375AD00C78586 /* MoveItemsViewModel.swift in Sources */,
 				942189662C2375AD00C78586 /* PointOfSaleViewModel.swift in Sources */,
 				946D2F742CE2E84600F3FA81 /* PercentagePickerX.swift in Sources */,
-				9421895C2C2375AD00C78586 /* String+Ext.swift in Sources */,
 				94A0BF1E2D19BB34008D6CEE /* DividerX.swift in Sources */,
-				9421895E2C2375AD00C78586 /* DepartmentButtonMod.swift in Sources */,
-				942189702C2375AD00C78586 /* DateTimeLabel.swift in Sources */,
 				94E1853F2C7F30CB0011A3F8 /* SaleItemEntity.swift in Sources */,
 				94A9D3F92CEAC8B1006650B1 /* NumberPickerX.swift in Sources */,
 				942189892C2375AD00C78586 /* ItemData.swift in Sources */,
@@ -555,7 +536,6 @@
 				9421895B2C2375AD00C78586 /* Double+Ext.swift in Sources */,
 				945C28882C8689A10041836D /* ExternalLinks.swift in Sources */,
 				94797A8B2C82964F00B9CDD8 /* HexImage.swift in Sources */,
-				942189832C2375AD00C78586 /* PasscodeX.swift in Sources */,
 				94CAB6902CF6DA27002AE31E /* KeypadView.swift in Sources */,
 				9421897B2C2375AD00C78586 /* CartSidebarView.swift in Sources */,
 				942189882C2375AD00C78586 /* DepartmentData.swift in Sources */,

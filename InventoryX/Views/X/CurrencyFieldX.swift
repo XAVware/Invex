@@ -49,7 +49,7 @@ struct CurrencyFieldX: View {
                 placeholders = AttributedString(Array(repeating: "0", count: decPart.count))
             }
         }
-         
+        
         let decimalPart = parts.count > 1 ? parts.last! : ""
         var integerPart = String(parts.first ?? "")
         
@@ -86,18 +86,18 @@ struct CurrencyFieldX: View {
         return dollarSign + attInt + dec + attributedDec + placeholders
     }
     
-
+    
     var body: some View {
         let layout = vSize == .compact ? AnyLayout(HStackLayout()) : AnyLayout(VStackLayout(spacing: 24))
         VStack {
             Spacer()
             
-            layout {                    
+            layout {
                 Text(formattedInput)
                     .animation(.interactiveSpring, value: formattedInput)
-                .animation(.spring(), value: toggleError)
-                .padding()
-                .modifier(Shake(animatableData: toggleError ? 1 : 0))
+                    .animation(.spring(), value: toggleError)
+                    .padding()
+                    .modifier(Shake(animatableData: toggleError ? 1 : 0))
                 
                 KeypadView(strValue: $strValue, tapKey: { key in
                     guard prevalidate(key) else { return }
@@ -106,13 +106,13 @@ struct CurrencyFieldX: View {
                     case "<":   deleteTapped()
                     default:    numberTapped(key)
                     }
-                
+                    
                 })
                 .frame(maxWidth: 480, maxHeight: 420)
                 .padding(.vertical)
             } //: VStack
             .padding(.vertical)
-
+            
             PrimaryButtonPanelX {
                 var val = NSAttributedString(formattedInput).string
                 
@@ -206,18 +206,19 @@ struct CurrencyFieldX: View {
     CurrencyFieldX(amount: 0, save: { val in
         
     })
-        .background(Color.bg)
-        .environment(FormXViewModel())
+    .background(Color.bg)
+    .environment(FormXViewModel())
 }
 
+// MARK: - Shake Animation
 struct Shake: GeometryEffect {
     var distance: CGFloat = 8
     var count: CGFloat = 3
     var animatableData: CGFloat
-
+    
     func effectValue(size: CGSize) -> ProjectionTransform {
         ProjectionTransform(CGAffineTransform(translationX:
-            distance * sin(animatableData * .pi * count), y: 0))
+                                                distance * sin(animatableData * .pi * count), y: 0))
     }
 }
 

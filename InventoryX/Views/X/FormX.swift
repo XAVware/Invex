@@ -10,13 +10,9 @@ import SwiftUI
 /*
  Validation:
  TextFieldX accepts validation logic as a parameter to improve robustness. More specific fields, like CurrencyFieldX, handle validation within their view since validating a formatted currency remains consistent across use cases.
- 
- 
- 
- 
  */
 
-
+// MARK: - View Model
 @Observable
 class FormXViewModel {
     var origValue: String = ""
@@ -60,12 +56,11 @@ class FormXViewModel {
         withAnimation {
             expandedContainer = nil
         }
-        
         return
     }
-    
 }
 
+// MARK: - Form X View
 struct FormX<C: View>: View {
     @Environment(\.horizontalSizeClass) var hSize
     @State var formVM: FormXViewModel = FormXViewModel()
@@ -107,7 +102,8 @@ struct FormX<C: View>: View {
     
 }
 
-struct ThemeFormSection<C: View>: View {
+/// Used for read-only sections
+struct FormSectionX<C: View>: View {
     @Environment(\.horizontalSizeClass) var hSize
     
     let content: C
@@ -126,13 +122,10 @@ struct ThemeFormSection<C: View>: View {
             
             VStack(alignment: .leading, spacing: 6) {
                 content
-            }
+            } //: VStack
             .background(Color.fafafa)
-        }
-        //        .padding()
-        //        .modifier(RoundedOutlineMod(cornerRadius: 9))
+        } //: VStack
     }
-    
 }
 
 

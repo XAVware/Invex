@@ -18,12 +18,5 @@ extension Double {
     
     func toPercentageString(includeSymbol: Bool = true) -> String {
         String(format: "%.2f", self * 100) + (includeSymbol ? "%" : "")
-//        let formatter = NumberFormatter()
-//        formatter.numberStyle = .decimal
-//        formatter.maximumFractionDigits = 2
-//        formatter.minimumFractionDigits = 0
-//        let wholePercent = self * 100
-//        let rawPercentageString = formatter.string(from: NSNumber(value: wholePercent)) ?? ""
-//        return String(format: "%.2f", rawPercentageString) + (includeSymbol ? "%" : "")
     }
 }

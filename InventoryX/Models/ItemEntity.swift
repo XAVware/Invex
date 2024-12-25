@@ -28,21 +28,8 @@ class ItemEntity: Object, ObjectKeyIdentifiable, Identifiable {
     }
     
     var formattedPrice: String { retailPrice.toCurrencyString() }
-    var formattedQty: String { String(describing: onHandQty) }
-    var formattedUnitCost: String { unitCost.toCurrencyString() }
-    var departmentName: String { department.first?.name ?? "" }
-    
     var showWarning: Bool {
         guard let dept = self.department.first else { return true }
         return onHandQty < dept.restockNumber
-    }
-    
-    var restockWarning: String {
-        guard let dept = department.first else { return "" }
-        return onHandQty < dept.restockNumber ? "⚠️" : ""
-    }
-    
-    func sell(qty: Int) {
-        self.onHandQty -= qty
     }
 }

@@ -65,7 +65,7 @@ struct PercentagePickerX: View {
                     }
                     .pickerStyle(WheelPickerStyle())
                     .font(.largeTitle)
-
+                    
                 } else {
                     Picker("Fractional Number", selection: $fractionalNumber) {
                         ForEach(0 ..< 99) { value in

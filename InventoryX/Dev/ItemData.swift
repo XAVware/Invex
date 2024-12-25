@@ -34,7 +34,7 @@ extension ItemEntity {
         ItemEntity(name: "Hot Chocolate", attribute: "Hot", retailPrice: 2.5, avgCostPer: 0.8, onHandQty: 70),
         ItemEntity(name: "Fruit Juice", attribute: "Cold", retailPrice: 2.0, avgCostPer: 0.6, onHandQty: 90)
     ]
-
+    
     static let snackArray = [
         ItemEntity(name: "Chips", attribute: "Packaged", retailPrice: 1.0, avgCostPer: 0.4, onHandQty: 100),
         ItemEntity(name: "Nachos", attribute: "Hot", retailPrice: 3.5, avgCostPer: 1.0, onHandQty: 50),

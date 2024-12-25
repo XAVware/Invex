@@ -18,7 +18,7 @@ import RealmSwift
 
 // TODO: Move form validation back into ViewModels. Only pass this actor type validated data so it is easier to troubleshoot.
 actor RealmActor {
-
+    
     @MainActor
     func fetchCompany() throws -> CompanyEntity? {
         let realm = try Realm()
@@ -36,17 +36,6 @@ actor RealmActor {
             realm.delete(dept)
         }
     }
-    
-    /// Sales use a SaleEntity model instead of ItemEntity, so there's no risk of losing sale data.
-//    @MainActor func deleteItem(withId id: ObjectId) async throws {
-//        // Make sure item is not currently in cart.
-//        let realm = try await Realm()
-//        guard let item = realm.object(ofType: ItemEntity.self, forPrimaryKey: id) else { throw AppError.noItemFound }
-//        
-//        try await realm.asyncWrite {
-//            realm.delete(item)
-//        }
-//    }
     
     @MainActor func moveItems(from fromDept: DepartmentEntity, to toDept: DepartmentEntity) async throws {
         let realm = try await Realm()
@@ -102,7 +91,7 @@ actor RealmActor {
             newSale.items.append(objectsIn: items)
         }
     }
-
+    
     func deleteAll() async throws {
         let realm = try await Realm()
         try await realm.asyncWrite {
@@ -110,7 +99,3 @@ actor RealmActor {
         }
     }
 }
-
-
-
-

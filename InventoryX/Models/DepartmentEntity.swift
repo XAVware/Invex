@@ -21,9 +21,5 @@ class DepartmentEntity: Object, ObjectKeyIdentifiable, Identifiable {
         self.restockNumber = restockNum
         self.defMarkup = defMarkup
     }
-    
-    var formattedMarkup: String { defMarkup.toPercentageString(includeSymbol: false) }
-    var formattedRestockNum: String { restockNumber.description }
-    var itemCount: String { items.count.description }
 }
 

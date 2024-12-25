@@ -42,7 +42,7 @@ import RealmSwift
         }
         
     }
-
+    
     nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

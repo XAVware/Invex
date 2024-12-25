@@ -19,7 +19,7 @@ extension SaleEntity {
         
         let exampleSales: [SaleEntity] = (1...300).map { _ in
             let randomItem = ItemEntity.drinkArray.randomElement()!
-//            let randomQuantity = Int.random(in: 1...42)
+            //            let randomQuantity = Int.random(in: 1...42)
             let randomDate = Date.random(in: threeMonthsAgo...Date())
             return SaleEntity(timestamp: randomDate, total: randomItem.retailPrice)
         }

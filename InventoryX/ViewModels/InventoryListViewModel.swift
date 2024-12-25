@@ -12,7 +12,6 @@ import RealmSwift
 class InventoryViewModel {
     var selectedItems: [ItemEntity] = []
     var showingMoveItems: Bool = false
-    var showingRemoveItemsFromDeptAlert: Bool = false
     var showingDeleteAlert: Bool = false
     
     func multiSelect(_ id: ItemEntity) {

@@ -15,7 +15,7 @@ struct DepartmentPickerX: View {
     @State var title: String
     @State var description: String
     let onChange: (DepartmentEntity) -> Void
-
+    
     init(dept: Binding<DepartmentEntity?>, title: String, description: String, onChange: @escaping (DepartmentEntity) -> Void) {
         self._selectedDepartment = dept
         self.title = title
@@ -34,7 +34,6 @@ struct DepartmentPickerX: View {
                     Text(title)
                     Text(description)
                         .opacity(0.5)
-                    
                 } //: VStack
                 
                 Spacer()
@@ -45,7 +44,6 @@ struct DepartmentPickerX: View {
                             onChange(dept)
                         }
                         .tag(dept)
-                        
                     }
                 } label: {
                     HStack {

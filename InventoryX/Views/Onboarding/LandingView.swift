@@ -11,7 +11,6 @@ struct LandingView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
-//    var isIphone: Bool { hSize == .compact || vSize == .compact }
     
     @State var index: Int = 0
     
@@ -78,7 +77,7 @@ struct LandingView: View {
                 .overlay(index == highlights.count - 1 ? disclaimer : nil, alignment: .bottom)
                 
                 DividerX()
-
+                
                 navigationPanel
                     .padding()
             } //: VStack

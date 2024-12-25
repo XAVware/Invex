@@ -16,6 +16,7 @@ import SwiftUI
  - Validation should be done in parent.
  */
 
+// MARK: - KeypadView
 struct KeypadView: View {
     let gridSpacing: CGFloat = 1
     @Binding var strValue: String
@@ -24,7 +25,6 @@ struct KeypadView: View {
     let defMaxHeight: CGFloat = 420
     
     let tapKey: (String) -> Void
-//    let onError: () -> Void
     
     var body: some View {
         VStack(spacing: gridSpacing) {
@@ -34,7 +34,6 @@ struct KeypadView: View {
                         let number = (row - 1) * 3 + col
                         KeypadButton(number: "\(number)") {
                             tapKey(number.description)
-//                            self.strValue.append("\(number)")
                         }
                     }
                 } //: HStack
@@ -46,8 +45,6 @@ struct KeypadView: View {
                     tapKey(".")
                 }
                 .fontWeight(.black)
-//                .disabled(strValue.contains("."))
-//                .opacity(strValue.contains(".") ? 0.01 : 1)
                 
                 KeypadButton(number: "0") {
                     tapKey("0")
@@ -63,6 +60,8 @@ struct KeypadView: View {
     
 }
 
+
+// MARK: - Keypad Button View
 struct KeypadButton: View {
     enum KeypadButtonShape { case round, none }
     var number: String? = nil
@@ -103,6 +102,7 @@ struct KeypadButton: View {
         .buttonStyle(NumberPadButtonStyle())
     }
     
+    // MARK: - Button Style
     struct NumberPadButtonStyle: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
@@ -111,7 +111,6 @@ struct KeypadButton: View {
                 .animation(.interpolatingSpring(duration: 0.1), value: configuration.isPressed)
         }
     }
-    
 }
 
 

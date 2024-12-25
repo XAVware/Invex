@@ -59,7 +59,7 @@ struct ContainerX<C: View>: View {
                     VStack(alignment: .leading, spacing: isExpanded ? 8 : 6) {
                         Text(title)
                             .font(isExpanded ? .largeTitle : .body)
-                                            
+                        
                         Text((value.isEmpty || isExpanded) ? description : value)
                             .opacity(0.5)
                             .padding(.trailing, isExpanded ? 48 : 0)
