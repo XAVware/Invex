@@ -24,26 +24,19 @@ struct CurrencyFieldX: View {
         self.save = save
     }
     
-    // Validate entered amount
-    private func validateAmount() {
-        if let amount = Double(strValue), amount < 0 {
-            toggleError = true
-            errorMessage = "Please enter an amount greater than $0."
-        } else {
-            toggleError = false
-            errorMessage = ""
-        }
-    }
+    @State private var formattedResult: AttributedString = AttributedString("")
     
-    private var formattedInput: AttributedString {
-        let s: String = strValue
+    private func formatInput(_ input: String, requiresPlaceholder: Bool) -> AttributedString {
         var placeholders = AttributedString("")
-        let parts = s.split(separator: ".")
+        let parts = input.split(separator: ".")
         
         /// String value should show `00` as a placeholder when it contains a `.` but does not have any digits following it
-        if s.contains(".") && parts.count == 1 {
+        // Case: "123." -> needs "00" appended
+        // Case: "123.4" -> needs "0" appended
+        // Format number preceding decimal to include commas when need.
+        if input.contains(".") && parts.count == 1 {
             placeholders = AttributedString("00")
-        } else if s.contains(".") && parts.count == 2 {
+        } else if input.contains(".") && parts.count == 2 {
             let decPart = parts[1]
             if decPart.count < 2 {
                 placeholders = AttributedString(Array(repeating: "0", count: decPart.count))
@@ -59,7 +52,7 @@ struct CurrencyFieldX: View {
             formatter.numberStyle = .decimal
             integerPart = formatter.string(from: NSNumber(value: intValue)) ?? ""
         }
-        
+        // Format dollar sign
         var dollarSign = AttributedString("$")
         dollarSign.font = .system(size: 36, weight: .light, design: .rounded)
         dollarSign.foregroundColor = Color.neoOverLight
@@ -70,10 +63,12 @@ struct CurrencyFieldX: View {
         attInt.font = .system(size: 56, weight: .semibold, design: .rounded)
         attInt.foregroundColor = Color.textPrimary.opacity(0.8)
         
-        var dec = AttributedString(s.contains(".") ? "." : "")
+        // Further formatting is needed if the text contains a decimal
+        var dec = AttributedString(input.contains(".") ? "." : "")
         dec.font = .system(size: 56, weight: .semibold, design: .rounded)
         dec.foregroundColor = Color.textPrimary.opacity(0.8)
         
+        // Decimals
         var attributedDec = AttributedString(decimalPart)
         attributedDec.font = .system(size: 56, weight: .semibold, design: .rounded)
         attributedDec.foregroundColor = Color.textPrimary.opacity(0.8)
@@ -86,6 +81,84 @@ struct CurrencyFieldX: View {
         return dollarSign + attInt + dec + attributedDec + placeholders
     }
     
+    // Validate entered amount
+    private func validateAmount() {
+        if let amount = Double(strValue), amount < 0 {
+            toggleError = true
+            errorMessage = "Please enter an amount greater than $0."
+        } else {
+            toggleError = false
+            errorMessage = ""
+        }
+    }
+    
+//    private var formattedInput: AttributedString {
+//        let parts = input.split(separator: ".")
+//        var result = AttributedString("")
+//        
+//        // Format dollar sign
+//        var dollarSign = AttributedString("$")
+//        dollarSign.font = .system(size: 36, weight: .light, design: .rounded)
+//        dollarSign.foregroundColor = Color.neoOverLight
+//        dollarSign.baselineOffset = 18
+//        dollarSign.kern = 6
+//        result += dollarSign
+//        
+//        // Format number preceding decimal to include commas when need.
+//        var integerPart = String(parts.first ?? "")
+//        if let intValue = Int(integerPart) {
+//            let formatter = NumberFormatter()
+//            formatter.numberStyle = .decimal
+//            integerPart = formatter.string(from: NSNumber(value: intValue)) ?? ""
+//        }
+//        
+//        var attInt = AttributedString(integerPart)
+//        attInt.font = .system(size: 56, weight: .semibold, design: .rounded)
+//        attInt.foregroundColor = Color.textPrimary.opacity(0.8)
+//        result += attInt
+//        
+//        // Further formatting is needed if the text contains a decimal
+//        if input.contains(".") {
+//            var decimal = AttributedString(".")
+//            decimal.font = .system(size: 56, weight: .semibold, design: .rounded)
+//            decimal.foregroundColor = Color.textPrimary.opacity(0.8)
+//            result += decimal
+//            
+//            // Decimals
+//            let decimalPart = parts.count > 1 ? String(parts[1]) : ""
+//            if !decimalPart.isEmpty {
+//                var attDec = AttributedString(decimalPart)
+//                attDec.font = .system(size: 56, weight: .semibold, design: .rounded)
+//                attDec.foregroundColor = Color.textPrimary.opacity(0.8)
+//                attDec.kern = 1.5
+//                result += attDec
+//            }
+//            
+//            // Placeholder zeros
+//            var placeholderZeros = ""
+//            if parts.count == 1 {
+//                // Case: "123." -> needs "00" appended
+//                placeholderZeros = "00"
+//            } else if let decimalDigits = parts.last {
+//                // Case: "123.4" -> needs "0" appended
+//                let neededZeros = 2 - decimalDigits.count
+//                if neededZeros > 0 {
+//                    placeholderZeros = String(repeating: "0", count: neededZeros)
+//                }
+//            }
+//            
+//            if !placeholderZeros.isEmpty {
+//                var placeholder = AttributedString(placeholderZeros)
+//                placeholder.font = .system(size: 56, weight: .semibold, design: .rounded)
+//                placeholder.foregroundColor = Color.textPrimary.opacity(requiresPlaceholder ? 0.3 : 0.8)
+//                placeholder.kern = 1.5
+//                result += placeholder
+//            }
+//        }
+//        
+//        return result
+//    }
+    
     
     var body: some View {
         let layout = vSize == .compact ? AnyLayout(HStackLayout()) : AnyLayout(VStackLayout(spacing: 24))
@@ -93,8 +166,8 @@ struct CurrencyFieldX: View {
             Spacer()
             
             layout {
-                Text(formattedInput)
-                    .animation(.interactiveSpring, value: formattedInput)
+                Text(formattedResult)
+                    .animation(.interactiveSpring, value: formattedResult)
                     .animation(.spring(), value: toggleError)
                     .padding()
                     .modifier(Shake(animatableData: toggleError ? 1 : 0))
@@ -106,7 +179,7 @@ struct CurrencyFieldX: View {
                     case "<":   deleteTapped()
                     default:    numberTapped(key)
                     }
-                    
+                    formattedResult = formatInput(strValue, requiresPlaceholder: requiresPlaceholder)
                 })
                 .frame(maxWidth: 480, maxHeight: 420)
                 .padding(.vertical)
@@ -114,7 +187,7 @@ struct CurrencyFieldX: View {
             .padding(.vertical)
             
             PrimaryButtonPanelX {
-                var val = NSAttributedString(formattedInput).string
+                var val = NSAttributedString(formattedResult).string
                 
                 if !val.contains(".") {
                     val.append(".00")
@@ -124,7 +197,7 @@ struct CurrencyFieldX: View {
                 }
                 formVM.closeContainer(withValue: val)
             } onSave: {
-                let amt = NSAttributedString(formattedInput).string.replacingOccurrences(of: "$", with: "")
+                let amt = NSAttributedString(formattedResult).string.replacingOccurrences(of: "$", with: "")
                 guard let amount = Double(amt) else {
                     return
                 }
@@ -136,6 +209,7 @@ struct CurrencyFieldX: View {
         .background(Color.bg)
         .onAppear {
             setPlaceholderVisibility()
+            formattedResult = formatInput(strValue, requiresPlaceholder: requiresPlaceholder)
         }
         .onChange(of: self.strValue) { _, _ in
             validateAmount()
