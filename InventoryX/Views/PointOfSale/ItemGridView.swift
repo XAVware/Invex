@@ -10,7 +10,7 @@ import RealmSwift
 
 struct ItemGridView: View {
     @ObservedResults(ItemEntity.self, sortDescriptor: SortDescriptor(keyPath: "name", ascending: true)) var items
-    private let columns: [GridItem] = [ GridItem(.adaptive(minimum: 160, maximum: .infinity), spacing: 12) ]
+    private let columns: [GridItem] = [ GridItem(.adaptive(minimum: 210, maximum: .infinity), spacing: 12) ]
     @State var department: DepartmentEntity?
     let onSelect: ((ItemEntity) -> Void)
     
@@ -46,9 +46,15 @@ struct ItemGridButtonLabel: View {
     
     var body: some View {
         Grid(alignment: .leading) {
-            Text(item.name)
-                .fontWeight(.semibold)
-                .font(.headline)
+            GridRow(alignment: .top) {
+                Text(item.name)
+                    .fontWeight(.semibold)
+                    .font(.headline)
+                Image(systemName: "cart.badge.plus")
+                    .font(.caption2)
+                    .foregroundStyle(Color.shadow300)
+                    .gridColumnAlignment(.trailing)
+            }
             
             GridRow(alignment: .bottom) {
                 Text(item.attribute)
@@ -62,7 +68,7 @@ struct ItemGridButtonLabel: View {
         .padding(10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .fontDesign(.rounded)
-        .background(.ultraThinMaterial)
+        .background(Color.bg400)
         .overlay(
             RoundedRectangle(cornerRadius: 6)
                 .stroke(Color.accentColor.opacity(0.1), lineWidth: 1)
@@ -72,11 +78,11 @@ struct ItemGridButtonLabel: View {
 }
 
 
-//#Preview {
-//    ItemGridView(items: ItemEntity.drinkArray) { i in
-//
-//    }
-//    .padding()
-//    .environment(\.realm, DepartmentEntity.previewRealm)
-//
-//}
+#Preview {
+    ItemGridView() { i in
+
+    }
+    .padding()
+    .environment(\.realm, DepartmentEntity.previewRealm)
+
+}

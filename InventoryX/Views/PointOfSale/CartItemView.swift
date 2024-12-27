@@ -73,7 +73,7 @@ struct CartItemView: View {
             Text(qty.description)
                 .frame(width: 42, height: 28, alignment: .center)
                 .font(.subheadline)
-                .background(Color.bg)
+                .background(Color.bg100)
             
             
             Button {

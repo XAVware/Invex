@@ -52,6 +52,8 @@ struct InventoryXApp: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
             TabRoot()
+                .overlay(AlertView(), alignment: .top)
+                .environment(AlertService.shared)
         }
     }
 }

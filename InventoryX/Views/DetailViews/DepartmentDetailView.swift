@@ -12,6 +12,7 @@ struct DepartmentDetailView: View {
     @Environment(\.dismiss) var dismiss
     
     /// If the entity's name is empty when it is initially passed to the view, `isNew` is set to true
+    // TODO: In createDefaultDepartment() save the department if it doesn't already exist instead of using isNew
     let isNew: Bool
         
     @ObservedRealmObject var department: DepartmentEntity
@@ -23,10 +24,15 @@ struct DepartmentDetailView: View {
     }
     
     func createDefaultDepartment() {
+        guard let department = department.thaw() else {
+            print("Error thawing department")
+            return
+        }
+        
         do {
             let realm = try Realm()
             let departments = realm.objects(DepartmentEntity.self)
-            if departments.count == 0 || isNew {
+            if /*departments.count == 0 ||*/ isNew {
                 try realm.write {
                     realm.add(department)
                 }
@@ -122,6 +128,6 @@ struct DepartmentDetailView: View {
 
 #Preview {
     DepartmentDetailView(department: DepartmentEntity())
-        .background(Color.bg)
+        .background(Color.bg100)
 }
 

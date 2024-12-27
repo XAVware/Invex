@@ -80,7 +80,7 @@ struct ContainerX<C: View>: View {
                     .frame(maxWidth: 48)
                     .underline()
                     .buttonStyle(.plain)
-                    .background(Color.bg.opacity(0.001).padding(-14)) // Creates larger 'tappable' area
+                    .background(Color.bg100.opacity(0.001).padding(-14)) // Creates larger 'tappable' area
                 }
             } //: HStack
             .fontWeight(.medium)

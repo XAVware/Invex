@@ -23,7 +23,7 @@ struct ThemeButtonStyle: ButtonStyle {
             .padding(vSize == .compact || hSize == .compact ? 10 : 14)
             .background(
                 RoundedRectangle(cornerRadius: radius, style: .continuous)
-                    .fill(style.bgColor)
+                    .fill(style.bg100)
             )
             .foregroundColor(style.fgColor)
             .frame(maxWidth: 480, alignment: .center)
@@ -40,7 +40,7 @@ extension ThemeButtonStyle {
         case primary
         case secondary
         
-        var bgColor: AnyGradient {
+        var bg100: AnyGradient {
             return switch self {
             case .primary:      Color.accent.gradient
             case .secondary:    Color.clear.gradient

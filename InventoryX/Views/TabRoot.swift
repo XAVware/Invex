@@ -82,7 +82,7 @@ struct TabRoot: View {
                     ZStack {
                         VStack(spacing: 0) {
                             primaryContent
-                                .background(Color.bg)
+                                .background(Color.bg100)
                             
                             // MARK: - Tab Bar
                             HStack {
@@ -120,7 +120,7 @@ struct TabRoot: View {
                             .padding(.bottom, geo.safeAreaInsets.bottom / 2)
                             .overlay(DividerX(), alignment: .top)
                         } //: VStack
-                        .background(Color.bg)
+                        .background(Color.bg100)
                         .navigationBarTitleDisplayMode(.inline) // Commenting this out makes the back button on ConfirmSaleView not work...
                         .navigationDestination(for: LSXDisplay.self) { detail in
                             switch detail {
@@ -144,7 +144,7 @@ struct TabRoot: View {
                                 .environmentObject(posVM)
                         }
                     } //: ZStack
-                    .background(Color.bg)
+                    .background(Color.bg100)
                     .toolbar {
                         ToolbarItem(placement: .topBarTrailing) {
                             switch lsxVM.mainDisplay {

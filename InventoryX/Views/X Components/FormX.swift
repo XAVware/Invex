@@ -115,7 +115,7 @@ struct FormX<C: View>: View {
                 VStack(alignment: .leading, spacing: 12) {
                     content
                 }
-                .background(Color.bg100.clipShape(RoundedRectangle(cornerRadius: 8)).padding(-12))
+                .background(Color.bg150.clipShape(RoundedRectangle(cornerRadius: 8)).padding(-12))
                 .padding(.vertical)
                 .environment(formVM)
             } //: VStack
@@ -125,7 +125,7 @@ struct FormX<C: View>: View {
             .transition(.opacity)
             .animation(.interpolatingSpring, value: formVM.expandedContainer)
         } //: Scroll View
-        .background(Color.bg)
+        .background(Color.bg100)
         .scrollIndicators(.hidden)
         .toolbar(formVM.expandedContainer == nil ? .visible : .hidden, for: .navigationBar)
     } //: Body

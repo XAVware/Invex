@@ -59,7 +59,7 @@ struct CartSidebarView: View {
                     Spacer()
                         .frame(height: geo.safeAreaInsets.bottom + (vSize == .compact ? 32 : 48))
                 } //: VStack
-                .background(Color.bg.ignoresSafeArea(edges: .trailing))
+                .background(Color.bg100.ignoresSafeArea(edges: .trailing))
                 .overlay(DividerX(), alignment: .leading)
                 .frame(maxWidth: navService.sidebarWidth ?? 500)
                 .offset(x: navService.sidebarVis != .showing ? navService.sidebarWidth ?? 500 : 0)

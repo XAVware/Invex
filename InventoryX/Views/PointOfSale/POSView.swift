@@ -107,7 +107,7 @@ struct DepartmentButtonMod: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.headline)
-            .foregroundStyle(isSelected ? Color.bg : Color.accent)
+            .foregroundStyle(isSelected ? Color.bg100 : Color.accent)
             .fontWeight(isSelected ? .semibold : .regular)
             .fontDesign(.rounded)
             .frame(minWidth: 56)

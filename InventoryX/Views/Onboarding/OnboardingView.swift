@@ -218,7 +218,7 @@ struct OnboardingStepRow: View {
                 Image(systemName: "chevron.right")
                     .font(.title3)
             } //: HStack
-            .background(Color.bg.opacity(0.001)) // Creates larger 'tappable' area
+            .background(Color.bg100.opacity(0.001)) // Creates larger 'tappable' area
         }
         .buttonStyle(.plain)
     }

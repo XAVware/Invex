@@ -89,7 +89,7 @@ struct CurrencyFieldX: View {
             }
         } //: VStack
         .padding()
-        .background(Color.bg)
+        .background(Color.bg100)
         .onAppear {
             setPlaceholderVisibility()
             formattedResult = formatInput(strValue, requiresPlaceholder: requiresPlaceholder)
@@ -265,7 +265,7 @@ struct CurrencyFieldX: View {
     CurrencyFieldX(amount: 0, save: { val in
         
     })
-    .background(Color.bg)
+    .background(Color.bg100)
     .environment(FormXViewModel())
 }
 

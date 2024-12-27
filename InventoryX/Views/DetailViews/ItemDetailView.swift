@@ -87,13 +87,17 @@ struct ItemDetailView: View {
     
     private var rotatePrompt: some View {
         ZStack {
-            Color.bg.ignoresSafeArea()
+            Color.bg100.ignoresSafeArea()
             Image(systemName: "rectangle.landscape.rotate")
         }
     }
     
     // MARK: - Functions
     private func createDefaultItem() {
+        guard let item = item.thaw() else {
+            print("Error thawing item")
+            return
+        }
         do {
             let realm = try Realm()
             let items = realm.objects(ItemEntity.self)
@@ -204,5 +208,5 @@ struct ItemDetailView: View {
 //    ItemDetailView(item: ItemEntity())
     ItemDetailView(item: ItemEntity.item2) 
         .environment(\.realm, DepartmentEntity.previewRealm)
-        .background(Color.bg)
+        .background(Color.bg100)
 }

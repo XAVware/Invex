@@ -28,7 +28,7 @@ struct InventoryListView: View {
             .clipped()
         } // ScrollView
         .navigationTitle("Inventory")
-        .background(Color.bg)
+        .background(Color.bg100)
         .overlay(multiSelectPanel, alignment: .bottom)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -73,7 +73,7 @@ struct InventoryListView: View {
                 }
         } //: HStack
         .padding()
-        .background(.ultraThinMaterial)
+        .background(.thinMaterial)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(Color.accentColor.opacity(0.2), lineWidth: 1)

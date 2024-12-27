@@ -10,6 +10,7 @@
 		941637762D1C0D49000C5636 /* LSXDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941637752D1C0D49000C5636 /* LSXDisplay.swift */; };
 		9416377A2D1E2E48000C5636 /* CartItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941637792D1E2E43000C5636 /* CartItem.swift */; };
 		9416377C2D1E73E8000C5636 /* SidebarState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9416377B2D1E73E5000C5636 /* SidebarState.swift */; };
+		941637862D1F0CDB000C5636 /* AlertX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 941637842D1F0CDB000C5636 /* AlertX.swift */; };
 		942189032C23757200C78586 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 942189022C23757200C78586 /* .gitignore */; };
 		9421895A2C2375AD00C78586 /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 942189092C2375AC00C78586 /* Date+Ext.swift */; };
 		9421895B2C2375AD00C78586 /* Double+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9421890A2C2375AC00C78586 /* Double+Ext.swift */; };
@@ -77,6 +78,7 @@
 		941637752D1C0D49000C5636 /* LSXDisplay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LSXDisplay.swift; sourceTree = "<group>"; };
 		941637792D1E2E43000C5636 /* CartItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItem.swift; sourceTree = "<group>"; };
 		9416377B2D1E73E5000C5636 /* SidebarState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarState.swift; sourceTree = "<group>"; };
+		941637842D1F0CDB000C5636 /* AlertX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertX.swift; sourceTree = "<group>"; };
 		942189022C23757200C78586 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		942189092C2375AC00C78586 /* Date+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		9421890A2C2375AC00C78586 /* Double+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Double+Ext.swift"; sourceTree = "<group>"; };
@@ -327,6 +329,7 @@
 			isa = PBXGroup;
 			children = (
 				942189542C2375AD00C78586 /* RealmActor.swift */,
+				941637842D1F0CDB000C5636 /* AlertX.swift */,
 				942189552C2375AD00C78586 /* RealmMigrator.swift */,
 			);
 			path = Services;
@@ -492,6 +495,7 @@
 				942189752C2375AD00C78586 /* DepartmentDetailView.swift in Sources */,
 				94750FFA2C8CC1FA009562A7 /* TabRoot.swift in Sources */,
 				946D2F782CE2E95000F3FA81 /* ContainerX.swift in Sources */,
+				941637862D1F0CDB000C5636 /* AlertX.swift in Sources */,
 				942189782C2375AD00C78586 /* InventoryListView.swift in Sources */,
 				9421896D2C2375AD00C78586 /* InventoryXApp.swift in Sources */,
 				944F670A2C89448F00828875 /* CartItemView.swift in Sources */,

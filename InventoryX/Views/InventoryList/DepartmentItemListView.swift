@@ -99,7 +99,7 @@ struct DepartmentItemListView: View {
             
         } //: VStack
         .padding(.top)
-        .background(Color.bg)
+        .background(Color.bg100)
     } //: Section Header
     
     private var sectionContent: some View {
@@ -148,7 +148,7 @@ struct DepartmentItemListView: View {
                             }
                             .fontWeight(.semibold)
                             .padding(8)
-                            .background(Color.bg)
+                            .background(Color.bg100)
                             .modifier(RoundedOutlineMod(cornerRadius: 7, borderColor: Color.accentColor.opacity(0.07)))
                             
                         } //: HStack

@@ -64,7 +64,7 @@ struct ConfirmSaleView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .overlay(isLandscape ? nil : summary, alignment: .bottom)
             .padding()
-            .background(Color.bg)
+            .background(Color.bg100)
             .navigationTitle("Confirm Sale")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
@@ -148,6 +148,7 @@ struct ConfirmSaleView: View {
             try await updateStock(cartItems: vm.cartItems)
             vm.clearCart()
             navService.path.removeLast()
+            AlertService.shared.show(type: .success, message: "Sale saved")
         }
     }
     
