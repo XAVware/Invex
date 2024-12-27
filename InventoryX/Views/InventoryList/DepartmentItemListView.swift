@@ -73,17 +73,21 @@ struct DepartmentItemListView: View {
                             .frame(maxWidth: .infinity, alignment: .center)
                         Divider()
                     }
+                    
                     Text("Stock")
-                        .frame(maxWidth: 100, alignment: .center)
-                    Divider()
-                    Text("Price")
-                        .frame(maxWidth: 100, alignment: .trailing)
+                        .frame(maxWidth: hSize == .regular ? 100 : 72, alignment: hSize == .regular ? .center : .trailing)
+                    
+                    if hSize == .regular {
+                        Divider()
+                        Text("Price")
+                            .frame(maxWidth: 100, alignment: .trailing)
+                    }
                     
                 }
                 .frame(maxWidth: .infinity)
                 
                 Text("")
-                    .frame(maxWidth: 64, alignment: .trailing)
+                    .frame(maxWidth: hSize == .regular ? 64 : 12, alignment: .trailing)
                 
             } //: HStack
             .padding(.vertical, 12)
@@ -126,27 +130,35 @@ struct DepartmentItemListView: View {
                             Text(item.attribute)
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
+                        
                         Text(item.onHandQty.description)
-                            .frame(maxWidth: 100, alignment: .center)
+                            .frame(maxWidth: hSize == .regular ? 100 : 72, alignment: hSize == .regular ? .center : .trailing)
                             .foregroundStyle(item.showWarning ? Color.red : Color.textDark)
                         
-                        Text(item.retailPrice.toCurrencyString())
-                            .frame(maxWidth: 100, alignment: .trailing)
+                        if hSize == .regular {
+                            Text(item.retailPrice.toCurrencyString())
+                                .frame(maxWidth: 100, alignment: .trailing)
+                        }
                     } //: HStack
                     
-                    HStack {
-                        Button("Edit", systemImage: "pencil") {
-                            onSelect(item)
-                        }
-                        .fontWeight(.semibold)
-                        .padding(8)
-                        .background(Color.bg)
-                        .modifier(RoundedOutlineMod(cornerRadius: 7, borderColor: Color.accentColor.opacity(0.07)))
+                    if hSize == .regular {
+                        HStack {
+                            Button("Edit", systemImage: "pencil") {
+                                onSelect(item)
+                            }
+                            .fontWeight(.semibold)
+                            .padding(8)
+                            .background(Color.bg)
+                            .modifier(RoundedOutlineMod(cornerRadius: 7, borderColor: Color.accentColor.opacity(0.07)))
+                            
+                        } //: HStack
+                        .labelStyle(.iconOnly)
+                        .font(.system(.headline, design: .rounded))
+                        .frame(maxWidth: 64, alignment: .trailing)
+                    } else {
+                        Image(systemName: "chevron.right")
                         
-                    } //: HStack
-                    .labelStyle(.iconOnly)
-                    .font(.system(.headline, design: .rounded))
-                    .frame(maxWidth: 64, alignment: .trailing)
+                    }
                 } //: HStack
                 .background(Color.bg200)
                 .padding(.vertical)

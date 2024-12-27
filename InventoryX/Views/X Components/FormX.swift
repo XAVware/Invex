@@ -48,6 +48,7 @@ class FormXViewModel {
     var onTapOutside: (() -> Void)?
     var expandedContainer: UUID?
     var containers: [ContainerXModel] = []
+    var labelsHidden: Bool = false
     
     /// When a container is initially expanded, the string version of the container's value is set.
     func setOrigValue(_ value: String) {
@@ -75,7 +76,6 @@ class FormXViewModel {
     
     /// Confirms the container's value has not changed
     func closeContainer(withValue currentVal: String) {
-        print("Closing container. Original: \(origValue). New: \(currentVal)")
         guard self.origValue == currentVal else {
             showAlert = true
             return

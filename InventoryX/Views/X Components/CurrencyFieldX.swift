@@ -28,16 +28,34 @@ struct CurrencyFieldX: View {
     }
     
     var body: some View {
+        @Bindable var formVM: FormXViewModel = self.formVM
         let layout = vSize == .compact ? AnyLayout(HStackLayout()) : AnyLayout(VStackLayout(spacing: 24))
         VStack {
-            Spacer()
+//            Spacer()
             
             layout {
-                Text(formattedResult)
-                    .animation(.interactiveSpring, value: formattedResult)
-                    .animation(.spring(), value: toggleError)
-                    .padding()
-                    .modifier(Shake(animatableData: toggleError ? 1 : 0))
+//                if vSize == .regular {
+                VStack {
+                    if vSize == .compact {
+                        VStack(alignment: .leading, spacing: 8) {
+                            // Title is displayed large like th
+                            Text("Retail Price")
+                                .font(.largeTitle)
+                            
+                            Text("How much do you sell it for?")
+                                .opacity(0.5)
+                                .padding(.trailing, 48)
+                                .font(.headline)
+                        } //: VStack
+                    }
+                    
+                    Text(formattedResult)
+                        .animation(.interactiveSpring, value: formattedResult)
+                        .animation(.spring(), value: toggleError)
+                        .padding()
+                        .modifier(Shake(animatableData: toggleError ? 1 : 0))
+                }
+//                }
                 
                 KeypadX(strValue: $strValue, tapKey: { key in
                     guard prevalidate(key) else { return }
@@ -62,6 +80,7 @@ struct CurrencyFieldX: View {
                 formVM.closeContainer(withValue: val)
             } onSave: {
                 let amt = NSAttributedString(formattedResult).string.replacingOccurrences(of: "$", with: "")
+                print(amt)
                 guard let amount = Double(amt) else {
                     return
                 }
@@ -78,6 +97,14 @@ struct CurrencyFieldX: View {
         .onChange(of: self.strValue) { _, _ in
             validateAmount()
         }
+        .onChange(of: vSize) { oldValue, newValue in
+            if newValue == .compact {
+                formVM.labelsHidden = true
+            } else {
+                formVM.labelsHidden = false
+            }
+        }
+        
     }
     
     private func prevalidate(_ key: String) -> Bool {

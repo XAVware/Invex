@@ -25,6 +25,7 @@ struct InventoryListView: View {
                 }
             } //: Lazy V
             .padding(8)
+            .clipped()
         } // ScrollView
         .navigationTitle("Inventory")
         .background(Color.bg)
