@@ -45,7 +45,7 @@ struct LandingView: View {
                                     .padding()
                                     .frame(maxWidth: 540, maxHeight: 540)
                                 Spacer()
-                                LandingHighlightTextView(highlight: highlight)
+                                LandingHightextLightView(highlight: highlight)
                                     .padding()
                                     .frame(maxWidth: 540, maxHeight: 240)
                             }

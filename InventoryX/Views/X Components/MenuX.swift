@@ -50,7 +50,7 @@ struct MenuX: View {
                         Text(selectedDepartment?.name ?? "Select")
                         Image(systemName: "chevron.up.chevron.down")
                     }
-                    .foregroundStyle(Color.textPrimary)
+                    .foregroundStyle(Color.textDark)
                 }
             } //: HStack
             .padding(.vertical)

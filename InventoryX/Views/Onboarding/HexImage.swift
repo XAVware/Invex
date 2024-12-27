@@ -19,8 +19,8 @@ struct HexImage: View {
             Hexagon()
                 .fill(Color.bg)
                 .rotationEffect(Angle(degrees: isIphone ? 0 : 30))
-                .shadow(color: .neoUnderDark.opacity(0.8), radius: 3, x: 2, y: 2)
-                .shadow(color: .neoUnderLight, radius: 2, x: -3, y: -3)
+                .shadow(color: Color.shadow200.opacity(0.8), radius: 3, x: 2, y: 2)
+                .shadow(color: Color.bg000, radius: 2, x: -3, y: -3)
             
             Image(imageName)
                 .resizable()

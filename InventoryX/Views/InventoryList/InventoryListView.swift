@@ -78,7 +78,7 @@ struct InventoryListView: View {
                 .stroke(Color.accentColor.opacity(0.2), lineWidth: 1)
         )
         .clipShape(RoundedRectangle(cornerRadius: 8))
-        .shadow(color: Color.textPrimary.opacity(0.15), radius: 3)
+        .shadow(color: Color.textDark.opacity(0.15), radius: 3)
         .frame(maxWidth: 540, maxHeight: 48)
         .opacity(vm.selectedItems.isEmpty ? 0 : 1)
         .offset(y: vm.selectedItems.isEmpty ? 96 : -12)

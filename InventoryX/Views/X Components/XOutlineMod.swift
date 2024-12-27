@@ -20,7 +20,7 @@ struct XOutlineMod: ViewModifier {
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(Color.textPrimary, lineWidth: 1.5)
+                    .stroke(Color.textDark, lineWidth: 1.5)
                     .opacity(isSelected ? 1 : 0.2)
             )
             .animation(.snappy, value: isSelected)

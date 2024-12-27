@@ -26,7 +26,7 @@ struct TextFieldX: View {
         if self.errMsg.isEmpty == false {
             return Color.red.opacity(0.8)
         } else {
-            return focus ? Color.textPrimary : Color.neoUnderDark
+            return focus ? Color.textDark : Color.shadow200
         }
     }
     

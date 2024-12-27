@@ -49,7 +49,7 @@ extension ThemeButtonStyle {
         
         var fgColor: Color {
             return switch self {
-            case .primary:      Color.primaryButtonText
+            case .primary:      Color.textLight
             case .secondary:    Color.accent
             }
         }

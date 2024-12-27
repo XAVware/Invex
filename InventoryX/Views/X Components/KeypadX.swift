@@ -73,19 +73,19 @@ struct KeypadXButton: View {
             if let number = number {
                 Text(number)
                     .font(.title)
-                    .foregroundColor(Color.textPrimary)
+                    .foregroundColor(Color.textDark)
             }
             
             if let symbol = symbol {
                 Image(systemName: symbol)
                     .font(.title)
-                    .foregroundColor(Color.textPrimary)
+                    .foregroundColor(Color.textDark)
             }
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .font(.largeTitle)
-        .foregroundColor(Color.textPrimary)
+        .foregroundColor(Color.textDark)
         .background {
             GeometryReader { geo in
                 let w: CGFloat = geo.size.width

@@ -89,9 +89,9 @@ struct DepartmentItemListView: View {
             .padding(.vertical, 12)
             .padding(.horizontal, 8)
             .background(Color.bg300)
-            .foregroundStyle(Color.textPrimary)
+            .foregroundStyle(Color.textDark)
             .font(.system(.callout, design: .rounded, weight: .regular))
-            .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.topLeft, .topRight])
+            .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.shadow200.opacity(0.6), radius: 8, corners: [.topLeft, .topRight])
             
         } //: VStack
         .padding(.top)
@@ -128,7 +128,7 @@ struct DepartmentItemListView: View {
                         }
                         Text(item.onHandQty.description)
                             .frame(maxWidth: 100, alignment: .center)
-                            .foregroundStyle(item.showWarning ? Color.red : Color.textPrimary)
+                            .foregroundStyle(item.showWarning ? Color.red : Color.textDark)
                         
                         Text(item.retailPrice.toCurrencyString())
                             .frame(maxWidth: 100, alignment: .trailing)
@@ -161,7 +161,7 @@ struct DepartmentItemListView: View {
             }
         } //: VStack
         .background(Color.bg200)
-        .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.bottomLeft, .bottomRight])
+        .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.shadow200.opacity(0.6), radius: 8, corners: [.bottomLeft, .bottomRight])
     } //: Section Content
 
     private var noItemsRow: some View {
@@ -176,8 +176,8 @@ struct DepartmentItemListView: View {
         .padding(.vertical, 12)
         .padding(.horizontal, 8)
         .background(Color.bg200)
-        .foregroundStyle(Color.textPrimary)
-        .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.bottomLeft, .bottomRight])
+        .foregroundStyle(Color.textDark)
+        .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.shadow200.opacity(0.6), radius: 8, corners: [.bottomLeft, .bottomRight])
     }
     
     // MARK: - Functions

@@ -95,7 +95,7 @@ struct CartSidebarView: View {
                 .fill(Color.accent.gradient)
                 .padding(.horizontal, 8)
         )
-        .foregroundColor(Color.primaryButtonText)
+        .foregroundColor(Color.textLight)
         .padding(.vertical, vSize == .regular ? 2 : 0)
     }
     

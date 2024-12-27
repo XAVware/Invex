@@ -171,7 +171,7 @@ struct CurrencyFieldX: View {
         
         // Cache shared attributes
         let mainFont = Font.system(size: 56, weight: .semibold, design: .rounded)
-        let mainColor = Color.textPrimary.opacity(0.8)
+        let mainColor = Color.textDark.opacity(0.8)
         
         // Add components with shared attributes
         result += dollarSign()
@@ -188,7 +188,7 @@ struct CurrencyFieldX: View {
     private func dollarSign() -> AttributedString {
         var sign = AttributedString("$")
         sign.font = .system(size: 36, weight: .light, design: .rounded)
-        sign.foregroundColor = Color.textPrimary.opacity(0.6)
+        sign.foregroundColor = Color.textDark.opacity(0.6)
         sign.baselineOffset = 18
         sign.kern = 6
         return sign

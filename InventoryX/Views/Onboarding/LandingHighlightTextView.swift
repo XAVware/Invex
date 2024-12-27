@@ -1,5 +1,5 @@
 //
-//  LandingHighlightTextView.swift
+//  LandingHightextLightView.swift
 //  InventoryX
 //
 //  Created by Ryan Smetana on 8/30/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LandingHighlightTextView: View {
+struct LandingHightextLightView: View {
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
     private var isIphone: Bool { hSize == .compact || vSize == .compact }
@@ -36,5 +36,5 @@ struct LandingHighlightTextView: View {
 }
 
 #Preview {
-    LandingHighlightTextView(highlight: LandingHighlight(imageName: "LandingImage", title: "title", caption: "caption"))
+    LandingHightextLightView(highlight: LandingHighlight(imageName: "LandingImage", title: "title", caption: "caption"))
 }

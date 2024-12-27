@@ -12,7 +12,7 @@ struct RoundedOutlineMod: ViewModifier {
     let borderColor: Color
     let lineWidth: CGFloat
     
-    init(cornerRadius: CGFloat, borderColor: Color = Color.neoUnderLight, lineWidth: CGFloat = 1) {
+    init(cornerRadius: CGFloat, borderColor: Color = Color.bg000, lineWidth: CGFloat = 1) {
         self.cornerRadius = cornerRadius
         self.borderColor = borderColor
         self.lineWidth = lineWidth

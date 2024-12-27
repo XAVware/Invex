@@ -58,7 +58,7 @@ struct ItemGridButtonLabel: View {
             }
             .font(.subheadline)
         }
-        .foregroundStyle(Color.textPrimary)
+        .foregroundStyle(Color.textDark)
         .padding(10)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .fontDesign(.rounded)
