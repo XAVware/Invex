@@ -14,7 +14,7 @@ struct LandingView: View {
     
     @State var index: Int = 0
     
-    let highlights: [LandingHighlight] = [
+    private let highlights: [LandingHighlight] = [
         LandingHighlight(imageName: "LandingImage", title: "Welcome!", caption: "Transform your workflow with Invex - Point of Sale designed for cash-run businesses."),
         
         LandingHighlight(imageName: "InventoryManagement", title: "Simple Inventory Management", caption: "Stay on top of your inventory levels with proactive reorder notifications."),
@@ -23,23 +23,6 @@ struct LandingView: View {
         
         //        LandingHighlight(imageName: "Insights", title: "Insights at Your Fingertips", caption: "Plan ahead with detailed analytics and reports.")
     ]
-    
-    private func nextTapped() {
-        if index == highlights.count - 1 {
-            dismiss()
-        } else {
-            withAnimation(.snappy) {
-                index += 1
-            }
-        }
-    }
-    
-    private func backTapped() {
-        guard index != 0 else { return }
-        withAnimation(.snappy) {
-            index -= 1
-        }
-    }
     
     var body: some View {
         GeometryReader { geo in
@@ -130,6 +113,25 @@ struct LandingView: View {
         } //: VStack
         .font(.system(.caption2, design: .rounded))
         .padding()
+    }
+    
+    // MARK: - Functions
+    
+    private func nextTapped() {
+        if index == highlights.count - 1 {
+            dismiss()
+        } else {
+            withAnimation(.snappy) {
+                index += 1
+            }
+        }
+    }
+    
+    private func backTapped() {
+        guard index != 0 else { return }
+        withAnimation(.snappy) {
+            index -= 1
+        }
     }
 }
 

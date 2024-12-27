@@ -7,20 +7,14 @@
 
 import SwiftUI
 
-struct ContainerXModel {
-    let id: UUID = UUID()
-    let title: String
-    let description: String
-}
-
+// MARK: - ContainerX View
 struct ContainerX<C: View>: View {
     @Environment(FormXViewModel.self) var formVM
-    
+    @State private var id: UUID = UUID()
     @State var title: String
     @State var description: String
     let value: String
     let content: C
-    @State private var id: UUID = UUID()
     
     var isExpanded: Bool { formVM.expandedContainer == id }
     
@@ -50,6 +44,10 @@ struct ContainerX<C: View>: View {
                 }
             })
             .overlay(divider, alignment: .bottom)
+            .transition(.opacity)
+            .animation(.interpolatingSpring, value: formVM.expandedContainer == nil)
+            .animation(.interpolatingSpring, value: isExpanded)
+
     } //: Body
     
     @ViewBuilder private var contentView: some View {
@@ -101,4 +99,11 @@ struct ContainerX<C: View>: View {
         
     })
     .environment(FormXViewModel())
+}
+
+// MARK: - Container Model
+struct ContainerXModel {
+    let id: UUID = UUID()
+    let title: String
+    let description: String
 }

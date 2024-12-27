@@ -10,7 +10,7 @@ import SwiftUI
 struct LandingHighlightTextView: View {
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
-    var isIphone: Bool { hSize == .compact || vSize == .compact }
+    private var isIphone: Bool { hSize == .compact || vSize == .compact }
     @State var highlight: LandingHighlight
     
     var body: some View {

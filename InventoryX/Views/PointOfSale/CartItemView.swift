@@ -29,7 +29,7 @@ struct CartItemView: View {
                             .fontWeight(.light)
                     }
                     Spacer()
-                }
+                } //: VStack
                 
                 stepper
             } //: VStack

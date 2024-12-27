@@ -13,8 +13,7 @@ struct PercentagePickerX: View {
     @State private var focus: Component = .whole
     @State private var wholeNumber: Int = 0
     @State private var fractionalNumber: Int = 0
-    
-    let save: (Double) -> Void
+    private let save: (Double) -> Void
     
     private var taxRate: Double {
         return (Double((wholeNumber * 100) + fractionalNumber) / 10000)
@@ -86,11 +85,8 @@ struct PercentagePickerX: View {
                 formVM.forceClose()
             })
         } //: VStack
-    }
+    } //: Body
 }
-
-
-
 
 #Preview {
     PercentagePickerX(tax: 0.0625, save: { v in

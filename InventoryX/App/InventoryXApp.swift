@@ -52,11 +52,6 @@ struct InventoryXApp: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
             TabRoot()
-                .task {
-                    //                    try await RealmActor().deleteAll()
-                    //                    try await RealmActor().setUpForDebug()
-                    
-                }
         }
     }
 }

@@ -22,43 +22,7 @@ struct ConfirmSaleView: View {
     @State var saleNumber: Int = -2
     @State var taxRate: Double = 0
     
-//    var cartSubtotal: Double { vm.cartItems.reduce(0) { $0 + $1.retailPrice } }
-//    var taxAmount: Double { cartSubtotal * taxRate / 100 }
-//    var total: Double { cartSubtotal + taxAmount }
-    
-    /// Finalizes the sale by adding the sale to Realm and updating ItemEntity quantities on hand.
-    func finalizeSale() {
-        vm.cartItems.removeAll(where: { $0.qtyInCart == 0 })
-        guard !vm.cartItems.isEmpty else {
-            navService.path.removeLast()
-            return
-        }
-        
-        let newSale = SaleEntity(timestamp: Date(), total: vm.total)
-        let saleItems = vm.cartItems.map { $0.convertToSaleItem() }
-        newSale.items.append(objectsIn: saleItems)
-        $sales.append(newSale)
-        
-        Task {
-            try await updateStock(cartItems: vm.cartItems)
-            vm.clearCart()
-            navService.path.removeLast()
-        }
-    }
-    
-    func updateStock(cartItems: [CartItem]) async throws {
-        let realm = try await Realm()
-        try cartItems.forEach { item in
-            guard let realmItem = realm.object(ofType: ItemEntity.self, forPrimaryKey: item.id) else { throw AppError.thawingItemError }
-            let origQty = realmItem.onHandQty
-            try realm.write {
-                realmItem.onHandQty = origQty - item.qtyInCart
-            }
-        }
-    }
-    
     var body: some View {
-        
         GeometryReader { geo in
             let w = geo.size.width
             let h = geo.size.height
@@ -88,7 +52,6 @@ struct ConfirmSaleView: View {
                     .listStyle(PlainListStyle())
                     .environmentObject(vm)
                     .frame(height: isLandscape ? h : h * 0.65)
-//                    Spacer()
                 } //: VStack
                 .font(.subheadline)
                 .background(Color.bg200.clipShape(RoundedRectangle(cornerRadius: 8)))
@@ -165,6 +128,38 @@ struct ConfirmSaleView: View {
             
         } //: VStack - Order Summary
         .frame(minWidth: 220, maxWidth: 420/*, maxHeight: max(h * 0.33, 320)*/)
+    } //: Summary View
+    
+    // MARK: - Functions
+    /// Finalizes the sale by adding the sale to Realm and updating ItemEntity quantities on hand.
+    private func finalizeSale() {
+        vm.cartItems.removeAll(where: { $0.qtyInCart == 0 })
+        guard !vm.cartItems.isEmpty else {
+            navService.path.removeLast()
+            return
+        }
+        
+        let newSale = SaleEntity(timestamp: Date(), total: vm.total)
+        let saleItems = vm.cartItems.map { $0.convertToSaleItem() }
+        newSale.items.append(objectsIn: saleItems)
+        $sales.append(newSale)
+        
+        Task {
+            try await updateStock(cartItems: vm.cartItems)
+            vm.clearCart()
+            navService.path.removeLast()
+        }
+    }
+    
+    private func updateStock(cartItems: [CartItem]) async throws {
+        let realm = try await Realm()
+        try cartItems.forEach { item in
+            guard let realmItem = realm.object(ofType: ItemEntity.self, forPrimaryKey: item.id) else { throw AppError.thawingItemError }
+            let origQty = realmItem.onHandQty
+            try realm.write {
+                realmItem.onHandQty = origQty - item.qtyInCart
+            }
+        }
     }
     
 }

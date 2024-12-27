@@ -93,8 +93,8 @@ struct FormX<C: View>: View {
     @Environment(\.horizontalSizeClass) var hSize
     @State var formVM: FormXViewModel = FormXViewModel()
     
-    let content: C
-    let title: String
+    private let content: C
+    private let title: String
     
     init(title: String, @ViewBuilder content: (() -> C)) {
         self.title = title
@@ -122,7 +122,8 @@ struct FormX<C: View>: View {
             .padding(hSize == .regular ? 48 : 16)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .fontDesign(.rounded)
-            .transition(.blurReplace)
+            .transition(.opacity)
+            .animation(.interpolatingSpring, value: formVM.expandedContainer)
         } //: Scroll View
         .background(Color.bg)
         .scrollIndicators(.hidden)
@@ -132,13 +133,12 @@ struct FormX<C: View>: View {
 }
 
 // MARK: - FormX Section
-
 /// Used for read-only sections
 struct FormSectionX<C: View>: View {
     @Environment(\.horizontalSizeClass) var hSize
     
-    let content: C
-    @State var title: String = ""
+    private let content: C
+    @State private var title: String = ""
     
     init(title: String, @ViewBuilder content: (() -> C)) {
         self.title = title
@@ -155,7 +155,7 @@ struct FormSectionX<C: View>: View {
                 content
             } //: VStack
         } //: VStack
-    }
+    } //: Body
 }
 
 

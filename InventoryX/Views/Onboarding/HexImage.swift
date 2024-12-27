@@ -11,7 +11,7 @@ struct HexImage: View {
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
     @Environment(\.colorScheme) var colorScheme
-    var isIphone: Bool { hSize == .compact || vSize == .compact }
+    private var isIphone: Bool { hSize == .compact || vSize == .compact }
     @State var imageName: String
     
     var body: some View {

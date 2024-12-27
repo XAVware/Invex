@@ -11,7 +11,6 @@ import RealmSwift
 class ItemEntity: Object, ObjectKeyIdentifiable, Identifiable {
     @Persisted(primaryKey: true) var _id: ObjectId
     @Persisted(originProperty: "items") var department: LinkingObjects<DepartmentEntity>
-    
     @Persisted var name: String
     @Persisted var attribute: String
     @Persisted var retailPrice: Double

@@ -13,10 +13,7 @@ import Algorithms
  8.29.24 - A warning is being thrown for breaking constraints on startup on regular width devices. I thought it was related to POSView but it only happens when OnboardingView is being displayed as a full screen cover. Going to toggle onboarding with an optional isOnboarding variable in the root.
  */
 
-enum SidebarState {
-    case hidden
-    case showing
-}
+
 
 struct POSView: View {
     @Environment(NavigationService.self) var navService
@@ -26,11 +23,6 @@ struct POSView: View {
     
     /// When `selectedDepartment` is nil, the app displays all items in the view.
     @State var selectedDepartment: DepartmentEntity?
-//    @State var showCartAlert: Bool = false
-    
-    func departmentTapped(_ department: DepartmentEntity?) {
-        selectedDepartment = department
-    }
     
     var body: some View {
         VStack(spacing: 8) {
@@ -96,28 +88,10 @@ struct POSView: View {
         .padding()
     }
     
-    struct DepartmentButtonMod: ViewModifier {
-        let isSelected: Bool
-        func body(content: Content) -> some View {
-            content
-                .font(.headline)
-                .foregroundStyle(isSelected ? Color.bg : Color.accent)
-                .fontWeight(isSelected ? .semibold : .regular)
-                .fontDesign(.rounded)
-                .frame(minWidth: 56)
-//                .foregroundStyle(.accent)
-                .opacity(isSelected ? 1.0 : 0.8)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(isSelected ? .accent : .clear)
-                .clipShape(RoundedRectangle(cornerRadius: 24))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 24)
-                        .stroke(.accent, lineWidth: 1)
-                )
-        }
+    // MARK: - Functions
+    private func departmentTapped(_ department: DepartmentEntity?) {
+        selectedDepartment = department
     }
-    
 }
 
 #Preview {
@@ -126,3 +100,26 @@ struct POSView: View {
         .environment(NavigationService())
         .environment(\.realm, DepartmentEntity.previewRealm)
 }
+
+// MARK: - Department Button Mod
+struct DepartmentButtonMod: ViewModifier {
+    let isSelected: Bool
+    func body(content: Content) -> some View {
+        content
+            .font(.headline)
+            .foregroundStyle(isSelected ? Color.bg : Color.accent)
+            .fontWeight(isSelected ? .semibold : .regular)
+            .fontDesign(.rounded)
+            .frame(minWidth: 56)
+        //                .foregroundStyle(.accent)
+            .opacity(isSelected ? 1.0 : 0.8)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(isSelected ? .accent : .clear)
+            .clipShape(RoundedRectangle(cornerRadius: 24))
+            .overlay(
+                RoundedRectangle(cornerRadius: 24)
+                    .stroke(.accent, lineWidth: 1)
+            )
+    }
+    }

@@ -4,16 +4,14 @@ import RealmSwift
 
 
 @MainActor class PointOfSaleViewModel: ObservableObject {
-//    let id = UUID()
     @Published var companyName: String = ""
     @Published var taxRate: Double = 0.0
     @Published var cartSubtotal: Double = 0.0
     var taxAmount: Double { cartSubtotal * taxRate }
     var total: Double { cartSubtotal + taxAmount }
     
-    @Published var cartItems: [CartItem] = [/*CartItem(from: ItemEntity.item1), CartItem(from: ItemEntity.item2)*/]
+    @Published var cartItems: [CartItem] = []
     @Published var showCartAlert: Bool = false
-    
     
     init() {
         fetchCompany()
@@ -57,10 +55,6 @@ import RealmSwift
     func recalculateSubtotal() {
         cartSubtotal = cartItems.reduce(0) { $0 + $1.retailPrice * Double($1.qtyInCart) }
     }
-    
-//    nonisolated func hash(into hasher: inout Hasher) {
-//        hasher.combine(id)
-//    }
     
     func clearCart() {
         self.cartItems.removeAll()

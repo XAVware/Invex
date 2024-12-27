@@ -1,5 +1,5 @@
 //
-//  KeypadX.swift
+//  CurrencyFieldX.swift
 //  InventoryX
 //
 //  Created by Ryan Smetana on 11/18/24.
@@ -14,13 +14,11 @@ struct CurrencyFieldX: View {
     @State private var strValue: String = ""
     @State private var toggleError: Bool = false
     @State private var errorMessage: String = ""
-    private let save: (Double) -> Void
-    
-    @State var requiresPlaceholder: Bool = true
+    @State private var requiresPlaceholder: Bool = true
     @State private var formattedResult: AttributedString = AttributedString("")
+    private let save: (Double) -> Void
 
     init(amount: Double, save: @escaping (Double) -> Void) {
-        print("Init")
         // 12.10.24 Why is this initializing four times?
         let formatter = NumberFormatter()
         formatter.minimumFractionDigits = 2

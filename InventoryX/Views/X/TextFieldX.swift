@@ -10,22 +10,16 @@ import SwiftUI
 struct TextFieldX: View {
     @Environment(FormXViewModel.self) var formVM
     @FocusState private var focus: Bool
-    @State var value: String = ""
-    @State var errMsg: String = ""
+    @State private var value: String = ""
+    @State private var errMsg: String = ""
     
-    let validate: (String) -> (Bool, String?)
-    let save: (String) -> Void
+    private let validate: (String) -> (Bool, String?)
+    private let save: (String) -> Void
     
     init(value: String, validate: @escaping (String) -> (Bool, String?), save: @escaping (String) -> Void) {
         self.value = value
         self.validate = validate
         self.save = save
-    }
-    
-    func setFocus(_ focus: Bool) {
-        withAnimation(.interactiveSpring) {
-            self.focus = focus
-        }
     }
     
     private var borderColor: Color {
@@ -63,34 +57,16 @@ struct TextFieldX: View {
                 
             } //: VStack
             .onChange(of: focus) { wasFocused, isFocused in
-                /// When the text field is no longer focused, run validation logic.
-                ///     - To no longer be in focus the user must have de-selected the field or tried to submit.
-                if !isFocused {
-                    let validation = validate(value)
-                    if !validation.0 {
-                        errMsg = validation.1 ?? "Error"
-                    }
-                } else if wasFocused && isFocused {
-                    errMsg = ""
-                }
+                focusChanged(from: wasFocused, to: isFocused)
             }
             
             Spacer()
             
             PrimaryButtonPanelX(onCancel: {
-                setFocus(false)
-                formVM.closeContainer(withValue: self.value)
+                cancelTapped()
             }, onSave: {
-                setFocus(false)
-                let validation = validate(value)
-                if validation.0 == false {
-                    errMsg = validation.1 ?? "Error"
-                    return
-                }
-                save(value)
-                formVM.forceClose()
+                saveTapped()
             })
-            
         } //: VStack
         .onAppear {
             setFocus(true)
@@ -99,6 +75,41 @@ struct TextFieldX: View {
             }
         }
     } //: Body
+    
+    private func setFocus(_ focus: Bool) {
+        withAnimation(.interactiveSpring) {
+            self.focus = focus
+        }
+    }
+    
+    private func saveTapped() {
+        setFocus(false)
+        let validation = validate(value)
+        if validation.0 == false {
+            errMsg = validation.1 ?? "Error"
+            return
+        }
+        save(value)
+        formVM.forceClose()
+    }
+    
+    private func cancelTapped() {
+        setFocus(false)
+        formVM.closeContainer(withValue: self.value)
+    }
+    
+    private func focusChanged(from wasFocused: Bool, to isFocused: Bool) {
+        /// When the text field is no longer focused, run validation logic.
+        ///     - To no longer be in focus the user must have de-selected the field or tried to submit.
+        if !isFocused {
+            let validation = validate(value)
+            if !validation.0 {
+                errMsg = validation.1 ?? "Error"
+            }
+        } else if wasFocused && isFocused {
+            errMsg = ""
+        }
+    }
     
 }
 

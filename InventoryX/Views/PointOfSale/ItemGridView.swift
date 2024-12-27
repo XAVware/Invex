@@ -10,18 +10,9 @@ import RealmSwift
 
 struct ItemGridView: View {
     @ObservedResults(ItemEntity.self, sortDescriptor: SortDescriptor(keyPath: "name", ascending: true)) var items
+    private let columns: [GridItem] = [ GridItem(.adaptive(minimum: 160, maximum: .infinity), spacing: 12) ]
     @State var department: DepartmentEntity?
     let onSelect: ((ItemEntity) -> Void)
-    
-    private func getItems() -> [ItemEntity] {
-        if let department {
-            return Array(department.items.sorted(by: \.name, ascending: true))
-        } else {
-            return Array(items)
-        }
-    }
-    
-    let columns: [GridItem] = [ GridItem(.adaptive(minimum: 160, maximum: .infinity), spacing: 12) ]
     
     var body: some View {
         ScrollView {
@@ -39,10 +30,17 @@ struct ItemGridView: View {
         } //: Scroll
         .scrollIndicators(.hidden)
     } //: Body
+    
+    private func getItems() -> [ItemEntity] {
+        if let department {
+            return Array(department.items.sorted(by: \.name, ascending: true))
+        } else {
+            return Array(items)
+        }
+    }
 }
 
 // MARK: - Item Grid Button Label
-
 struct ItemGridButtonLabel: View {
     let item: ItemEntity
     

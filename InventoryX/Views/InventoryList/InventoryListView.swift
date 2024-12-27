@@ -14,7 +14,7 @@ struct InventoryListView: View {
     @Environment(\.horizontalSizeClass) var hSize
     @ObservedResults(DepartmentEntity.self) var departments
     @State private var vm: InventoryViewModel = .init()
-    @State private var sortOrder: [KeyPathComparator<ItemEntity>] = []
+//    @State private var sortOrder: [KeyPathComparator<ItemEntity>] = []
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {

@@ -11,9 +11,9 @@ import RealmSwift
 struct MenuX: View {
     @Environment(FormXViewModel.self) var formVM
     @ObservedResults(DepartmentEntity.self) var departments
-    @Binding var selectedDepartment: DepartmentEntity?
-    @State var title: String
-    @State var description: String
+    @Binding private var selectedDepartment: DepartmentEntity?
+    @State private var title: String
+    @State private var description: String
     let onChange: (DepartmentEntity) -> Void
     
     init(dept: Binding<DepartmentEntity?>, title: String, description: String, onChange: @escaping (DepartmentEntity) -> Void) {
@@ -61,5 +61,5 @@ struct MenuX: View {
                 }
             }
         }
-    }
+    } //: Body
 }

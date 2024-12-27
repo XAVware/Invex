@@ -17,21 +17,8 @@ struct SettingsView: View {
     // This could be causing lock screen to dismiss on orientation change.
     @State var showingLockScreen: Bool = false
     
-    private func lockTapped() {
-        showingLockScreen.toggle()
-    }
-    
-    func pushView(_ view: LSXDisplay) {
-        navService.path.append(view)
-    }
-    
-    func changeTab(to view: LSXDisplay) {
-        lsxVM.mainDisplay = view
-    }
-    
     var body: some View {
         FormX(title: "Settings") {
-            
             FormSectionX(title: "Profile") {
                 VStack(spacing: 0) {
                     Button("Account", systemImage: "person") { pushView(.company) }
@@ -67,7 +54,18 @@ struct SettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
     } //: Body
     
+    // MARK: - Functions
+    private func lockTapped() {
+        showingLockScreen.toggle()
+    }
     
+    private func pushView(_ view: LSXDisplay) {
+        navService.path.append(view)
+    }
+    
+    private func changeTab(to view: LSXDisplay) {
+        lsxVM.mainDisplay = view
+    }
 }
 
 #Preview {

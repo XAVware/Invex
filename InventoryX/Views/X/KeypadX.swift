@@ -1,29 +1,27 @@
-////
-////  KeypadX.swift
-////  InventoryX
-////
-////  Created by Ryan Smetana on 11/26/24.
-////
+//
+//  KeypadX.swift
+//  InventoryX
+//
+//  Created by Ryan Smetana on 11/26/24.
+//
 
 import SwiftUI
 
 /*
- - Decimal key is disabled and hidden when the bound value already contains a decimal.
- - Bound value is reset to 0 when the input is entirely deleted.
- - Keypad buttons fill full frame width. Width should be controlled by parent.
- - Keypad buttons adjust their height to match the width.
- - Keypad buttons can have their `shape` set to add a shape to the background.
- - Validation should be done in parent.
+ - Commas are added as needed for numbers 1,000 and up.
+ - Error animation is triggered when user:
+    - attempts to delete all digits - 0 will always be displayed;
+    - attempts to add two decimal places
+    - attempts to add a third digit after a decimal
+ 
+ - If the value contains a decimal that is not followed by two digits, placeholder zeros (00) are displayed for each missing decimal.
+ - When the user deletes the character following the decimal, the decimal and the placeholders are removed.
  */
 
 // MARK: - KeypadX
 struct KeypadX: View {
-    let gridSpacing: CGFloat = 1
+    private let gridSpacing: CGFloat = 1
     @Binding var strValue: String
-    
-    let defMaxWidth: CGFloat = 360
-    let defMaxHeight: CGFloat = 420
-    
     let tapKey: (String) -> Void
     
     var body: some View {
@@ -55,7 +53,6 @@ struct KeypadX: View {
                 }
             } //: HStack
         } //: VStack
-        
     } //: Body
     
 }
