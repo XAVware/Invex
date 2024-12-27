@@ -10,8 +10,8 @@ import RealmSwift
 
 struct ConfirmSaleView: View {
     @Environment(NavigationService.self) var navService
-    
-    @Environment(\.verticalSizeClass) var verSize
+    @Environment(\.horizontalSizeClass) var hSize
+    @Environment(\.verticalSizeClass) var vSize
     @EnvironmentObject var vm: PointOfSaleViewModel
     
     @ObservedResults(CompanyEntity.self) var companies
@@ -22,15 +22,19 @@ struct ConfirmSaleView: View {
     @State var saleNumber: Int = -2
     @State var taxRate: Double = 0
     
-    var cartSubtotal: Double { vm.cartItems.reduce(0) { $0 + $1.retailPrice } }
-    var taxAmount: Double { cartSubtotal * taxRate / 100 }
-    var total: Double { cartSubtotal + taxAmount }
+//    var cartSubtotal: Double { vm.cartItems.reduce(0) { $0 + $1.retailPrice } }
+//    var taxAmount: Double { cartSubtotal * taxRate / 100 }
+//    var total: Double { cartSubtotal + taxAmount }
     
     /// Finalizes the sale by adding the sale to Realm and updating ItemEntity quantities on hand.
     func finalizeSale() {
-        guard !vm.cartItems.isEmpty else { return }
+        vm.cartItems.removeAll(where: { $0.qtyInCart == 0 })
+        guard !vm.cartItems.isEmpty else {
+            navService.path.removeLast()
+            return
+        }
         
-        let newSale = SaleEntity(timestamp: Date(), total: self.total)
+        let newSale = SaleEntity(timestamp: Date(), total: vm.total)
         let saleItems = vm.cartItems.map { $0.convertToSaleItem() }
         newSale.items.append(objectsIn: saleItems)
         $sales.append(newSale)
@@ -54,113 +58,52 @@ struct ConfirmSaleView: View {
     }
     
     var body: some View {
+        
         GeometryReader { geo in
             let w = geo.size.width
             let h = geo.size.height
             let isLandscape: Bool = w > h
-            // 700 is slightly greater than the height of iPhone 15 pro.
-            let isCondensed: Bool = max(w, h) < 700 || verSize == .compact
-            
-            VStack(alignment: .center, spacing: !isCondensed ? 24 : 16) {
-                
-                // Grid item spacing is used for the column spacing. LazyVGrid spacing is used for row spacing.
-                // Layout horizontally if screen is in landscape
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(minimum: 120, maximum: 540), spacing: 48), count: isLandscape ? 2 : 1), alignment: .center, spacing: 24) {
-                    // MARK: - Receipt View
-                    VStack(spacing: 16) {
-                        HStack {
-                            Text("Sale #\(saleNumber)")
-                            Spacer()
-                        }
-                        
+            HStack(alignment: isLandscape ? .center : .top) {
+                // MARK: - Receipt View
+                VStack(spacing: 0) {
+                    HStack {
+                        Text("Cart")
+                            .font(.headline)
+                        Spacer()
                         Text("\(companyName)")
-                        
-                        ScrollView(.vertical, showsIndicators: false) {
-                            VStack(spacing: 16) {
-                                ForEach(vm.cartItems) { item in
-                                    let itemQty = item.qtyInCart
-                                    let itemSubtotal: Double = Double(itemQty) * item.retailPrice
-                                    HStack(spacing: 0) {
-                                        VStack(alignment: .leading) {
-                                            Text(item.name)
-                                            Spacer()
-                                            Text("Qty: \(itemQty)")
-                                        } //: VStack
-                                        
-                                        Spacer()
-                                        
-                                        VStack(alignment: .trailing) {
-                                            Text("\(item.retailPrice.toCurrencyString()) / unit")
-                                            Spacer()
-                                            Text(itemSubtotal.toCurrencyString())
-                                        } //: VStack
-                                    } //: HStack
-                                    .padding(.vertical, 8)
-                                    
-                                    Divider().opacity(0.4)
-                                } //: VStack
-                            } //: For Each
-                        } //: Scroll
-                        .frame(maxWidth: 420)
-                    } //: VStack
-                    .frame(height: isLandscape ? h : h * 0.6)
-                    .font(.subheadline)
+                        Spacer()
+                        Text("Sale #\(saleNumber)")
+                            .fontWeight(.light)
+                    } //: HStack
+                    .padding()
+                    .background(Color.bg300)
                     
-                    // MARK: - Summary View
-                    VStack(spacing: 16) {
-                        ZStack {
-                            NeomorphicCardView(layer: .under)
-                            VStack(alignment: .leading, spacing: !isCondensed ? 16 : 8) {
-                                if !isCondensed {
-                                    Text("Order Summary")
-                                        .fontWeight(.semibold)
-                                        .font(verSize == .regular ? .title2 : .title3)
-                                        .padding(.bottom)
-                                }
-                                
-                                VStack(spacing: 16) {
-                                    HStack {
-                                        Text("Subtotal:")
-                                        Spacer()
-                                        Text("\(cartSubtotal.toCurrencyString())")
-                                    } //: HStack
-                                    
-                                    HStack {
-                                        Text("Tax:")
-                                        Spacer()
-                                        Text("\(taxAmount.toCurrencyString())")
-                                    } //: HStack
-                                } //: VStack
-                                .font(.subheadline)
-                                
-                                Divider()
-                                
-                                HStack {
-                                    Text("Total:")
-                                    Spacer()
-                                    Text(total.toCurrencyString())
-                                } //: HStack
-                                .fontWeight(.semibold)
-                                .font(.title3)
-                                .padding(.vertical, 4)
-                            } //: VStack
-                            .padding()
-                        } //ZStack
-                        
-                        Button(action: finalizeSale) {
-                            Text("Confirm Sale").frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(ThemeButtonStyle())
-                        
-                    } //: VStack - Order Summary
-                    .frame(minWidth: 220, maxWidth: 420, maxHeight: max(h * 0.33, 360))
-                } //: Lazy Grid
+                    Divider()
+                    
+                    List(vm.cartItems) { item in
+                        CartItemView(item: item, qty: item.qtyInCart)
+                            .listRowBackground(Color.clear)
+                            .padding(.vertical)
+                    }
+                    .listStyle(PlainListStyle())
+                    .environmentObject(vm)
+                    .frame(height: isLandscape ? h : h * 0.65)
+//                    Spacer()
+                } //: VStack
+                .font(.subheadline)
+                .background(Color.bg200.clipShape(RoundedRectangle(cornerRadius: 8)))
+                .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.shadow100, radius: 8, corners: [.allCorners])
+                
+                if isLandscape {
+                    summary
+                }
             } //: VStack
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .overlay(isLandscape ? nil : summary, alignment: .bottom)
             .padding()
             .background(Color.bg)
             .navigationTitle("Confirm Sale")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 guard let c = companies.first else { return }
                 self.companyName = c.name
@@ -170,6 +113,60 @@ struct ConfirmSaleView: View {
         } //: Geometry Reader
     } //: Body
     
+    // MARK: - Summary View
+    private var summary: some View {
+        VStack(spacing: 16) {
+            let isCondensed: Bool = hSize == .compact || vSize == .compact
+            VStack(alignment: .leading) {
+                if !isCondensed {
+                    Text("Order Summary")
+                        .fontWeight(.semibold)
+                        .font(vSize == .regular ? .title2 : .title3)
+                        .padding(.bottom)
+                }
+                
+                VStack(spacing: 16) {
+                    HStack {
+                        Text("Subtotal:")
+                        Spacer()
+                        Text("\(vm.cartSubtotal.toCurrencyString())")
+                    } //: HStack
+                    
+                    HStack {
+                        Text("Tax:")
+                        Spacer()
+                        Text("\(vm.taxAmount.toCurrencyString())")
+                    } //: HStack
+                } //: VStack
+                .font(.subheadline)
+                
+                Divider()
+                
+                HStack {
+                    Text("Total:")
+                    Spacer()
+                    Text(vm.total.toCurrencyString())
+                } //: HStack
+                .fontWeight(.semibold)
+                .font(.title3)
+                .padding(.vertical, 4)
+                
+                
+            } //: VStack
+            .padding()
+            .background(Color.bg200.clipShape(RoundedRectangle(cornerRadius: 12)))
+            .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.shadow100, radius: 8, corners: [.allCorners])
+            
+            Button(action: finalizeSale) {
+                Text("Confirm Sale").frame(maxWidth: .infinity)
+            }
+            .buttonStyle(ThemeButtonStyle())
+            .padding(.vertical, 8)
+            
+        } //: VStack - Order Summary
+        .frame(minWidth: 220, maxWidth: 420/*, maxHeight: max(h * 0.33, 320)*/)
+    }
+    
 }
 
 
@@ -178,5 +175,6 @@ struct ConfirmSaleView: View {
         ConfirmSaleView()
             .navigationTitle("Confirm Sale")
             .environmentObject(PointOfSaleViewModel())
+            .environment(NavigationService())
     }
 }

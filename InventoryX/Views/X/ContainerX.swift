@@ -53,10 +53,12 @@ struct ContainerX<C: View>: View {
     } //: Body
     
     @ViewBuilder private var contentView: some View {
+        // Only show the container if it is the selected container or if there is no other container selected.
         if isExpanded || formVM.expandedContainer == nil {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(alignment: .center) {
                     VStack(alignment: .leading, spacing: isExpanded ? 8 : 6) {
+                        // Title is displayed large like th
                         Text(title)
                             .font(isExpanded ? .largeTitle : .body)
                         
@@ -64,11 +66,11 @@ struct ContainerX<C: View>: View {
                             .opacity(0.5)
                             .padding(.trailing, isExpanded ? 48 : 0)
                             .font(isExpanded ? .headline : .body)
-                        
                     } //: VStack
                     
                     Spacer()
                     
+                    // Only show button when the container is not already expanded.
                     if !isExpanded {
                         Button(value.isEmpty ? "Add" : "Edit") {
                             formVM.expandContainer(id: self.id)
@@ -77,7 +79,7 @@ struct ContainerX<C: View>: View {
                         .frame(maxWidth: 48)
                         .underline()
                         .buttonStyle(.plain)
-                        .background(Color.bg.opacity(0.001).padding(-14))
+                        .background(Color.bg.opacity(0.001).padding(-14)) // Creates larger 'tappable' area
                     }
                 } //: HStack
                 .fontWeight(.medium)

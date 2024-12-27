@@ -32,14 +32,27 @@ struct CartSidebarView: View {
                     List(vm.cartItems) { item in
                         CartItemView(item: item, qty: item.qtyInCart)
                             .listRowBackground(Color.clear)
-                            .padding(.vertical, 8)
+                            .padding(.vertical)
                     }
                     .frame(maxHeight: .infinity)
                     .listStyle(PlainListStyle())
                     .environmentObject(vm)
                     
                     // MARK: - Cart Totals
-                    CartTotalsView()
+                    VStack(spacing: 4) {
+                        HStack {
+                            Text("Subtotal:")
+                            Spacer()
+                            Text("\(vm.cartSubtotal.toCurrencyString())")
+                        } //: HStack
+                        
+                        HStack {
+                            Text("Tax:")
+                            Spacer()
+                            Text("\(vm.taxAmount.toCurrencyString())")
+                        } //: HStack
+                    } //: VStack
+                    .font(.caption)
                         .padding()
                     
                     // Height should be bottom safe area plus tab bar height - if its ignoring safe areas

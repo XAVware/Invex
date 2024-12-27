@@ -8,27 +8,6 @@
 import SwiftUI
 import RealmSwift
 
-struct CartItem: Identifiable, Hashable {
-    var id: ObjectId
-    var name: String
-    var attribute: String
-    var retailPrice: Double
-    var qtyInCart: Int
-    
-    init(from itemEntity: ItemEntity) {
-        self.id = itemEntity._id
-        self.name = itemEntity.name
-        self.attribute = itemEntity.attribute
-        self.retailPrice = itemEntity.retailPrice
-        self.qtyInCart = 1
-    }
-    
-    func convertToSaleItem() -> SaleItemEntity {
-        return SaleItemEntity(item: self)
-    }
-    
-}
-
 struct CartItemView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var vm: PointOfSaleViewModel
@@ -37,24 +16,44 @@ struct CartItemView: View {
     let qty: Int
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(item.name)
-                Text("(\(item.attribute))")
-                Spacer()
-                Text($item.wrappedValue.retailPrice.toCurrencyString())
-                    .fontWeight(.semibold)
+        HStack {
+            VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(item.name)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.headline)
+                    if !item.attribute.isEmpty {
+                        Text(item.attribute)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .font(.subheadline)
+                            .fontWeight(.light)
+                    }
+                    Spacer()
+                }
                 
-            }
-            .font(.callout)
-            .fontDesign(.rounded)
-            
-            HStack {
                 stepper
-                Spacer()
-            } //: HStack
-        } //: VStack
-        .padding(.vertical, 6)
+            } //: VStack
+            
+            VStack(alignment: .trailing, spacing: 2) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text($item.wrappedValue.retailPrice.toCurrencyString())
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                
+                Button("Remove", systemImage: "trash") {
+                    vm.removeItemFromCart(withId: item.id)
+                }
+                .labelStyle(.iconOnly)
+                .buttonStyle(.plain)
+                .font(.callout)
+                .fontWeight(.light)
+                .opacity(0.8)
+            } //: VStack
+            .frame(maxWidth: 72, alignment: .trailing)
+        } //: HStack
+        .fontDesign(.rounded)
+        .frame(maxHeight: 240)
     } //: Body
     
     private var stepper: some View {
@@ -63,38 +62,33 @@ struct CartItemView: View {
                 vm.adjustStock(of: item, by: -1)
             } label: {
                 Text("-")
-                    .font(.title2)
-                    .fontWeight(.light)
+                    .font(.system(.title2, design: .rounded, weight: .light))
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                    .background(.bg)
+                    .background(Color.bg400)
             }
             .frame(width: 26, height: 28, alignment: .center)
             .buttonStyle(PlainButtonStyle())
-            .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
             .disabled(qty == 0)
             
             Text(qty.description)
                 .frame(width: 42, height: 28, alignment: .center)
                 .font(.subheadline)
-                .background(.fafafa)
+                .background(Color.bg)
             
             
             Button {
                 vm.adjustStock(of: item, by: 1)
             } label: {
                 Text("+")
-                    .font(.title2)
-                    .fontWeight(.light)
+                    .font(.system(.title2, design: .rounded, weight: .light))
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                    .background(.bg)
+                    .background(Color.bg400)
             }
             .frame(width: 26, height: 28, alignment: .center)
             .buttonStyle(PlainButtonStyle())
-            .blendMode(colorScheme == .dark ? .plusLighter : .plusDarker)
         } //: HStack
         .clipShape(RoundedRectangle(cornerRadius: 8))
-        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.neoOverDark, lineWidth: 0.5))
-        .listRowBackground(Color.clear)
+        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.shadow100, lineWidth: 0.5))
         
     }
 }
@@ -103,4 +97,5 @@ struct CartItemView: View {
 #Preview {
     CartItemView(item: CartItem(from: ItemEntity.item1), qty: 2)
         .padding()
+        .environmentObject(PointOfSaleViewModel())
 }

@@ -28,7 +28,7 @@ struct ItemDetailView: View {
         do {
             let realm = try Realm()
             let items = realm.objects(ItemEntity.self)
-            if items.count == 0 && isNew {
+            if items.count == 0 || isNew {
                 try realm.write {
                     realm.add(item)
                 }
@@ -151,7 +151,7 @@ struct ItemDetailView: View {
                 })
             }
                         
-            DepartmentPickerX(dept: $selectedDepartment, title: "Department:", description: "Which department is this item in?") { newDept in
+            MenuX(dept: $selectedDepartment, title: "Department:", description: "Which department is this item in?") { newDept in
                 selectedDepartment = newDept
                 saveDepartment(department: newDept)
             }
@@ -194,7 +194,8 @@ struct ItemDetailView: View {
 }
 
 #Preview {
-    ItemDetailView(item: ItemEntity())
+//    ItemDetailView(item: ItemEntity())
+    ItemDetailView(item: ItemEntity.item2) 
         .environment(\.realm, DepartmentEntity.previewRealm)
         .background(Color.bg)
 }

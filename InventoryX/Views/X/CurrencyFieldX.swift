@@ -1,5 +1,5 @@
 //
-//  KeypadView.swift
+//  KeypadX.swift
 //  InventoryX
 //
 //  Created by Ryan Smetana on 11/18/24.
@@ -11,154 +11,23 @@ struct CurrencyFieldX: View {
     @Environment(\.horizontalSizeClass) var hSize
     @Environment(\.verticalSizeClass) var vSize
     @Environment(FormXViewModel.self) var formVM
-    @State private var strValue: String = "0"
+    @State private var strValue: String = ""
     @State private var toggleError: Bool = false
     @State private var errorMessage: String = ""
     private let save: (Double) -> Void
     
     @State var requiresPlaceholder: Bool = true
-    
+    @State private var formattedResult: AttributedString = AttributedString("")
+
     init(amount: Double, save: @escaping (Double) -> Void) {
+        print("Init")
         // 12.10.24 Why is this initializing four times?
-        self.strValue = amount.description
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        self.strValue = formatter.string(from: NSNumber(value: amount))?.replacingOccurrences(of: ",", with: "") ?? "0.00" 
         self.save = save
     }
-    
-    @State private var formattedResult: AttributedString = AttributedString("")
-    
-    private func formatInput(_ input: String, requiresPlaceholder: Bool) -> AttributedString {
-        var placeholders = AttributedString("")
-        let parts = input.split(separator: ".")
-        
-        /// String value should show `00` as a placeholder when it contains a `.` but does not have any digits following it
-        // Case: "123." -> needs "00" appended
-        // Case: "123.4" -> needs "0" appended
-        // Format number preceding decimal to include commas when need.
-        if input.contains(".") && parts.count == 1 {
-            placeholders = AttributedString("00")
-        } else if input.contains(".") && parts.count == 2 {
-            let decPart = parts[1]
-            if decPart.count < 2 {
-                placeholders = AttributedString(Array(repeating: "0", count: decPart.count))
-            }
-        }
-        
-        let decimalPart = parts.count > 1 ? parts.last! : ""
-        var integerPart = String(parts.first ?? "")
-        
-        // Add commas to number before decimal as needed.
-        if let intValue = Int(integerPart) {
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            integerPart = formatter.string(from: NSNumber(value: intValue)) ?? ""
-        }
-        // Format dollar sign
-        var dollarSign = AttributedString("$")
-        dollarSign.font = .system(size: 36, weight: .light, design: .rounded)
-        dollarSign.foregroundColor = Color.neoOverLight
-        dollarSign.baselineOffset = 18
-        dollarSign.kern = 6
-        
-        var attInt = AttributedString(integerPart)
-        attInt.font = .system(size: 56, weight: .semibold, design: .rounded)
-        attInt.foregroundColor = Color.textPrimary.opacity(0.8)
-        
-        // Further formatting is needed if the text contains a decimal
-        var dec = AttributedString(input.contains(".") ? "." : "")
-        dec.font = .system(size: 56, weight: .semibold, design: .rounded)
-        dec.foregroundColor = Color.textPrimary.opacity(0.8)
-        
-        // Decimals
-        var attributedDec = AttributedString(decimalPart)
-        attributedDec.font = .system(size: 56, weight: .semibold, design: .rounded)
-        attributedDec.foregroundColor = Color.textPrimary.opacity(0.8)
-        attributedDec.kern = 1.5
-        
-        placeholders.font = .system(size: 56, weight: .semibold, design: .rounded)
-        placeholders.foregroundColor = Color.textPrimary.opacity(requiresPlaceholder ? 1 : 0.3)
-        placeholders.kern = 1.5
-        
-        return dollarSign + attInt + dec + attributedDec + placeholders
-    }
-    
-    // Validate entered amount
-    private func validateAmount() {
-        if let amount = Double(strValue), amount < 0 {
-            toggleError = true
-            errorMessage = "Please enter an amount greater than $0."
-        } else {
-            toggleError = false
-            errorMessage = ""
-        }
-    }
-    
-//    private var formattedInput: AttributedString {
-//        let parts = input.split(separator: ".")
-//        var result = AttributedString("")
-//        
-//        // Format dollar sign
-//        var dollarSign = AttributedString("$")
-//        dollarSign.font = .system(size: 36, weight: .light, design: .rounded)
-//        dollarSign.foregroundColor = Color.neoOverLight
-//        dollarSign.baselineOffset = 18
-//        dollarSign.kern = 6
-//        result += dollarSign
-//        
-//        // Format number preceding decimal to include commas when need.
-//        var integerPart = String(parts.first ?? "")
-//        if let intValue = Int(integerPart) {
-//            let formatter = NumberFormatter()
-//            formatter.numberStyle = .decimal
-//            integerPart = formatter.string(from: NSNumber(value: intValue)) ?? ""
-//        }
-//        
-//        var attInt = AttributedString(integerPart)
-//        attInt.font = .system(size: 56, weight: .semibold, design: .rounded)
-//        attInt.foregroundColor = Color.textPrimary.opacity(0.8)
-//        result += attInt
-//        
-//        // Further formatting is needed if the text contains a decimal
-//        if input.contains(".") {
-//            var decimal = AttributedString(".")
-//            decimal.font = .system(size: 56, weight: .semibold, design: .rounded)
-//            decimal.foregroundColor = Color.textPrimary.opacity(0.8)
-//            result += decimal
-//            
-//            // Decimals
-//            let decimalPart = parts.count > 1 ? String(parts[1]) : ""
-//            if !decimalPart.isEmpty {
-//                var attDec = AttributedString(decimalPart)
-//                attDec.font = .system(size: 56, weight: .semibold, design: .rounded)
-//                attDec.foregroundColor = Color.textPrimary.opacity(0.8)
-//                attDec.kern = 1.5
-//                result += attDec
-//            }
-//            
-//            // Placeholder zeros
-//            var placeholderZeros = ""
-//            if parts.count == 1 {
-//                // Case: "123." -> needs "00" appended
-//                placeholderZeros = "00"
-//            } else if let decimalDigits = parts.last {
-//                // Case: "123.4" -> needs "0" appended
-//                let neededZeros = 2 - decimalDigits.count
-//                if neededZeros > 0 {
-//                    placeholderZeros = String(repeating: "0", count: neededZeros)
-//                }
-//            }
-//            
-//            if !placeholderZeros.isEmpty {
-//                var placeholder = AttributedString(placeholderZeros)
-//                placeholder.font = .system(size: 56, weight: .semibold, design: .rounded)
-//                placeholder.foregroundColor = Color.textPrimary.opacity(requiresPlaceholder ? 0.3 : 0.8)
-//                placeholder.kern = 1.5
-//                result += placeholder
-//            }
-//        }
-//        
-//        return result
-//    }
-    
     
     var body: some View {
         let layout = vSize == .compact ? AnyLayout(HStackLayout()) : AnyLayout(VStackLayout(spacing: 24))
@@ -172,7 +41,7 @@ struct CurrencyFieldX: View {
                     .padding()
                     .modifier(Shake(animatableData: toggleError ? 1 : 0))
                 
-                KeypadView(strValue: $strValue, tapKey: { key in
+                KeypadX(strValue: $strValue, tapKey: { key in
                     guard prevalidate(key) else { return }
                     switch key {
                     case ".":   decimalTapped()
@@ -191,9 +60,6 @@ struct CurrencyFieldX: View {
                 
                 if !val.contains(".") {
                     val.append(".00")
-                } else if val.split(separator: ".").count == 2 {
-                    let dec = val.split(separator: ".")[1]
-                    print("Decimal: \(dec)")
                 }
                 formVM.closeContainer(withValue: val)
             } onSave: {
@@ -225,6 +91,17 @@ struct CurrencyFieldX: View {
         return true
     }
     
+    // Validate entered amount
+    private func validateAmount() {
+        if let amount = Double(strValue), amount < 0 {
+            toggleError = true
+            errorMessage = "Please enter an amount greater than $0."
+        } else {
+            toggleError = false
+            errorMessage = ""
+        }
+    }
+     
     // MARK: - Key Pad Functions
     /// Check that string is not empty before deleting character.
     private func deleteTapped() {
@@ -232,7 +109,15 @@ struct CurrencyFieldX: View {
             triggerError()
             return
         }
+        
+        requiresPlaceholder = false
+        
         strValue.removeLast()
+        // If we're about to delete the decimal point, remove the whole decimal portion
+        if strValue.last == "." {
+            strValue = String(strValue.dropLast())
+            return
+        }
     }
     
     /// Confirm the string doesn't already contain a decimal before appending
@@ -274,6 +159,81 @@ struct CurrencyFieldX: View {
             toggleError = false
         }
     }
+    
+    // MARK: - Text field formatting
+    private let numberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        return formatter
+    }()
+    
+    private func formatInput(_ input: String, requiresPlaceholder: Bool) -> AttributedString {
+        let parts = input.split(separator: ".")
+        var result = AttributedString("")
+        
+        // Cache shared attributes
+        let mainFont = Font.system(size: 56, weight: .semibold, design: .rounded)
+        let mainColor = Color.textPrimary.opacity(0.8)
+        
+        // Add components with shared attributes
+        result += dollarSign()
+        result += integerPart(parts.first ?? "", font: mainFont, color: mainColor)
+        
+        if input.contains(".") {
+            result += decimalComponents(parts: parts, font: mainFont, color: mainColor, requiresPlaceholder: requiresPlaceholder)
+        }
+        
+        return result
+    }
+    
+    // Break into smaller, focused functions
+    private func dollarSign() -> AttributedString {
+        var sign = AttributedString("$")
+        sign.font = .system(size: 36, weight: .light, design: .rounded)
+        sign.foregroundColor = Color.textPrimary.opacity(0.6)
+        sign.baselineOffset = 18
+        sign.kern = 6
+        return sign
+    }
+    
+    private func integerPart(_ str: String.SubSequence, font: Font, color: Color) -> AttributedString {
+        let formatted = numberFormatter.string(from: NSNumber(value: Int(String(str)) ?? 0)) ?? ""
+        var result = AttributedString(formatted)
+        result.font = font
+        result.foregroundColor = color
+        return result
+    }
+    
+    private func decimalComponents(parts: [String.SubSequence], font: Font, color: Color, requiresPlaceholder: Bool) -> AttributedString {
+        var result = AttributedString(".")
+        result.font = font
+        result.foregroundColor = color
+        
+        if let decPart = parts[safe: 1] {
+            var dec = AttributedString(String(decPart))
+            dec.font = font
+            dec.foregroundColor = color  // Remove opacity here
+            dec.kern = 1.5
+            result += dec
+            
+            // Only placeholder zeros get reduced opacity
+            if decPart.count < 2 {
+                var zeros = AttributedString(String(repeating: "0", count: 2 - decPart.count))
+                zeros.font = font
+                zeros.foregroundColor = color.opacity(requiresPlaceholder ? 1 : 0.3)
+                zeros.kern = 1.5
+                result += zeros
+            }
+        } else {
+            var zeros = AttributedString("00")
+            zeros.font = font
+            zeros.foregroundColor = color.opacity(requiresPlaceholder ? 1 : 0.3)
+            zeros.kern = 1.5
+            result += zeros
+        }
+        
+        return result
+    }
 }
 
 #Preview {
@@ -299,5 +259,11 @@ struct Shake: GeometryEffect {
 extension Decimal {
     var significantFractionalDecimalDigits: Int {
         return max(-exponent, 0)
+    }
+}
+
+extension Collection {
+    subscript(safe index: Index) -> Element? {
+        indices.contains(index) ? self[index] : nil
     }
 }

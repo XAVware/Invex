@@ -1,5 +1,5 @@
 ////
-////  KeypadView.swift
+////  KeypadX.swift
 ////  InventoryX
 ////
 ////  Created by Ryan Smetana on 11/26/24.
@@ -16,8 +16,8 @@ import SwiftUI
  - Validation should be done in parent.
  */
 
-// MARK: - KeypadView
-struct KeypadView: View {
+// MARK: - KeypadX
+struct KeypadX: View {
     let gridSpacing: CGFloat = 1
     @Binding var strValue: String
     
@@ -32,7 +32,7 @@ struct KeypadView: View {
                 HStack(spacing: gridSpacing) {
                     ForEach(1..<4) { col in
                         let number = (row - 1) * 3 + col
-                        KeypadButton(number: "\(number)") {
+                        KeypadXButton(number: "\(number)") {
                             tapKey(number.description)
                         }
                     }
@@ -41,16 +41,16 @@ struct KeypadView: View {
             
             // Last row
             HStack(spacing: gridSpacing) {
-                KeypadButton(number: ".") {
+                KeypadXButton(number: ".") {
                     tapKey(".")
                 }
                 .fontWeight(.black)
                 
-                KeypadButton(number: "0") {
+                KeypadXButton(number: "0") {
                     tapKey("0")
                 }
                 
-                KeypadButton(symbol: "delete.left") {
+                KeypadXButton(symbol: "delete.left") {
                     tapKey("<")
                 }
             } //: HStack
@@ -62,7 +62,7 @@ struct KeypadView: View {
 
 
 // MARK: - Keypad Button View
-struct KeypadButton: View {
+struct KeypadXButton: View {
     enum KeypadButtonShape { case round, none }
     var number: String? = nil
     var symbol: String? = nil
@@ -99,18 +99,17 @@ struct KeypadButton: View {
                     ], center: .center, startRadius: w / 4, endRadius: w / 2))
             }
         }
-        .buttonStyle(NumberPadButtonStyle())
-    }
-    
-    // MARK: - Button Style
-    struct NumberPadButtonStyle: ButtonStyle {
-        func makeBody(configuration: Configuration) -> some View {
-            configuration.label
-                .opacity(configuration.isPressed ? 0.7 : 1.0)
-                .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-                .animation(.interpolatingSpring(duration: 0.1), value: configuration.isPressed)
-        }
+        .buttonStyle(KeypadXButtonStyle())
     }
 }
 
 
+// MARK: - Button Style
+struct KeypadXButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.7 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+            .animation(.interpolatingSpring(duration: 0.1), value: configuration.isPressed)
+    }
+}

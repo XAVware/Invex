@@ -10,7 +10,6 @@ import RealmSwift
 
 struct DepartmentDetailView: View {
     @Environment(\.dismiss) var dismiss
-//    @StateObject var vm: DetailViewModel = DetailViewModel()
     
     /// If the entity's name is empty when it is initially passed to the view, `isNew` is set to true
     let isNew: Bool
@@ -27,7 +26,7 @@ struct DepartmentDetailView: View {
         do {
             let realm = try Realm()
             let departments = realm.objects(DepartmentEntity.self)
-            if departments.count == 0 && isNew {
+            if departments.count == 0 || isNew {
                 try realm.write {
                     realm.add(department)
                 }
@@ -98,18 +97,14 @@ struct DepartmentDetailView: View {
                 })
                 
             }
-            
-//            DividerX()
-            
+                        
             // Restock Quantity Container
             ContainerX(data: containerData[1], value: department.restockNumber.description) {
                 NumberPickerX(number: department.restockNumber) { value in
                     saveRestockQuantity(validQty: value)
                 }
             }
-            
-//            DividerX()
-//            
+
 //            // Markup Container
 //            ContainerX(data: containerData[2], value: department.defMarkup.toPercentageString()) {
 //                PercentagePickerX(tax: department.defMarkup) { value in
@@ -118,7 +113,6 @@ struct DepartmentDetailView: View {
 //                    }
 //                }
 //            }
-            
         } //: FormX
         .onAppear {
             createDefaultDepartment()

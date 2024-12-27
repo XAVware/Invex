@@ -10,7 +10,6 @@ import SwiftUI
 struct NumberPickerX: View {
     @Environment(FormXViewModel.self) var formVM
     @State private var number: Int = 0
-    
     let save: (Int) -> Void
     
     init(number: Int, save: @escaping (Int) -> Void) {
@@ -42,5 +41,5 @@ struct NumberPickerX: View {
                 formVM.forceClose()
             })
         } //: VStack
-    }
+    } //: Body
 }

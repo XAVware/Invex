@@ -11,10 +11,10 @@ import RealmSwift
 struct InventoryListView: View {
     private enum EntityType { case item, department }
     @Environment(NavigationService.self) var navService
+    @Environment(\.horizontalSizeClass) var hSize
     @ObservedResults(DepartmentEntity.self) var departments
     @State private var vm: InventoryViewModel = .init()
     @State private var sortOrder: [KeyPathComparator<ItemEntity>] = []
-    
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -26,6 +26,7 @@ struct InventoryListView: View {
             } //: Lazy V
             .padding(8)
         } // ScrollView
+        .navigationTitle("Inventory")
         .background(Color.bg)
         .overlay(multiSelectPanel, alignment: .bottom)
         .toolbar {
@@ -45,13 +46,11 @@ struct InventoryListView: View {
         }
     } //: Body
     
-    
     private var multiSelectPanel: some View {
         HStack(spacing: 16) {
-            Button("Deselect All", systemImage: "xmark", action: vm.deselectAll)
+            Button("Deselect", systemImage: "xmark", action: vm.deselectAll)
             Spacer()
-            
-            Menu("Move...") {
+            Menu("Move...", systemImage: "rectangle.portrait.and.arrow.right") {
                 Text("Select new department:")
                 ForEach(departments) { dept in
                     Button(dept.name) {
@@ -85,7 +84,6 @@ struct InventoryListView: View {
         .offset(y: vm.selectedItems.isEmpty ? 96 : -12)
         .animation(.interactiveSpring, value: vm.selectedItems.isEmpty)
         .padding()
-        
     } //: Multi Select Panel
     
     private func addTapped(type: EntityType) {

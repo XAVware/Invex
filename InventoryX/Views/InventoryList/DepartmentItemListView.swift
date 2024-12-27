@@ -12,11 +12,16 @@ import RealmSwift
 struct DepartmentItemListView: View {
     @Environment(NavigationService.self) var navService
     @Environment(InventoryViewModel.self) var vm
+    @Environment(\.horizontalSizeClass) var hSize
     @ObservedRealmObject var department: DepartmentEntity
     
     var body: some View {
         Section {
-            sectionContent
+            if department.items.isEmpty {
+                noItemsRow
+            } else {
+                sectionContent
+            }
         } header: {
             sectionHeader
         }
@@ -43,8 +48,6 @@ struct DepartmentItemListView: View {
                 
                 Image(systemName: "ellipsis")
                     .rotationEffect(Angle(degrees: 90))
-                
-                
             }
             .padding(8)
             .alert("There are items in this department. Move them to a different department first.", isPresented: $vm.showingMoveItems) {
@@ -63,15 +66,18 @@ struct DepartmentItemListView: View {
                 HStack(spacing: 0) {
                     Text("Item")
                         .frame(maxWidth: .infinity, alignment: .leading)
+                    Divider()
                     
-                    Text("Attribute")
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    
+                    if hSize == .regular {
+                        Text("Attribute")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        Divider()
+                    }
                     Text("Stock")
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    
+                        .frame(maxWidth: 100, alignment: .center)
+                    Divider()
                     Text("Price")
-                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(maxWidth: 100, alignment: .trailing)
                     
                 }
                 .frame(maxWidth: .infinity)
@@ -81,9 +87,9 @@ struct DepartmentItemListView: View {
                 
             } //: HStack
             .padding(.vertical, 12)
+            .padding(.horizontal, 8)
             .background(Color.bg300)
             .foregroundStyle(Color.textPrimary)
-            .padding(.horizontal, 8)
             .font(.system(.callout, design: .rounded, weight: .regular))
             .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.topLeft, .topRight])
             
@@ -105,18 +111,27 @@ struct DepartmentItemListView: View {
                     .foregroundStyle(Color.accentColor)
                     
                     HStack(spacing: 0) {
-                        Text(item.name)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        Text(item.attribute)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        
+                        if hSize == .compact {
+                            VStack(alignment: .leading) {
+                                Text(item.name)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .font(.headline)
+                                Text(item.attribute)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .font(.subheadline)
+                            }
+                        } else {
+                            Text(item.name)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Text(item.attribute)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                        }
                         Text(item.onHandQty.description)
-                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(maxWidth: 100, alignment: .center)
                             .foregroundStyle(item.showWarning ? Color.red : Color.textPrimary)
                         
                         Text(item.retailPrice.toCurrencyString())
-                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(maxWidth: 100, alignment: .trailing)
                     } //: HStack
                     
                     HStack {
@@ -148,7 +163,24 @@ struct DepartmentItemListView: View {
         .background(Color.bg200)
         .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.bottomLeft, .bottomRight])
     } //: Section Content
+
+    private var noItemsRow: some View {
+        VStack {
+            Text("No items yet. Tap the + button to add items.")
+                .frame(maxWidth: .infinity)
+                .italic()
+                .padding(.vertical)
+                .font(.callout)
+                .fontWeight(.light)
+        } //: VStack
+        .padding(.vertical, 12)
+        .padding(.horizontal, 8)
+        .background(Color.bg200)
+        .foregroundStyle(Color.textPrimary)
+        .roundedCornerWithBorder(lineWidth: 1, borderColor: Color.neoUnderDark.opacity(0.6), radius: 8, corners: [.bottomLeft, .bottomRight])
+    }
     
+    // MARK: - Functions
     private func deleteDepartmentTapped(dept: DepartmentEntity) {
         if dept.items.isEmpty {
             Task {

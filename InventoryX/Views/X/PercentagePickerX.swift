@@ -96,4 +96,5 @@ struct PercentagePickerX: View {
     PercentagePickerX(tax: 0.0625, save: { v in
         
     })
+    .environment(FormXViewModel())
 }

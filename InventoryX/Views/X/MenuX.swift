@@ -1,5 +1,5 @@
 //
-//  DepartmentPickerX.swift
+//  MenuX.swift
 //  InventoryX
 //
 //  Created by Ryan Smetana on 12/10/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 import RealmSwift
 
-struct DepartmentPickerX: View {
+struct MenuX: View {
     @Environment(FormXViewModel.self) var formVM
     @ObservedResults(DepartmentEntity.self) var departments
     @Binding var selectedDepartment: DepartmentEntity?

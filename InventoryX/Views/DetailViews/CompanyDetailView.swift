@@ -41,12 +41,11 @@ struct CompanyDetailView: View {
             print("Error saving name: \(error)")
         }
         
-        // Backdoor
-        if isNew && validName == "XAVware" {
+        // Easter egg to upload sample data
+        if validName == "XAVware" {
             Task {
+                try await RealmActor().deleteAll()
                 try await RealmActor().setUpForDebug()
-//                AuthService.shared.exists = true
-                
             }
         }
     }

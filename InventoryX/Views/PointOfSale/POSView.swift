@@ -26,7 +26,7 @@ struct POSView: View {
     
     /// When `selectedDepartment` is nil, the app displays all items in the view.
     @State var selectedDepartment: DepartmentEntity?
-    @State var showCartAlert: Bool = false
+//    @State var showCartAlert: Bool = false
     
     func departmentTapped(_ department: DepartmentEntity?) {
         selectedDepartment = department
@@ -71,18 +71,16 @@ struct POSView: View {
         } //: VStack
         .overlay(navService.sidebarVis == nil ? checkoutButton : nil, alignment: .bottom)
         .navigationTitle("New Sale")
-        .alert("Your cart is empty.", isPresented: $showCartAlert) {
+        .alert("Your cart is empty.", isPresented: $vm.showCartAlert) {
             Button("Okay", role: .cancel) { }
         }
     } //: Body
     
     private var checkoutButton: some View {
         Button {
-            guard !vm.cartItems.isEmpty else {
-                showCartAlert.toggle()
-                return
+            vm.checkoutTapped {
+                navService.path.append(LSXDisplay.confirmSale)
             }
-            navService.path.append(LSXDisplay.confirmSale)
         } label: {
             HStack {
                 Image(systemName: "cart")

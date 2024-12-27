@@ -18,11 +18,11 @@ struct MenuButtonStyle: ButtonStyle {
         configuration.label
             .frame(height: 42)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 0, style: .continuous)
-                    .fill(Color.fafafa)
-//                    .frame(maxHeight: .infinity)
-            )
+//            .background(
+//                RoundedRectangle(cornerRadius: 0, style: .continuous)
+//                    .fill(Color.fafafa)
+////                    .frame(maxHeight: .infinity)
+//            )
 //            .padding(.vertical, 12)
             .font(.subheadline)
             .opacity(configuration.isPressed ? 0.7 : 1.0)
