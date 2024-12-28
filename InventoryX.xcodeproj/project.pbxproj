@@ -171,6 +171,7 @@
 		80B5EF6F29F0C318007D9842 /* InventoryX */ = {
 			isa = PBXGroup;
 			children = (
+				942189242C2375AC00C78586 /* Assets.xcassets */,
 				942189232C2375AC00C78586 /* App */,
 				942189472C2375AD00C78586 /* Dev */,
 				942189202C2375AC00C78586 /* Enums */,
@@ -296,7 +297,6 @@
 			children = (
 				942189452C2375AD00C78586 /* RealmActor_Ext.swift */,
 				942189462C2375AD00C78586 /* SaleData.swift */,
-				942189242C2375AC00C78586 /* Assets.xcassets */,
 			);
 			path = Dev;
 			sourceTree = "<group>";

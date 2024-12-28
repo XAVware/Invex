@@ -31,7 +31,7 @@ struct DepartmentDetailView: View {
         
         do {
             let realm = try Realm()
-            let departments = realm.objects(DepartmentEntity.self)
+//            let d=]epartments = realm.objects(DepartmentEntity.self)
             if /*departments.count == 0 ||*/ isNew {
                 try realm.write {
                     realm.add(department)
