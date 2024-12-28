@@ -7,8 +7,17 @@ import RealmSwift
     @Published var companyName: String = ""
     @Published var taxRate: Double = 0.0
     @Published var cartSubtotal: Double = 0.0
-    var taxAmount: Double { cartSubtotal * taxRate }
-    var total: Double { cartSubtotal + taxAmount }
+//    var taxAmount: Double { cartSubtotal * taxRate }
+//    var total: Double { cartSubtotal + taxAmount }
+
+    var taxAmount: Double {
+        (cartSubtotal * taxRate).rounded(to: 2)
+    }
+    
+
+    var total: Double {
+        (cartSubtotal + taxAmount).rounded(to: 2)
+    }
     
     @Published var cartItems: [CartItem] = []
     @Published var showCartAlert: Bool = false

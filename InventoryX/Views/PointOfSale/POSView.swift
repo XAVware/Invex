@@ -11,9 +11,6 @@ import RealmSwift
 /*
  8.29.24 - A warning is being thrown for breaking constraints on startup on regular width devices. I thought it was related to POSView but it only happens when OnboardingView is being displayed as a full screen cover. Going to toggle onboarding with an optional isOnboarding variable in the root.
  */
-
-
-
 struct POSView: View {
     @Environment(NavigationService.self) var navService
     @EnvironmentObject var vm: PointOfSaleViewModel

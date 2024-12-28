@@ -25,6 +25,7 @@ struct ItemGridView: View {
                         ItemGridButtonLabel(item: item)
                     }
                 } //: ForEach
+                Color.bg100.frame(height: 64)
             } //: LazyVGrid
             .padding(2)
         } //: Scroll
@@ -46,15 +47,15 @@ struct ItemGridButtonLabel: View {
     
     var body: some View {
         Grid(alignment: .leading) {
-            GridRow(alignment: .top) {
+//            GridRow(alignment: .top) {
                 Text(item.name)
                     .fontWeight(.semibold)
                     .font(.headline)
-                Image(systemName: "cart.badge.plus")
-                    .font(.caption2)
-                    .foregroundStyle(Color.shadow300)
-                    .gridColumnAlignment(.trailing)
-            }
+//                Image(systemName: "cart.badge.plus")
+//                    .font(.caption2)
+//                    .foregroundStyle(Color.shadow300)
+//                    .gridColumnAlignment(.trailing)
+//            }
             
             GridRow(alignment: .bottom) {
                 Text(item.attribute)
