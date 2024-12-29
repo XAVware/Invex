@@ -295,7 +295,6 @@
 		942189472C2375AD00C78586 /* Dev */ = {
 			isa = PBXGroup;
 			children = (
-				942189452C2375AD00C78586 /* RealmActor_Ext.swift */,
 				942189462C2375AD00C78586 /* SaleData.swift */,
 			);
 			path = Dev;
@@ -326,6 +325,7 @@
 		942189562C2375AD00C78586 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				942189452C2375AD00C78586 /* RealmActor_Ext.swift */,
 				942189542C2375AD00C78586 /* RealmActor.swift */,
 				941637842D1F0CDB000C5636 /* AlertX.swift */,
 				942189552C2375AD00C78586 /* RealmMigrator.swift */,
