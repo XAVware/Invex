@@ -3,18 +3,98 @@
 ## Overview
 InveX is an iOS application developed to support small, cash-run businesses in tracking their inventory and processing sales. It allows businesses to add their inventory, adjust their pricing and on-hand quantity, and track sales. The idea of InveX started when my family's business, Stryker Airsoft, was having trouble with the inventory management app they were using to track concessions. I set out to create an equal or better, free app.
 
-InveX is written in SwiftUI and uses MongoDB's Realm for data persistence. After bouncing from CoreData, to Realm, to Firestore, I finally landed back on Realm for this application. I chose Realm because I want to keep the app completely free and give users a sense of security knowing that their data is completely theirs and stored on their device.
+InveX is written in SwiftUI and uses MongoDB's Realm for data persistence. I chose to use Realm to gain experience using local databases. If this app were intended to be an actual product, data would be in the cloud. Since I've gained experience with cloud workflows through other projects, I chose to use Realm here. This also allows me to keep the app completely free and give users a sense of security knowing that their data is completely theirs and stored on their device.
 
 Realm's SDK has several SwiftUI property wrappers that could have been taken advantage of, but just in case I decide to move the data storage to the cloud in the future I decided to use their asynchronous functions so the app's architecture mimics what it would be if it were cloud based.
 
-Though this wasn't the first iOS app I've worked on, I used this project as a means to reach a few goals that I haven't pursued in any other app - the largest being a successful app store submission. 
+# Key Takeaways & Reminders to Self (running list - oldest to newest)
+- Take the time to set up your git project and gitignore correctly to avoid tedious clean up in the future. Branches are powerful, use them.
+- More complex code does not necessarily mean it's better code.
+- Make smaller commits that use shorter messages. At the time of writing the long commit messages it seemed important - 01.2025 I don't think I've ever went back to read them.
+- Merge conflicts are not fun, especially when you attempt to open the project in XCode afterwards.
+- Ask yourself 'are you absolutely sure the user interface NEEDS to be laid out this way and it won't change in the future' before wasting time building custom components (ref. LazySplitX)
+- Cleaning and solidifying the foundation is more difficult when the app has more features.
+- When you begin going down the path of creating a reusable component (ref. ComponentsX - Invex v1.3) pause development and architect/design the full component before beginning development again. This will help avoid implementing a core piece of the component's foundation incorrectly (ref. cancel/submit buttons).
+- If it's important that the app runs and appears well on iPhone and iPad, consider making two separate XCode projects.
+- Sometimes input validation can be better handled before the user taps submit.
 
-## Project / Version 1.0 Goals
+  
+# Versions
+## Version 1.3
+Continued foundation improvements. Cleaned up color scheme. Migrated navigation to use Tab View. Build reusable input fields (ComponentsX)
+
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Swift                           57            639            618           3400
+JSON                            27              0              0            683
+Markdown                         1             45              0            192
+XML                              9              0              1            137
+-------------------------------------------------------------------------------
+SUM:                            94            684            619           4412
+-------------------------------------------------------------------------------
+
+## Version 1.2
+Attempt to remove the 'hard coded' UI layout conditions, ultimately leading to LazySplitX
+ Finished developing LazySplit which resulted in:
+    - No longer need to track if menu is open or not. LazyNavView's .prominentDetail style won't compress the button grid.
+ 
+ - Added item count to cart button so the user is aware of what is happening on compact screens.
+ - Add landing page to onboarding sequence.
+ - Fix bug where lock screen dismissed on orientation change.
+ - Improve UI of InventoryListView
+ - Minor Realm performance improvements
+ 
+ Removed:
+ - ResponsiveView
+ - MenuState
+ - OnboardingState
+ - GlowingOutlineMod
+ - SecondaryButtonMod
+ - TitleMod
+ - PaneOutlineMod
+ - MenuButtonMod
+ - ColumnHeaderModel
+
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Swift                           56            711            822           3092
+JSON                            22              0              0            653
+Markdown                         1             45              0            192
+XML                              6              0              1             94
+-------------------------------------------------------------------------------
+SUM:                            85            756            823           4031
+-------------------------------------------------------------------------------
+
+## Version 1.0 / 1.1
+Wrap up previous versions (see branches v0.x) so app can be submitted.
 - Submit to App Store
 - Responsive views for all device sizes and orientations
 - Light/Dark mode
 - Encryption for passcode storage
 
+Originally submitted as version 1.0.1 but somehow this changed to version 1.1 on App Store connect - needs further attention
+
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Swift                           48            488           1062           1918
+JSON                            22              0              0            653
+XML                              8              0              1            195
+-------------------------------------------------------------------------------
+SUM:                            78            488           1063           2766
+-------------------------------------------------------------------------------
+
+## Version 0.1 to 0.4
+The first version was intended to only be used by my family's business through TestFlight. 'Completeness' was not a requirement because I knew exactly which pages they would use. Re-usability was not a question, nor was responsive design. I knew exactly what the departments would be and exactly what device it would be used on. Because of this, Version0.1 was created with many static/hard-coded variables and values. It now acts as the baseline project for Invex.
+
+At this point, Realm did not have SwiftUI property wrappers, so business-logic was stored in ObservableObjects and the models used Objective-C dynamic variables.
+
+Versions 0.2 to 0.4 moved towards completeness and reusability.
+
+
+# Initial ReadMe
 ## Responsive Design
 Today, responsive interfaces are not just common, they're expected. Up until this project I put my focus on designing interfaces for a single screen, typically whichever iPhone I had at the time, without putting thought into how they look on others. In InveX, I utilized `ViewThatFits`, `LazyGrids`, and the Environment's `SizeClass` to ensure the app looks correct on all devices. In addition, I learned how important it is to track where you set view `frame` sizes and `padding`.
 
@@ -228,10 +308,3 @@ Use a nearly-invisible background to detects taps that occur outside of the menu
      }
      .opacity(contentOpacity)
     ```
-
-
-## Version 1.0
-4555
-
-## Version 1.1
-Lines of code: 4625
