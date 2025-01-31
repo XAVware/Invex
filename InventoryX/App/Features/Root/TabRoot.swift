@@ -35,22 +35,6 @@ import Combine
     @Published var mainDisplay: LSXDisplay = .pos
 }
 
-@Observable
-class NavigationService {
-    var path: NavigationPath = .init()
-    var sidebarVis: SidebarState?
-    var sidebarWidth: CGFloat?
-    /// Toggle between hidden and sidebar cart state. Only called from regular horizontal size class devices.
-    func toggleSidebar() {
-        withAnimation {
-            if sidebarVis == .hidden {
-                sidebarVis = .showing
-            } else {
-                sidebarVis = .hidden
-            }
-        }
-    }
-}
 
 struct TabRoot: View {
     @State private var nav: NavigationService = .init()
@@ -238,10 +222,4 @@ struct TabRoot: View {
 
 
 
-struct TabButtonModel: Identifiable {
-    let id: UUID =  UUID()
-    let destination: LSXDisplay
-    let unselectedIconName: String
-    let selectedIconName: String
-    let title: String
-}
+

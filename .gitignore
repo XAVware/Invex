@@ -2,6 +2,7 @@
 .DS_Store
 *.xcuserinterfacestate
 
+*.pbxproj
 xcuserdata/
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
