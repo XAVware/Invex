@@ -18,9 +18,9 @@ struct ItemDetailView: View {
         
     @ObservedRealmObject var item: ItemEntity
     
-    init(item: ItemEntity) {
-        self._item = ObservedRealmObject(wrappedValue: item)
-        self.isNew = item.name.isEmpty
+    init(item: ItemEntity?) {
+        self._item = ObservedRealmObject(wrappedValue: item ?? ItemEntity())
+        self.isNew = item == nil
     }
     
     let containerData: [ContainerXModel] = [
@@ -94,10 +94,6 @@ struct ItemDetailView: View {
     
     // MARK: - Functions
     private func createDefaultItem() {
-        guard let item = item.thaw() else {
-            print("Error thawing item")
-            return
-        }
         do {
             let realm = try Realm()
             let items = realm.objects(ItemEntity.self)

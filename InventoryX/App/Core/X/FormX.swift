@@ -112,7 +112,7 @@ struct FormX<C: View>: View {
                         .padding(.top, 4)
                 }
                 
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 16) {
                     content
                 }
                 .background(Color.bg150.clipShape(RoundedRectangle(cornerRadius: 8)).padding(-12))
@@ -146,7 +146,7 @@ struct FormSectionX<C: View>: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 10) {
             Text(title)
                 .font(.title2)
                 .fontWeight(.semibold)

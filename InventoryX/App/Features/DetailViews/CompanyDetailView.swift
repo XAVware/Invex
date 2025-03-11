@@ -42,7 +42,7 @@ struct CompanyDetailView: View {
         }
         
         // Easter egg to upload sample data
-        if validName == "XAVware" {
+        if validName == "TestMode" {
             Task {
                 try await RealmActor().deleteAll()
                 try await RealmActor().setUpForDebug()

@@ -18,21 +18,15 @@ struct DepartmentDetailView: View {
     @ObservedRealmObject var department: DepartmentEntity
     @State var showDeleteConfirmation: Bool = false
     
-    init(department: DepartmentEntity) {
-        self._department = ObservedRealmObject(wrappedValue: department)
-        self.isNew = department.name.isEmpty
+    init(department: DepartmentEntity?) {
+        self._department = ObservedRealmObject(wrappedValue: department ?? DepartmentEntity())
+        self.isNew = department == nil
     }
     
     func createDefaultDepartment() {
-        guard let department = department.thaw() else {
-            print("Error thawing department")
-            return
-        }
-        
         do {
             let realm = try Realm()
-//            let d=]epartments = realm.objects(DepartmentEntity.self)
-            if /*departments.count == 0 ||*/ isNew {
+            if isNew {
                 try realm.write {
                     realm.add(department)
                 }
