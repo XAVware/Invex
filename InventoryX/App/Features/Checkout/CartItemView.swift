@@ -35,9 +35,12 @@ struct CartItemView: View {
             } //: VStack
             
             VStack(alignment: .trailing, spacing: 2) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text($item.wrappedValue.retailPrice.toCurrencyString())
+                VStack(alignment: .trailing, spacing: 2) {
+                    let price = $item.wrappedValue.retailPrice
+                    Text((price * Double(qty)).toCurrencyString())
                         .fontWeight(.semibold)
+                    Text(price.toCurrencyString() + " ea.")
+                        .font(.caption2)
                     Spacer()
                 }
                 

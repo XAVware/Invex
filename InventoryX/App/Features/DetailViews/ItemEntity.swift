@@ -19,6 +19,7 @@ class ItemEntity: Object, ObjectKeyIdentifiable, Identifiable {
     
     convenience init(name: String, attribute: String, retailPrice: Double, avgCostPer: Double, onHandQty: Int = 0) {
         self.init()
+        self._id = ObjectId.generate()
         self.name = name
         self.attribute = attribute
         self.retailPrice = retailPrice

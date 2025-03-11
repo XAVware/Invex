@@ -46,42 +46,38 @@ struct SettingsView: View {
                 .buttonStyle(MenuButtonStyle(trailingIcon: "arrow.up.right"))
             }
             
-//            HStack {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("Test Mode")
+                    .font(.headline)
                 
-                
-                FormSectionX(title: "Test Mode") {
-                    
-                    Text("To try out the app with sample inventory, go to Account and change your business name to 'TestMode' (case sensitive). This will erase your current data and restart the app.")
-                    
-                        .font(.subheadline)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(12)
-                .padding(.vertical, 8)
-                .background(.ultraThinMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.accentColor.opacity(0.1), lineWidth: 1))
-                .padding(.vertical, 16)
-                .overlay(
-                    Image(systemName: "lightbulb.max.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: 32, maxHeight: 32)
-                        .padding(12)
-//                        .opacity(0.8)
-                        .foregroundStyle(Color.textLight)
-                        .background(
-                            ZStack {
-                                Color.bg100
-                                Color.accentColor.opacity(0.5)
-                            }
-                        )
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.accentColor.opacity(0.1), lineWidth: 1))
-                        .offset(x: -8, y: -8)
-                    , alignment: .topTrailing)
-                .padding(.vertical)
-//            }
+                Text("Change your business name to 'TestMode' (case sensitive) to try out Invex with sample inventory. This will erase your current data and restart the app.")
+                    .font(.caption2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } //: VStack
+            .padding(12)
+            .padding(.vertical, 8)
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.accentColor.opacity(0.1), lineWidth: 1))
+            .padding(.vertical, 16)
+            .overlay(
+                Image(systemName: "lightbulb.max.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: 28, maxHeight: 28)
+                    .padding(10)
+                    .foregroundStyle(Color.textLight)
+                    .background(
+                        ZStack {
+                            Color.bg100
+                            Color.accentColor.opacity(0.5)
+                        }
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.accentColor.opacity(0.1), lineWidth: 1))
+                    .offset(x: -8, y: -8)
+                , alignment: .topTrailing)
+            .padding(.vertical)
             
             
             Text("© 2024 XAVware, LLC. All Rights Reserved.")

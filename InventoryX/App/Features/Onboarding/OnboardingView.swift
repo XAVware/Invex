@@ -41,9 +41,9 @@ class OnboardingViewModel: ObservableObject {
                     realm.add(DepartmentEntity())
                 }
                 
-                if realm.objects(ItemEntity.self).isEmpty {
-                    realm.add(ItemEntity())
-                }
+//                if realm.objects(ItemEntity.self).isEmpty {
+//                    realm.add(ItemEntity())
+//                }
             }
         } catch {
             print("Error setting up default objects: \(error)")
@@ -62,7 +62,10 @@ class OnboardingViewModel: ObservableObject {
                 isSetupComplete = true
             }
             
-            if let thawedDepartment = realm.objects(DepartmentEntity.self).first, let item = realm.objects(ItemEntity.self).first {
+            // Only link the item to the department if both exist and the item isn't already in a department
+            if let thawedDepartment = realm.objects(DepartmentEntity.self).first, 
+                let item = realm.objects(ItemEntity.self).first,
+               item.department.isEmpty {  // Only add if not already in a department
                 try realm.write {
                     thawedDepartment.items.append(item)
                 }
@@ -155,11 +158,6 @@ struct OnboardingView: View {
             }
             .navigationDestination(for: LSXDisplay.self) { view in
                 destinationView(for: view)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done", action: { path.removeLast() })
-                        }
-                    }
             }
         } //: Navigation Stack
         .task {

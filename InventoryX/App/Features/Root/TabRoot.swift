@@ -108,7 +108,7 @@ struct TabRoot: View {
                         .navigationBarTitleDisplayMode(.inline) // Commenting this out makes the back button on ConfirmSaleView not work...
                         .navigationDestination(for: LSXDisplay.self) { detail in
                             switch detail {
-                            case .company: CompanyDetailView(company: companies.first ?? CompanyEntity())
+                            case .company:              CompanyDetailView(company: companies.first ?? CompanyEntity())
                             case .item(let i):          ItemDetailView(item: i)
                             case .department(let d):    DepartmentDetailView(department: d)
                             case .confirmSale:
@@ -180,6 +180,7 @@ struct TabRoot: View {
         } else {
             OnboardingView()
                 .environmentObject(lsxVM)
+                .environment(nav)
                 .onAppear {
                     lsxVM.mainDisplay = .pos
                     nav.path = .init()

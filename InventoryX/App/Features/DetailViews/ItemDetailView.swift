@@ -11,6 +11,7 @@ import RealmSwift
 struct ItemDetailView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.verticalSizeClass) var vSize
+    @Environment(NavigationService.self) var navService
     @ObservedResults(DepartmentEntity.self) var departments
     @State private var selectedDepartment: DepartmentEntity?
     /// If the entity's name is empty when it is initially passed to the view, `isNew` is set to true
@@ -19,8 +20,9 @@ struct ItemDetailView: View {
     @ObservedRealmObject var item: ItemEntity
     
     init(item: ItemEntity?) {
-        self._item = ObservedRealmObject(wrappedValue: item ?? ItemEntity())
-        self.isNew = item == nil
+        let newItem = item ?? ItemEntity()
+        self._item = ObservedRealmObject(wrappedValue: newItem)
+        self.isNew = newItem.realm == nil
     }
     
     let containerData: [ContainerXModel] = [
@@ -81,9 +83,52 @@ struct ItemDetailView: View {
         } //: FormX
         .onAppear {
             createDefaultItem()
+            if let dept = item.department.first {
+                selectedDepartment = dept
+            } else if let firstDept = departments.first {
+                selectedDepartment = firstDept
+                saveDepartment(department: firstDept)
+            }
+        }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) { 
+                Button("Back", systemImage: "chevron.left") { 
+                    back()
+                }
+                .fontWeight(.semibold)
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) { 
+                Button("Done") { 
+                    back()
+                }
+                .fontWeight(.semibold)
+            }
         }
         
     } //: Body
+    
+    private func back() {
+        if item.name.isEmpty && item.realm != nil {
+            do {
+                let realm = try Realm()
+                if let thawedItem = item.thaw() {
+                    try realm.write {
+                        realm.delete(thawedItem)
+                    }
+                }
+            } catch {
+                print("Error deleting empty item: \(error)")
+            }
+        }
+        
+        if !navService.path.isEmpty {
+            navService.path.removeLast()
+        } else {
+            dismiss()
+        }
+    }
     
     private var rotatePrompt: some View {
         ZStack {
@@ -96,14 +141,13 @@ struct ItemDetailView: View {
     private func createDefaultItem() {
         do {
             let realm = try Realm()
-            let items = realm.objects(ItemEntity.self)
-            if items.count == 0 || isNew {
+            if isNew {
                 try realm.write {
                     realm.add(item)
                 }
             }
         } catch {
-            print("Error creating default company: \(error)")
+            print("Error creating default item: \(error)")
         }
     }
     

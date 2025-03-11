@@ -13,14 +13,17 @@ struct DepartmentDetailView: View {
     
     /// If the entity's name is empty when it is initially passed to the view, `isNew` is set to true
     // TODO: In createDefaultDepartment() save the department if it doesn't already exist instead of using isNew
-    let isNew: Bool
+    @State var isNew: Bool
         
     @ObservedRealmObject var department: DepartmentEntity
     @State var showDeleteConfirmation: Bool = false
+    @Environment(NavigationService.self) var navService
+
     
     init(department: DepartmentEntity?) {
-        self._department = ObservedRealmObject(wrappedValue: department ?? DepartmentEntity())
-        self.isNew = department == nil
+        let newDept = department ?? DepartmentEntity()
+        self._department = ObservedRealmObject(wrappedValue: newDept)
+        self.isNew = newDept.realm == nil
     }
     
     func createDefaultDepartment() {
@@ -32,7 +35,7 @@ struct DepartmentDetailView: View {
                 }
             }
         } catch {
-            print("Error creating default company: \(error)")
+            print("Error creating default department: \(error)")
         }
     }
     
@@ -44,10 +47,17 @@ struct DepartmentDetailView: View {
         }
     }
     
-    func saveDepartmentName(validName: String) {
+    private func saveDepartmentName(validName: String) {
+        guard !validName.isEmpty else { return }
+        
         do {
             let realm = try Realm()
+            
             try realm.write {
+                if isNew && department.realm == nil {
+                    realm.add(department)
+                    isNew = false
+                }
                 $department.wrappedValue.name = validName
             }
         } catch {
@@ -117,7 +127,45 @@ struct DepartmentDetailView: View {
         .onAppear {
             createDefaultDepartment()
         }
+        .navigationBarBackButtonHidden()
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) { 
+                Button("Back", systemImage: "chevron.left") { 
+                    back()
+                }
+                .fontWeight(.semibold)
+            }
+            
+            ToolbarItem(placement: .topBarTrailing) { 
+                Button("Done") { 
+                    back()
+                }
+                .fontWeight(.semibold)
+            }
+        }
     } //: Body
+    
+    private func back() {
+        if department.name.isEmpty && department.realm != nil {
+            do {
+                let realm = try Realm()
+                if let thawedDept = department.thaw() {
+                    try realm.write {
+                        realm.delete(thawedDept)
+                    }
+                }
+            } catch {
+                print("Error deleting empty department: \(error)")
+            }
+        }
+        
+        if !navService.path.isEmpty {
+            navService.path.removeLast()
+        } else {
+            dismiss()
+        }
+    }
+          
 }
 
 #Preview {

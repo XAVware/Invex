@@ -53,6 +53,8 @@ struct MenuX: View {
                     .foregroundStyle(Color.textDark)
                 }
             } //: HStack
+            .fontWeight(.medium)
+            .fontDesign(.rounded)
             .padding(.vertical)
             .overlay(divider, alignment: .bottom)
             .onAppear {

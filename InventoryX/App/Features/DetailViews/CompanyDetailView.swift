@@ -107,7 +107,15 @@ struct CompanyDetailView: View {
         .onAppear {
             createDefaultCompany()
         }
+        .navigationBarBackButtonHidden()
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) { 
+                Button("Back", systemImage: "chevron.left") { 
+                    dismiss()
+                }
+                .fontWeight(.semibold)
+            }
+            
             ToolbarItem(placement: .topBarTrailing) {
                 if company.finishedOnboarding {
                     Menu {
@@ -120,7 +128,10 @@ struct CompanyDetailView: View {
                     }
                     .foregroundStyle(.accent)
                 } else {
-                    EmptyView()
+                    Button("Done") { 
+                        dismiss()
+                    }
+                    .fontWeight(.semibold)
                 }
             }
         }

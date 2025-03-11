@@ -47,15 +47,9 @@ struct ItemGridButtonLabel: View {
     
     var body: some View {
         Grid(alignment: .leading) {
-//            GridRow(alignment: .top) {
-                Text(item.name)
-                    .fontWeight(.semibold)
-                    .font(.headline)
-//                Image(systemName: "cart.badge.plus")
-//                    .font(.caption2)
-//                    .foregroundStyle(Color.shadow300)
-//                    .gridColumnAlignment(.trailing)
-//            }
+            Text(item.name)
+                .fontWeight(.semibold)
+                .font(.headline)
             
             GridRow(alignment: .bottom) {
                 Text(item.attribute)
